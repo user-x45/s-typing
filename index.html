@@ -836,7 +836,7 @@ function finishOnlineGame(msg){
   const accuracy = attempts === 0 ? 0 : Math.round((you.score / attempts) * 100);
   const speed = Math.round((onlineChars / 100) * 60);
   let resultLabel = "ひきわけ";
-  if(msg.result === "win") resultLabel = msg.forfeit ? "しつげんしょう" : "しょうり";
+  if(msg.result === "win") resultLabel = msg.forfeit ? "不戦勝" : "しょうり";
   else if(msg.result === "lose") resultLabel = "はいせん";
   resultScoreEl.textContent = resultLabel;
   const modeLabel = currentMode === "kanji" ? "文章" : "ひらがな";
