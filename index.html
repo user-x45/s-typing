@@ -200,12 +200,109 @@
     opacity:0.75;
   }
 
+  .nickname-row{
+    display:flex;
+    justify-content:center;
+    margin-bottom:14px;
+  }
+
+  #nickname-input{
+    width:100%;
+    max-width:280px;
+    padding:10px 14px;
+    font-size:14px;
+    font-family:'Zen Kaku Gothic New', sans-serif;
+    border:1.5px solid var(--line);
+    border-radius:3px;
+    background:rgba(255,253,246,0.7);
+    color:var(--ink);
+    outline:none;
+    text-align:center;
+    transition:border-color 0.15s ease;
+  }
+
+  #nickname-input:focus{
+    border-color:var(--gold);
+  }
+
   .start-row{
     display:flex;
     gap:10px;
     justify-content:center;
     flex-wrap:wrap;
     margin-bottom:8px;
+  }
+
+  .ranking-panel{
+    margin-top:26px;
+    padding-top:22px;
+    border-top:1px solid var(--line);
+  }
+
+  .ranking-panel.hidden{
+    display:none;
+  }
+
+  .ranking-title{
+    font-family:'Shippori Mincho', serif;
+    font-size:14px;
+    letter-spacing:0.2em;
+    color:var(--gold);
+    margin-bottom:14px;
+  }
+
+  .ranking-list{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    max-width:340px;
+    margin:0 auto;
+  }
+
+  .ranking-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 12px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:rgba(255,253,246,0.5);
+    font-size:13px;
+  }
+
+  .ranking-row.me{
+    border-color:var(--hanko);
+    background:rgba(168,53,42,0.08);
+  }
+
+  .ranking-rank{
+    font-family:'Shippori Mincho', serif;
+    font-weight:800;
+    color:var(--hanko);
+    width:32px;
+    text-align:center;
+    flex-shrink:0;
+  }
+
+  .ranking-name{
+    flex:1;
+    text-align:left;
+    color:var(--ink);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .ranking-score{
+    font-weight:600;
+    color:var(--ink-soft);
+    flex-shrink:0;
+  }
+
+  .ranking-empty{
+    font-size:12px;
+    color:var(--ink-soft);
+    opacity:0.7;
   }
 
   .start-btn{
@@ -538,6 +635,10 @@
         <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
       </div>
 
+      <div class="nickname-row">
+        <input type="text" id="nickname-input" maxlength="20" placeholder="ランキング用のニックネーム">
+      </div>
+
       <div class="start-row">
         <button class="start-btn" id="start-btn">ひとりで練習</button>
         <button class="start-btn online-btn" id="start-online-btn">オンライン対戦</button>
@@ -595,6 +696,11 @@
         </div>
       </div>
       <button class="retry-btn" id="retry-btn">もう一度</button>
+
+      <div class="ranking-panel hidden" id="ranking-panel">
+        <div class="ranking-title">全国ランキング TOP20</div>
+        <div class="ranking-list" id="ranking-list"></div>
+      </div>
     </div>
 
   </div>
@@ -650,8 +756,12 @@ const searchCountLabelEl = document.getElementById("search-count-label");
 const cancelSearchBtn = document.getElementById("cancel-search-btn");
 const countdownEl = document.getElementById("countdown");
 const countdownNumberEl = document.getElementById("countdown-number");
+const nicknameInputEl = document.getElementById("nickname-input");
+const rankingPanelEl = document.getElementById("ranking-panel");
+const rankingListEl = document.getElementById("ranking-list");
 
 const ONLINE_SERVER_URL = "wss://key-onl.user-x45.workers.dev";
+const API_SERVER_URL = "https://key-onl.user-x45.workers.dev";
 
 let ws = null;
 let matchId = null;
@@ -677,6 +787,61 @@ function fitSpacerToViewport(){
 }
 
 window.addEventListener("resize", fitSpacerToViewport);
+
+nicknameInputEl.value = localStorage.getItem("typingNickname") || "";
+nicknameInputEl.addEventListener("change", () => {
+  localStorage.setItem("typingNickname", nicknameInputEl.value.trim());
+});
+
+function getNickname(){
+  const name = nicknameInputEl.value.trim();
+  return name.length > 0 ? name.slice(0, 20) : "名無し";
+}
+
+async function submitScore(mode, level, score, miss){
+  try{
+    await fetch(`${API_SERVER_URL}/ranking/submit?mode=${mode}&level=${level}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: getNickname(), score, miss })
+    });
+  }catch(e){}
+}
+
+async function loadRanking(mode, level){
+  try{
+    const res = await fetch(`${API_SERVER_URL}/ranking/top?mode=${mode}&level=${level}`);
+    const data = await res.json();
+    renderRanking(data.ranking || []);
+  }catch(e){
+    renderRanking(null);
+  }
+}
+
+function renderRanking(rows){
+  rankingPanelEl.classList.remove("hidden");
+  rankingListEl.innerHTML = "";
+  if(!rows || rows.length === 0){
+    rankingListEl.innerHTML = `<div class="ranking-empty">まだ記録がありません</div>`;
+    return;
+  }
+  const myName = getNickname();
+  rows.forEach(row => {
+    const item = document.createElement("div");
+    item.className = "ranking-row" + (row.name === myName ? " me" : "");
+    const rankEl = document.createElement("span");
+    rankEl.className = "ranking-rank";
+    rankEl.textContent = `${row.rank}位`;
+    const nameEl = document.createElement("span");
+    nameEl.className = "ranking-name";
+    nameEl.textContent = row.name;
+    const scoreEl = document.createElement("span");
+    scoreEl.className = "ranking-score";
+    scoreEl.textContent = row.score;
+    item.append(rankEl, nameEl, scoreEl);
+    rankingListEl.appendChild(item);
+  });
+}
 
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -708,6 +873,7 @@ document.getElementById("start-online-btn").addEventListener("click", startOnlin
 cancelSearchBtn.addEventListener("click", cancelSearch);
 document.getElementById("retry-btn").addEventListener("click", () => {
   resultEl.classList.remove("visible");
+  rankingPanelEl.classList.add("hidden");
   setupEl.classList.remove("hidden");
 });
 
@@ -863,6 +1029,7 @@ function finishOnlineGame(msg){
   document.body.classList.remove("game-active");
   opponentScoreLabelEl.classList.add("hidden");
   resultEl.classList.add("visible");
+  rankingPanelEl.classList.add("hidden");
   const you = msg.you;
   const opponent = msg.opponent;
   const attempts = you.score + you.miss;
@@ -963,6 +1130,10 @@ function endGame(){
   statAccuracyEl.textContent = `${accuracy}%`;
   statSpeedEl.textContent = speed;
   statMissEl.textContent = missCount;
+
+  submitScore(currentMode, currentLevel, finalScore, missCount).then(() => {
+    loadRanking(currentMode, currentLevel);
+  });
 }
 
 function shakeInput(){
