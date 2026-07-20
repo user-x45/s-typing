@@ -309,6 +309,12 @@ async function login(password){
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action: "login", password })
   });
+  if(res.status === 429){
+    const data = await res.json();
+    const err = new Error("locked");
+    err.retryAfterSeconds = data.retryAfterSeconds;
+    throw err;
+  }
   if(!res.ok){
     throw new Error("unauthorized");
   }
@@ -405,7 +411,12 @@ async function tryLogin(){
     dashboardEl.classList.remove("hidden");
     renderBoards(data);
   }catch(e){
-    loginErrorEl.textContent = "パスワードが違います";
+    if(e.message === "locked"){
+      const minutes = Math.ceil(e.retryAfterSeconds / 60);
+      loginErrorEl.textContent = `試行回数が多すぎます。${minutes}分後にもう一度お試しください`;
+    } else {
+      loginErrorEl.textContent = "パスワードが違います";
+    }
   }
 }
 
