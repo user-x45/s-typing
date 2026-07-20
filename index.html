@@ -770,6 +770,24 @@ const countdownNumberEl = document.getElementById("countdown-number");
 const ONLINE_SERVER_URL = "wss://key-onl.user-x45.workers.dev";
 const RANKING_API_URL = ONLINE_SERVER_URL.replace(/^wss:/, "https:").replace(/^ws:/, "http:");
 
+const clickSoundEl = new Audio("sounds/click.mp3");
+const keySoundEl = new Audio("sounds/key.mp3");
+
+function playSound(baseAudio){
+  const sound = baseAudio.cloneNode();
+  sound.play().catch(() => {});
+}
+
+document.addEventListener("click", (e) => {
+  if(e.target.closest("button")){
+    playSound(clickSoundEl);
+  }
+});
+
+inputEl.addEventListener("keydown", () => {
+  playSound(keySoundEl);
+});
+
 const rankingBoxEl = document.getElementById("ranking-box");
 const rankingListEl = document.getElementById("ranking-list");
 const rankingTitleEl = document.querySelector(".ranking-title");
