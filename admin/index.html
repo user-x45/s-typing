@@ -281,7 +281,7 @@ const LEVEL_LABELS = { beginner: "初級", intermediate: "中級", advanced: "�
 const MODES = ["hiragana", "kanji"];
 const LEVELS = ["beginner", "intermediate", "advanced"];
 
-let adminPassword = "";
+let adminToken = "";
 
 const loginPanelEl = document.getElementById("login-panel");
 const dashboardEl = document.getElementById("dashboard");
@@ -295,12 +295,25 @@ async function callAdmin(action, extra){
   const res = await fetch(`${WORKER_URL}/admin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ password: adminPassword, action, ...extra })
+    body: JSON.stringify({ token: adminToken, action, ...extra })
   });
   if(res.status === 401){
     throw new Error("unauthorized");
   }
   return res.json();
+}
+
+async function login(password){
+  const res = await fetch(`${WORKER_URL}/admin`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "login", password })
+  });
+  if(!res.ok){
+    throw new Error("unauthorized");
+  }
+  const data = await res.json();
+  return data.token;
 }
 
 function renderBoards(data){
@@ -375,14 +388,18 @@ async function loadDashboard(){
     const data = await callAdmin("list", {});
     renderBoards(data);
   }catch(e){
-    loginErrorEl.textContent = "データの取得に失敗しました";
+    adminToken = "";
+    dashboardEl.classList.add("hidden");
+    loginPanelEl.classList.remove("hidden");
+    loginErrorEl.textContent = "セッションが切れました。もう一度パスワードを入力してください";
   }
 }
 
 async function tryLogin(){
-  adminPassword = passwordInputEl.value;
   loginErrorEl.textContent = "";
   try{
+    adminToken = await login(passwordInputEl.value);
+    passwordInputEl.value = "";
     const data = await callAdmin("list", {});
     loginPanelEl.classList.add("hidden");
     dashboardEl.classList.remove("hidden");
