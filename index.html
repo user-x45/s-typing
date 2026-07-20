@@ -952,8 +952,8 @@ async function loadRanking(){
   const level = currentLevel;
   const modeLabel = mode === "kanji" ? "文章" : "ひらがな";
   rankingTitleEl.textContent = `🏆 ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
-  rankingListEl.innerHTML = `<li class="ranking-loading">読み込み中...</li>`;
-  rankingBoxEl.classList.remove("hidden");
+  rankingBoxEl.classList.add("hidden");
+  rankingListEl.innerHTML = "";
   try{
     const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`);
     if(requestId !== rankingRequestId) return;
