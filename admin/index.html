@@ -73,7 +73,7 @@
   }
 
   h1{
-    font-family:'Shippori Mincho', serif;
+    font-family:'BIZ UDPGothic', sans-serif;
     font-weight:800;
     font-size:30px;
     margin:0;
@@ -108,7 +108,7 @@
     font-size:15px;
     color:var(--ink);
     outline:none;
-    font-family:'Zen Kaku Gothic New', sans-serif;
+    font-family:'BIZ UDPGothic', sans-serif;
   }
 
   input[type="password"]:focus{
@@ -123,7 +123,7 @@
     color:var(--washi);
     border:none;
     border-radius:3px;
-    font-family:'Shippori Mincho', serif;
+    font-family:'BIZ UDPGothic', sans-serif;
     font-size:15px;
     font-weight:700;
     cursor:pointer;
@@ -131,6 +131,11 @@
 
   .login-btn:hover{
     background:var(--hanko-deep);
+  }
+
+  .login-btn:disabled{
+    opacity:0.6;
+    cursor:default;
   }
 
   .error-text{
@@ -141,6 +146,32 @@
   }
 
   .hidden{display:none !important;}
+
+  .loading-panel{
+    max-width:360px;
+    margin:0 auto;
+    text-align:center;
+  }
+
+  .loading-text{
+    font-family:'BIZ UDPGothic', sans-serif;
+    font-size:15px;
+    color:var(--ink-soft);
+  }
+
+  .spinner{
+    width:32px;
+    height:32px;
+    margin:0 auto 16px;
+    border:3px solid var(--line);
+    border-top-color:var(--hanko);
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+
+  @keyframes spin{
+    to{ transform:rotate(360deg); }
+  }
 
   .board-grid{
     display:grid;
@@ -165,7 +196,7 @@
   }
 
   .board-title{
-    font-family:'Shippori Mincho', serif;
+    font-family:'BIZ UDPGothic', sans-serif;
     font-weight:700;
     font-size:15px;
   }
@@ -199,7 +230,7 @@
   }
 
   .score-rank{
-    font-family:'Shippori Mincho', serif;
+    font-family:'BIZ UDPGothic', sans-serif;
     font-weight:700;
     color:var(--hanko);
     width:40px;
@@ -242,7 +273,7 @@
     color:var(--ink);
     border-radius:3px;
     padding:8px 18px;
-    font-family:'Shippori Mincho', serif;
+    font-family:'BIZ UDPGothic', sans-serif;
     font-size:13px;
     cursor:pointer;
   }
@@ -263,8 +294,13 @@
   <div class="panel login-panel" id="login-panel">
     <label class="field-label" for="password-input">管理者パスワード</label>
     <input type="password" id="password-input" autocomplete="off">
-    <button class="login-btn" id="login-btn">開く</button>
+    <button class="login-btn" id="login-btn">ログイン</button>
     <div class="error-text" id="login-error"></div>
+  </div>
+
+  <div class="panel loading-panel hidden" id="loading-panel">
+    <div class="spinner"></div>
+    <div class="loading-text">読み込み中...</div>
   </div>
 
   <div id="dashboard" class="hidden">
@@ -285,6 +321,7 @@ const LEVELS = ["beginner", "intermediate", "advanced"];
 let adminToken = "";
 
 const loginPanelEl = document.getElementById("login-panel");
+const loadingPanelEl = document.getElementById("loading-panel");
 const dashboardEl = document.getElementById("dashboard");
 const passwordInputEl = document.getElementById("password-input");
 const loginBtnEl = document.getElementById("login-btn");
@@ -397,6 +434,7 @@ async function loadDashboard(){
   }catch(e){
     adminToken = "";
     dashboardEl.classList.add("hidden");
+    loadingPanelEl.classList.add("hidden");
     loginPanelEl.classList.remove("hidden");
     loginErrorEl.textContent = "セッションが切れました。もう一度パスワードを入力してください";
   }
@@ -404,14 +442,18 @@ async function loadDashboard(){
 
 async function tryLogin(){
   loginErrorEl.textContent = "";
+  loginPanelEl.classList.add("hidden");
+  loadingPanelEl.classList.remove("hidden");
   try{
     adminToken = await login(passwordInputEl.value);
     passwordInputEl.value = "";
     const data = await callAdmin("list", {});
-    loginPanelEl.classList.add("hidden");
+    loadingPanelEl.classList.add("hidden");
     dashboardEl.classList.remove("hidden");
     renderBoards(data);
   }catch(e){
+    loadingPanelEl.classList.add("hidden");
+    loginPanelEl.classList.remove("hidden");
     if(e.message === "locked"){
       const minutes = Math.ceil(e.retryAfterSeconds / 60);
       loginErrorEl.textContent = `試行回数が多すぎます。${minutes}分後にもう一度お試しください`;
