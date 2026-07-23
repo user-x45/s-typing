@@ -11,6 +11,7 @@
 <meta content="シンプルタイピング" property="og:site_name">
 <title>シンプルタイピング｜ひらがな・文章タイピング練習ゲーム</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org/",
@@ -209,6 +210,12 @@
   .switch-player-btn:hover{
     border-color:var(--gold);
     color:var(--ink);
+  }
+
+  .google-signin-row{
+    display:flex;
+    justify-content:center;
+    margin-bottom:16px;
   }
 
   .mute-check-label{
@@ -879,8 +886,9 @@
 
       <div class="player-name-row">
         <span class="player-name-label" id="current-player-label"></span>
-        <button class="switch-player-btn" id="switch-player-btn"><i class="fas fa-right-left"></i> 次の人と交代</button>
+        <button class="switch-player-btn hidden" id="logout-btn"><i class="fas fa-right-from-bracket"></i> ログアウト</button>
       </div>
+      <div class="google-signin-row" id="google-signin-container"></div>
 
       <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
 
@@ -1024,44 +1032,144 @@ nameInputFieldEl.addEventListener("keydown", (e) => {
   }
 });
 
-const PLAYER_NAME_KEY = "playerName";
+const GOOGLE_CLIENT_ID = "934662707347-mog2fs8vq4ifl4hq4s5dobkv1oauni6n.apps.googleusercontent.com";
+const SESSION_TOKEN_KEY = "sessionToken";
 const currentPlayerLabelEl = document.getElementById("current-player-label");
-const switchPlayerBtnEl = document.getElementById("switch-player-btn");
+const logoutBtnEl = document.getElementById("logout-btn");
+const googleSigninContainerEl = document.getElementById("google-signin-container");
+
+let currentPlayerName = null;
 
 function getPlayerName(){
-  return sessionStorage.getItem(PLAYER_NAME_KEY);
+  return currentPlayerName;
 }
 
-function setPlayerName(name){
-  sessionStorage.setItem(PLAYER_NAME_KEY, name);
-  updatePlayerNameLabel();
-  updateSetupHighScore();
+function getSessionToken(){
+  return localStorage.getItem(SESSION_TOKEN_KEY);
+}
+
+function setSessionToken(token){
+  localStorage.setItem(SESSION_TOKEN_KEY, token);
+}
+
+function clearSessionToken(){
+  localStorage.removeItem(SESSION_TOKEN_KEY);
 }
 
 function updatePlayerNameLabel(){
-  const name = getPlayerName();
-  currentPlayerLabelEl.textContent = name ? `プレイヤー：${name}` : "";
+  currentPlayerLabelEl.textContent = currentPlayerName ? `プレイヤー：${currentPlayerName}` : "";
 }
 
-function ensurePlayerName(){
-  if(getPlayerName()) return;
-  showNameInputModal((name) => {
-    setPlayerName(name);
-  });
-}
-
-switchPlayerBtnEl.addEventListener("click", () => {
-  sessionStorage.removeItem(PLAYER_NAME_KEY);
-  clearAllHighScores();
+function showLoggedInUi(name){
+  currentPlayerName = name;
   updatePlayerNameLabel();
   updateSetupHighScore();
-  showNameInputModal((name) => {
-    setPlayerName(name);
+  googleSigninContainerEl.classList.add("hidden");
+  logoutBtnEl.classList.remove("hidden");
+}
+
+function showLoggedOutUi(){
+  currentPlayerName = null;
+  updatePlayerNameLabel();
+  updateSetupHighScore();
+  googleSigninContainerEl.classList.remove("hidden");
+  logoutBtnEl.classList.add("hidden");
+}
+
+async function verifySession(){
+  const token = getSessionToken();
+  if(!token){
+    showLoggedOutUi();
+    return;
+  }
+  try{
+    const res = await fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "verify", token })
+    });
+    const data = await res.json();
+    if(data.valid){
+      showLoggedInUi(data.name);
+    } else {
+      clearSessionToken();
+      showLoggedOutUi();
+    }
+  }catch(e){
+    showLoggedOutUi();
+  }
+}
+
+async function handleGoogleCredential(response){
+  let data;
+  try{
+    const res = await fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "login", idToken: response.credential })
+    });
+    data = await res.json();
+  }catch(e){
+    showCustomAlert("ログインに失敗しました");
+    return;
+  }
+  if(data.error){
+    showCustomAlert("ログインに失敗しました");
+    return;
+  }
+  if(data.isNewUser){
+    showNameInputModal(async (name) => {
+      let regData;
+      try{
+        const regRes = await fetch(`${RANKING_API_URL}/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "register", pendingToken: data.pendingToken, name })
+        });
+        regData = await regRes.json();
+      }catch(e){
+        showCustomAlert("登録に失敗しました");
+        return;
+      }
+      if(regData.token){
+        setSessionToken(regData.token);
+        showLoggedInUi(regData.name);
+      } else {
+        showCustomAlert("登録に失敗しました");
+      }
+    });
+  } else {
+    setSessionToken(data.token);
+    showLoggedInUi(data.name);
+  }
+}
+
+function initGoogleSignIn(){
+  if(!window.google || !google.accounts || !google.accounts.id) return;
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleCredential
   });
+  google.accounts.id.renderButton(googleSigninContainerEl, { theme: "outline", size: "large", text: "signin_with", locale: "ja" });
+}
+
+logoutBtnEl.addEventListener("click", () => {
+  const token = getSessionToken();
+  clearSessionToken();
+  showLoggedOutUi();
+  if(token){
+    fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "logout", token })
+    }).catch(() => {});
+  }
 });
 
-updatePlayerNameLabel();
-ensurePlayerName();
+window.addEventListener("load", () => {
+  initGoogleSignIn();
+  verifySession();
+});
 
 const wordBank = {
   hiragana: {
