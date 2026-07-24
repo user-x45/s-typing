@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - ページが見つかりません</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+        .error-code {
+            font-size: 96px;
+            font-weight: 800;
+            color: #2b2d42;
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+        .error-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #4a4e69;
+            margin-bottom: 12px;
+        }
+        .error-message {
+            font-size: 15px;
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        .home-btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: #2b2d42;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        .home-btn:hover {
+            background-color: #4a4e69;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">ページが見つかりません</h2>
+        <p class="error-message">お探しのページは削除されたか、URLが変更された可能性があります。<br>入力したアドレスが正しいかご確認ください。</p>
+        <a href="/" class="home-btn">トップページへ戻る</a>
+    </div>
+</body>
+</html>
