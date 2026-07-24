@@ -208,11 +208,6 @@
     color:var(--ink);
   }
 
-  .google-signin-row{
-    display:flex;
-    align-items:center;
-  }
-
   .mute-check-label{
     display:flex;
     align-items:center;
@@ -858,7 +853,7 @@
     <div class="menu-title">シンプルタイピング</div>
     <div class="menu-auth">
       <span class="player-name-label" id="current-player-label"></span>
-      <div class="google-signin-row" id="google-signin-container"></div>
+      <button class="switch-player-btn" id="google-login-btn"><i class="fab fa-google"></i> ログイン</button>
       <button class="switch-player-btn hidden" id="logout-btn"><i class="fas fa-right-from-bracket"></i> ログアウト</button>
     </div>
   </div>
@@ -1029,7 +1024,7 @@ const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googl
 const SESSION_TOKEN_KEY = "sessionToken";
 const currentPlayerLabelEl = document.getElementById("current-player-label");
 const logoutBtnEl = document.getElementById("logout-btn");
-const googleSigninContainerEl = document.getElementById("google-signin-container");
+const googleLoginBtnEl = document.getElementById("google-login-btn");
 
 let currentPlayerName = null;
 let serverHighScores = null;
@@ -1051,7 +1046,7 @@ function clearSessionToken(){
 }
 
 function updatePlayerNameLabel(){
-  currentPlayerLabelEl.textContent = currentPlayerName ? `プレイヤー：${currentPlayerName}` : "";
+  currentPlayerLabelEl.textContent = currentPlayerName ? currentPlayerName : "";
 }
 
 async function loadServerHighScores(token){
@@ -1073,7 +1068,7 @@ async function showLoggedInUi(name, token){
   await loadServerHighScores(token);
   updatePlayerNameLabel();
   updateSetupHighScore();
-  googleSigninContainerEl.classList.add("hidden");
+  googleLoginBtnEl.classList.add("hidden");
   logoutBtnEl.classList.remove("hidden");
 }
 
@@ -1082,7 +1077,7 @@ function showLoggedOutUi(){
   serverHighScores = null;
   updatePlayerNameLabel();
   updateSetupHighScore();
-  googleSigninContainerEl.classList.remove("hidden");
+  googleLoginBtnEl.classList.remove("hidden");
   logoutBtnEl.classList.add("hidden");
 }
 
@@ -1160,8 +1155,12 @@ function initGoogleSignIn(){
     client_id: GOOGLE_CLIENT_ID,
     callback: handleGoogleCredential
   });
-  google.accounts.id.renderButton(googleSigninContainerEl, { theme: "outline", size: "large", text: "signin_with", locale: "ja" });
 }
+
+googleLoginBtnEl.addEventListener("click", () => {
+  if(!window.google || !google.accounts || !google.accounts.id) return;
+  google.accounts.id.prompt();
+});
 
 logoutBtnEl.addEventListener("click", () => {
   const token = getSessionToken();
