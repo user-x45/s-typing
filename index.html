@@ -97,27 +97,32 @@
     max-width:640px;
   }
 
-  header{
-    text-align:center;
-    margin-bottom:28px;
-    position:relative;
+  .menu-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+    padding:12px 20px;
+    background:var(--panel-bg);
+    border:1px solid var(--line);
+    border-radius:4px;
   }
 
-  .kicker{
-    font-size:12px;
-    letter-spacing:0.35em;
-    color:var(--gold);
-    margin-bottom:6px;
-  }
-
-  h1{
+  .menu-title{
     font-family:'BIZ UDPGothic', sans-serif;
     font-weight:800;
-    font-size:38px;
-    margin:0;
-    letter-spacing:0.08em;
-    position:relative;
-    display:inline-block;
+    font-size:20px;
+    letter-spacing:0.06em;
+    color:var(--ink);
+  }
+
+  .menu-auth{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
   }
 
   .custom-alert-overlay{
@@ -180,15 +185,6 @@
     background:var(--hanko-deep);
   }
 
-  .player-name-row{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    margin-bottom:16px;
-    flex-wrap:wrap;
-  }
-
   .player-name-label{
     font-size:13px;
     color:var(--ink-soft);
@@ -214,8 +210,7 @@
 
   .google-signin-row{
     display:flex;
-    justify-content:center;
-    margin-bottom:16px;
+    align-items:center;
   }
 
   .mute-check-label{
@@ -829,8 +824,8 @@
     body{padding:24px 10px;}
     body.game-active{padding:10px 10px;}
     .panel{padding:18px 14px;}
-    .kicker{font-size:10px;}
-    h1{font-size:26px;}
+    .menu-bar{padding:10px 14px;}
+    .menu-title{font-size:17px;}
 
     .mode-btn{font-size:12px;padding:9px 6px;}
     .level-btn{font-size:12px;padding:10px 6px;}
@@ -859,10 +854,14 @@
 </head>
 <body>
 <div class="stage">
-  <header id="site-header">
-    <div class="kicker">SIMPLE TYPING</div>
-    <h1>シンプルタイピング</h1>
-  </header>
+  <div class="menu-bar" id="site-header">
+    <div class="menu-title">シンプルタイピング</div>
+    <div class="menu-auth">
+      <span class="player-name-label" id="current-player-label"></span>
+      <div class="google-signin-row" id="google-signin-container"></div>
+      <button class="switch-player-btn hidden" id="logout-btn"><i class="fas fa-right-from-bracket"></i> ログアウト</button>
+    </div>
+  </div>
 
   <div class="panel">
 
@@ -883,12 +882,6 @@
         <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
         <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
       </div>
-
-      <div class="player-name-row">
-        <span class="player-name-label" id="current-player-label"></span>
-        <button class="switch-player-btn hidden" id="logout-btn"><i class="fas fa-right-from-bracket"></i> ログアウト</button>
-      </div>
-      <div class="google-signin-row" id="google-signin-container"></div>
 
       <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
 
