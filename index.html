@@ -1153,6 +1153,7 @@ nameInputFieldEl.addEventListener("keydown", (e) => {
 
 const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
 const SESSION_TOKEN_KEY = "sessionToken";
+const GUEST_NAME_KEY = "guestPlayerName";
 const currentPlayerLabelEl = document.getElementById("current-player-label");
 const logoutBtnEl = document.getElementById("logout-btn");
 const googleLoginBtnEl = document.getElementById("google-login-btn");
@@ -1182,6 +1183,7 @@ editNameBtnEl.addEventListener("click", () => {
       }
     } else {
       currentPlayerName = name;
+      localStorage.setItem(GUEST_NAME_KEY, name);
     }
     updatePlayerNameLabel();
     updateSetupHighScore();
@@ -1235,7 +1237,7 @@ async function showLoggedInUi(name, token){
 }
 
 function showLoggedOutUi(){
-  currentPlayerName = "GUEST";
+  currentPlayerName = localStorage.getItem(GUEST_NAME_KEY) || "GUEST";
   serverHighScores = null;
   updatePlayerNameLabel();
   updateSetupHighScore();
