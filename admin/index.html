@@ -426,6 +426,7 @@ function renderBoards(data){
           del.className = "delete-btn";
           del.textContent = "削除";
           del.addEventListener("click", async () => {
+            if(!confirm(`${scoreName}（${scoreValue}）を削除しますか？`)) return;
             await callAdmin("delete", { mode, level, score: scoreValue });
             loadDashboard();
           });
