@@ -1161,7 +1161,7 @@ const googleBtnContainerEl = document.getElementById("google-btn-container");
 const editNameBtnEl = document.getElementById("edit-name-btn");
 
 editNameBtnEl.addEventListener("click", () => {
-  const prefill = currentPlayerName && currentPlayerName !== "GUEST" ? currentPlayerName : "";
+  const prefill = currentPlayerName || "";
   showNameInputModal(async (name) => {
     const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
     if(isLoggedIn){
