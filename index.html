@@ -113,6 +113,23 @@
     overflow:hidden;
   }
 
+  .menu-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-shrink:0;
+    min-width:0;
+    text-decoration:none;
+    color:inherit;
+  }
+
+  .menu-logo{
+    height:28px;
+    width:auto;
+    display:block;
+    flex-shrink:0;
+  }
+
   .menu-title{
     font-family:'BIZ UDPGothic', sans-serif;
     font-weight:800;
@@ -917,6 +934,12 @@
       padding:10px 14px;
       gap:8px;
     }
+    .menu-brand{
+      gap:8px;
+    }
+    .menu-logo{
+      height:24px;
+    }
     .menu-title{
       font-size:17px;
     }
@@ -942,6 +965,8 @@
     body.game-active{padding:10px 10px;}
     .panel{padding:18px 14px;}
     .menu-bar{padding:8px 12px;}
+    .menu-brand{gap:6px;}
+    .menu-logo{height:22px;}
     .menu-title{font-size:16px;}
 
     .mode-btn{font-size:12px;padding:9px 6px;}
@@ -972,7 +997,10 @@
 <body>
 <div class="stage">
   <div class="menu-bar" id="site-header">
-    <div class="menu-title">シンプルタイピング</div>
+    <a href="/" class="menu-brand">
+      <img src="logo.svg" alt="シンプルタイピング" class="menu-logo">
+      <div class="menu-title">シンプルタイピング</div>
+    </a>
     <div class="menu-auth">
       <span class="player-name-label" id="current-player-label"></span>
       <button class="edit-name-btn" id="edit-name-btn" aria-label="名前を変更"><i class="fas fa-pen"></i></button>
