@@ -1208,6 +1208,51 @@ async function verifySession(){
   }
 }
 
+async function handleGoogleCredential(response){
+  let data;
+  try{
+    const res = await fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "login", idToken: response.credential })
+    });
+    data = await res.json();
+  }catch(e){
+    showCustomAlert("ログインに失敗しました");
+    return;
+  }
+  if(data.error){
+    showCustomAlert("ログインに失敗しました");
+    return;
+  }
+  closeGoogleLoginPopup();
+  if(data.isNewUser){
+    showNameInputModal(async (name) => {
+      let regData;
+      try{
+        const regRes = await fetch(`${RANKING_API_URL}/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "register", pendingToken: data.pendingToken, name })
+        });
+        regData = await regRes.json();
+      }catch(e){
+        showCustomAlert("登録に失敗しました");
+        return;
+      }
+      if(regData.token){
+        setSessionToken(regData.token);
+        await showLoggedInUi(regData.name, regData.token);
+      } else {
+        showCustomAlert("登録に失敗しました");
+      }
+    });
+  } else {
+    setSessionToken(data.token);
+    await showLoggedInUi(data.name, data.token);
+  }
+}
+
 const googleLoginOverlayEl = document.getElementById("google-login-overlay");
 const googleLoginCloseBtnEl = document.getElementById("google-login-close-btn");
 let googleSignInReady = false;
@@ -1216,8 +1261,7 @@ function initGoogleSignIn(){
   if(!window.google || !google.accounts || !google.accounts.id) return;
   google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
-    ux_mode: "redirect",
-    login_uri: `${RANKING_API_URL}/google-redirect`
+    callback: handleGoogleCredential
   });
   googleSignInReady = true;
 }
@@ -1262,68 +1306,9 @@ logoutBtnEl.addEventListener("click", () => {
   }
 });
 
-async function processGoogleRedirectResult(){
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get("token");
-  const name = params.get("name") || "";
-  const pendingToken = params.get("pendingToken");
-  const isNewUser = params.get("newUser") === "1";
-  const loginError = params.get("loginError") === "1";
-
-  if(!token && !pendingToken && !loginError) return false;
-
-  params.delete("token");
-  params.delete("name");
-  params.delete("pendingToken");
-  params.delete("newUser");
-  params.delete("loginError");
-  const cleanUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : "");
-  history.replaceState(null, "", cleanUrl);
-
-  if(loginError){
-    showCustomAlert("ログインに失敗しました");
-    return true;
-  }
-
-  if(isNewUser && pendingToken){
-    showNameInputModal(async (name) => {
-      let regData;
-      try{
-        const regRes = await fetch(`${RANKING_API_URL}/auth`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "register", pendingToken, name })
-        });
-        regData = await regRes.json();
-      }catch(e){
-        showCustomAlert("登録に失敗しました");
-        return;
-      }
-      if(regData.token){
-        setSessionToken(regData.token);
-        await showLoggedInUi(regData.name, regData.token);
-      } else {
-        showCustomAlert("登録に失敗しました");
-      }
-    });
-    return true;
-  }
-
-  if(token){
-    setSessionToken(token);
-    await showLoggedInUi(name, token);
-    return true;
-  }
-
-  return true;
-}
-
-window.addEventListener("load", async () => {
+window.addEventListener("load", () => {
   initGoogleSignIn();
-  const handled = await processGoogleRedirectResult();
-  if(!handled){
-    verifySession();
-  }
+  verifySession();
 });
 
 const wordBank = {
