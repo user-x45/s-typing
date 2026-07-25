@@ -236,6 +236,14 @@
     width:40px;
   }
 
+  .score-name{
+    flex:1;
+    padding-right:8px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
   .score-value{
     flex:1;
     font-weight:600;
@@ -395,7 +403,10 @@ function renderBoards(data){
         empty.textContent = "データがありません";
         board.appendChild(empty);
       } else {
-        scores.forEach((score, i) => {
+        scores.forEach((entry, i) => {
+          const scoreValue = typeof entry === "object" && entry !== null ? entry.score : entry;
+          const scoreName = typeof entry === "object" && entry !== null && entry.name ? entry.name : "GUEST";
+
           const row = document.createElement("div");
           row.className = "score-row";
 
@@ -403,19 +414,24 @@ function renderBoards(data){
           rank.className = "score-rank";
           rank.textContent = `${i + 1}位`;
 
+          const name = document.createElement("div");
+          name.className = "score-name";
+          name.textContent = scoreName;
+
           const value = document.createElement("div");
           value.className = "score-value";
-          value.textContent = score;
+          value.textContent = scoreValue;
 
           const del = document.createElement("button");
           del.className = "delete-btn";
           del.textContent = "削除";
           del.addEventListener("click", async () => {
-            await callAdmin("delete", { mode, level, score });
+            await callAdmin("delete", { mode, level, score: scoreValue });
             loadDashboard();
           });
 
           row.appendChild(rank);
+          row.appendChild(name);
           row.appendChild(value);
           row.appendChild(del);
           board.appendChild(row);
