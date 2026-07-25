@@ -131,12 +131,69 @@
   }
 
   .google-btn-container{
+    display:flex;
+    justify-content:center;
+  }
+
+  .google-login-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(31,28,25,0.55);
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    padding:20px;
+  }
+
+  .google-login-overlay.visible{
+    display:flex;
+  }
+
+  .google-login-box{
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:28px 24px;
+    max-width:320px;
+    width:100%;
+    text-align:center;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .google-login-box::before{
+    content:"";
     position:absolute;
-    width:1px;
-    height:1px;
-    overflow:hidden;
-    opacity:0.01;
+    inset:6px;
+    border:1px solid rgba(31,28,25,0.12);
+    border-radius:2px;
     pointer-events:none;
+  }
+
+  .google-login-message{
+    font-size:15px;
+    color:var(--ink);
+    margin-bottom:20px;
+  }
+
+  .google-login-close-btn{
+    margin-top:18px;
+    padding:8px 28px;
+    background:transparent;
+    border:1.5px solid var(--line);
+    border-radius:3px;
+    font-family:'BIZ UDPGothic', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all 0.2s ease;
+  }
+
+  .google-login-close-btn:hover{
+    border-color:var(--gold);
+    color:var(--ink);
   }
 
   .custom-alert-overlay{
@@ -891,7 +948,6 @@
     <div class="menu-auth">
       <span class="player-name-label" id="current-player-label"></span>
       <button class="switch-player-btn" id="google-login-btn"><i class="fab fa-google"></i> ログイン</button>
-      <div id="google-btn-container" class="google-btn-container"></div>
       <button class="switch-player-btn hidden" id="logout-btn"><i class="fas fa-right-from-bracket"></i> ログアウト</button>
     </div>
   </div>
@@ -991,6 +1047,14 @@
       <button class="retry-btn" id="retry-btn">もう一度</button>
     </div>
 
+  </div>
+</div>
+
+<div class="google-login-overlay" id="google-login-overlay">
+  <div class="google-login-box">
+    <div class="google-login-message">Googleアカウントでログイン</div>
+    <div id="google-btn-container" class="google-btn-container"></div>
+    <button class="google-login-close-btn" id="google-login-close-btn">閉じる</button>
   </div>
 </div>
 
@@ -1161,6 +1225,7 @@ async function handleGoogleCredential(response){
     showCustomAlert("ログインに失敗しました");
     return;
   }
+  closeGoogleLoginPopup();
   if(data.isNewUser){
     showNameInputModal(async (name) => {
       let regData;
@@ -1188,19 +1253,43 @@ async function handleGoogleCredential(response){
   }
 }
 
+const googleLoginOverlayEl = document.getElementById("google-login-overlay");
+const googleLoginCloseBtnEl = document.getElementById("google-login-close-btn");
+let googleSignInReady = false;
+
 function initGoogleSignIn(){
   if(!window.google || !google.accounts || !google.accounts.id) return;
   google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
     callback: handleGoogleCredential
   });
+  googleSignInReady = true;
+}
+
+function openGoogleLoginPopup(){
+  if(!googleSignInReady){
+    initGoogleSignIn();
+  }
+  googleBtnContainerEl.innerHTML = "";
   google.accounts.id.renderButton(googleBtnContainerEl, { theme: "outline", size: "large", text: "signin_with", locale: "ja" });
+  googleLoginOverlayEl.classList.add("visible");
+}
+
+function closeGoogleLoginPopup(){
+  googleLoginOverlayEl.classList.remove("visible");
 }
 
 googleLoginBtnEl.addEventListener("click", () => {
-  const realBtn = googleBtnContainerEl.querySelector("div[role=button]");
-  if(realBtn){
-    realBtn.click();
+  openGoogleLoginPopup();
+});
+
+googleLoginCloseBtnEl.addEventListener("click", () => {
+  closeGoogleLoginPopup();
+});
+
+googleLoginOverlayEl.addEventListener("click", (e) => {
+  if(e.target === googleLoginOverlayEl){
+    closeGoogleLoginPopup();
   }
 });
 
