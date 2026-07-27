@@ -861,6 +861,16 @@
     margin-bottom:4px;
   }
 
+  .site-footer{
+    text-align:center;
+    margin-top:16px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+    font-size:11px;
+    color:var(--ink-soft);
+    opacity:0.7;
+  }
+
   .name-input-overlay{
     display:none;
     position:fixed;
@@ -1170,6 +1180,8 @@
           <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
           <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
         </ul>
+
+        <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
       </div>
     </div>
 
@@ -1849,6 +1861,8 @@ function applyStateFromHash(){
   loadRanking();
   updateSetupHighScore();
 }
+
+document.getElementById("footer-year").textContent = new Date().getFullYear();
 
 applyStateFromHash();
 window.addEventListener("hashchange", applyStateFromHash);
