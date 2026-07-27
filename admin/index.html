@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>ランキング管理｜シンプルタイピング</title>
+<title>管理者ページ｜シンプルタイピング</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap');
 
@@ -173,6 +173,36 @@
     to{ transform:rotate(360deg); }
   }
 
+  .menu-panel{
+    max-width:420px;
+    margin:0 auto;
+  }
+
+  .menu-grid{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .menu-btn{
+    width:100%;
+    padding:18px;
+    background:var(--panel-bg-soft);
+    border:1.5px solid var(--line);
+    border-radius:4px;
+    font-family:'BIZ UDPGothic', sans-serif;
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+    cursor:pointer;
+    text-align:center;
+  }
+
+  .menu-btn:hover{
+    border-color:var(--hanko);
+    color:var(--hanko);
+  }
+
   .board-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
@@ -271,11 +301,11 @@
 
   .top-actions{
     display:flex;
-    justify-content:flex-end;
+    justify-content:space-between;
     margin-bottom:16px;
   }
 
-  .refresh-btn{
+  .refresh-btn, .back-btn{
     background:transparent;
     border:1.5px solid var(--ink);
     color:var(--ink);
@@ -286,8 +316,65 @@
     cursor:pointer;
   }
 
-  .refresh-btn:hover{
+  .refresh-btn:hover, .back-btn:hover{
     background:var(--ink);
+    color:var(--washi);
+  }
+
+  .user-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .user-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--panel-bg-soft);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:12px 16px;
+  }
+
+  .user-info{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+
+  .user-name{
+    font-family:'BIZ UDPGothic', sans-serif;
+    font-weight:700;
+    font-size:14px;
+  }
+
+  .user-sub{
+    font-size:11px;
+    color:var(--ink-soft);
+    opacity:0.7;
+    word-break:break-all;
+  }
+
+  .user-scores{
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
+
+  .user-delete-btn{
+    background:transparent;
+    border:1px solid var(--hanko);
+    color:var(--hanko);
+    border-radius:3px;
+    padding:6px 14px;
+    font-size:12px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+
+  .user-delete-btn:hover{
+    background:var(--hanko);
     color:var(--washi);
   }
 </style>
@@ -296,7 +383,7 @@
 <div class="stage">
   <header>
     <div class="kicker">SIMPLE TYPING</div>
-    <h1>ランキング管理</h1>
+    <h1>管理者ページ</h1>
   </header>
 
   <div class="panel login-panel" id="login-panel">
@@ -311,11 +398,27 @@
     <div class="loading-text">読み込み中...</div>
   </div>
 
-  <div id="dashboard" class="hidden">
+  <div class="panel menu-panel hidden" id="menu-panel">
+    <div class="menu-grid">
+      <button class="menu-btn" id="menu-ranking-btn">ランキング管理</button>
+      <button class="menu-btn" id="menu-users-btn">ユーザー管理</button>
+    </div>
+  </div>
+
+  <div id="ranking-dashboard" class="hidden">
     <div class="top-actions">
+      <button class="back-btn" id="ranking-back-btn">戻る</button>
       <button class="refresh-btn" id="refresh-btn">再読み込み</button>
     </div>
     <div class="board-grid" id="board-grid"></div>
+  </div>
+
+  <div id="user-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="user-back-btn">戻る</button>
+      <button class="refresh-btn" id="user-refresh-btn">再読み込み</button>
+    </div>
+    <div class="user-list" id="user-list"></div>
   </div>
 </div>
 
@@ -330,12 +433,30 @@ let adminToken = "";
 
 const loginPanelEl = document.getElementById("login-panel");
 const loadingPanelEl = document.getElementById("loading-panel");
-const dashboardEl = document.getElementById("dashboard");
+const menuPanelEl = document.getElementById("menu-panel");
+const rankingDashboardEl = document.getElementById("ranking-dashboard");
+const userDashboardEl = document.getElementById("user-dashboard");
 const passwordInputEl = document.getElementById("password-input");
 const loginBtnEl = document.getElementById("login-btn");
 const loginErrorEl = document.getElementById("login-error");
 const refreshBtnEl = document.getElementById("refresh-btn");
 const boardGridEl = document.getElementById("board-grid");
+const userListEl = document.getElementById("user-list");
+const menuRankingBtnEl = document.getElementById("menu-ranking-btn");
+const menuUsersBtnEl = document.getElementById("menu-users-btn");
+const rankingBackBtnEl = document.getElementById("ranking-back-btn");
+const userBackBtnEl = document.getElementById("user-back-btn");
+const userRefreshBtnEl = document.getElementById("user-refresh-btn");
+
+function showOnly(el){
+  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl].forEach(node => {
+    if(node === el){
+      node.classList.remove("hidden");
+    } else {
+      node.classList.add("hidden");
+    }
+  });
+}
 
 async function callAdmin(action, extra){
   const res = await fetch(`${WORKER_URL}/admin`, {
@@ -390,7 +511,7 @@ function renderBoards(data){
       clearBtn.addEventListener("click", async () => {
         if(!confirm(`${MODE_LABELS[mode]}・${LEVEL_LABELS[level]} のランキングを全て削除しますか？`)) return;
         await callAdmin("clear", { mode, level });
-        loadDashboard();
+        loadRankingDashboard();
       });
 
       head.appendChild(title);
@@ -428,7 +549,7 @@ function renderBoards(data){
           del.addEventListener("click", async () => {
             if(!confirm(`${scoreName}（${scoreValue}）を削除しますか？`)) return;
             await callAdmin("delete", { mode, level, score: scoreValue });
-            loadDashboard();
+            loadRankingDashboard();
           });
 
           row.appendChild(rank);
@@ -444,33 +565,90 @@ function renderBoards(data){
   }
 }
 
-async function loadDashboard(){
+function renderUsers(users){
+  userListEl.innerHTML = "";
+  if(!users || users.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "登録されているユーザーがいません";
+    userListEl.appendChild(empty);
+    return;
+  }
+
+  users.forEach(user => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const name = document.createElement("div");
+    name.className = "user-name";
+    name.textContent = user.name || "GUEST";
+
+    const sub = document.createElement("div");
+    sub.className = "user-sub";
+    sub.textContent = user.sub;
+
+    const scoreKeys = Object.keys(user.highScores || {});
+    const scores = document.createElement("div");
+    scores.className = "user-scores";
+    scores.textContent = scoreKeys.length > 0
+      ? scoreKeys.map(k => `${k}: ${user.highScores[k]}`).join(" / ")
+      : "ハイスコアなし";
+
+    info.appendChild(name);
+    info.appendChild(sub);
+    info.appendChild(scores);
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "user-delete-btn";
+    delBtn.textContent = "削除";
+    delBtn.addEventListener("click", async () => {
+      if(!confirm(`ユーザー「${user.name || "GUEST"}」を削除しますか？この操作は取り消せません`)) return;
+      await callAdmin("deleteUser", { sub: user.sub });
+      loadUserDashboard();
+    });
+
+    row.appendChild(info);
+    row.appendChild(delBtn);
+    userListEl.appendChild(row);
+  });
+}
+
+async function loadRankingDashboard(){
   try{
     const data = await callAdmin("list", {});
     renderBoards(data);
   }catch(e){
-    adminToken = "";
-    dashboardEl.classList.add("hidden");
-    loadingPanelEl.classList.add("hidden");
-    loginPanelEl.classList.remove("hidden");
-    loginErrorEl.textContent = "セッションが切れました。もう一度パスワードを入力してください";
+    handleSessionExpired();
   }
+}
+
+async function loadUserDashboard(){
+  try{
+    const data = await callAdmin("listUsers", {});
+    renderUsers(data.users);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+function handleSessionExpired(){
+  adminToken = "";
+  showOnly(loginPanelEl);
+  loginErrorEl.textContent = "セッションが切れました。もう一度パスワードを入力してください";
 }
 
 async function tryLogin(){
   loginErrorEl.textContent = "";
-  loginPanelEl.classList.add("hidden");
-  loadingPanelEl.classList.remove("hidden");
+  showOnly(loadingPanelEl);
   try{
     adminToken = await login(passwordInputEl.value);
     passwordInputEl.value = "";
-    const data = await callAdmin("list", {});
-    loadingPanelEl.classList.add("hidden");
-    dashboardEl.classList.remove("hidden");
-    renderBoards(data);
+    showOnly(menuPanelEl);
   }catch(e){
-    loadingPanelEl.classList.add("hidden");
-    loginPanelEl.classList.remove("hidden");
+    showOnly(loginPanelEl);
     if(e.message === "locked"){
       const minutes = Math.ceil(e.retryAfterSeconds / 60);
       loginErrorEl.textContent = `試行回数が多すぎます。${minutes}分後にもう一度お試しください`;
@@ -484,7 +662,22 @@ loginBtnEl.addEventListener("click", tryLogin);
 passwordInputEl.addEventListener("keydown", (e) => {
   if(e.key === "Enter") tryLogin();
 });
-refreshBtnEl.addEventListener("click", loadDashboard);
+
+menuRankingBtnEl.addEventListener("click", async () => {
+  showOnly(rankingDashboardEl);
+  await loadRankingDashboard();
+});
+
+menuUsersBtnEl.addEventListener("click", async () => {
+  showOnly(userDashboardEl);
+  await loadUserDashboard();
+});
+
+rankingBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+userBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+
+refreshBtnEl.addEventListener("click", loadRankingDashboard);
+userRefreshBtnEl.addEventListener("click", loadUserDashboard);
 </script>
 </body>
 </html>
