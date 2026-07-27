@@ -1707,6 +1707,7 @@ loadRanking();
 let ws = null;
 let matchId = null;
 let myRole = null;
+let opponentName = "";
 let isOnlineMode = false;
 let onlineWordDeck = [];
 let onlineIndex = 0;
@@ -1815,13 +1816,15 @@ function startOnlineSearch(){
   searchingEl.classList.add("visible");
   let secondsLeft = 15;
   searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
-  ws = new WebSocket(`${ONLINE_SERVER_URL}/lobby?mode=${currentMode}&level=${currentLevel}`);
+  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
+  ws = new WebSocket(`${ONLINE_SERVER_URL}/lobby?mode=${currentMode}&level=${currentLevel}&name=${myName}`);
   ws.onmessage = (event) => {
     const msg = JSON.parse(event.data);
     if(msg.type === "matched"){
       clearInterval(searchCountdownTimer);
       matchId = msg.matchId;
       myRole = msg.role;
+      opponentName = msg.opponentName || "GUEST";
       connectToMatch();
     } else if(msg.type === "timeout"){
       clearInterval(searchCountdownTimer);
@@ -1907,7 +1910,8 @@ function beginOnlineMatch(){
   endGameBtn.classList.add("hidden");
   const modeLabel = currentMode === "sentence" ? "文章" : "ひらがな";
   levelLabelEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）`;
-  scoreLabelEl.textContent = `せいかい 0 もん`;
+  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
+  scoreLabelEl.textContent = `${myDisplayName} 0 もん`;
   timeLabelEl.textContent = `残り 100 秒`;
   timerFillEl.style.width = "100%";
   updateOpponentHud();
@@ -1933,7 +1937,8 @@ function beginOnlineMatch(){
 }
 
 function updateOpponentHud(){
-  opponentScoreLabelEl.textContent = `あいて ${opponentScore} もん`;
+  const displayName = opponentName || "GUEST";
+  opponentScoreLabelEl.textContent = `${displayName} ${opponentScore} もん`;
 }
 
 function handleOnlineSubmit(typed){
@@ -1948,7 +1953,8 @@ function handleOnlineSubmit(typed){
   onlineChars += currentWord.length;
   onlineIndex++;
   currentWord = onlineWordDeck[onlineIndex % onlineWordDeck.length];
-  scoreLabelEl.textContent = `せいかい ${onlineScore} もん`;
+  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
+  scoreLabelEl.textContent = `${myDisplayName} ${onlineScore} もん`;
   renderWord();
   inputEl.value = "";
   inputEl.classList.remove("shake");
@@ -1981,11 +1987,14 @@ function finishOnlineGame(msg){
   else if(msg.result === "lose") resultLabel = "はいせん";
   resultScoreEl.textContent = resultLabel;
   const modeLabel = currentMode === "sentence" ? "文章" : "ひらがな";
-  resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）/ あなた ${you.score}もん・あいて ${opponent.score}もん`;
+  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
+  const oppDisplayName = opponentName || "GUEST";
+  resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）/ ${myDisplayName} ${you.score}もん・${oppDisplayName} ${opponent.score}もん`;
   statAccuracyEl.textContent = `${accuracy}%`;
   statSpeedEl.textContent = speed;
   statMissEl.textContent = you.miss;
   if(ws){ ws.close(); ws = null; }
+  opponentName = "";
 }
 
 function pickWord(){
