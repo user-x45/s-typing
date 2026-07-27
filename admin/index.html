@@ -203,6 +203,26 @@
     color:var(--hanko);
   }
 
+  .logout-btn{
+    width:100%;
+    margin-top:6px;
+    padding:12px;
+    background:transparent;
+    border:1.5px solid var(--hanko);
+    border-radius:4px;
+    font-family:'BIZ UDPGothic', sans-serif;
+    font-size:14px;
+    font-weight:700;
+    color:var(--hanko);
+    cursor:pointer;
+    text-align:center;
+  }
+
+  .logout-btn:hover{
+    background:var(--hanko);
+    color:var(--washi);
+  }
+
   .board-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
@@ -402,6 +422,7 @@
     <div class="menu-grid">
       <button class="menu-btn" id="menu-ranking-btn">ランキング管理</button>
       <button class="menu-btn" id="menu-users-btn">ユーザー管理</button>
+      <button class="logout-btn" id="logout-btn">ログアウト</button>
     </div>
   </div>
 
@@ -444,6 +465,7 @@ const boardGridEl = document.getElementById("board-grid");
 const userListEl = document.getElementById("user-list");
 const menuRankingBtnEl = document.getElementById("menu-ranking-btn");
 const menuUsersBtnEl = document.getElementById("menu-users-btn");
+const logoutBtnEl = document.getElementById("logout-btn");
 const rankingBackBtnEl = document.getElementById("ranking-back-btn");
 const userBackBtnEl = document.getElementById("user-back-btn");
 const userRefreshBtnEl = document.getElementById("user-refresh-btn");
@@ -510,8 +532,13 @@ function renderBoards(data){
       clearBtn.textContent = "全削除";
       clearBtn.addEventListener("click", async () => {
         if(!confirm(`${MODE_LABELS[mode]}・${LEVEL_LABELS[level]} のランキングを全て削除しますか？`)) return;
-        await callAdmin("clear", { mode, level });
-        loadRankingDashboard();
+        showOnly(loadingPanelEl);
+        try{
+          await callAdmin("clear", { mode, level });
+          await loadRankingDashboard();
+        }catch(e){
+          handleSessionExpired();
+        }
       });
 
       head.appendChild(title);
@@ -548,8 +575,13 @@ function renderBoards(data){
           del.textContent = "削除";
           del.addEventListener("click", async () => {
             if(!confirm(`${scoreName}（${scoreValue}）を削除しますか？`)) return;
-            await callAdmin("delete", { mode, level, score: scoreValue });
-            loadRankingDashboard();
+            showOnly(loadingPanelEl);
+            try{
+              await callAdmin("delete", { mode, level, score: scoreValue });
+              await loadRankingDashboard();
+            }catch(e){
+              handleSessionExpired();
+            }
           });
 
           row.appendChild(rank);
@@ -606,8 +638,13 @@ function renderUsers(users){
     delBtn.textContent = "削除";
     delBtn.addEventListener("click", async () => {
       if(!confirm(`ユーザー「${user.name || "GUEST"}」を削除しますか？この操作は取り消せません`)) return;
-      await callAdmin("deleteUser", { sub: user.sub });
-      loadUserDashboard();
+      showOnly(loadingPanelEl);
+      try{
+        await callAdmin("deleteUser", { sub: user.sub });
+        await loadUserDashboard();
+      }catch(e){
+        handleSessionExpired();
+      }
     });
 
     row.appendChild(info);
@@ -617,18 +654,22 @@ function renderUsers(users){
 }
 
 async function loadRankingDashboard(){
+  showOnly(loadingPanelEl);
   try{
     const data = await callAdmin("list", {});
     renderBoards(data);
+    showOnly(rankingDashboardEl);
   }catch(e){
     handleSessionExpired();
   }
 }
 
 async function loadUserDashboard(){
+  showOnly(loadingPanelEl);
   try{
     const data = await callAdmin("listUsers", {});
     renderUsers(data.users);
+    showOnly(userDashboardEl);
   }catch(e){
     handleSessionExpired();
   }
@@ -663,14 +704,14 @@ passwordInputEl.addEventListener("keydown", (e) => {
   if(e.key === "Enter") tryLogin();
 });
 
-menuRankingBtnEl.addEventListener("click", async () => {
-  showOnly(rankingDashboardEl);
-  await loadRankingDashboard();
-});
+menuRankingBtnEl.addEventListener("click", loadRankingDashboard);
+menuUsersBtnEl.addEventListener("click", loadUserDashboard);
 
-menuUsersBtnEl.addEventListener("click", async () => {
-  showOnly(userDashboardEl);
-  await loadUserDashboard();
+logoutBtnEl.addEventListener("click", () => {
+  adminToken = "";
+  passwordInputEl.value = "";
+  loginErrorEl.textContent = "";
+  showOnly(loginPanelEl);
 });
 
 rankingBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
