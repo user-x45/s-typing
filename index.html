@@ -861,9 +861,28 @@
     margin-bottom:4px;
   }
 
+  .site-footer-links{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    margin-top:16px;
+  }
+
+  .site-footer-links a{
+    font-size:11px;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    opacity:0.8;
+  }
+
+  .site-footer-links a:hover{
+    color:var(--hanko);
+    opacity:1;
+  }
+
   .site-footer{
     text-align:center;
-    margin-top:16px;
+    margin-top:8px;
     padding-top:14px;
     border-top:1px solid var(--line);
     font-size:11px;
@@ -1181,6 +1200,7 @@
           <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
         </ul>
 
+        <div class="site-footer-links"><a href="/terms">利用規約</a><a href="/privacy">プライバシーポリシー</a></div>
         <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
       </div>
     </div>
