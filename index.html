@@ -829,6 +829,38 @@
     color:var(--ink);
   }
 
+  .info-box{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+  }
+
+  .info-title{
+    text-align:center;
+    font-family:'BIZ UDPGothic', sans-serif;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:0.1em;
+    color:var(--gold);
+    margin-bottom:10px;
+  }
+
+  .info-title:not(:first-child){
+    margin-top:18px;
+  }
+
+  .info-list{
+    margin:0;
+    padding:0 0 0 1.2em;
+    font-size:13px;
+    line-height:1.7;
+    color:var(--ink-soft);
+  }
+
+  .info-list li{
+    margin-bottom:4px;
+  }
+
   .name-input-overlay{
     display:none;
     position:fixed;
@@ -1120,6 +1152,24 @@
       <div class="ranking-box hidden" id="ranking-box">
         <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
         <ol class="ranking-list" id="ranking-list"></ol>
+      </div>
+
+      <div class="info-box">
+        <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
+        <ul class="info-list">
+          <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
+          <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
+          <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
+          <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
+        </ul>
+
+        <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
+        <ul class="info-list">
+          <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
+          <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
+          <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
+          <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
+        </ul>
       </div>
     </div>
 
