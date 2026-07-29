@@ -1568,11 +1568,10 @@ let googleSignInReady = false;
 
 function initGoogleSignIn(){
   if(!window.google || !google.accounts || !google.accounts.id) return;
-  const returnTo = window.location.origin + window.location.pathname;
   google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
     ux_mode: "redirect",
-    login_uri: `${RANKING_API_URL}/auth/google-redirect?return=${encodeURIComponent(returnTo)}`,
+    login_uri: `${RANKING_API_URL}/auth/google-redirect`,
     callback: handleGoogleCredential
   });
   googleSignInReady = true;
