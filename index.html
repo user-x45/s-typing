@@ -1570,64 +1570,10 @@ function initGoogleSignIn(){
   if(!window.google || !google.accounts || !google.accounts.id) return;
   google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
-    ux_mode: "redirect",
-    login_uri: `${RANKING_API_URL}/auth/google-redirect`,
+    ux_mode: "popup",
     callback: handleGoogleCredential
   });
   googleSignInReady = true;
-}
-
-function cleanGoogleRedirectParams(){
-  const cleanUrl = window.location.origin + window.location.pathname;
-  window.history.replaceState({}, document.title, cleanUrl);
-}
-
-async function processGoogleRedirectReturn(){
-  const params = new URLSearchParams(window.location.search);
-  const glogin = params.get("glogin");
-  if(!glogin) return;
-
-  if(glogin === "ok"){
-    const token = params.get("token");
-    const name = params.get("name") || "";
-    cleanGoogleRedirectParams();
-    if(token){
-      setSessionToken(token);
-      await showLoggedInUi(name, token);
-    }
-    return;
-  }
-
-  if(glogin === "new"){
-    const pendingToken = params.get("pendingToken");
-    cleanGoogleRedirectParams();
-    if(pendingToken){
-      showNameInputModal(async (name) => {
-        let regData;
-        try{
-          const regRes = await fetch(`${RANKING_API_URL}/auth`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "register", pendingToken, name })
-          });
-          regData = await regRes.json();
-        }catch(e){
-          showCustomAlert("登録に失敗しました");
-          return;
-        }
-        if(regData.token){
-          setSessionToken(regData.token);
-          await showLoggedInUi(regData.name, regData.token);
-        } else {
-          showCustomAlert("登録に失敗しました");
-        }
-      });
-    }
-    return;
-  }
-
-  cleanGoogleRedirectParams();
-  showCustomAlert("ログインに失敗しました");
 }
 
 function openGoogleLoginPopup(){
@@ -1678,9 +1624,7 @@ function hideAppLoadingOverlay(){
 
 window.addEventListener("load", () => {
   initGoogleSignIn();
-  const sessionLoadPromise = new URLSearchParams(window.location.search).get("glogin")
-    ? processGoogleRedirectReturn()
-    : verifySession();
+  const sessionLoadPromise = verifySession();
   Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
