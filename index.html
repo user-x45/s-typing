@@ -2335,6 +2335,11 @@ document.addEventListener("visibilitychange", () => {
   if(document.visibilityState !== "hidden") return;
   if(searchingEl.classList.contains("visible")){
     cancelSearch();
+  } else if(countdownEl.classList.contains("visible")){
+    clearInterval(countdownTimerId);
+    countdownEl.classList.remove("visible");
+    if(ws){ ws.close(); ws = null; }
+    setupEl.classList.remove("hidden");
   } else if(isOnlineMode){
     if(ws && ws.readyState === WebSocket.OPEN){
       ws.close();
