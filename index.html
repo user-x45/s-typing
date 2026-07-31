@@ -2330,6 +2330,23 @@ inputEl.addEventListener("keydown", (e) => {
   playSound(correctSoundEl);
   nextWord();
 });
+
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState !== "hidden") return;
+  if(searchingEl.classList.contains("visible")){
+    cancelSearch();
+  } else if(isOnlineMode){
+    if(ws && ws.readyState === WebSocket.OPEN){
+      ws.close();
+    }
+    finishOnlineGame({
+      you:{score:onlineScore, miss:onlineMiss},
+      opponent:{score:opponentScore, miss:0},
+      result:"lose",
+      forfeit:true
+    });
+  }
+});
 </script>
 </body>
 </html>
