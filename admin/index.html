@@ -40,6 +40,10 @@
 
   *{box-sizing:border-box;}
 
+  button, input, select, textarea{
+    font-family: inherit;
+  }
+
   html{height:100%;}
 
   body{
@@ -48,7 +52,7 @@
     min-height:100dvh;
     background:var(--washi);
     color:var(--ink);
-    font-family:'BIZ UDPGothic', sans-serif;
+    font-family: "BIZ UDPGothic", "HiraginoSans-W2", "Hiragino Kaku Gothic ProN", Meiryo, "メイリオ", sans-serif;
     line-height:1.5;
     display:flex;
     justify-content:center;
@@ -73,7 +77,6 @@
   }
 
   h1{
-    font-family:'BIZ UDPGothic', sans-serif;
     font-weight:800;
     font-size:30px;
     margin:0;
@@ -108,7 +111,6 @@
     font-size:16px;
     color:var(--ink);
     outline:none;
-    font-family:'BIZ UDPGothic', sans-serif;
   }
 
   input[type="password"]:focus{
@@ -123,7 +125,6 @@
     color:var(--washi);
     border:none;
     border-radius:3px;
-    font-family:'BIZ UDPGothic', sans-serif;
     font-size:15px;
     font-weight:700;
     cursor:pointer;
@@ -154,7 +155,6 @@
   }
 
   .loading-text{
-    font-family:'BIZ UDPGothic', sans-serif;
     font-size:15px;
     color:var(--ink-soft);
   }
@@ -190,7 +190,6 @@
     background:var(--panel-bg-soft);
     border:1.5px solid var(--line);
     border-radius:4px;
-    font-family:'BIZ UDPGothic', sans-serif;
     font-size:16px;
     font-weight:700;
     color:var(--ink);
@@ -210,7 +209,6 @@
     background:transparent;
     border:1.5px solid var(--hanko);
     border-radius:4px;
-    font-family:'BIZ UDPGothic', sans-serif;
     font-size:14px;
     font-weight:700;
     color:var(--hanko);
@@ -246,7 +244,6 @@
   }
 
   .board-title{
-    font-family:'BIZ UDPGothic', sans-serif;
     font-weight:700;
     font-size:15px;
   }
@@ -280,7 +277,6 @@
   }
 
   .score-rank{
-    font-family:'BIZ UDPGothic', sans-serif;
     font-weight:700;
     color:var(--hanko);
     width:40px;
@@ -331,7 +327,6 @@
     color:var(--ink);
     border-radius:3px;
     padding:8px 18px;
-    font-family:'BIZ UDPGothic', sans-serif;
     font-size:13px;
     cursor:pointer;
   }
@@ -364,7 +359,6 @@
   }
 
   .user-name{
-    font-family:'BIZ UDPGothic', sans-serif;
     font-weight:700;
     font-size:14px;
   }
