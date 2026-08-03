@@ -1249,7 +1249,7 @@
 
     <div class="online-status" id="friend-join">
       <div class="status-title">招待コードを入力してください</div>
-      <input type="text" class="friend-code-input" id="friend-code-input" maxlength="6" autocomplete="off" placeholder="コードを入力">
+      <input type="text" class="friend-code-input" id="friend-code-input" maxlength="6" autocomplete="off" inputmode="numeric" pattern="[0-9]*" placeholder="コードを入力">
       <div class="start-row">
         <button class="start-btn online-btn" id="friend-join-submit-btn">参加する</button>
       </div>
@@ -1684,6 +1684,9 @@ const friendJoinEl = document.getElementById("friend-join");
 const friendWaitingEl = document.getElementById("friend-waiting");
 const friendCodeLabelEl = document.getElementById("friend-code-label");
 const friendCodeInputEl = document.getElementById("friend-code-input");
+friendCodeInputEl.addEventListener("input", () => {
+  friendCodeInputEl.value = friendCodeInputEl.value.replace(/[^0-9]/g, "");
+});
 
 const ONLINE_SERVER_URL = "wss://key-onl.user-x45.workers.dev";
 const RANKING_API_URL = ONLINE_SERVER_URL.replace(/^wss:/, "https:").replace(/^ws:/, "http:");
@@ -2054,6 +2057,10 @@ function startFriendJoin(){
   const code = friendCodeInputEl.value.trim();
   if(!code){
     showCustomAlert("招待コードを入力してください");
+    return;
+  }
+  if(!/^[0-9]+$/.test(code)){
+    showCustomAlert("招待コードは数字のみ入力してください");
     return;
   }
   friendJoinEl.classList.remove("visible");
