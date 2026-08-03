@@ -416,6 +416,7 @@
     <div class="menu-grid">
       <button class="menu-btn" id="menu-ranking-btn">ランキング管理</button>
       <button class="menu-btn" id="menu-users-btn">ユーザー管理</button>
+      <button class="menu-btn" id="menu-invite-btn">招待コード管理</button>
       <button class="logout-btn" id="logout-btn">ログアウト</button>
     </div>
   </div>
@@ -435,6 +436,14 @@
     </div>
     <div class="user-list" id="user-list"></div>
   </div>
+
+  <div id="invite-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="invite-back-btn">戻る</button>
+      <button class="refresh-btn" id="invite-refresh-btn">再読み込み</button>
+    </div>
+    <div class="user-list" id="invite-list"></div>
+  </div>
 </div>
 
 <script>
@@ -451,21 +460,26 @@ const loadingPanelEl = document.getElementById("loading-panel");
 const menuPanelEl = document.getElementById("menu-panel");
 const rankingDashboardEl = document.getElementById("ranking-dashboard");
 const userDashboardEl = document.getElementById("user-dashboard");
+const inviteDashboardEl = document.getElementById("invite-dashboard");
 const passwordInputEl = document.getElementById("password-input");
 const loginBtnEl = document.getElementById("login-btn");
 const loginErrorEl = document.getElementById("login-error");
 const refreshBtnEl = document.getElementById("refresh-btn");
 const boardGridEl = document.getElementById("board-grid");
 const userListEl = document.getElementById("user-list");
+const inviteListEl = document.getElementById("invite-list");
 const menuRankingBtnEl = document.getElementById("menu-ranking-btn");
 const menuUsersBtnEl = document.getElementById("menu-users-btn");
+const menuInviteBtnEl = document.getElementById("menu-invite-btn");
 const logoutBtnEl = document.getElementById("logout-btn");
 const rankingBackBtnEl = document.getElementById("ranking-back-btn");
 const userBackBtnEl = document.getElementById("user-back-btn");
 const userRefreshBtnEl = document.getElementById("user-refresh-btn");
+const inviteBackBtnEl = document.getElementById("invite-back-btn");
+const inviteRefreshBtnEl = document.getElementById("invite-refresh-btn");
 
 function showOnly(el){
-  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl].forEach(node => {
+  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl].forEach(node => {
     if(node === el){
       node.classList.remove("hidden");
     } else {
@@ -647,6 +661,59 @@ function renderUsers(users){
   });
 }
 
+function renderInviteCodes(codes){
+  inviteListEl.innerHTML = "";
+  if(!codes || codes.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "有効な招待コードがありません";
+    inviteListEl.appendChild(empty);
+    return;
+  }
+
+  codes.forEach(entry => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const code = document.createElement("div");
+    code.className = "user-name";
+    code.textContent = entry.code;
+
+    const meta = document.createElement("div");
+    meta.className = "user-sub";
+    meta.textContent = `${MODE_LABELS[entry.mode] || entry.mode} / ${LEVEL_LABELS[entry.level] || entry.level}`;
+
+    const expires = document.createElement("div");
+    expires.className = "user-scores";
+    expires.textContent = `有効期限: ${new Date(entry.expiresAt).toLocaleString("ja-JP")}`;
+
+    info.appendChild(code);
+    info.appendChild(meta);
+    info.appendChild(expires);
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "user-delete-btn";
+    delBtn.textContent = "削除";
+    delBtn.addEventListener("click", async () => {
+      if(!confirm(`招待コード「${entry.code}」を削除しますか？`)) return;
+      showOnly(loadingPanelEl);
+      try{
+        await callAdmin("deleteInviteCode", { code: entry.code });
+        await loadInviteDashboard();
+      }catch(e){
+        handleSessionExpired();
+      }
+    });
+
+    row.appendChild(info);
+    row.appendChild(delBtn);
+    inviteListEl.appendChild(row);
+  });
+}
+
 async function loadRankingDashboard(){
   showOnly(loadingPanelEl);
   try{
@@ -664,6 +731,17 @@ async function loadUserDashboard(){
     const data = await callAdmin("listUsers", {});
     renderUsers(data.users);
     showOnly(userDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+async function loadInviteDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("listInviteCodes", {});
+    renderInviteCodes(data.codes);
+    showOnly(inviteDashboardEl);
   }catch(e){
     handleSessionExpired();
   }
@@ -700,6 +778,7 @@ passwordInputEl.addEventListener("keydown", (e) => {
 
 menuRankingBtnEl.addEventListener("click", loadRankingDashboard);
 menuUsersBtnEl.addEventListener("click", loadUserDashboard);
+menuInviteBtnEl.addEventListener("click", loadInviteDashboard);
 
 logoutBtnEl.addEventListener("click", () => {
   adminToken = "";
@@ -710,9 +789,11 @@ logoutBtnEl.addEventListener("click", () => {
 
 rankingBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
 userBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+inviteBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
 
 refreshBtnEl.addEventListener("click", loadRankingDashboard);
 userRefreshBtnEl.addEventListener("click", loadUserDashboard);
+inviteRefreshBtnEl.addEventListener("click", loadInviteDashboard);
 </script>
 </body>
 </html>
