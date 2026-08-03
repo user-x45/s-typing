@@ -1570,13 +1570,37 @@ function decodeGoogleIdTokenPayload(idToken){
   return JSON.parse(atob(base64));
 }
 
+function isGoogleAuthHash(hash){
+  return !!hash && (hash.includes("id_token") || hash.includes("access_token") || /^#?iss=/.test(hash));
+}
+
+function clearGoogleAuthHashFromUrl(){
+  if(isGoogleAuthHash(window.location.hash)){
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+    window.location.hash = "";
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
+}
+
+function scheduleGoogleAuthHashCleanup(){
+  clearGoogleAuthHashFromUrl();
+  requestAnimationFrame(clearGoogleAuthHashFromUrl);
+  setTimeout(clearGoogleAuthHashFromUrl, 100);
+  setTimeout(clearGoogleAuthHashFromUrl, 500);
+  setTimeout(clearGoogleAuthHashFromUrl, 1500);
+}
+
+window.addEventListener("hashchange", () => {
+  if(isGoogleAuthHash(window.location.hash)) clearGoogleAuthHashFromUrl();
+});
+
 async function processGoogleAuthRedirect(){
   const hash = window.location.hash;
-  if(!hash || !hash.includes("id_token")) return false;
+  if(!isGoogleAuthHash(hash)) return false;
   const params = new URLSearchParams(hash.substring(1));
   const idToken = params.get("id_token");
   const error = params.get("error");
-  history.replaceState(null, "", window.location.pathname + window.location.search);
+  scheduleGoogleAuthHashCleanup();
   if(error || !idToken) return false;
   const expectedNonce = sessionStorage.getItem(GOOGLE_AUTH_NONCE_KEY);
   sessionStorage.removeItem(GOOGLE_AUTH_NONCE_KEY);
