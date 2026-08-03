@@ -24,7 +24,6 @@
 <link href="favicon/180.png" rel="apple-touch-icon" type="image/png">
 <link href="favicon/152.png" rel="apple-touch-icon-precomposed" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org/",
@@ -202,11 +201,6 @@
     color:var(--ink);
   }
 
-  .google-btn-container{
-    display:flex;
-    justify-content:center;
-  }
-
   .app-loading-overlay{
     position:fixed;
     inset:0;
@@ -245,65 +239,6 @@
     to{ transform:rotate(360deg); }
   }
 
-  .google-login-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(31,28,25,0.55);
-    align-items:center;
-    justify-content:center;
-    z-index:1000;
-    padding:20px;
-  }
-
-  .google-login-overlay.visible{
-    display:flex;
-  }
-
-  .google-login-box{
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:4px;
-    padding:28px 24px;
-    max-width:320px;
-    width:100%;
-    text-align:center;
-    position:relative;
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  }
-
-  .google-login-box::before{
-    content:"";
-    position:absolute;
-    inset:6px;
-    border:1px solid rgba(31,28,25,0.12);
-    border-radius:2px;
-    pointer-events:none;
-  }
-
-  .google-login-message{
-    font-size:15px;
-    color:var(--ink);
-    margin-bottom:20px;
-  }
-
-  .google-login-close-btn{
-    margin-top:18px;
-    padding:8px 28px;
-    background:transparent;
-    border:1.5px solid var(--line);
-    border-radius:3px;
-    font-size:13px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-  }
-
-  .google-login-close-btn:hover{
-    border-color:var(--gold);
-    color:var(--ink);
-  }
 
   .custom-alert-overlay{
     display:none;
@@ -1376,14 +1311,6 @@
   </div>
 </div>
 
-<div class="google-login-overlay" id="google-login-overlay">
-  <div class="google-login-box">
-    <div class="google-login-message">Google アカウントでログイン</div>
-    <div id="google-btn-container" class="google-btn-container"></div>
-    <button class="google-login-close-btn" id="google-login-close-btn">閉じる</button>
-  </div>
-</div>
-
 <div class="custom-alert-overlay" id="custom-alert-overlay">
   <div class="custom-alert-box">
     <div class="custom-alert-message" id="custom-alert-message"></div>
@@ -1454,7 +1381,6 @@ const GUEST_NAME_KEY = "guestPlayerName";
 const currentPlayerLabelEl = document.getElementById("current-player-label");
 const logoutBtnEl = document.getElementById("logout-btn");
 const googleLoginBtnEl = document.getElementById("google-login-btn");
-const googleBtnContainerEl = document.getElementById("google-btn-container");
 const editNameBtnEl = document.getElementById("edit-name-btn");
 const menuToggleBtnEl = document.getElementById("menu-toggle-btn");
 const menuAuthPanelEl = document.getElementById("menu-auth-panel");
@@ -1572,13 +1498,13 @@ async function verifySession(){
   }
 }
 
-async function handleGoogleCredential(response){
+async function handleGoogleCredential(idToken){
   let data;
   try{
     const res = await fetch(`${RANKING_API_URL}/auth`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "login", idToken: response.credential })
+      body: JSON.stringify({ action: "login", idToken })
     });
     data = await res.json();
   }catch(e){
@@ -1589,7 +1515,6 @@ async function handleGoogleCredential(response){
     showCustomAlert("ログインに失敗しました");
     return;
   }
-  closeGoogleLoginPopup();
   if(data.isNewUser){
     showNameInputModal(async (name) => {
       let regData;
@@ -1617,44 +1542,60 @@ async function handleGoogleCredential(response){
   }
 }
 
-const googleLoginOverlayEl = document.getElementById("google-login-overlay");
-const googleLoginCloseBtnEl = document.getElementById("google-login-close-btn");
-let googleSignInReady = false;
+const GOOGLE_AUTH_NONCE_KEY = "googleAuthNonce";
 
-function initGoogleSignIn(){
-  if(!window.google || !google.accounts || !google.accounts.id) return;
-  google.accounts.id.initialize({
+function generateGoogleAuthNonce(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function startGoogleLogin(){
+  const nonce = generateGoogleAuthNonce();
+  sessionStorage.setItem(GOOGLE_AUTH_NONCE_KEY, nonce);
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  const params = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
-    callback: handleGoogleCredential
+    redirect_uri: redirectUri,
+    response_type: "id_token",
+    scope: "openid",
+    nonce,
+    prompt: "select_account"
   });
-  googleSignInReady = true;
+  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
 }
 
-function openGoogleLoginPopup(){
-  if(!googleSignInReady){
-    initGoogleSignIn();
+function decodeGoogleIdTokenPayload(idToken){
+  const payloadPart = idToken.split(".")[1];
+  const base64 = payloadPart.replace(/-/g, "+").replace(/_/g, "/");
+  return JSON.parse(atob(base64));
+}
+
+async function processGoogleAuthRedirect(){
+  const hash = window.location.hash;
+  if(!hash || !hash.includes("id_token")) return false;
+  const params = new URLSearchParams(hash.substring(1));
+  const idToken = params.get("id_token");
+  const error = params.get("error");
+  history.replaceState(null, "", window.location.pathname + window.location.search);
+  if(error || !idToken) return false;
+  const expectedNonce = sessionStorage.getItem(GOOGLE_AUTH_NONCE_KEY);
+  sessionStorage.removeItem(GOOGLE_AUTH_NONCE_KEY);
+  try{
+    const payload = decodeGoogleIdTokenPayload(idToken);
+    if(expectedNonce && payload.nonce !== expectedNonce){
+      showCustomAlert("ログインに失敗しました");
+      return true;
+    }
+  }catch(e){
+    showCustomAlert("ログインに失敗しました");
+    return true;
   }
-  googleBtnContainerEl.innerHTML = "";
-  google.accounts.id.renderButton(googleBtnContainerEl, { theme: "outline", size: "large", text: "signin_with", locale: "ja" });
-  googleLoginOverlayEl.classList.add("visible");
-}
-
-function closeGoogleLoginPopup(){
-  googleLoginOverlayEl.classList.remove("visible");
+  await handleGoogleCredential(idToken);
+  return true;
 }
 
 googleLoginBtnEl.addEventListener("click", () => {
-  openGoogleLoginPopup();
-});
-
-googleLoginCloseBtnEl.addEventListener("click", () => {
-  closeGoogleLoginPopup();
-});
-
-googleLoginOverlayEl.addEventListener("click", (e) => {
-  if(e.target === googleLoginOverlayEl){
-    closeGoogleLoginPopup();
-  }
+  startGoogleLogin();
 });
 
 logoutBtnEl.addEventListener("click", () => {
@@ -1676,9 +1617,9 @@ function hideAppLoadingOverlay(){
   appLoadingOverlayEl.classList.add("hidden");
 }
 
-window.addEventListener("load", () => {
-  initGoogleSignIn();
-  const sessionLoadPromise = verifySession();
+window.addEventListener("load", async () => {
+  const handledGoogleRedirect = await processGoogleAuthRedirect();
+  const sessionLoadPromise = handledGoogleRedirect ? Promise.resolve() : verifySession();
   Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
