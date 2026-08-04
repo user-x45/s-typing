@@ -1783,6 +1783,15 @@ async function loadRanking(){
   }
 }
 
+function logPlay(mode, level){
+  const name = normalizePlayerName(getPlayerName());
+  fetch(`${RANKING_API_URL}/playlog`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, mode, level })
+  }).catch(() => {});
+}
+
 async function submitScoreToRanking(score, mode, level, name){
   try{
     const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`, {
@@ -2122,6 +2131,7 @@ function startOnlineCountdown(){
 }
 
 function beginOnlineMatch(){
+  logPlay(currentMode, currentLevel);
   isOnlineMode = true;
   onlineIndex = 0;
   onlineScore = 0;
@@ -2274,6 +2284,7 @@ function nextWord(){
 }
 
 async function startGame(){
+  logPlay(currentMode, currentLevel);
   await ensureWordList(currentMode, currentLevel);
   setupEl.classList.add("hidden");
   resultEl.classList.remove("visible");
