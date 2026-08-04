@@ -462,6 +462,7 @@
 const WORKER_URL = "https://key-onl.user-x45.workers.dev";
 const MODE_LABELS = { hiragana: "ひらがな", katakana: "カタカナ", sentence: "文章" };
 const LEVEL_LABELS = { beginner: "初級", intermediate: "中級", advanced: "上級" };
+const MATCH_TYPE_LABELS = { solo: "一人プレイ", online: "オンライン対戦", friend: "フレンド対戦" };
 const MODES = ["hiragana", "katakana", "sentence"];
 const LEVELS = ["beginner", "intermediate", "advanced"];
 
@@ -757,12 +758,18 @@ function renderPlayLog(entries){
     meta.className = "user-sub";
     meta.textContent = `${MODE_LABELS[entry.mode] || entry.mode} / ${LEVEL_LABELS[entry.level] || entry.level}`;
 
+    const matchInfo = document.createElement("div");
+    matchInfo.className = "user-sub";
+    const matchTypeLabel = MATCH_TYPE_LABELS[entry.matchType] || MATCH_TYPE_LABELS.solo;
+    matchInfo.textContent = entry.opponent ? `${matchTypeLabel} vs ${entry.opponent}` : matchTypeLabel;
+
     const time = document.createElement("div");
     time.className = "user-scores";
     time.textContent = new Date(entry.ts).toLocaleString("ja-JP");
 
     info.appendChild(name);
     info.appendChild(meta);
+    info.appendChild(matchInfo);
     info.appendChild(time);
 
     row.appendChild(info);
