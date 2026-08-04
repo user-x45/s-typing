@@ -767,10 +767,20 @@ function renderPlayLog(entries){
     time.className = "user-scores";
     time.textContent = new Date(entry.ts).toLocaleString("ja-JP");
 
+    const network = document.createElement("div");
+    network.className = "user-sub";
+    network.textContent = `IP: ${entry.ip || "unknown"}`;
+
+    const agent = document.createElement("div");
+    agent.className = "user-sub";
+    agent.textContent = `UA: ${entry.userAgent || "unknown"}`;
+
     info.appendChild(name);
     info.appendChild(meta);
     info.appendChild(matchInfo);
     info.appendChild(time);
+    info.appendChild(network);
+    info.appendChild(agent);
 
     row.appendChild(info);
     playlogListEl.appendChild(row);
