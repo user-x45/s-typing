@@ -417,6 +417,7 @@
       <button class="menu-btn" id="menu-ranking-btn">ランキング管理</button>
       <button class="menu-btn" id="menu-users-btn">ユーザー管理</button>
       <button class="menu-btn" id="menu-invite-btn">招待コード管理</button>
+      <button class="menu-btn" id="menu-playlog-btn">プレイログ</button>
       <button class="logout-btn" id="logout-btn">ログアウト</button>
     </div>
   </div>
@@ -444,6 +445,17 @@
     </div>
     <div class="user-list" id="invite-list"></div>
   </div>
+
+  <div id="playlog-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="playlog-back-btn">戻る</button>
+      <div>
+        <button class="clear-btn" id="playlog-clear-btn">全削除</button>
+        <button class="refresh-btn" id="playlog-refresh-btn">再読み込み</button>
+      </div>
+    </div>
+    <div class="user-list" id="playlog-list"></div>
+  </div>
 </div>
 
 <script>
@@ -461,6 +473,7 @@ const menuPanelEl = document.getElementById("menu-panel");
 const rankingDashboardEl = document.getElementById("ranking-dashboard");
 const userDashboardEl = document.getElementById("user-dashboard");
 const inviteDashboardEl = document.getElementById("invite-dashboard");
+const playlogDashboardEl = document.getElementById("playlog-dashboard");
 const passwordInputEl = document.getElementById("password-input");
 const loginBtnEl = document.getElementById("login-btn");
 const loginErrorEl = document.getElementById("login-error");
@@ -477,9 +490,14 @@ const userBackBtnEl = document.getElementById("user-back-btn");
 const userRefreshBtnEl = document.getElementById("user-refresh-btn");
 const inviteBackBtnEl = document.getElementById("invite-back-btn");
 const inviteRefreshBtnEl = document.getElementById("invite-refresh-btn");
+const menuPlaylogBtnEl = document.getElementById("menu-playlog-btn");
+const playlogListEl = document.getElementById("playlog-list");
+const playlogBackBtnEl = document.getElementById("playlog-back-btn");
+const playlogRefreshBtnEl = document.getElementById("playlog-refresh-btn");
+const playlogClearBtnEl = document.getElementById("playlog-clear-btn");
 
 function showOnly(el){
-  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl].forEach(node => {
+  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl, playlogDashboardEl].forEach(node => {
     if(node === el){
       node.classList.remove("hidden");
     } else {
@@ -714,6 +732,55 @@ function renderInviteCodes(codes){
   });
 }
 
+function renderPlayLog(entries){
+  playlogListEl.innerHTML = "";
+  if(!entries || entries.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "プレイ履歴がありません";
+    playlogListEl.appendChild(empty);
+    return;
+  }
+
+  entries.forEach(entry => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const name = document.createElement("div");
+    name.className = "user-name";
+    name.textContent = entry.name || "GUEST";
+
+    const meta = document.createElement("div");
+    meta.className = "user-sub";
+    meta.textContent = `${MODE_LABELS[entry.mode] || entry.mode} / ${LEVEL_LABELS[entry.level] || entry.level}`;
+
+    const time = document.createElement("div");
+    time.className = "user-scores";
+    time.textContent = new Date(entry.ts).toLocaleString("ja-JP");
+
+    info.appendChild(name);
+    info.appendChild(meta);
+    info.appendChild(time);
+
+    row.appendChild(info);
+    playlogListEl.appendChild(row);
+  });
+}
+
+async function loadPlayLogDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("listPlayLog", {});
+    renderPlayLog(data.entries);
+    showOnly(playlogDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
 async function loadRankingDashboard(){
   showOnly(loadingPanelEl);
   try{
@@ -779,6 +846,7 @@ passwordInputEl.addEventListener("keydown", (e) => {
 menuRankingBtnEl.addEventListener("click", loadRankingDashboard);
 menuUsersBtnEl.addEventListener("click", loadUserDashboard);
 menuInviteBtnEl.addEventListener("click", loadInviteDashboard);
+menuPlaylogBtnEl.addEventListener("click", loadPlayLogDashboard);
 
 logoutBtnEl.addEventListener("click", () => {
   adminToken = "";
@@ -790,10 +858,23 @@ logoutBtnEl.addEventListener("click", () => {
 rankingBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
 userBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
 inviteBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+playlogBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
 
 refreshBtnEl.addEventListener("click", loadRankingDashboard);
 userRefreshBtnEl.addEventListener("click", loadUserDashboard);
 inviteRefreshBtnEl.addEventListener("click", loadInviteDashboard);
+playlogRefreshBtnEl.addEventListener("click", loadPlayLogDashboard);
+
+playlogClearBtnEl.addEventListener("click", async () => {
+  if(!confirm("プレイログを全て削除しますか？")) return;
+  showOnly(loadingPanelEl);
+  try{
+    await callAdmin("clearPlayLog", {});
+    await loadPlayLogDashboard();
+  }catch(e){
+    handleSessionExpired();
+  }
+});
 </script>
 </body>
 </html>
