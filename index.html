@@ -1620,6 +1620,10 @@ let totalCharsTyped = 0;
 let timeLeft = 100;
 let timerId = null;
 let isComposing = false;
+let integrityOk = true;
+let lastKeyTime = 0;
+let suspiciousKeyCount = 0;
+let keyIntervals = [];
 
 const setupEl = document.getElementById("setup");
 const gameEl = document.getElementById("game");
@@ -1791,13 +1795,30 @@ function logPlay(mode, level, matchType, opponent){
   }).catch(() => {});
 }
 
-async function submitScoreToRanking(score, mode, level, name){
+async function requestGameSessionToken(mode, level){
   try{
     const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ score, name })
+      body: JSON.stringify({ action: "startSession" })
     });
+    if(!res.ok) return null;
+    const data = await res.json();
+    return data.token || null;
+  }catch(e){
+    return null;
+  }
+}
+
+async function submitScoreToRanking(score, mode, level, name){
+  if(!currentGameSessionToken) return;
+  try{
+    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ score, name, token: currentGameSessionToken })
+    });
+    currentGameSessionToken = null;
     if(!res.ok) return;
     const data = await res.json();
     if(mode === currentMode && level === currentLevel){
@@ -1827,6 +1848,7 @@ async function checkRankQualifies(score, mode, level){
 }
 
 async function handleRankingSubmission(score, mode, level){
+  if(!integrityOk) return;
   const qualifies = await checkRankQualifies(score, mode, level);
   if(!qualifies) return;
   const name = normalizePlayerName(getPlayerName());
@@ -1835,7 +1857,7 @@ async function handleRankingSubmission(score, mode, level){
 
 const initialRankingLoadPromise = loadRanking();
 
-
+let currentGameSessionToken = null;
 let ws = null;
 let matchId = null;
 let myRole = null;
@@ -2284,6 +2306,8 @@ function nextWord(){
 
 async function startGame(){
   logPlay(currentMode, currentLevel, "solo", "");
+  currentGameSessionToken = null;
+  requestGameSessionToken(currentMode, currentLevel).then(token => { currentGameSessionToken = token; });
   await ensureWordList(currentMode, currentLevel);
   setupEl.classList.add("hidden");
   resultEl.classList.remove("visible");
@@ -2299,6 +2323,10 @@ async function startGame(){
   totalCharsTyped = 0;
   timeLeft = 100;
   usedWords = [];
+  integrityOk = true;
+  lastKeyTime = 0;
+  suspiciousKeyCount = 0;
+  keyIntervals = [];
   resultRankBadgeEl.classList.remove("visible");
   resultRankBadgeEl.textContent = "";
   newRecordBadgeEl.classList.remove("visible");
@@ -2376,12 +2404,49 @@ function shakeInput(){
   inputEl.classList.add("shake");
 }
 
+function flagIntegrity(){
+  integrityOk = false;
+}
+
+function recordKeystrokeTiming(){
+  const now = performance.now();
+  if(lastKeyTime > 0){
+    const delta = now - lastKeyTime;
+    keyIntervals.push(delta);
+    if(keyIntervals.length > 20) keyIntervals.shift();
+    if(delta < 20) suspiciousKeyCount++;
+    if(keyIntervals.length >= 10){
+      const mean = keyIntervals.reduce((a, b) => a + b, 0) / keyIntervals.length;
+      const variance = keyIntervals.reduce((a, b) => a + (b - mean) * (b - mean), 0) / keyIntervals.length;
+      const stddev = Math.sqrt(variance);
+      if(stddev < 3 && mean < 120) suspiciousKeyCount++;
+    }
+    if(suspiciousKeyCount >= 6) flagIntegrity();
+  }
+  lastKeyTime = now;
+}
+
 inputEl.addEventListener("compositionstart", () => { isComposing = true; });
 inputEl.addEventListener("compositionend", () => {
   setTimeout(() => { isComposing = false; }, 0);
 });
 
-inputEl.addEventListener("input", () => {
+inputEl.addEventListener("paste", (e) => {
+  e.preventDefault();
+  flagIntegrity();
+});
+
+inputEl.addEventListener("drop", (e) => {
+  e.preventDefault();
+  flagIntegrity();
+});
+
+inputEl.addEventListener("input", (e) => {
+  if(!e.isTrusted){
+    flagIntegrity();
+    return;
+  }
+  recordKeystrokeTiming();
   updateProgressHighlight(inputEl.value);
   inputEl.classList.remove("shake");
   hintLabelEl.textContent = "Enterで確定";
@@ -2389,6 +2454,10 @@ inputEl.addEventListener("input", () => {
 
 inputEl.addEventListener("keydown", (e) => {
   if(e.key !== "Enter") return;
+  if(!e.isTrusted){
+    flagIntegrity();
+    return;
+  }
   if(isComposing || e.isComposing || e.keyCode === 229) return;
   e.preventDefault();
 
