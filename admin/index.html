@@ -490,13 +490,13 @@
       <div class="event-status" id="event-status-text">読み込み中...</div>
       <label class="field-label" for="event-month-input">対象月</label>
       <input type="month" id="event-month-input">
-      <button class="login-btn" id="event-enable-btn">有効化して現在のランキングを保存</button>
+      <button class="login-btn" id="event-enable-btn">この月でイベントモードを有効化</button>
       <button class="logout-btn" id="event-disable-btn">無効化</button>
     </div>
     <div class="panel" style="margin-top:16px;">
-      <label class="field-label">保存済みランキング（アーカイブ）の確認</label>
+      <label class="field-label">月別ランキングの確認</label>
       <input type="month" id="event-archive-month-input">
-      <button class="login-btn" id="event-archive-load-btn">アーカイブを表示</button>
+      <button class="login-btn" id="event-archive-load-btn">月別ランキングを表示</button>
       <div class="board-grid" id="event-archive-grid" style="margin-top:16px;"></div>
     </div>
   </div>
@@ -919,7 +919,7 @@ eventEnableBtnEl.addEventListener("click", async () => {
     alert("対象月を選択してください");
     return;
   }
-  if(!confirm(`${month} を対象にイベントモードを有効化しますか？現在のランキングが保存されます`)) return;
+  if(!confirm(`${month} を対象にイベントモードを有効化しますか？`)) return;
   showOnly(loadingPanelEl);
   try{
     await callAdmin("setEventMode", { enabled: true, month });
