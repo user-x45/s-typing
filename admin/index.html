@@ -391,6 +391,28 @@
     background:var(--hanko);
     color:var(--washi);
   }
+
+  .event-status{
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:18px;
+  }
+
+  input[type="month"]{
+    width:100%;
+    padding:12px 14px;
+    background:var(--input-bg);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    font-size:16px;
+    color:var(--ink);
+    outline:none;
+    margin-bottom:14px;
+  }
+
+  input[type="month"]:focus{
+    border-color:var(--gold);
+  }
 </style>
 </head>
 <body>
@@ -418,6 +440,7 @@
       <button class="menu-btn" id="menu-users-btn">ユーザー管理</button>
       <button class="menu-btn" id="menu-invite-btn">招待コード管理</button>
       <button class="menu-btn" id="menu-playlog-btn">プレイログ</button>
+      <button class="menu-btn" id="menu-event-btn">イベントモード</button>
       <button class="logout-btn" id="logout-btn">ログアウト</button>
     </div>
   </div>
@@ -455,6 +478,27 @@
       </div>
     </div>
     <div class="user-list" id="playlog-list"></div>
+  </div>
+
+  <div id="event-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="event-back-btn">戻る</button>
+      <button class="refresh-btn" id="event-refresh-btn">再読み込み</button>
+    </div>
+    <div class="panel">
+      <label class="field-label">イベントモード状態</label>
+      <div class="event-status" id="event-status-text">読み込み中...</div>
+      <label class="field-label" for="event-month-input">対象月</label>
+      <input type="month" id="event-month-input">
+      <button class="login-btn" id="event-enable-btn">有効化して現在のランキングを保存</button>
+      <button class="logout-btn" id="event-disable-btn">無効化</button>
+    </div>
+    <div class="panel" style="margin-top:16px;">
+      <label class="field-label">保存済みランキング（アーカイブ）の確認</label>
+      <input type="month" id="event-archive-month-input">
+      <button class="login-btn" id="event-archive-load-btn">アーカイブを表示</button>
+      <div class="board-grid" id="event-archive-grid" style="margin-top:16px;"></div>
+    </div>
   </div>
 </div>
 
@@ -496,9 +540,20 @@ const playlogListEl = document.getElementById("playlog-list");
 const playlogBackBtnEl = document.getElementById("playlog-back-btn");
 const playlogRefreshBtnEl = document.getElementById("playlog-refresh-btn");
 const playlogClearBtnEl = document.getElementById("playlog-clear-btn");
+const eventDashboardEl = document.getElementById("event-dashboard");
+const menuEventBtnEl = document.getElementById("menu-event-btn");
+const eventBackBtnEl = document.getElementById("event-back-btn");
+const eventRefreshBtnEl = document.getElementById("event-refresh-btn");
+const eventStatusTextEl = document.getElementById("event-status-text");
+const eventMonthInputEl = document.getElementById("event-month-input");
+const eventEnableBtnEl = document.getElementById("event-enable-btn");
+const eventDisableBtnEl = document.getElementById("event-disable-btn");
+const eventArchiveMonthInputEl = document.getElementById("event-archive-month-input");
+const eventArchiveLoadBtnEl = document.getElementById("event-archive-load-btn");
+const eventArchiveGridEl = document.getElementById("event-archive-grid");
 
 function showOnly(el){
-  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl, playlogDashboardEl].forEach(node => {
+  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl, playlogDashboardEl, eventDashboardEl].forEach(node => {
     if(node === el){
       node.classList.remove("hidden");
     } else {
@@ -786,6 +841,124 @@ function renderPlayLog(entries){
     playlogListEl.appendChild(row);
   });
 }
+
+function renderArchiveBoards(data){
+  eventArchiveGridEl.innerHTML = "";
+  for(const mode of MODES){
+    for(const level of LEVELS){
+      const key = `${mode}:${level}`;
+      const scores = data[key] || [];
+      const board = document.createElement("div");
+      board.className = "board";
+
+      const head = document.createElement("div");
+      head.className = "board-head";
+
+      const title = document.createElement("div");
+      title.className = "board-title";
+      title.textContent = `${MODE_LABELS[mode]}・${LEVEL_LABELS[level]}`;
+
+      head.appendChild(title);
+      board.appendChild(head);
+
+      if(scores.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "empty-text";
+        empty.textContent = "データがありません";
+        board.appendChild(empty);
+      } else {
+        scores.forEach((entry, i) => {
+          const scoreValue = typeof entry === "object" && entry !== null ? entry.score : entry;
+          const scoreName = typeof entry === "object" && entry !== null && entry.name ? entry.name : "GUEST";
+
+          const row = document.createElement("div");
+          row.className = "score-row";
+
+          const rank = document.createElement("div");
+          rank.className = "score-rank";
+          rank.textContent = `${i + 1}位`;
+
+          const name = document.createElement("div");
+          name.className = "score-name";
+          name.textContent = scoreName;
+
+          const value = document.createElement("div");
+          value.className = "score-value";
+          value.textContent = scoreValue;
+
+          row.appendChild(rank);
+          row.appendChild(name);
+          row.appendChild(value);
+          board.appendChild(row);
+        });
+      }
+
+      eventArchiveGridEl.appendChild(board);
+    }
+  }
+}
+
+async function loadEventDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("getEventMode", {});
+    eventStatusTextEl.textContent = data.enabled
+      ? `イベントモード: 有効中（対象月: ${data.month || "未設定"}）`
+      : "イベントモード: 無効";
+    eventMonthInputEl.value = data.month || "";
+    eventArchiveGridEl.innerHTML = "";
+    showOnly(eventDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+eventEnableBtnEl.addEventListener("click", async () => {
+  const month = eventMonthInputEl.value;
+  if(!month){
+    alert("対象月を選択してください");
+    return;
+  }
+  if(!confirm(`${month} を対象にイベントモードを有効化しますか？現在のランキングが保存されます`)) return;
+  showOnly(loadingPanelEl);
+  try{
+    await callAdmin("setEventMode", { enabled: true, month });
+    await loadEventDashboard();
+  }catch(e){
+    handleSessionExpired();
+  }
+});
+
+eventDisableBtnEl.addEventListener("click", async () => {
+  if(!confirm("イベントモードを無効化しますか？")) return;
+  showOnly(loadingPanelEl);
+  try{
+    await callAdmin("setEventMode", { enabled: false, month: eventMonthInputEl.value });
+    await loadEventDashboard();
+  }catch(e){
+    handleSessionExpired();
+  }
+});
+
+eventArchiveLoadBtnEl.addEventListener("click", async () => {
+  const month = eventArchiveMonthInputEl.value;
+  if(!month){
+    alert("確認したい月を選択してください");
+    return;
+  }
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("getEventArchive", { month });
+    showOnly(eventDashboardEl);
+    renderArchiveBoards(data);
+  }catch(e){
+    handleSessionExpired();
+  }
+});
+
+menuEventBtnEl.addEventListener("click", loadEventDashboard);
+eventBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+eventRefreshBtnEl.addEventListener("click", loadEventDashboard);
 
 async function loadPlayLogDashboard(){
   showOnly(loadingPanelEl);
