@@ -1776,9 +1776,12 @@ async function loadRanking(){
       rankingListEl.innerHTML = "";
       return;
     }
-    const scores = await res.json();
+    const data = await res.json();
     if(requestId !== rankingRequestId) return;
-    renderRanking(scores);
+    if(data.eventMode){
+      rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ${data.month}限定ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
+    }
+    renderRanking(data.scores);
   }catch(e){
     if(requestId !== rankingRequestId) return;
     rankingBoxEl.classList.add("hidden");
@@ -1836,7 +1839,8 @@ async function checkRankQualifies(score, mode, level){
   try{
     const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`);
     if(!res.ok) return true;
-    const scores = await res.json();
+    const data = await res.json();
+    const scores = data.scores;
     if(!Array.isArray(scores)) return true;
     if(scores.length < RANKING_DISPLAY_MAX) return true;
     const lowestEntry = scores[scores.length - 1];
