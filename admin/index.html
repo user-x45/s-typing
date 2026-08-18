@@ -842,7 +842,7 @@ function renderPlayLog(entries){
   });
 }
 
-function renderArchiveBoards(data){
+function renderArchiveBoards(data, month){
   eventArchiveGridEl.innerHTML = "";
   for(const mode of MODES){
     for(const level of LEVELS){
@@ -858,7 +858,24 @@ function renderArchiveBoards(data){
       title.className = "board-title";
       title.textContent = `${MODE_LABELS[mode]}・${LEVEL_LABELS[level]}`;
 
+      const clearBtn = document.createElement("button");
+      clearBtn.className = "clear-btn";
+      clearBtn.textContent = "全削除";
+      clearBtn.addEventListener("click", async () => {
+        if(!confirm(`${MODE_LABELS[mode]}・${LEVEL_LABELS[level]} の ${month} のランキングを全て削除しますか？`)) return;
+        showOnly(loadingPanelEl);
+        try{
+          await callAdmin("clearMonthRanking", { mode, level, month });
+          const refreshed = await callAdmin("getEventArchive", { month });
+          renderArchiveBoards(refreshed, month);
+          showOnly(eventDashboardEl);
+        }catch(e){
+          handleSessionExpired();
+        }
+      });
+
       head.appendChild(title);
+      head.appendChild(clearBtn);
       board.appendChild(head);
 
       if(scores.length === 0){
@@ -886,9 +903,26 @@ function renderArchiveBoards(data){
           value.className = "score-value";
           value.textContent = scoreValue;
 
+          const del = document.createElement("button");
+          del.className = "delete-btn";
+          del.textContent = "削除";
+          del.addEventListener("click", async () => {
+            if(!confirm(`${scoreName}（${scoreValue}）を削除しますか？`)) return;
+            showOnly(loadingPanelEl);
+            try{
+              await callAdmin("deleteMonthRanking", { mode, level, month, score: scoreValue });
+              const refreshed = await callAdmin("getEventArchive", { month });
+              renderArchiveBoards(refreshed, month);
+              showOnly(eventDashboardEl);
+            }catch(e){
+              handleSessionExpired();
+            }
+          });
+
           row.appendChild(rank);
           row.appendChild(name);
           row.appendChild(value);
+          row.appendChild(del);
           board.appendChild(row);
         });
       }
@@ -950,7 +984,7 @@ eventArchiveLoadBtnEl.addEventListener("click", async () => {
   try{
     const data = await callAdmin("getEventArchive", { month });
     showOnly(eventDashboardEl);
-    renderArchiveBoards(data);
+    renderArchiveBoards(data, month);
   }catch(e){
     handleSessionExpired();
   }
