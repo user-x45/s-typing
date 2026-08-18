@@ -699,6 +699,28 @@
     letter-spacing:0.05em;
   }
 
+  .event-banner{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin:0 0 16px;
+    padding:10px 14px;
+    border-radius:10px;
+    background:linear-gradient(135deg, var(--gold), #ffcf5c);
+    color:#3a2a00;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.05em;
+    text-align:center;
+    animation:eventPulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes eventPulse{
+    0%, 100%{ box-shadow:0 0 0 0 rgba(255,207,92,0.5); }
+    50%{ box-shadow:0 0 0 8px rgba(255,207,92,0); }
+  }
+
   .ranking-box{
     margin-top:22px;
     padding-top:18px;
@@ -1115,6 +1137,7 @@
   <div class="panel">
 
     <div class="setup" id="setup">
+      <div class="event-banner hidden" id="event-banner"><i class="fas fa-star"></i> <span id="event-banner-text">イベント開催中！</span></div>
       <div class="mode-tabs">
         <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
         <button class="mode-btn" data-mode="katakana">カタカナ</button>
@@ -1691,6 +1714,8 @@ muteBtn.addEventListener("change", () => {
 });
 
 const rankingBoxEl = document.getElementById("ranking-box");
+const eventBannerEl = document.getElementById("event-banner");
+const eventBannerTextEl = document.getElementById("event-banner-text");
 const rankingListEl = document.getElementById("ranking-list");
 const rankingTitleEl = document.querySelector(".ranking-title");
 const resultRankBadgeEl = document.getElementById("result-rank-badge");
@@ -1780,6 +1805,10 @@ async function loadRanking(){
     if(requestId !== rankingRequestId) return;
     if(data.eventMode){
       rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ${data.month}限定ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
+      eventBannerTextEl.textContent = `${data.month}イベント開催中！`;
+      eventBannerEl.classList.remove("hidden");
+    } else {
+      eventBannerEl.classList.add("hidden");
     }
     renderRanking(data.scores);
   }catch(e){
