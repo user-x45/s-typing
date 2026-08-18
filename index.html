@@ -86,6 +86,17 @@
     display:flex;
     justify-content:center;
     padding:40px 16px;
+    user-select:none;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+  }
+
+  input, textarea{
+    user-select:text;
+    -webkit-user-select:text;
+    -moz-user-select:text;
+    -ms-user-select:text;
   }
 
   body.game-active{
@@ -2504,6 +2515,22 @@ document.addEventListener("visibilitychange", () => {
 });
 
 document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});
+
+document.addEventListener("selectstart", (e) => {
+  e.preventDefault();
+});
+
+document.addEventListener("copy", (e) => {
+  e.preventDefault();
+});
+
+document.addEventListener("cut", (e) => {
+  e.preventDefault();
+});
+
+document.addEventListener("dragstart", (e) => {
   e.preventDefault();
 });
 
