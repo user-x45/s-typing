@@ -1,12 +1,4 @@
 <!DOCTYPE html>
-<!--
- ____  _                 _      _____                          
-/ ___|(_)_ __ ___  _ __ | | ___|_   _|   _ _ __ (_)_ __   __ _ 
-\___ \| | '_ ` _ \| '_ \| |/ _ \ | || | | | '_ \| | '_ \ / _` |
- ___) | | | | | | | |_) | |  __/ | || |_| | |_) | | | | | (_| |
-|____/|_|_| |_| |_| .__/|_|\___| |_| \__, | .__/|_|_| |_|\__, |
-                   |_|               |___/|_|            |___/ 
--->
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -2508,6 +2500,29 @@ document.addEventListener("visibilitychange", () => {
       result:"lose",
       forfeit:true
     });
+  }
+});
+
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});
+
+document.addEventListener("keydown", (e) => {
+  if(e.key === "F12"){
+    e.preventDefault();
+    return;
+  }
+  if(e.ctrlKey && e.shiftKey && ["I", "J", "C", "i", "j", "c"].includes(e.key)){
+    e.preventDefault();
+    return;
+  }
+  if(e.metaKey && e.altKey && ["I", "J", "C", "i", "j", "c"].includes(e.key)){
+    e.preventDefault();
+    return;
+  }
+  if((e.ctrlKey || e.metaKey) && ["U", "u", "S", "s"].includes(e.key)){
+    e.preventDefault();
+    return;
   }
 });
 </script>
