@@ -97,7 +97,7 @@
   }
 
   body.game-active{
-    padding:16px 16px;
+    padding:clamp(8px,2vh,16px) 16px;
   }
 
   .stage{
@@ -540,8 +540,8 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:18px;
-    font-size:13px;
+    margin-bottom:clamp(8px,2vh,18px);
+    font-size:clamp(11px,2vh,13px);
     color:var(--ink-soft);
     letter-spacing:0.05em;
   }
@@ -552,7 +552,7 @@
     background:rgba(31,28,25,0.1);
     border-radius:12px;
     overflow:hidden;
-    margin-bottom:24px;
+    margin-bottom:clamp(12px,3vh,24px);
   }
 
   .timer-fill{
@@ -564,21 +564,21 @@
 
   .word-frame{
     text-align:center;
-    padding:36px 12px;
+    padding:clamp(14px,4vh,36px) 12px;
     background:var(--panel-bg-soft);
     border-radius:12px;
-    margin-bottom:26px;
+    margin-bottom:clamp(12px,3vh,26px);
   }
 
   .word-eyebrow{
-    font-size:11px;
+    font-size:clamp(10px,1.6vh,11px);
     letter-spacing:0.3em;
     color:var(--gold);
-    margin-bottom:12px;
+    margin-bottom:clamp(6px,1.5vh,12px);
   }
 
   #word-display{
-    font-size:46px;
+    font-size:clamp(22px,6vh,46px);
     font-weight:600;
     letter-spacing:0.12em;
     white-space:nowrap;
@@ -600,8 +600,8 @@
 
   #typing-input{
     width:100%;
-    padding:16px 18px;
-    font-size:22px;
+    padding:clamp(10px,2.5vh,16px) 18px;
+    font-size:clamp(16px,3vh,22px);
     border:1.5px solid var(--line);
     border-radius:10px;
     background:var(--input-bg);
@@ -636,7 +636,7 @@
     font-size:12px;
     color:var(--ink-soft);
     opacity:0.65;
-    margin-top:10px;
+    margin-top:clamp(6px,1.5vh,10px);
     min-height:16px;
   }
 
@@ -1109,6 +1109,17 @@
     .stat-value{font-size:17px;}
     .stat-label{font-size:9px;}
     .retry-btn{font-size:13px;padding:10px 24px;}
+  }
+
+  @media (max-height:600px){
+    body.game-active{padding:6px 16px;}
+    .hud{margin-bottom:6px;font-size:11px;}
+    .timer-track{margin-bottom:8px;}
+    .word-frame{padding:10px 12px;margin-bottom:8px;}
+    .word-eyebrow{margin-bottom:4px;}
+    #word-display{font-size:clamp(20px,5vh,32px);}
+    #typing-input{padding:8px 14px;font-size:16px;}
+    .hint{margin-top:4px;min-height:14px;}
   }
 </style>
 </head>
@@ -1913,8 +1924,7 @@ function fitSpacerToViewport(){
   imeSpacerEl.style.height = "0px";
   requestAnimationFrame(() => {
     const contentHeight = document.documentElement.scrollHeight;
-    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    const available = viewportHeight - contentHeight;
+    const available = window.innerHeight - contentHeight;
     imeSpacerEl.style.height = `${Math.max(0, available)}px`;
   });
 }
@@ -1923,9 +1933,8 @@ window.addEventListener("resize", fitSpacerToViewport);
 window.addEventListener("resize", fitWordDisplayFontSize);
 if(window.visualViewport){
   window.visualViewport.addEventListener("resize", fitSpacerToViewport);
-  window.visualViewport.addEventListener("scroll", fitSpacerToViewport);
+  window.visualViewport.addEventListener("resize", fitWordDisplayFontSize);
 }
-inputEl.addEventListener("focus", fitSpacerToViewport);
 
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
