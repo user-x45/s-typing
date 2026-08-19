@@ -1913,13 +1913,19 @@ function fitSpacerToViewport(){
   imeSpacerEl.style.height = "0px";
   requestAnimationFrame(() => {
     const contentHeight = document.documentElement.scrollHeight;
-    const available = window.innerHeight - contentHeight;
+    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    const available = viewportHeight - contentHeight;
     imeSpacerEl.style.height = `${Math.max(0, available)}px`;
   });
 }
 
 window.addEventListener("resize", fitSpacerToViewport);
 window.addEventListener("resize", fitWordDisplayFontSize);
+if(window.visualViewport){
+  window.visualViewport.addEventListener("resize", fitSpacerToViewport);
+  window.visualViewport.addEventListener("scroll", fitSpacerToViewport);
+}
+inputEl.addEventListener("focus", fitSpacerToViewport);
 
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
