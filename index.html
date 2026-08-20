@@ -1652,9 +1652,6 @@ window.addEventListener("load", async () => {
   Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
-/* =========================================================
-   かな → ローマ字 変換エンジン（リアルタイム入力モード用）
-   ========================================================= */
 
 const ROMAN_MAP = {
   'あ': ['a'], 'い': ['i', 'yi'], 'う': ['u', 'wu'], 'え': ['e'], 'お': ['o'],
@@ -1698,18 +1695,14 @@ const ROMAN_MAP = {
   'ー': ['-'], ',': [','], '.': ['.'], '、': [','], '。': ['.'], '・': ['/']
 };
 
-// 拗音として結合できる小書きのかな
 const SMALL_KANA = ['ゃ', 'ゅ', 'ょ', 'ぁ', 'ぃ', 'ぅ', 'ぇ', 'ぉ'];
 
-// 促音（っ）が単体処理になる例外パターン（あ行・な行）
 const SOKUON_EXCEPTION_ROW = ['あ', 'い', 'う', 'え', 'お', 'な', 'に', 'ぬ', 'ね', 'の'];
 
-// 「ん」の省略入力ができないパターン（あ行・な行・や行、または文末）
 const N_FULL_INPUT_ROW = ['あ', 'い', 'う', 'え', 'お', 'な', 'に', 'ぬ', 'ね', 'の', 'や', 'ゆ', 'よ'];
 
 function lookupRoman(unit){
   if(ROMAN_MAP[unit]) return ROMAN_MAP[unit].slice();
-  // カタカナ由来の「ゔ」はローマ字表では「ヴ」として定義されているため変換して再検索する
   if(unit.indexOf('ゔ') !== -1){
     const alt = unit.replace(/ゔ/g, 'ヴ');
     if(ROMAN_MAP[alt]) return ROMAN_MAP[alt].slice();
@@ -1717,7 +1710,6 @@ function lookupRoman(unit){
   return null;
 }
 
-// かな文字列を「1回のタイピング単位」の配列に分割する（拗音の結合のみ・っ/んは未解決）
 function splitKanaUnits(reading){
   const chars = Array.from(reading || '');
   const units = [];
@@ -1734,8 +1726,6 @@ function splitKanaUnits(reading){
   return units;
 }
 
-// かな文字列 → タイピングセグメント配列（各セグメントは { kana, options } ）
-// options はそのセグメントを打ち切るために有効なローマ字候補の一覧
 function buildTypingSegments(reading){
   const units = splitKanaUnits(reading);
   const segments = [];
@@ -1748,14 +1738,14 @@ function buildTypingSegments(reading){
       const nextFirstChar = nextUnit ? Array.from(nextUnit)[0] : null;
       const isException = !nextUnit || SOKUON_EXCEPTION_ROW.indexOf(nextFirstChar) !== -1;
       if(isException){
-        // 単体で処理（例：「いっぬ」→ i + ltu(xtu) + nu）
         segments.push({ kana: unit, options: lookupRoman('っ') || ['ltu', 'xtu'] });
       } else {
-        // 次の文字の1文字目＋本体　という形で出力する
         const nextOptions = lookupRoman(nextUnit) || [nextUnit];
         const doubled = nextOptions.map(opt => opt.charAt(0) + opt);
-        segments.push({ kana: unit + nextUnit, options: doubled });
-        i++; // 次のユニットはこのセグメントに統合済み
+        const sokuonOptions = lookupRoman('っ') || ['ltu', 'xtu'];
+        const smallTsuCombined = sokuonOptions.flatMap(su => nextOptions.map(opt => su + opt));
+        segments.push({ kana: unit + nextUnit, options: [...doubled, ...smallTsuCombined] });
+        i++;
       }
       continue;
     }
@@ -1765,7 +1755,6 @@ function buildTypingSegments(reading){
       const nextFirstChar = nextUnit ? Array.from(nextUnit)[0] : null;
       const needsFullInput = !nextUnit || N_FULL_INPUT_ROW.indexOf(nextFirstChar) !== -1;
       const base = lookupRoman('ん') || ['nn', 'xn', 'n'];
-      // 省略入力（'n'単体）ができない場合は最後の 'n' を取り除く
       segments.push({ kana: unit, options: needsFullInput ? base.slice(0, -1) : base.slice() });
       continue;
     }
@@ -1774,7 +1763,6 @@ function buildTypingSegments(reading){
     if(options){
       segments.push({ kana: unit, options });
     } else {
-      // 変換表にない文字（漢字の混入など）はそのまま素通りさせる
       segments.push({ kana: unit, options: [unit] });
     }
   }
@@ -1782,7 +1770,6 @@ function buildTypingSegments(reading){
   return segments;
 }
 
-// かな文字列 → ローマ字文字列（代表的な一例）
 function kanaToRoman(kana){
   return buildTypingSegments(kana).map(seg => seg.options[0]).join('');
 }
@@ -1790,8 +1777,6 @@ function kanaToRoman(kana){
 function katakanaToHiragana(str){
   return (str || '').replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
 }
-
-/* ========================================================= */
 
 const wordListCache = {};
 
@@ -1804,8 +1789,6 @@ async function fetchWordList(mode, level){
   return list;
 }
 
-// 文章モードのひらがな読み一覧（sentence-(難易度)2.json）を取得し、
-// 表示テキスト（sentence-(難易度).json）と同じ並び順で紐づける
 const sentenceReadingCache = {};
 
 async function ensureSentenceReadings(level, words){
@@ -1841,8 +1824,6 @@ async function ensureWordList(mode, level){
   return list;
 }
 
-// 現在の単語（currentWord）に対応する「ひらがな読み」を取得する
-// ひらがなモード：そのまま／カタカナモード：自動変換／文章モード：sentence-(難易度)2.jsonの読みを参照
 function getCurrentWordReading(){
   if(currentMode === "katakana") return katakanaToHiragana(currentWord);
   if(currentMode === "sentence"){
@@ -2562,17 +2543,19 @@ document.querySelectorAll(".input-mode-btn").forEach(btn => {
 
 updateInputModeUI();
 
-/* ---------- リアルタイム入力モード ---------- */
+let typedActuals = [];
 
 function setupRealtimeWord(){
   const reading = getCurrentWordReading();
   typingSegments = buildTypingSegments(reading);
   segmentIndex = 0;
   segmentTyped = "";
+  typedActuals = [];
   renderRomajiDisplay();
 }
 
 function pickDisplayOption(seg, i){
+  if(i < segmentIndex && typedActuals[i]) return typedActuals[i];
   if(i === segmentIndex && segmentTyped){
     const match = seg.options.find(opt => opt.indexOf(segmentTyped) === 0);
     if(match) return match;
@@ -2631,11 +2614,13 @@ function handleRealtimeKey(key){
     return;
   }
 
+  playSound(keySoundEl);
   segmentTyped = candidate;
   hintLabelEl.textContent = "ローマ字でタイピングしよう";
 
   const exact = seg.options.indexOf(candidate) !== -1;
   if(exact){
+    typedActuals[segmentIndex] = candidate;
     segmentIndex++;
     segmentTyped = "";
     if(segmentIndex >= typingSegments.length){
