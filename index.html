@@ -609,18 +609,6 @@
     animation:shake 0.3s ease;
   }
 
-  .rchar{
-    display:inline-block;
-  }
-
-  .rchar.done{
-    color:var(--hanko);
-  }
-
-  .rchar.current .rtyped{
-    color:var(--hanko);
-  }
-
   .input-row{
     position:relative;
   }
@@ -1652,146 +1640,22 @@ window.addEventListener("load", async () => {
   Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
-/* =========================================================
-   かな → ローマ字 変換エンジン（リアルタイム入力モード用）
-   ========================================================= */
-
-const ROMAN_MAP = {
-  'あ': ['a'], 'い': ['i', 'yi'], 'う': ['u', 'wu'], 'え': ['e'], 'お': ['o'],
-  'か': ['ka', 'ca'], 'き': ['ki'], 'く': ['ku', 'cu', 'qu'], 'け': ['ke'], 'こ': ['ko', 'co'],
-  'さ': ['sa'], 'し': ['si', 'shi', 'ci'], 'す': ['su'], 'せ': ['se', 'ce'], 'そ': ['so'],
-  'た': ['ta'], 'ち': ['ti', 'chi'], 'つ': ['tu', 'tsu'], 'て': ['te'], 'と': ['to'],
-  'な': ['na'], 'に': ['ni'], 'ぬ': ['nu'], 'ね': ['ne'], 'の': ['no'],
-  'は': ['ha'], 'ひ': ['hi'], 'ふ': ['fu', 'hu'], 'へ': ['he'], 'ほ': ['ho'],
-  'ま': ['ma'], 'み': ['mi'], 'む': ['mu'], 'め': ['me'], 'も': ['mo'],
-  'や': ['ya'], 'ゆ': ['yu'], 'よ': ['yo'],
-  'ら': ['ra'], 'り': ['ri'], 'る': ['ru'], 'れ': ['re'], 'ろ': ['ro'],
-  'わ': ['wa'], 'ゐ': ['wyi'], 'ゑ': ['wye'], 'を': ['wo'], 'ん': ['nn', 'xn', 'n'],
-  'が': ['ga'], 'ぎ': ['gi'], 'ぐ': ['gu'], 'げ': ['ge'], 'ご': ['go'],
-  'ざ': ['za'], 'じ': ['ji', 'zi'], 'ず': ['zu'], 'ぜ': ['ze'], 'ぞ': ['zo'],
-  'だ': ['da'], 'ぢ': ['di'], 'づ': ['du'], 'で': ['de'], 'ど': ['do'],
-  'ば': ['ba'], 'び': ['bi'], 'ぶ': ['bu'], 'べ': ['be'], 'ぼ': ['bo'],
-  'ぱ': ['pa'], 'ぴ': ['pi'], 'ぷ': ['pu'], 'ぺ': ['pe'], 'ぽ': ['po'],
-  'うぁ': ['wha'], 'うぃ': ['whi'], 'うぇ': ['whe'], 'うぉ': ['who'],
-  'きゃ': ['kya'], 'きぃ': ['kyi'], 'きゅ': ['kyu'], 'きぇ': ['kye'], 'きょ': ['kyo'],
-  'くぁ': ['qa', 'qwa'], 'くぃ': ['qi', 'qwi'], 'くぇ': ['qe', 'qwe'], 'くぉ': ['qo', 'qwo'], 'くゃ': ['qya'], 'くゅ': ['qyu'], 'くょ': ['qyo'],
-  'しゃ': ['sya', 'sha'], 'しぃ': ['syi'], 'しゅ': ['syu', 'shu'], 'しぇ': ['sye', 'she'], 'しょ': ['syo', 'sho'],
-  'つぁ': ['tsa'], 'つぃ': ['tsi'], 'つぇ': ['tse'], 'つぉ': ['tso'],
-  'ちゃ': ['tya', 'cha'], 'ちぃ': ['tyi'], 'ちゅ': ['tyu', 'chu'], 'ちぇ': ['tye', 'che'], 'ちょ': ['tyo', 'cho'],
-  'てゃ': ['tha'], 'てぃ': ['thi'], 'てゅ': ['thu'], 'てぇ': ['the'], 'てょ': ['tho'],
-  'とぁ': ['twa'], 'とぃ': ['twi'], 'とぅ': ['twu'], 'とぇ': ['twe'], 'とぉ': ['two'],
-  'ひゃ': ['hya'], 'ひぃ': ['hyi'], 'ひゅ': ['hyu'], 'ひぇ': ['hye'], 'ひょ': ['hyo'],
-  'ふぁ': ['fa'], 'ふぃ': ['fi'], 'ふぇ': ['fe'], 'ふぉ': ['fo'],
-  'にゃ': ['nya'], 'にぃ': ['nyi'], 'にゅ': ['nyu'], 'にぇ': ['nye'], 'にょ': ['nyo'],
-  'みゃ': ['mya'], 'みぃ': ['myi'], 'みゅ': ['myu'], 'みぇ': ['mye'], 'みょ': ['myo'],
-  'りゃ': ['rya'], 'りぃ': ['ryi'], 'りゅ': ['ryu'], 'りぇ': ['rye'], 'りょ': ['ryo'],
-  'ゔ': ['vu'], 'ゔぁ': ['va'], 'ゔぃ': ['vi'], 'ゔぇ': ['ve'], 'ゔぉ': ['vo'],
-  'ぎゃ': ['gya'], 'ぎぃ': ['gyi'], 'ぎゅ': ['gyu'], 'ぎぇ': ['gye'], 'ぎょ': ['gyo'],
-  'ぐぁ': ['gwa'], 'ぐぃ': ['gwi'], 'ぐぅ': ['gwu'], 'ぐぇ': ['gwe'], 'ぐぉ': ['gwo'],
-  'じゃ': ['ja', 'zya'], 'じぃ': ['jyi', 'zyi'], 'じゅ': ['ju', 'zyu'], 'じぇ': ['je', 'zye'], 'じょ': ['jo', 'zyo'],
-  'でゃ': ['dha'], 'でぃ': ['dhi'], 'でゅ': ['dhu'], 'でぇ': ['dhe'], 'でょ': ['dho'],
-  'ぢゃ': ['dya'], 'ぢぃ': ['dyi'], 'ぢゅ': ['dyu'], 'ぢぇ': ['dye'], 'ぢょ': ['dyo'],
-  'びゃ': ['bya'], 'びぃ': ['byi'], 'びゅ': ['byu'], 'びぇ': ['bye'], 'びょ': ['byo'],
-  'ぴゃ': ['pya'], 'ぴぃ': ['pyi'], 'ぴゅ': ['pyu'], 'ぴぇ': ['pye'], 'ぴょ': ['pyo'],
-  'ぁ': ['la', 'xa'], 'ぃ': ['li', 'xi'], 'ぅ': ['lu', 'xu'], 'ぇ': ['le', 'xe'], 'ぉ': ['lo', 'xo'],
-  'ゃ': ['lya', 'xya'], 'ゅ': ['lyu', 'xyu'], 'ょ': ['lyo', 'xyo'], 'っ': ['ltu', 'xtu'],
-  'ー': ['-'], ',': [','], '.': ['.'], '、': [','], '。': ['.'], '・': ['/']
+const TypingAPI = {
+  endpoint: "https://typingapi.com/api/v1/",
+  async convert(hiragana, currentKey, keyHistory){
+    const params = new URLSearchParams({
+      hiragana: hiragana || "",
+      current_key: currentKey || "",
+      key_history: keyHistory || ""
+    });
+    const res = await fetch(`${this.endpoint}?${params.toString()}`);
+    if(!res.ok) throw new Error("TypingAPI request failed");
+    return res.json();
+  },
+  katakanaToHiragana(str){
+    return (str || "").replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+  }
 };
-
-// 拗音として結合できる小書きのかな
-const SMALL_KANA = ['ゃ', 'ゅ', 'ょ', 'ぁ', 'ぃ', 'ぅ', 'ぇ', 'ぉ'];
-
-// 促音（っ）が単体処理になる例外パターン（あ行・な行）
-const SOKUON_EXCEPTION_ROW = ['あ', 'い', 'う', 'え', 'お', 'な', 'に', 'ぬ', 'ね', 'の'];
-
-// 「ん」の省略入力ができないパターン（あ行・な行・や行、または文末）
-const N_FULL_INPUT_ROW = ['あ', 'い', 'う', 'え', 'お', 'な', 'に', 'ぬ', 'ね', 'の', 'や', 'ゆ', 'よ'];
-
-function lookupRoman(unit){
-  if(ROMAN_MAP[unit]) return ROMAN_MAP[unit].slice();
-  // カタカナ由来の「ゔ」はローマ字表では「ヴ」として定義されているため変換して再検索する
-  if(unit.indexOf('ゔ') !== -1){
-    const alt = unit.replace(/ゔ/g, 'ヴ');
-    if(ROMAN_MAP[alt]) return ROMAN_MAP[alt].slice();
-  }
-  return null;
-}
-
-// かな文字列を「1回のタイピング単位」の配列に分割する（拗音の結合のみ・っ/んは未解決）
-function splitKanaUnits(reading){
-  const chars = Array.from(reading || '');
-  const units = [];
-  for(let i = 0; i < chars.length; i++){
-    const c = chars[i];
-    const next = chars[i + 1];
-    if(next && SMALL_KANA.indexOf(next) !== -1 && lookupRoman(c + next)){
-      units.push(c + next);
-      i++;
-    } else {
-      units.push(c);
-    }
-  }
-  return units;
-}
-
-// かな文字列 → タイピングセグメント配列（各セグメントは { kana, options } ）
-// options はそのセグメントを打ち切るために有効なローマ字候補の一覧
-function buildTypingSegments(reading){
-  const units = splitKanaUnits(reading);
-  const segments = [];
-
-  for(let i = 0; i < units.length; i++){
-    const unit = units[i];
-
-    if(unit === 'っ'){
-      const nextUnit = units[i + 1];
-      const nextFirstChar = nextUnit ? Array.from(nextUnit)[0] : null;
-      const isException = !nextUnit || SOKUON_EXCEPTION_ROW.indexOf(nextFirstChar) !== -1;
-      if(isException){
-        // 単体で処理（例：「いっぬ」→ i + ltu(xtu) + nu）
-        segments.push({ kana: unit, options: lookupRoman('っ') || ['ltu', 'xtu'] });
-      } else {
-        // 次の文字の1文字目＋本体　という形で出力する
-        const nextOptions = lookupRoman(nextUnit) || [nextUnit];
-        const doubled = nextOptions.map(opt => opt.charAt(0) + opt);
-        segments.push({ kana: unit + nextUnit, options: doubled });
-        i++; // 次のユニットはこのセグメントに統合済み
-      }
-      continue;
-    }
-
-    if(unit === 'ん'){
-      const nextUnit = units[i + 1];
-      const nextFirstChar = nextUnit ? Array.from(nextUnit)[0] : null;
-      const needsFullInput = !nextUnit || N_FULL_INPUT_ROW.indexOf(nextFirstChar) !== -1;
-      const base = lookupRoman('ん') || ['nn', 'xn', 'n'];
-      // 省略入力（'n'単体）ができない場合は最後の 'n' を取り除く
-      segments.push({ kana: unit, options: needsFullInput ? base.slice(0, -1) : base.slice() });
-      continue;
-    }
-
-    const options = lookupRoman(unit);
-    if(options){
-      segments.push({ kana: unit, options });
-    } else {
-      // 変換表にない文字（漢字の混入など）はそのまま素通りさせる
-      segments.push({ kana: unit, options: [unit] });
-    }
-  }
-
-  return segments;
-}
-
-// かな文字列 → ローマ字文字列（代表的な一例）
-function kanaToRoman(kana){
-  return buildTypingSegments(kana).map(seg => seg.options[0]).join('');
-}
-
-function katakanaToHiragana(str){
-  return (str || '').replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
-}
-
-/* ========================================================= */
 
 const wordListCache = {};
 
@@ -1804,8 +1668,6 @@ async function fetchWordList(mode, level){
   return list;
 }
 
-// 文章モードのひらがな読み一覧（sentence-(難易度)2.json）を取得し、
-// 表示テキスト（sentence-(難易度).json）と同じ並び順で紐づける
 const sentenceReadingCache = {};
 
 async function ensureSentenceReadings(level, words){
@@ -1841,10 +1703,8 @@ async function ensureWordList(mode, level){
   return list;
 }
 
-// 現在の単語（currentWord）に対応する「ひらがな読み」を取得する
-// ひらがなモード：そのまま／カタカナモード：自動変換／文章モード：sentence-(難易度)2.jsonの読みを参照
 function getCurrentWordReading(){
-  if(currentMode === "katakana") return katakanaToHiragana(currentWord);
+  if(currentMode === "katakana") return TypingAPI.katakanaToHiragana(currentWord);
   if(currentMode === "sentence"){
     const map = sentenceReadingCache[currentLevel] || {};
     return map[currentWord] || currentWord;
@@ -1858,10 +1718,10 @@ const modeLabels = { hiragana:"ひらがな", katakana:"カタカナ", sentence:
 
 let currentMode = "hiragana";
 let currentLevel = "beginner";
-let inputMode = "textbox"; // "textbox" | "realtime"
-let typingSegments = [];
-let segmentIndex = 0;
-let segmentTyped = "";
+let inputMode = "textbox";
+let realtimeReading = "";
+let realtimeKeyHistory = "";
+let realtimeBusy = false;
 let currentWord = "";
 let usedWords = [];
 let score = 0;
@@ -2562,39 +2422,22 @@ document.querySelectorAll(".input-mode-btn").forEach(btn => {
 
 updateInputModeUI();
 
-/* ---------- リアルタイム入力モード ---------- */
-
-function setupRealtimeWord(){
-  const reading = getCurrentWordReading();
-  typingSegments = buildTypingSegments(reading);
-  segmentIndex = 0;
-  segmentTyped = "";
-  renderRomajiDisplay();
-}
-
-function pickDisplayOption(seg, i){
-  if(i === segmentIndex && segmentTyped){
-    const match = seg.options.find(opt => opt.indexOf(segmentTyped) === 0);
-    if(match) return match;
+async function setupRealtimeWord(){
+  realtimeReading = getCurrentWordReading();
+  realtimeKeyHistory = "";
+  if(romajiDisplayEl) romajiDisplayEl.textContent = "";
+  if(!realtimeReading) return;
+  try{
+    const data = await TypingAPI.convert(realtimeReading, "", "");
+    renderRomajiDisplay(data.romaji);
+  }catch(e){
+    if(romajiDisplayEl) romajiDisplayEl.textContent = realtimeReading;
   }
-  return seg.options[0];
 }
 
-function renderRomajiDisplay(){
+function renderRomajiDisplay(romaji){
   if(!romajiDisplayEl) return;
-  const html = typingSegments.map((seg, i) => {
-    const shown = pickDisplayOption(seg, i);
-    if(i < segmentIndex){
-      return `<span class="rchar done">${shown}</span>`;
-    }
-    if(i === segmentIndex){
-      const typedPart = shown.slice(0, segmentTyped.length);
-      const restPart = shown.slice(segmentTyped.length);
-      return `<span class="rchar current"><span class="rtyped">${typedPart}</span>${restPart}</span>`;
-    }
-    return `<span class="rchar">${shown}</span>`;
-  }).join("");
-  romajiDisplayEl.innerHTML = html;
+  romajiDisplayEl.textContent = romaji || "";
 }
 
 function shakeRomaji(){
@@ -2616,35 +2459,29 @@ function completeRealtimeWord(){
   nextWord();
 }
 
-function handleRealtimeKey(key){
-  if(!typingSegments.length || segmentIndex >= typingSegments.length) return;
+async function handleRealtimeKey(key){
+  if(!realtimeReading || realtimeBusy) return;
+  realtimeBusy = true;
   recordKeystrokeTiming();
-  const seg = typingSegments[segmentIndex];
-  const candidate = segmentTyped + key;
-  const matches = seg.options.filter(opt => opt.indexOf(candidate) === 0);
-
-  if(matches.length === 0){
-    missCount++;
-    hintLabelEl.textContent = "ちがうキーです";
-    shakeRomaji();
-    playSound(incorrectSoundEl);
-    return;
-  }
-
-  segmentTyped = candidate;
-  hintLabelEl.textContent = "ローマ字でタイピングしよう";
-
-  const exact = seg.options.indexOf(candidate) !== -1;
-  if(exact){
-    segmentIndex++;
-    segmentTyped = "";
-    if(segmentIndex >= typingSegments.length){
-      renderRomajiDisplay();
-      completeRealtimeWord();
-      return;
+  try{
+    const data = await TypingAPI.convert(realtimeReading, key, realtimeKeyHistory);
+    if(data.miss){
+      missCount++;
+      hintLabelEl.textContent = "ちがうキーです";
+      shakeRomaji();
+      playSound(incorrectSoundEl);
+    } else {
+      realtimeKeyHistory = data.key_history || (realtimeKeyHistory + key);
+      hintLabelEl.textContent = "ローマ字でタイピングしよう";
+      renderRomajiDisplay(data.romaji);
+      if(data.finished){
+        completeRealtimeWord();
+      }
     }
+  }catch(e){
+  } finally {
+    realtimeBusy = false;
   }
-  renderRomajiDisplay();
 }
 
 document.addEventListener("keydown", (e) => {
