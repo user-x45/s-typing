@@ -2531,15 +2531,6 @@ function updateSentenceProgressHighlight(){
   if(!sentenceReadingDisplayEl) return;
   const readingChars = sentenceReadingDisplayEl.querySelectorAll(".sentence-reading-char");
   readingChars.forEach(el => el.classList.remove("done"));
-
-  if(currentMode !== "sentence" || inputMode !== "realtime") return;
-
-  const completedKanaCount = getRealtimeCompletedKanaCount();
-  readingChars.forEach((el, i) => {
-    if(i < completedKanaCount){
-      el.classList.add("done");
-    }
-  });
 }
 
 function shakeRomaji(){
@@ -2615,7 +2606,7 @@ function updateProgressHighlight(typed){
   const chars = wordDisplayEl.querySelectorAll(".char");
   chars.forEach(el => el.classList.remove("done"));
 
-  if(currentMode !== "sentence" || inputMode !== "realtime") return;
+  if(inputMode !== "textbox") return;
 
   let stillCorrect = true;
   chars.forEach((el, i) => {
