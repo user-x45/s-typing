@@ -1,2739 +1,339 @@
 <!DOCTYPE html>
-<!--
- ____  _                 _      _____                          
-/ ___|(_)_ __ ___  _ __ | | ___|_   _|   _ _ __ (_)_ __   __ _ 
-\___ \| | '_ ` _ \| '_ \| |/ _ \ | || | | | '_ \| | '_ \ / _` |
- ___) | | | | | | | |_) | |  __/ | || |_| | |_) | | | | | (_| |
-|____/|_|_| |_| |_| .__/|_|\___| |_| \__, | .__/|_|_| |_|\__, |
-                   |_|               |___/|_|            |___/ 
--->
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。">
-<meta content="https://s-typing.f5.si/" property="og:url">
-<meta content="シンプルタイピング" property="og:title">
-<meta content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。" property="og:description">
-<meta content="website" property="og:type">
-<meta content="シンプルタイピング" property="og:site_name">
-<title>シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム</title>
-<link href="favicon/32.png" rel="icon" sizes="32x32" type="image/png">
-<link href="favicon/96.png" rel="icon" sizes="96x96" type="image/png">
-<link href="favicon/144.png" rel="icon" sizes="144x144" type="image/png">
-<link href="favicon/180.png" rel="apple-touch-icon" type="image/png">
-<link href="favicon/152.png" rel="apple-touch-icon-precomposed" type="image/png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "WebSite",
-  "name": "シンプルタイピング",
-  "url": "https://s-typing.f5.si/"
-}
-</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSBNPPLE0E"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-LSBNPPLE0E');
-</script>
+<title>日本語タイピング練習</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap');
-
-  :root{
-    --washi:#ffffff;
-    --washi-deep:#f4f4f5;
-    --ink:#18181b;
-    --ink-soft:#6b7280;
-    --hanko:#a8352a;
-    --hanko-deep:#7e2019;
-    --gold:#b8933f;
-    --line:#e4e4e7;
-    --panel-bg:#ffffff;
-    --panel-bg-soft:#eceef1;
-    --input-bg:#ffffff;
-  }
-
-  @media (prefers-color-scheme: dark){
-    :root{
-      --washi:#0f0f11;
-      --washi-deep:#17181a;
-      --ink:#f4f4f5;
-      --ink-soft:#9ca3af;
-      --hanko:#d9584a;
-      --hanko-deep:#f07264;
-      --gold:#d9b45f;
-      --line:#2a2b2e;
-      --panel-bg:#18181b;
-      --panel-bg-soft:#28292d;
-      --input-bg:#18181b;
-    }
-  }
-
-  *{box-sizing:border-box;}
-
-  button, input, select, textarea{
-    font-family: inherit;
-  }
-
-  html{
-    height:100%;
-    overflow-x:hidden;
-  }
-
-  body{
-    margin:0;
-    min-height:100vh;
-    min-height:100dvh;
-    background:var(--washi);
-    color:var(--ink);
-    font-family: "BIZ UDPGothic", "HiraginoSans-W2", "Hiragino Kaku Gothic ProN", Meiryo, "メイリオ", sans-serif;
-    line-height:1.5;
-    display:flex;
-    justify-content:center;
-    padding:40px 16px;
-  }
-
-  body.game-active{
-    padding:clamp(8px,2vh,16px) 16px;
-  }
-
-  .stage{
-    width:100%;
-    max-width:640px;
-  }
-
-  .menu-bar{
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:nowrap;
-    margin-bottom:20px;
-    padding:12px 20px;
-    background:var(--panel-bg);
-    border:1px solid var(--line);
-    border-radius:12px;
-    white-space:nowrap;
-  }
-
-  .menu-brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-shrink:0;
-    min-width:0;
-    text-decoration:none;
-    color:inherit;
-  }
-
-  .menu-logo{
-    height:28px;
-    width:auto;
-    display:block;
-    flex-shrink:0;
-  }
-
-  .menu-title{
-    margin:0;
-    font-weight:800;
-    font-size:20px;
-    line-height:normal;
-    letter-spacing:0.06em;
-    color:var(--ink);
-    flex-shrink:0;
-  }
-
-  .menu-auth{
-    position:absolute;
-    top:100%;
-    right:0;
-    margin-top:8px;
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    gap:10px;
-    padding:14px 16px;
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:12px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.2);
-    white-space:nowrap;
-    z-index:10;
-  }
-
-  .menu-auth-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-
-  .menu-toggle-btn{
-    display:flex;
-    align-items:center;
-    gap:6px;
-    padding:6px 14px;
-    background:transparent;
-    border:1.5px solid var(--line);
-    border-radius:10px;
-    font-size:12px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-    white-space:nowrap;
-    flex-shrink:0;
-  }
-
-  .menu-toggle-btn:hover{
-    border-color:var(--gold);
-    color:var(--ink);
-  }
-
-  .app-loading-overlay{
-    position:fixed;
-    inset:0;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:14px;
-    background:var(--washi);
-    z-index:2000;
-    transition:opacity 0.3s ease;
-  }
-
-  .app-loading-overlay.hidden{
-    opacity:0;
-    pointer-events:none;
-  }
-
-  .app-loading-spinner{
-    width:44px;
-    height:44px;
-    border-radius:50%;
-    border:4px solid var(--line);
-    border-top-color:var(--hanko);
-    animation:app-loading-spin 0.8s linear infinite;
-  }
-
-  .app-loading-text{
-    font-size:14px;
-    font-weight:600;
-    letter-spacing:0.08em;
-    color:var(--ink-soft);
-  }
-
-  @keyframes app-loading-spin{
-    to{ transform:rotate(360deg); }
-  }
-
-
-  .custom-alert-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(31,28,25,0.55);
-    align-items:center;
-    justify-content:center;
-    z-index:1000;
-    padding:20px;
-  }
-
-  .custom-alert-overlay.visible{
-    display:flex;
-  }
-
-  .custom-alert-box{
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:28px 24px;
-    max-width:320px;
-    width:100%;
-    text-align:center;
-    position:relative;
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  }
-
-  .custom-alert-message{
-    font-size:15px;
-    color:var(--ink);
-    margin-bottom:22px;
-  }
-
-  .custom-alert-btn{
-    padding:10px 32px;
-    background:var(--hanko);
-    color:var(--washi);
-    border:none;
-    border-radius:10px;
-    font-size:14px;
-    font-weight:600;
-    letter-spacing:0.05em;
-    cursor:pointer;
-    transition:background 0.2s ease;
-  }
-
-  .custom-alert-btn:hover{
-    background:var(--hanko-deep);
-  }
-
-  .player-name-label{
-    font-size:13px;
-    color:var(--ink-soft);
-    flex-shrink:0;
-  }
-
-  .edit-name-btn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:24px;
-    height:24px;
-    padding:0;
-    background:transparent;
-    border:1.5px solid var(--line);
-    border-radius:10px;
-    font-size:11px;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-    flex-shrink:0;
-  }
-
-  .edit-name-btn:hover{
-    border-color:var(--gold);
-    color:var(--ink);
-  }
-
-  .switch-player-btn{
-    padding:6px 14px;
-    background:transparent;
-    border:1.5px solid var(--line);
-    border-radius:10px;
-    font-size:12px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-    white-space:nowrap;
-    flex-shrink:0;
-  }
-
-  .switch-player-btn:hover{
-    border-color:var(--gold);
-    color:var(--ink);
-  }
-
-  .mute-check-label{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    margin-top:16px;
-    font-size:13px;
-    color:var(--ink-soft);
-    cursor:pointer;
-  }
-
-  .mute-check{
-    width:16px;
-    height:16px;
-    cursor:pointer;
-    accent-color:var(--hanko);
-  }
-
-  .end-game-btn{
-    padding:6px 12px;
-    background:var(--hanko);
-    color:var(--washi);
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:12px;
-    margin-left:10px;
-  }
-
-  .panel{
-    background:var(--panel-bg);
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:28px;
-    position:relative;
-  }
-
-  .mode-tabs{
-    display:flex;
-    gap:4px;
-    justify-content:center;
-    margin-bottom:22px;
-    background:var(--panel-bg-soft);
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:4px;
-    overflow:hidden;
-  }
-
-  .mode-btn, .input-mode-btn{
-    flex:1;
-    padding:11px 8px;
-    background:transparent;
-    border:none;
-    border-radius:8px;
-    font-size:14px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-  }
-
-  .mode-btn.active, .input-mode-btn.active{
-    background:var(--hanko);
-    color:var(--washi);
-  }
-
-  .hidden{
-    display:none !important;
-  }
-
-  .levels{
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    margin-bottom:22px;
-  }
-
-  .level-btn{
-    flex:1;
-    padding:14px 8px;
-    background:transparent;
-    border:1.5px solid var(--line);
-    border-radius:10px;
-    font-size:15px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-  }
-
-  .level-btn .sub{
-    display:block;
-    font-size:11px;
-    font-weight:400;
-    color:var(--ink-soft);
-    opacity:0.6;
-    margin-top:4px;
-  }
-
-  .level-btn:hover{
-    border-color:var(--gold);
-  }
-
-  .level-btn.active{
-    background:var(--ink);
-    border-color:var(--ink);
-    color:var(--washi);
-  }
-
-  .level-btn.active .sub{
-    color:var(--washi);
-    opacity:0.75;
-  }
-
-  .start-row{
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin-bottom:8px;
-  }
-
-  .start-btn{
-    padding:12px 24px;
-    background:var(--hanko);
-    color:var(--washi);
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    font-weight:600;
-    letter-spacing:0.1em;
-    cursor:pointer;
-    transition:background 0.2s ease;
-  }
-
-  .start-btn:hover{
-    background:var(--hanko-deep);
-  }
-
-  .start-btn.online-btn{
-    background:var(--ink);
-  }
-
-  .start-btn.online-btn:hover{
-    background:var(--ink-soft);
-  }
-
-  .online-status{
-    display:none;
-    text-align:center;
-    padding:20px 8px;
-  }
-
-  .online-status.visible{
-    display:block;
-  }
-
-  .status-title{
-    font-size:18px;
-    font-weight:600;
-    margin-bottom:10px;
-  }
-
-  .search-spinner{
-    width:40px;
-    height:40px;
-    border:3px solid var(--line);
-    border-top-color:var(--hanko);
-    border-radius:50%;
-    margin:20px auto;
-    animation:spin 1s linear infinite;
-  }
-
-  @keyframes spin{
-    to{transform:rotate(360deg);}
-  }
-
-  .search-count{
-    font-size:20px;
-    color:var(--ink-soft);
-    margin-bottom:22px;
-  }
-
-  .countdown-number{
-    font-size:88px;
-    font-weight:800;
-    color:var(--hanko);
-    margin:16px 0 24px;
-  }
-
-  #opponent-score-label.hidden{
-    display:none;
-  }
-
-  .game{
-    display:none;
-  }
-
-  .game.visible{
-    display:block;
-  }
-
-  .setup.hidden{
-    display:none;
-  }
-
-  .hud{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:clamp(8px,2vh,18px);
-    font-size:clamp(11px,2vh,13px);
-    color:var(--ink-soft);
-    letter-spacing:0.05em;
-  }
-
-  .timer-track{
-    height:6px;
-    width:100%;
-    background:rgba(31,28,25,0.1);
-    border-radius:12px;
-    overflow:hidden;
-    margin-bottom:clamp(12px,3vh,24px);
-  }
-
-  .timer-fill{
-    height:100%;
-    background:var(--hanko);
-    width:100%;
-    transition:width 1s linear;
-  }
-
-  .word-frame{
-    text-align:center;
-    padding:clamp(14px,4vh,36px) 12px;
-    background:var(--panel-bg-soft);
-    border-radius:12px;
-    margin-bottom:clamp(12px,3vh,26px);
-  }
-
-  .word-eyebrow{
-    font-size:clamp(10px,1.6vh,11px);
-    letter-spacing:0.3em;
-    color:var(--gold);
-    margin-bottom:clamp(6px,1.5vh,12px);
-  }
-
-  #word-display{
-    font-size:clamp(22px,6vh,46px);
-    font-weight:600;
-    letter-spacing:0.12em;
-    white-space:nowrap;
-    overflow:hidden;
-  }
-
-  .char{
-    display:inline-block;
-    transition:color 0.15s ease;
-  }
-
-  .char.done{
-    color:var(--hanko);
-  }
-
-  .romaji-display{
-    margin-top:clamp(8px,2vh,16px);
-    font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
-    font-size:clamp(15px,3.4vh,26px);
-    font-weight:700;
-    letter-spacing:0.06em;
-    color:var(--ink-soft);
-    white-space:nowrap;
-    overflow:hidden;
-  }
-
-  .romaji-display.shake{
-    animation:shake 0.3s ease;
-  }
-
-  .rchar{
-    display:inline-block;
-  }
-
-  .rchar.done{
-    color:var(--hanko);
-  }
-
-  .rchar.current .rtyped{
-    color:var(--hanko);
-  }
-
-  .input-row{
-    position:relative;
-  }
-
-  #typing-input{
-    width:100%;
-    padding:clamp(10px,2.5vh,16px) 18px;
-    font-size:clamp(16px,3vh,22px);
-    border:1.5px solid var(--line);
-    border-radius:10px;
-    background:var(--input-bg);
-    color:var(--ink);
-    outline:none;
-    letter-spacing:0.08em;
-    transition:border-color 0.15s ease;
-    text-align: center;
-  }
-
-  #typing-input:focus{
-    border-color:var(--gold);
-  }
-
-  #typing-input.shake{
-    animation:shake 0.3s ease;
-    border-color:var(--hanko-deep);
-  }
-
-  @keyframes shake{
-    0%,100%{transform:translateX(0);}
-    25%{transform:translateX(-6px);}
-    75%{transform:translateX(6px);}
-  }
-
-  .ime-spacer{
-    height:0px;
-  }
-
-  .hint{
-    text-align:center;
-    font-size:12px;
-    color:var(--ink-soft);
-    opacity:0.65;
-    margin-top:clamp(6px,1.5vh,10px);
-    min-height:16px;
-  }
-
-  .result{
-    display:none;
-    text-align:center;
-  }
-
-  .result.visible{
-    display:block;
-  }
-
-  .result-title{
-    font-size:14px;
-    letter-spacing:0.3em;
-    color:var(--gold);
-    margin-bottom:6px;
-  }
-
-  .result-score{
-    font-size:64px;
-    font-weight:800;
-    color:var(--hanko);
-    margin-bottom:4px;
-  }
-
-  .result-sub{
-    font-size:13px;
-    color:var(--ink-soft);
-    margin-bottom:26px;
-  }
-
-  .stat-grid{
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    margin-bottom:26px;
-  }
-
-  .stat-box{
-    flex:1;
-    max-width:140px;
-    padding:14px 8px;
-    border:1px solid var(--line);
-    border-radius:10px;
-    background:var(--panel-bg-soft);
-  }
-
-  .stat-value{
-    font-size:22px;
-    font-weight:800;
-    color:var(--ink);
-    margin-bottom:4px;
-  }
-
-  .stat-label{
-    font-size:11px;
-    color:var(--ink-soft);
-    opacity:0.7;
-    letter-spacing:0.05em;
-  }
-
-  .event-banner{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    margin:0 0 16px;
-    padding:10px 14px;
-    border-radius:10px;
-    background:linear-gradient(135deg, var(--gold), #ffcf5c);
-    color:#3a2a00;
-    font-size:13px;
-    font-weight:700;
-    letter-spacing:0.05em;
-    text-align:center;
-    animation:eventPulse 1.8s ease-in-out infinite;
-  }
-
-  @keyframes eventPulse{
-    0%, 100%{ box-shadow:0 0 0 0 rgba(255,207,92,0.5); }
-    50%{ box-shadow:0 0 0 8px rgba(255,207,92,0); }
-  }
-
-  .ranking-box{
-    margin-top:22px;
-    padding-top:18px;
-    border-top:1px solid var(--line);
-  }
-
-  .ranking-title{
-    text-align:center;
-    font-size:14px;
-    font-weight:700;
-    letter-spacing:0.1em;
-    color:var(--gold);
-    margin-bottom:12px;
-  }
-
-  .ranking-list{
-    list-style:none;
-    margin:0;
-    padding:0;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:6px 14px;
-  }
-
-  .ranking-loading{
-    grid-column:1 / -1;
-    text-align:center;
-    padding:14px 10px;
-    font-size:13px;
-    color:var(--ink-soft);
-    opacity:0.75;
-  }
-
-  .ranking-item{
-    display:grid;
-    grid-template-columns:36px 1fr auto;
-    align-items:center;
-    padding:6px 10px;
-    background:var(--panel-bg-soft);
-    border:1px solid var(--line);
-    border-radius:10px;
-    font-size:13px;
-  }
-
-  .ranking-item .rank{
-    font-weight:700;
-    color:var(--hanko);
-  }
-
-  .ranking-item.top3 .rank{
-    color:var(--gold);
-  }
-
-  .ranking-item .name{
-    color:var(--ink-soft);
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-
-  .ranking-item .score{
-    font-weight:600;
-    color:var(--ink);
-    text-align:right;
-  }
-
-  .info-box{
-    margin-top:22px;
-    padding-top:18px;
-    border-top:1px solid var(--line);
-  }
-
-  .info-title{
-    text-align:center;
-    font-size:14px;
-    font-weight:700;
-    letter-spacing:0.1em;
-    color:var(--gold);
-    margin-bottom:10px;
-  }
-
-  .info-title:not(:first-child){
-    margin-top:18px;
-  }
-
-  .info-list{
-    margin:0;
-    padding:0 0 0 1.2em;
-    font-size:13px;
-    line-height:1.7;
-    color:var(--ink-soft);
-  }
-
-  .info-list li{
-    margin-bottom:4px;
-  }
-
-  .site-footer-links{
-    display:flex;
-    justify-content:center;
-    gap:16px;
-    margin-top:16px;
-  }
-
-  .site-footer-links a{
-    font-size:11px;
-    color:var(--ink-soft);
-    text-decoration:underline;
-    opacity:0.8;
-  }
-
-  .site-footer-links a:hover{
-    color:var(--hanko);
-    opacity:1;
-  }
-
-  .site-footer{
-    text-align:center;
-    margin-top:8px;
-    padding-top:14px;
-    border-top:1px solid var(--line);
-    font-size:11px;
-    color:var(--ink-soft);
-    opacity:0.7;
-  }
-
-  .name-input-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(31,28,25,0.55);
-    align-items:center;
-    justify-content:center;
-    z-index:1000;
-    padding:20px;
-  }
-
-  .name-input-overlay.visible{
-    display:flex;
-  }
-
-  .name-input-box{
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:28px 24px;
-    max-width:320px;
-    width:100%;
-    text-align:center;
-    position:relative;
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  }
-
-  .name-input-message{
-    font-size:14px;
-    color:var(--ink);
-    margin-bottom:16px;
-  }
-
-  .name-input-box input{
-    width:100%;
-    padding:10px 12px;
-    background:var(--input-bg);
-    border:1px solid var(--line);
-    border-radius:10px;
-    font-size:16px;
-    color:var(--ink);
-    text-align:center;
-    margin-bottom:18px;
-  }
-
-  .name-input-box input:focus{
-    outline:none;
-    border-color:var(--gold);
-  }
-
-  .name-input-btn{
-    padding:10px 32px;
-    background:var(--hanko);
-    color:var(--washi);
-    border:none;
-    border-radius:10px;
-    font-size:14px;
-    font-weight:600;
-    letter-spacing:0.05em;
-    cursor:pointer;
-    transition:background 0.2s ease;
-  }
-
-  .name-input-btn:hover{
-    background:var(--hanko-deep);
-  }
-
-  .result-rank-badge{
-    display:none;
-    margin:10px auto 0;
-    max-width:280px;
-    padding:8px 14px;
-    background:var(--hanko);
-    color:var(--washi);
-    border-radius:10px;
-    font-size:13px;
-    font-weight:700;
-    letter-spacing:0.05em;
-    text-align:center;
-  }
-
-  .result-rank-badge.visible{
-    display:block;
-  }
-
-  .high-score-label{
-    font-size:12px;
-    color:var(--ink-soft);
-    opacity:0.8;
-  }
-
-  .setup-high-score{
-    text-align:center;
-    margin-bottom:16px;
-  }
-
-  .result-high-score{
-    margin-bottom:14px;
-  }
-
-  .new-record-badge{
-    display:none;
-    margin:10px auto 0;
-    max-width:280px;
-    padding:8px 14px;
-    background:var(--gold);
-    color:var(--washi);
-    border-radius:10px;
-    font-size:13px;
-    font-weight:700;
-    letter-spacing:0.05em;
-    text-align:center;
-  }
-
-  .new-record-badge.visible{
-    display:block;
-  }
-
-  .retry-btn{
-    padding:12px 36px;
-    background:transparent;
-    border:1.5px solid var(--ink);
-    border-radius:10px;
-    font-size:15px;
-    color:var(--ink);
-    cursor:pointer;
-  }
-
-  .retry-btn:hover{
-    background:var(--ink);
-    color:var(--washi);
-  }
-
-  .friend-menu-row{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-    margin-bottom:20px;
-  }
-
-  .friend-code{
-    font-size:40px;
-    font-weight:800;
-    letter-spacing:0.15em;
-    color:var(--hanko);
-    margin-bottom:16px;
-  }
-
-  .friend-copy-btn{
-    margin-bottom:20px;
-  }
-
-  .friend-code-input{
-    width:100%;
-    max-width:220px;
-    padding:10px 12px;
-    background:var(--input-bg);
-    border:1px solid var(--line);
-    border-radius:10px;
-    font-size:18px;
-    letter-spacing:0.15em;
-    color:var(--ink);
-    text-align:center;
-    margin-bottom:18px;
-  }
-
-  .friend-code-input:focus{
-    outline:none;
-    border-color:var(--gold);
-  }
-
-  @media (min-width:561px){
-    .menu-toggle-btn{
-      display:none;
-    }
-    .menu-auth{
-      display:flex !important;
-      position:static;
-      flex-direction:row;
-      align-items:center;
-      margin-top:0;
-      padding:0;
-      background:none;
-      border:none;
-      box-shadow:none;
-      gap:10px;
-      flex-wrap:nowrap;
-      flex-shrink:1;
-      min-width:0;
-    }
-    .menu-auth-row{
-      gap:10px;
-    }
-  }
-
-  @media (max-width:560px){
-    .menu-bar{
-      padding:10px 14px;
-      gap:8px;
-    }
-    .menu-brand{
-      gap:8px;
-    }
-    .menu-logo{
-      height:24px;
-    }
-    .menu-title{
-      font-size:17px;
-    }
-    .player-name-label{
-      font-size:12px;
-    }
-    .edit-name-btn{
-      width:22px;
-      height:22px;
-      font-size:10px;
-    }
-    .switch-player-btn{
-      padding:5px 10px;
-      font-size:11px;
-    }
-    .menu-toggle-btn{
-      padding:5px 10px;
-      font-size:11px;
-    }
-    .menu-auth{
-      gap:6px;
-    }
-  }
-
-  @media (max-width:480px){
-    body{padding:24px 10px;}
-    body.game-active{padding:10px 10px;}
-    .panel{padding:18px 14px;}
-    .menu-bar{padding:8px 12px;}
-    .menu-brand{gap:6px;}
-    .menu-logo{height:22px;}
-    .menu-title{font-size:16px;}
-
-    .mode-btn{font-size:12px;padding:9px 6px;}
-    .level-btn{font-size:12px;padding:10px 6px;}
-    .level-btn .sub{font-size:9px;}
-    .start-btn{font-size:13px;padding:10px 18px;}
-
-    .status-title{font-size:15px;}
-    .search-spinner{width:32px;height:32px;}
-    .search-count{font-size:16px;}
-    .countdown-number{font-size:64px;}
-
-    .hud{font-size:11px;}
-    .word-eyebrow{font-size:10px;}
-    #word-display{font-size:26px;}
-    #typing-input{font-size:16px;padding:12px 14px;}
-    .hint{font-size:10px;}
-
-    .result-title{font-size:12px;}
-    .result-score{font-size:44px;}
-    .result-sub{font-size:11px;}
-    .stat-value{font-size:17px;}
-    .stat-label{font-size:9px;}
-    .retry-btn{font-size:13px;padding:10px 24px;}
-  }
-
-  @media (max-height:600px){
-    body.game-active{padding:6px 16px;}
-    .hud{margin-bottom:6px;font-size:11px;}
-    .timer-track{margin-bottom:8px;}
-    .word-frame{padding:10px 12px;margin-bottom:8px;}
-    .word-eyebrow{margin-bottom:4px;}
-    #word-display{font-size:clamp(20px,5vh,32px);}
-    #typing-input{padding:8px 14px;font-size:16px;}
-    .hint{margin-top:4px;min-height:14px;}
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+  background: #1a1a2e;
+  color: #eee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.ascii {
+  font-family: monospace;
+  white-space: pre;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #00ffcc;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+button {
+  background: #16213e;
+  color: #00ffcc;
+  border: 2px solid #00ffcc;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+button:hover {
+  background: #00ffcc;
+  color: #1a1a2e;
+}
+button.active {
+  background: #00ffcc;
+  color: #1a1a2e;
+  font-weight: bold;
+}
+#displayArea {
+  width: 100%;
+  max-width: 800px;
+  background: #0f3460;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  min-height: 180px;
+}
+.word-block {
+  display: inline-block;
+  margin: 0 8px 16px 0;
+  text-align: center;
+  vertical-align: top;
+}
+.word-kana {
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+.word-hira {
+  font-size: 13px;
+  margin-top: 4px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.word-hira .typed {
+  color: #00ffcc;
+}
+.word-hira .untyped {
+  color: #888;
+}
+.romaji-display {
+  font-size: 14px;
+  color: #aaa;
+  margin-top: 6px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#inputArea {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 16px;
+}
+#romajiInput {
+  width: 100%;
+  padding: 14px;
+  font-size: 20px;
+  border: 2px solid #00ffcc;
+  border-radius: 8px;
+  background: #16213e;
+  color: #fff;
+  outline: none;
+}
+#romajiInput:focus {
+  border-color: #00ffaa;
+  box-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+}
+#realtimeRomaji {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #00ffcc;
+  min-height: 24px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+}
+.hidden {
+  display: none !important;
+}
+#stats {
+  font-size: 14px;
+  color: #aaa;
+  margin-top: 12px;
+}
+.mode-label {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 8px;
+}
 </style>
 </head>
 <body>
-<div class="app-loading-overlay" id="app-loading-overlay">
-  <div class="app-loading-spinner"></div>
-  <div class="app-loading-text">読み込み中...</div>
-</div>
-<div class="stage">
-  <div class="menu-bar" id="site-header">
-    <a href="/" class="menu-brand">
-      <img src="logo.svg" alt="シンプルタイピング" class="menu-logo">
-      <h1 class="menu-title">シンプルタイピング</h1>
-    </a>
-    <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="メニュー"><i class="fas fa-bars"></i> メニュー</button>
-    <div class="menu-auth hidden" id="menu-auth-panel">
-      <div class="menu-auth-row">
-        <span class="player-name-label" id="current-player-label"></span>
-        <button class="edit-name-btn" id="edit-name-btn" aria-label="名前を変更"><i class="fas fa-pen"></i></button>
-      </div>
-      <button class="switch-player-btn" id="google-login-btn"><i class="fab fa-google"></i> ログイン</button>
-      <button class="switch-player-btn hidden" id="logout-btn"><i class="fas fa-right-from-bracket"></i> ログアウト</button>
-    </div>
-  </div>
-
-  <div class="panel">
-
-    <div class="setup" id="setup">
-      <div class="event-banner hidden" id="event-banner"><i class="fas fa-star"></i> <span id="event-banner-text">イベント開催中！</span></div>
-      <div class="mode-tabs">
-        <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
-        <button class="mode-btn" data-mode="katakana">カタカナ</button>
-        <button class="mode-btn" data-mode="sentence">文章</button>
-      </div>
-
-      <div class="levels" data-row="hiragana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
-
-      <div class="levels hidden" data-row="katakana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
-
-      <div class="levels hidden" data-row="sentence">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
-      </div>
-
-      <div class="mode-tabs input-mode-tabs">
-        <button class="input-mode-btn active" data-input-mode="textbox">テキストボックス</button>
-        <button class="input-mode-btn" data-input-mode="realtime">リアルタイム</button>
-      </div>
-
-      <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
-
-      <div class="start-row">
-        <button class="start-btn" id="start-btn"><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
-        <button class="start-btn online-btn" id="start-online-btn"><i class="fa-solid fa-globe"></i> オンライン対戦</button>
-        <button class="start-btn online-btn" id="start-friend-btn"><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
-      </div>
-
-      <label class="mute-check-label">
-        <input type="checkbox" id="mute-btn" class="mute-check">
-        ミュート
-      </label>
-
-      <div class="ranking-box hidden" id="ranking-box">
-        <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
-        <ol class="ranking-list" id="ranking-list"></ol>
-      </div>
-
-      <div class="info-box">
-        <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
-        <ul class="info-list">
-          <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
-          <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
-          <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
-          <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
-          <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
-        </ul>
-
-        <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
-        <ul class="info-list">
-          <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
-          <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
-          <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
-          <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
-        </ul>
-
-        <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
-        <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
-      </div>
-    </div>
-
-    <div class="online-status" id="searching">
-      <div class="status-title">対戦相手をさがしています</div>
-      <div class="search-spinner"></div>
-      <div class="search-count" id="search-count-label">残り 15 秒</div>
-      <button class="retry-btn" id="cancel-search-btn">キャンセル</button>
-    </div>
-
-    <div class="online-status" id="countdown">
-      <div class="countdown-number" id="countdown-number">3</div>
-    </div>
-
-    <div class="online-status" id="friend-menu">
-      <div class="status-title">フレンド対戦</div>
-      <div class="friend-menu-row">
-        <button class="start-btn online-btn" id="friend-create-btn">招待コードを作成する</button>
-        <button class="start-btn online-btn" id="friend-join-open-btn">招待コードで参加する</button>
-      </div>
-      <button class="retry-btn" id="friend-menu-back-btn">戻る</button>
-    </div>
-
-    <div class="online-status" id="friend-create">
-      <div class="status-title">このコードを友達に伝えてね</div>
-      <div class="friend-code" id="friend-code-label">------</div>
-      <button class="retry-btn friend-copy-btn" id="friend-code-copy-btn">コードをコピー</button>
-      <div class="search-count">相手の参加を待っています…</div>
-      <div class="search-spinner"></div>
-      <button class="retry-btn" id="friend-create-cancel-btn">キャンセル</button>
-    </div>
-
-    <div class="online-status" id="friend-join">
-      <div class="status-title">招待コードを入力してください</div>
-      <input type="text" class="friend-code-input" id="friend-code-input" maxlength="6" autocomplete="off" inputmode="numeric" pattern="[0-9]*" placeholder="コードを入力">
-      <div class="start-row">
-        <button class="start-btn online-btn" id="friend-join-submit-btn">参加する</button>
-      </div>
-      <button class="retry-btn" id="friend-join-cancel-btn">キャンセル</button>
-    </div>
-
-    <div class="online-status" id="friend-waiting">
-      <div class="status-title">相手を待っています</div>
-      <div class="search-spinner"></div>
-      <button class="retry-btn" id="friend-waiting-cancel-btn">キャンセル</button>
-    </div>
-
-    <div class="game" id="game">
-      <div class="hud">
-        <span id="score-label">せいかい 0 もん</span>
-        <span id="opponent-score-label" class="hidden">あいて 0 もん</span>
-        <span id="time-label">残り 100 秒</span>
-        <button id="end-game-btn" class="end-game-btn">終了</button>
-      </div>
-      <div class="timer-track"><div class="timer-fill" id="timer-fill"></div></div>
-
-      <div class="word-frame">
-        <div class="word-eyebrow" id="level-label">初級</div>
-        <div id="word-display"></div>
-        <div id="romaji-display" class="romaji-display hidden"></div>
-      </div>
-
-      <div class="ime-spacer" id="ime-spacer"></div>
-
-      <div class="input-row">
-        <input type="text" id="typing-input" autocomplete="off" placeholder="ここに入力してください">
-      </div>
-      <div class="hint" id="hint-label">Enterで確定</div>
-    </div>
-
-    <div class="result" id="result">
-      <div class="result-title">RESULT</div>
-      <div class="result-score" id="result-score">0</div>
-      <div class="result-sub" id="result-sub">総合スコア</div>
-      <div class="result-rank-badge" id="result-rank-badge"></div>
-      <div class="high-score-label result-high-score" id="result-high-score">ハイスコア 0</div>
-      <div class="new-record-badge" id="new-record-badge">ハイスコア更新！</div>
-      <div class="stat-grid">
-        <div class="stat-box">
-          <div class="stat-value" id="stat-accuracy">0%</div>
-          <div class="stat-label">正誤率</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-value" id="stat-speed">0</div>
-          <div class="stat-label">文字/分</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-value" id="stat-miss">0</div>
-          <div class="stat-label">ミス数</div>
-        </div>
-      </div>
-      <button class="retry-btn" id="retry-btn">もう一度</button>
-    </div>
-
-  </div>
+<div class="ascii">
+  ╔══════════════════════════════════════╗
+  ║   日 本 語 タ イ ピ ン グ 練 習      ║
+  ╚══════════════════════════════════════╝
 </div>
 
-<div class="custom-alert-overlay" id="custom-alert-overlay">
-  <div class="custom-alert-box">
-    <div class="custom-alert-message" id="custom-alert-message"></div>
-    <button class="custom-alert-btn" id="custom-alert-btn">OK</button>
-  </div>
+<div class="controls">
+  <button id="btnRealtime" class="active">リアルタイム</button>
+  <button id="btnTextbox">テキストボックス</button>
 </div>
 
-<div class="name-input-overlay" id="name-input-overlay">
-  <div class="name-input-box">
-    <div class="name-input-message" id="name-input-message">お名前を入力してください（6文字まで）</div>
-    <input type="text" id="name-input-field" maxlength="6" autocomplete="off" placeholder="GUEST">
-    <button class="name-input-btn" id="name-input-btn">登録</button>
-  </div>
+<div id="displayArea">
+  <div class="mode-label">文章モード</div>
+  <div id="sentenceDisplay"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@mogamoga1024/typing-jp@latest/dist/cdn/typing-jp.js"></script>
+<div id="inputArea">
+  <input type="text" id="romajiInput" placeholder="ローマ字を入力..." autocomplete="off" spellcheck="false">
+  <div id="realtimeRomaji"></div>
+</div>
+
+<div id="stats">進捗: <span id="progress">0</span> / <span id="total">0</span></div>
+
 <script>
-const customAlertOverlayEl = document.getElementById("custom-alert-overlay");
-const customAlertMessageEl = document.getElementById("custom-alert-message");
-const customAlertBtnEl = document.getElementById("custom-alert-btn");
+const sentences = [
+  { kana: "こんにちは", hira: "こんにちは", romaji: "konnichiha" },
+  { kana: "ありがとう", hira: "ありがとう", romaji: "arigatou" },
+  { kana: "おはようございます", hira: "おはようございます", romaji: "ohayougozaimasu" },
+  { kana: "すみません", hira: "すみません", romaji: "sumimasen" },
+  { kana: "いただきます", hira: "いただきます", romaji: "itadakimasu" },
+  { kana: "さようなら", hira: "さようなら", romaji: "sayounara" },
+  { kana: "がんばって", hira: "がんばって", romaji: "ganbatte" },
+  { kana: "おめでとうございます", hira: "おめでとうございます", romaji: "omedetougozaimasu" }
+];
 
-function showCustomAlert(message){
-  customAlertMessageEl.textContent = message;
-  customAlertOverlayEl.classList.add("visible");
+let currentIndex = 0;
+let typedRomaji = "";
+let mode = "realtime";
+let currentSentence = null;
+
+const btnRealtime = document.getElementById("btnRealtime");
+const btnTextbox = document.getElementById("btnTextbox");
+const romajiInput = document.getElementById("romajiInput");
+const realtimeRomaji = document.getElementById("realtimeRomaji");
+const sentenceDisplay = document.getElementById("sentenceDisplay");
+const progressEl = document.getElementById("progress");
+const totalEl = document.getElementById("total");
+
+function init() {
+  totalEl.textContent = sentences.length;
+  loadSentence();
+  updateUI();
 }
 
-customAlertBtnEl.addEventListener("click", () => {
-  customAlertOverlayEl.classList.remove("visible");
-});
-
-const nameInputOverlayEl = document.getElementById("name-input-overlay");
-const nameInputFieldEl = document.getElementById("name-input-field");
-const nameInputBtnEl = document.getElementById("name-input-btn");
-let nameInputCallback = null;
-
-function normalizePlayerName(raw){
-  const trimmed = (raw || "").trim().slice(0, 6);
-  return trimmed.length === 0 ? "GUEST" : trimmed;
-}
-
-function showNameInputModal(callback, prefill){
-  nameInputCallback = callback;
-  nameInputFieldEl.value = prefill || "";
-  nameInputOverlayEl.classList.add("visible");
-  nameInputFieldEl.focus();
-}
-
-function confirmNameInput(){
-  const name = normalizePlayerName(nameInputFieldEl.value);
-  nameInputOverlayEl.classList.remove("visible");
-  if(nameInputCallback){
-    const callback = nameInputCallback;
-    nameInputCallback = null;
-    callback(name);
+function loadSentence() {
+  if (currentIndex >= sentences.length) {
+    currentIndex = 0;
   }
+  currentSentence = sentences[currentIndex];
+  typedRomaji = "";
+  romajiInput.value = "";
+  renderSentence();
+  updateProgress();
 }
 
-nameInputBtnEl.addEventListener("click", confirmNameInput);
-nameInputFieldEl.addEventListener("keydown", (e) => {
-  if(e.key === "Enter"){
-    e.preventDefault();
-    confirmNameInput();
+function renderSentence() {
+  const word = currentSentence;
+  const hira = word.hira;
+  const typedLen = getMatchedHiraLength(typedRomaji, word.romaji, hira);
+
+  let hiraHtml = "";
+  for (let i = 0; i < hira.length; i++) {
+    if (i < typedLen) {
+      hiraHtml += `<span class="typed">${hira[i]}</span>`;
+    } else {
+      hiraHtml += `<span class="untyped">${hira[i]}</span>`;
+    }
   }
-});
 
-const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
-const SESSION_TOKEN_KEY = "sessionToken";
-const GUEST_NAME_KEY = "guestPlayerName";
-const currentPlayerLabelEl = document.getElementById("current-player-label");
-const logoutBtnEl = document.getElementById("logout-btn");
-const googleLoginBtnEl = document.getElementById("google-login-btn");
-const editNameBtnEl = document.getElementById("edit-name-btn");
-const menuToggleBtnEl = document.getElementById("menu-toggle-btn");
-const menuAuthPanelEl = document.getElementById("menu-auth-panel");
+  sentenceDisplay.innerHTML = `
+    <div class="word-block">
+      <div class="word-kana">${word.kana}</div>
+      <div class="word-hira">${hiraHtml}</div>
+      <div class="romaji-display">${word.romaji}</div>
+    </div>
+  `;
+}
 
-menuToggleBtnEl.addEventListener("click", () => {
-  menuAuthPanelEl.classList.toggle("hidden");
-});
+function getMatchedHiraLength(typed, targetRomaji, hira) {
+  let matched = 0;
+  let romajiPos = 0;
+  const lowerTyped = typed.toLowerCase();
+  const lowerTarget = targetRomaji.toLowerCase();
 
-editNameBtnEl.addEventListener("click", () => {
-  const prefill = currentPlayerName || "";
-  showNameInputModal(async (name) => {
-    const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-    if(isLoggedIn){
-      const token = getSessionToken();
-      try{
-        const res = await fetch(`${RANKING_API_URL}/auth`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "setName", token, name })
-        });
-        const data = await res.json();
-        if(data.name){
-          currentPlayerName = data.name;
-        } else {
-          showCustomAlert("名前の変更に失敗しました");
+  for (let i = 0; i < hira.length; i++) {
+    const char = hira[i];
+    let needed = 1;
+    if ("きゃきゅきょしゃしゅしょちゃちゅちょにゃにゅにょひゃひゅひょみゃみゅみょりゃりゅりょぎゃぎゅぎょじゃじゅじょびゃびゅびょぴゃぴゅぴょ".includes(char)) {
+      needed = 3;
+    } else if ("っん".includes(char)) {
+      needed = char === "っ" ? 1 : 1;
+    } else {
+      needed = 1;
+    }
+
+    let slice = lowerTarget.slice(romajiPos, romajiPos + needed + 2);
+    let found = false;
+    for (let len = 1; len <= 4; len++) {
+      const candidate = lowerTarget.slice(romajiPos, romajiPos + len);
+      if (lowerTyped.startsWith(candidate) || lowerTyped.length >= romajiPos + len && lowerTyped.slice(0, romajiPos + len) === lowerTarget.slice(0, romajiPos + len)) {
+        if (lowerTyped.length >= romajiPos + len) {
+          romajiPos += len;
+          matched = i + 1;
+          found = true;
+          break;
         }
-      }catch(e){
-        showCustomAlert("名前の変更に失敗しました");
-      }
-    } else {
-      currentPlayerName = name;
-      localStorage.setItem(GUEST_NAME_KEY, name);
-    }
-    updatePlayerNameLabel();
-    updateSetupHighScore();
-  }, prefill);
-});
-
-let currentPlayerName = null;
-let serverHighScores = null;
-
-function getPlayerName(){
-  return currentPlayerName;
-}
-
-function getSessionToken(){
-  return localStorage.getItem(SESSION_TOKEN_KEY);
-}
-
-function setSessionToken(token){
-  localStorage.setItem(SESSION_TOKEN_KEY, token);
-}
-
-function clearSessionToken(){
-  localStorage.removeItem(SESSION_TOKEN_KEY);
-}
-
-function updatePlayerNameLabel(){
-  currentPlayerLabelEl.textContent = currentPlayerName ? currentPlayerName : "";
-}
-
-async function loadServerHighScores(token){
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "getHighScores", token })
-    });
-    const data = await res.json();
-    serverHighScores = data.highScores || {};
-  }catch(e){
-    serverHighScores = {};
-  }
-}
-
-async function showLoggedInUi(name, token){
-  currentPlayerName = name;
-  await loadServerHighScores(token);
-  updatePlayerNameLabel();
-  updateSetupHighScore();
-  googleLoginBtnEl.classList.add("hidden");
-  logoutBtnEl.classList.remove("hidden");
-}
-
-function showLoggedOutUi(){
-  currentPlayerName = localStorage.getItem(GUEST_NAME_KEY) || "GUEST";
-  serverHighScores = null;
-  updatePlayerNameLabel();
-  updateSetupHighScore();
-  googleLoginBtnEl.classList.remove("hidden");
-  logoutBtnEl.classList.add("hidden");
-}
-
-async function verifySession(){
-  const token = getSessionToken();
-  if(!token){
-    showLoggedOutUi();
-    return;
-  }
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "verify", token })
-    });
-    const data = await res.json();
-    if(data.valid){
-      await showLoggedInUi(data.name, token);
-    } else {
-      clearSessionToken();
-      showLoggedOutUi();
-    }
-  }catch(e){
-    showLoggedOutUi();
-  }
-}
-
-async function handleGoogleCredential(idToken){
-  let data;
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "login", idToken })
-    });
-    data = await res.json();
-  }catch(e){
-    showCustomAlert("ログインに失敗しました");
-    return;
-  }
-  if(data.error){
-    showCustomAlert("ログインに失敗しました");
-    return;
-  }
-  if(data.isNewUser){
-    showNameInputModal(async (name) => {
-      let regData;
-      try{
-        const regRes = await fetch(`${RANKING_API_URL}/auth`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "register", pendingToken: data.pendingToken, name })
-        });
-        regData = await regRes.json();
-      }catch(e){
-        showCustomAlert("登録に失敗しました");
-        return;
-      }
-      if(regData.token){
-        setSessionToken(regData.token);
-        await showLoggedInUi(regData.name, regData.token);
-      } else {
-        showCustomAlert("登録に失敗しました");
-      }
-    });
-  } else {
-    setSessionToken(data.token);
-    await showLoggedInUi(data.name, data.token);
-  }
-}
-
-const GOOGLE_AUTH_NONCE_KEY = "googleAuthNonce";
-
-function generateGoogleAuthNonce(){
-  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-}
-
-function startGoogleLogin(){
-  const nonce = generateGoogleAuthNonce();
-  sessionStorage.setItem(GOOGLE_AUTH_NONCE_KEY, nonce);
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  const params = new URLSearchParams({
-    client_id: GOOGLE_CLIENT_ID,
-    redirect_uri: redirectUri,
-    response_type: "id_token",
-    scope: "openid",
-    nonce,
-    prompt: "select_account"
-  });
-  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
-}
-
-function decodeGoogleIdTokenPayload(idToken){
-  const payloadPart = idToken.split(".")[1];
-  const base64 = payloadPart.replace(/-/g, "+").replace(/_/g, "/");
-  return JSON.parse(atob(base64));
-}
-
-async function processGoogleAuthRedirect(){
-  const hash = window.location.hash;
-  if(!hash || !hash.includes("id_token")) return false;
-  const params = new URLSearchParams(hash.substring(1));
-  const idToken = params.get("id_token");
-  const error = params.get("error");
-  history.replaceState(null, "", window.location.pathname + window.location.search);
-  if(error || !idToken) return false;
-  const expectedNonce = sessionStorage.getItem(GOOGLE_AUTH_NONCE_KEY);
-  sessionStorage.removeItem(GOOGLE_AUTH_NONCE_KEY);
-  try{
-    const payload = decodeGoogleIdTokenPayload(idToken);
-    if(expectedNonce && payload.nonce !== expectedNonce){
-      showCustomAlert("ログインに失敗しました");
-      return true;
-    }
-  }catch(e){
-    showCustomAlert("ログインに失敗しました");
-    return true;
-  }
-  await handleGoogleCredential(idToken);
-  return true;
-}
-
-googleLoginBtnEl.addEventListener("click", () => {
-  startGoogleLogin();
-});
-
-logoutBtnEl.addEventListener("click", () => {
-  const token = getSessionToken();
-  clearSessionToken();
-  showLoggedOutUi();
-  if(token){
-    fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "logout", token })
-    }).catch(() => {});
-  }
-});
-
-const appLoadingOverlayEl = document.getElementById("app-loading-overlay");
-
-function hideAppLoadingOverlay(){
-  appLoadingOverlayEl.classList.add("hidden");
-}
-
-window.addEventListener("load", async () => {
-  const handledGoogleRedirect = await processGoogleAuthRedirect();
-  const sessionLoadPromise = handledGoogleRedirect ? Promise.resolve() : verifySession();
-  Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
-});
-
-
-function katakanaToHiragana(str){
-  return (str || '').replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
-}
-
-const wordListCache = {};
-
-async function fetchWordList(mode, level){
-  const cacheKey = `${mode}-${level}`;
-  if(wordListCache[cacheKey]) return wordListCache[cacheKey];
-  const res = await fetch(`words/${cacheKey}.json`);
-  const list = await res.json();
-  wordListCache[cacheKey] = list;
-  return list;
-}
-
-const sentenceReadingCache = {};
-
-async function ensureSentenceReadings(level, words){
-  if(sentenceReadingCache[level]) return sentenceReadingCache[level];
-  try{
-    const res = await fetch(`words/sentence-${level}2.json`);
-    const readings = await res.json();
-    const map = {};
-    (words || []).forEach((word, i) => {
-      map[word] = readings[i] !== undefined ? readings[i] : word;
-    });
-    sentenceReadingCache[level] = map;
-    return map;
-  }catch(e){
-    sentenceReadingCache[level] = {};
-    return sentenceReadingCache[level];
-  }
-}
-
-async function ensureWordList(mode, level){
-  const cacheKey = `${mode}-${level}`;
-  let list = wordListCache[cacheKey];
-  if(!list){
-    try{
-      list = await fetchWordList(mode, level);
-    }catch(e){
-      list = [];
-    }
-  }
-  if(mode === "sentence" && !sentenceReadingCache[level]){
-    await ensureSentenceReadings(level, list);
-  }
-  return list;
-}
-
-function getCurrentWordReading(){
-  if(currentMode === "katakana") return katakanaToHiragana(currentWord);
-  if(currentMode === "sentence"){
-    const map = sentenceReadingCache[currentLevel] || {};
-    return map[currentWord] || currentWord;
-  }
-  return currentWord;
-}
-
-
-const levelLabels = { beginner:"初級", intermediate:"中級", advanced:"上級" };
-const modeLabels = { hiragana:"ひらがな", katakana:"カタカナ", sentence:"文章" };
-
-let currentMode = "hiragana";
-let currentLevel = "beginner";
-let inputMode = "textbox";
-let typingText = null;
-let currentWord = "";
-let usedWords = [];
-let score = 0;
-let missCount = 0;
-let totalCharsTyped = 0;
-let timeLeft = 100;
-let timerId = null;
-let isComposing = false;
-let integrityOk = true;
-let lastKeyTime = 0;
-let suspiciousKeyCount = 0;
-let keyIntervals = [];
-
-const setupEl = document.getElementById("setup");
-const gameEl = document.getElementById("game");
-const resultEl = document.getElementById("result");
-const wordDisplayEl = document.getElementById("word-display");
-const romajiDisplayEl = document.getElementById("romaji-display");
-const inputRowEl = document.querySelector(".input-row");
-const inputEl = document.getElementById("typing-input");
-const scoreLabelEl = document.getElementById("score-label");
-const timeLabelEl = document.getElementById("time-label");
-const timerFillEl = document.getElementById("timer-fill");
-const levelLabelEl = document.getElementById("level-label");
-const hintLabelEl = document.getElementById("hint-label");
-const resultScoreEl = document.getElementById("result-score");
-const resultSubEl = document.getElementById("result-sub");
-const statAccuracyEl = document.getElementById("stat-accuracy");
-const statSpeedEl = document.getElementById("stat-speed");
-const statMissEl = document.getElementById("stat-miss");
-const imeSpacerEl = document.getElementById("ime-spacer");
-const headerEl = document.getElementById("site-header");
-const opponentScoreLabelEl = document.getElementById("opponent-score-label");
-const searchingEl = document.getElementById("searching");
-const searchCountLabelEl = document.getElementById("search-count-label");
-const cancelSearchBtn = document.getElementById("cancel-search-btn");
-const countdownEl = document.getElementById("countdown");
-const countdownNumberEl = document.getElementById("countdown-number");
-const friendMenuEl = document.getElementById("friend-menu");
-const friendCreateEl = document.getElementById("friend-create");
-const friendJoinEl = document.getElementById("friend-join");
-const friendWaitingEl = document.getElementById("friend-waiting");
-const friendCodeLabelEl = document.getElementById("friend-code-label");
-const friendCodeInputEl = document.getElementById("friend-code-input");
-friendCodeInputEl.addEventListener("input", () => {
-  friendCodeInputEl.value = friendCodeInputEl.value.replace(/[^0-9]/g, "");
-});
-
-const ONLINE_SERVER_URL = "wss://key-onl.user-x45.workers.dev";
-const RANKING_API_URL = ONLINE_SERVER_URL.replace(/^wss:/, "https:").replace(/^ws:/, "http:");
-
-const clickSoundEl = new Audio("sounds/click.mp3");
-const keySoundEl = new Audio("sounds/key.mp3");
-const correctSoundEl = new Audio("sounds/correct.mp3");
-const incorrectSoundEl = new Audio("sounds/incorrect.mp3");
-let isMuted = localStorage.getItem("isMuted") === "true";
-
-function playSound(baseAudio){
-  if(isMuted) return;
-  const sound = baseAudio.cloneNode();
-  sound.play().catch(() => {});
-}
-
-document.addEventListener("click", (e) => {
-  if(e.target.closest("button")){
-    playSound(clickSoundEl);
-  }
-});
-
-inputEl.addEventListener("keydown", () => {
-  playSound(keySoundEl);
-});
-
-const muteBtn = document.getElementById("mute-btn");
-muteBtn.checked = isMuted;
-muteBtn.addEventListener("change", () => {
-  isMuted = muteBtn.checked;
-  localStorage.setItem("isMuted", isMuted);
-});
-
-const rankingBoxEl = document.getElementById("ranking-box");
-const eventBannerEl = document.getElementById("event-banner");
-const eventBannerTextEl = document.getElementById("event-banner-text");
-const rankingListEl = document.getElementById("ranking-list");
-const rankingTitleEl = document.querySelector(".ranking-title");
-const resultRankBadgeEl = document.getElementById("result-rank-badge");
-const setupHighScoreEl = document.getElementById("setup-high-score");
-const resultHighScoreEl = document.getElementById("result-high-score");
-const newRecordBadgeEl = document.getElementById("new-record-badge");
-
-function getHighScoreKey(mode, level){
-  return `highScore_${mode}_${level}`;
-}
-
-function getHighScore(mode, level){
-  const key = getHighScoreKey(mode, level);
-  if(serverHighScores){
-    return serverHighScores[key] || 0;
-  }
-  const value = localStorage.getItem(key);
-  return value ? parseInt(value, 10) : 0;
-}
-
-function setHighScore(mode, level, newScore){
-  const key = getHighScoreKey(mode, level);
-  if(serverHighScores){
-    serverHighScores[key] = newScore;
-    const token = getSessionToken();
-    if(token){
-      fetch(`${RANKING_API_URL}/auth`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "setHighScore", token, mode, level, score: newScore })
-      }).catch(() => {});
-    }
-    return;
-  }
-  localStorage.setItem(key, String(newScore));
-}
-
-function updateSetupHighScore(){
-  setupHighScoreEl.textContent = `ハイスコア ${getHighScore(currentMode, currentLevel)}`;
-}
-
-let rankingRequestId = 0;
-const RANKING_DISPLAY_MAX = 20;
-
-function escapeHtml(str){
-  return String(str).replace(/[&<>"']/g, (ch) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[ch]));
-}
-
-function renderRanking(scores){
-  if(!Array.isArray(scores) || scores.length === 0){
-    rankingBoxEl.classList.add("hidden");
-    rankingListEl.innerHTML = "";
-    return;
-  }
-  rankingListEl.innerHTML = scores.map((s, i) => {
-    const rank = i + 1;
-    const entryScore = typeof s === "object" && s !== null ? s.score : s;
-    const entryName = typeof s === "object" && s !== null && s.name ? s.name : "GUEST";
-    return `<li class="ranking-item${rank <= 3 ? " top3" : ""}"><span class="rank">${rank}位</span><span class="name">${escapeHtml(entryName)}</span><span class="score">${entryScore}</span></li>`;
-  }).join("");
-  rankingBoxEl.classList.remove("hidden");
-}
-
-async function loadRanking(){
-  const requestId = ++rankingRequestId;
-  const mode = currentMode;
-  const level = currentLevel;
-  const modeLabel = modeLabels[mode] || "ひらがな";
-  rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
-  rankingBoxEl.classList.add("hidden");
-  rankingListEl.innerHTML = "";
-  try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`);
-    if(requestId !== rankingRequestId) return;
-    if(!res.ok){
-      rankingBoxEl.classList.add("hidden");
-      rankingListEl.innerHTML = "";
-      return;
-    }
-    const data = await res.json();
-    if(requestId !== rankingRequestId) return;
-    if(data.eventMode){
-      rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ${data.month}限定ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
-      eventBannerTextEl.textContent = `${data.month}イベント開催中！`;
-      eventBannerEl.classList.remove("hidden");
-    } else {
-      eventBannerEl.classList.add("hidden");
-    }
-    renderRanking(data.scores);
-  }catch(e){
-    if(requestId !== rankingRequestId) return;
-    rankingBoxEl.classList.add("hidden");
-    rankingListEl.innerHTML = "";
-  }
-}
-
-function logPlay(mode, level, matchType, opponent){
-  const name = normalizePlayerName(getPlayerName());
-  fetch(`${RANKING_API_URL}/playlog`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, mode, level, matchType: matchType || "solo", opponent: opponent || "" })
-  }).catch(() => {});
-}
-
-async function requestGameSessionToken(mode, level){
-  try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "startSession" })
-    });
-    if(!res.ok) return null;
-    const data = await res.json();
-    return data.token || null;
-  }catch(e){
-    return null;
-  }
-}
-
-async function submitScoreToRanking(score, mode, level, name){
-  if(!currentGameSessionToken) return;
-  try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ score, name, token: currentGameSessionToken })
-    });
-    currentGameSessionToken = null;
-    if(!res.ok) return;
-    const data = await res.json();
-    if(mode === currentMode && level === currentLevel){
-      renderRanking(data.top20);
-    }
-    if(data.rank){
-      resultRankBadgeEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング ${data.rank}位にランクインしました！`;
-      resultRankBadgeEl.classList.add("visible");
-    }
-  }catch(e){
-  }
-}
-
-async function checkRankQualifies(score, mode, level){
-  try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`);
-    if(!res.ok) return true;
-    const data = await res.json();
-    const scores = data.scores;
-    if(!Array.isArray(scores)) return true;
-    if(scores.length < RANKING_DISPLAY_MAX) return true;
-    const lowestEntry = scores[scores.length - 1];
-    const lowestScore = typeof lowestEntry === "object" && lowestEntry !== null ? lowestEntry.score : lowestEntry;
-    return score >= lowestScore;
-  }catch(e){
-    return true;
-  }
-}
-
-async function handleRankingSubmission(score, mode, level){
-  if(!integrityOk) return;
-  const qualifies = await checkRankQualifies(score, mode, level);
-  if(!qualifies) return;
-  const name = normalizePlayerName(getPlayerName());
-  submitScoreToRanking(score, mode, level, name);
-}
-
-const initialRankingLoadPromise = loadRanking();
-
-let currentGameSessionToken = null;
-let ws = null;
-let matchId = null;
-let myRole = null;
-let opponentName = "";
-let isOnlineMode = false;
-let onlineWordDeck = [];
-let onlineIndex = 0;
-let onlineScore = 0;
-let onlineMiss = 0;
-let onlineChars = 0;
-let friendWs = null;
-let friendRole = null;
-let opponentScore = 0;
-let searchCountdownTimer = null;
-let onlineTimerId = null;
-let onlineTimeLeft = 100;
-let countdownTimerId = null;
-
-function fitSpacerToViewport(){
-  imeSpacerEl.style.height = "0px";
-  requestAnimationFrame(() => {
-    const contentHeight = document.documentElement.scrollHeight;
-    const available = window.innerHeight - contentHeight;
-    imeSpacerEl.style.height = `${Math.max(0, available)}px`;
-  });
-}
-
-window.addEventListener("resize", fitSpacerToViewport);
-window.addEventListener("resize", fitWordDisplayFontSize);
-if(window.visualViewport){
-  window.visualViewport.addEventListener("resize", fitSpacerToViewport);
-  window.visualViewport.addEventListener("resize", fitWordDisplayFontSize);
-}
-
-document.querySelectorAll(".mode-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentMode = btn.dataset.mode;
-    currentLevel = "beginner";
-    document.querySelectorAll(".levels").forEach(row => {
-      row.classList.toggle("hidden", row.dataset.row !== currentMode);
-      row.querySelectorAll(".level-btn").forEach((lb, i) => {
-        lb.classList.toggle("active", i === 0);
-      });
-    });
-    loadRanking();
-    updateUrlHash();
-    updateSetupHighScore();
-    ensureWordList(currentMode, currentLevel);
-  });
-});
-
-document.querySelectorAll(".levels").forEach(row => {
-  row.querySelectorAll(".level-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      row.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentLevel = btn.dataset.level;
-      loadRanking();
-      updateUrlHash();
-      updateSetupHighScore();
-      ensureWordList(currentMode, currentLevel);
-    });
-  });
-});
-
-function updateUrlHash(){
-  if(currentMode === "hiragana" && currentLevel === "beginner"){
-    history.replaceState(null, "", window.location.pathname + window.location.search);
-  } else {
-    window.location.hash = `${currentMode}-${currentLevel}`;
-  }
-}
-
-function applyStateFromHash(){
-  const hash = window.location.hash.replace("#", "");
-  const validModes = ["hiragana", "katakana", "sentence"];
-  const validLevels = ["beginner", "intermediate", "advanced"];
-  const [mode, level] = hash.split("-");
-
-  if(hash && validModes.includes(mode) && validLevels.includes(level)){
-    currentMode = mode;
-    currentLevel = level;
-  } else {
-    currentMode = "hiragana";
-    currentLevel = "beginner";
-  }
-
-  document.querySelectorAll(".mode-btn").forEach(b => {
-    b.classList.toggle("active", b.dataset.mode === currentMode);
-  });
-
-  document.querySelectorAll(".levels").forEach(row => {
-    row.classList.toggle("hidden", row.dataset.row !== currentMode);
-    row.querySelectorAll(".level-btn").forEach(lb => {
-      lb.classList.toggle("active", lb.dataset.level === currentLevel);
-    });
-  });
-
-  loadRanking();
-  updateSetupHighScore();
-  ensureWordList(currentMode, currentLevel);
-}
-
-document.getElementById("footer-year").textContent = new Date().getFullYear();
-
-applyStateFromHash();
-window.addEventListener("hashchange", applyStateFromHash);
-
-document.getElementById("start-btn").addEventListener("click", startGame);
-document.getElementById("start-online-btn").addEventListener("click", startOnlineSearch);
-cancelSearchBtn.addEventListener("click", cancelSearch);
-document.getElementById("retry-btn").addEventListener("click", () => {
-  resultEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-});
-
-function startOnlineSearch(){
-  setupEl.classList.add("hidden");
-  searchingEl.classList.add("visible");
-  let secondsLeft = 15;
-  searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
-  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
-  ws = new WebSocket(`${ONLINE_SERVER_URL}/lobby?mode=${currentMode}&level=${currentLevel}&name=${myName}`);
-  ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "matched"){
-      clearInterval(searchCountdownTimer);
-      matchId = msg.matchId;
-      myRole = msg.role;
-      opponentName = msg.opponentName || "GUEST";
-      connectToMatch();
-    } else if(msg.type === "timeout"){
-      clearInterval(searchCountdownTimer);
-      cancelSearch();
-      showCustomAlert("対戦相手が見つかりませんでした");
-    }
-  };
-  ws.onerror = () => {
-    clearInterval(searchCountdownTimer);
-    cancelSearch();
-    showCustomAlert("サーバーに接続できませんでした");
-  };
-  searchCountdownTimer = setInterval(() => {
-    secondsLeft--;
-    searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
-    if(secondsLeft <= 0){
-      clearInterval(searchCountdownTimer);
-    }
-  }, 1000);
-}
-
-function cancelSearch(){
-  if(ws){ ws.close(); ws = null; }
-  clearInterval(searchCountdownTimer);
-  searchingEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-}
-
-function generateFriendCode(){
-  return String(Math.floor(100000 + Math.random() * 900000));
-}
-
-function connectFriendRoom(code, role){
-  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
-  friendRole = role;
-  friendWs = new WebSocket(`${ONLINE_SERVER_URL}/friend/${code}?role=${role}&mode=${currentMode}&level=${currentLevel}&name=${myName}`);
-  friendWs.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "matched"){
-      friendWs = null;
-      matchId = msg.matchId;
-      myRole = msg.role;
-      opponentName = msg.opponentName || "GUEST";
-      if(msg.mode) currentMode = msg.mode;
-      if(msg.level) currentLevel = msg.level;
-      friendCreateEl.classList.remove("visible");
-      friendWaitingEl.classList.remove("visible");
-      connectToMatch();
-    } else if(msg.type === "timeout"){
-      cancelFriend();
-      showCustomAlert("相手が見つかりませんでした");
-    }
-  };
-  friendWs.onerror = () => {
-    cancelFriend();
-    showCustomAlert(role === "guest" ? "招待コードが見つかりませんでした" : "サーバーに接続できませんでした");
-  };
-}
-
-function startFriendCreate(){
-  const code = generateFriendCode();
-  friendCodeLabelEl.textContent = code;
-  friendMenuEl.classList.remove("visible");
-  friendCreateEl.classList.add("visible");
-  connectFriendRoom(code, "host");
-}
-
-function startFriendJoin(){
-  const code = friendCodeInputEl.value.trim();
-  if(!code){
-    showCustomAlert("招待コードを入力してください");
-    return;
-  }
-  if(!/^[0-9]+$/.test(code)){
-    showCustomAlert("招待コードは数字のみ入力してください");
-    return;
-  }
-  friendJoinEl.classList.remove("visible");
-  friendWaitingEl.classList.add("visible");
-  connectFriendRoom(code, "guest");
-}
-
-function copyFriendCode(){
-  const code = friendCodeLabelEl.textContent;
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(code);
-  }
-  showCustomAlert("コードをコピーしました");
-}
-
-function cancelFriend(){
-  if(friendWs){ friendWs.close(); friendWs = null; }
-  friendRole = null;
-  friendCreateEl.classList.remove("visible");
-  friendWaitingEl.classList.remove("visible");
-  friendJoinEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-}
-
-document.getElementById("start-friend-btn").addEventListener("click", () => {
-  setupEl.classList.add("hidden");
-  friendMenuEl.classList.add("visible");
-});
-document.getElementById("friend-menu-back-btn").addEventListener("click", () => {
-  friendMenuEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-});
-document.getElementById("friend-create-btn").addEventListener("click", startFriendCreate);
-document.getElementById("friend-create-cancel-btn").addEventListener("click", cancelFriend);
-document.getElementById("friend-code-copy-btn").addEventListener("click", copyFriendCode);
-document.getElementById("friend-join-open-btn").addEventListener("click", () => {
-  friendMenuEl.classList.remove("visible");
-  friendCodeInputEl.value = "";
-  friendJoinEl.classList.add("visible");
-  friendCodeInputEl.focus();
-});
-document.getElementById("friend-join-cancel-btn").addEventListener("click", () => {
-  friendJoinEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-});
-document.getElementById("friend-join-submit-btn").addEventListener("click", startFriendJoin);
-document.getElementById("friend-waiting-cancel-btn").addEventListener("click", cancelFriend);
-
-function connectToMatch(){
-  if(ws) ws.close();
-  ws = new WebSocket(`${ONLINE_SERVER_URL}/match/${matchId}?role=${myRole}&mode=${currentMode}&level=${currentLevel}`);
-  ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "start"){
-      onlineWordDeck = msg.wordDeck;
-      startOnlineCountdown();
-    } else if(msg.type === "opponentProgress"){
-      opponentScore = msg.score;
-      updateOpponentHud();
-    } else if(msg.type === "end"){
-      finishOnlineGame(msg);
-    } else if(msg.type === "opponentLeft"){
-      finishOnlineGame({
-        you:{score:onlineScore, miss:onlineMiss},
-        opponent:{score:opponentScore, miss:0},
-        result:"win",
-        forfeit:true
-      });
-    }
-  };
-}
-
-function startOnlineCountdown(){
-  searchingEl.classList.remove("visible");
-  countdownEl.classList.add("visible");
-  let count = 3;
-  countdownNumberEl.textContent = count;
-  clearInterval(countdownTimerId);
-  countdownTimerId = setInterval(() => {
-    count--;
-    if(count > 0){
-      countdownNumberEl.textContent = count;
-    } else {
-      clearInterval(countdownTimerId);
-      countdownEl.classList.remove("visible");
-      beginOnlineMatch();
-    }
-  }, 1000);
-}
-
-function beginOnlineMatch(){
-  logPlay(currentMode, currentLevel, friendRole ? "friend" : "online", opponentName);
-  isOnlineMode = true;
-  onlineIndex = 0;
-  onlineScore = 0;
-  onlineMiss = 0;
-  onlineChars = 0;
-  opponentScore = 0;
-  onlineTimeLeft = 100;
-  gameEl.classList.add("visible");
-  headerEl.classList.add("hidden");
-  document.body.classList.add("game-active");
-  opponentScoreLabelEl.classList.remove("hidden");
-  endGameBtn.classList.add("hidden");
-  const modeLabel = modeLabels[currentMode] || "ひらがな";
-  levelLabelEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）`;
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  scoreLabelEl.textContent = `${myDisplayName} 0 もん`;
-  timeLabelEl.textContent = `残り 100 秒`;
-  timerFillEl.style.width = "100%";
-  updateOpponentHud();
-  currentWord = onlineWordDeck[0];
-  renderWord();
-  inputEl.value = "";
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-  fitSpacerToViewport();
-  inputEl.focus();
-  clearInterval(onlineTimerId);
-  onlineTimerId = setInterval(() => {
-    onlineTimeLeft--;
-    timeLabelEl.textContent = `残り ${onlineTimeLeft} 秒`;
-    timerFillEl.style.width = `${(onlineTimeLeft / 100) * 100}%`;
-    if(onlineTimeLeft <= 0){
-      clearInterval(onlineTimerId);
-      if(ws && ws.readyState === WebSocket.OPEN){
-        ws.send(JSON.stringify({type:"finished", score:onlineScore, miss:onlineMiss}));
       }
     }
-  }, 1000);
-}
-
-function updateOpponentHud(){
-  const displayName = opponentName || "GUEST";
-  opponentScoreLabelEl.textContent = `${displayName} ${opponentScore} もん`;
-}
-
-function handleOnlineSubmit(typed){
-  if(typed !== currentWord){
-    onlineMiss++;
-    hintLabelEl.textContent = "まだ違います";
-    shakeInput();
-    playSound(incorrectSoundEl);
-    return;
-  }
-  onlineScore++;
-  onlineChars += currentWord.length;
-  onlineIndex++;
-  currentWord = onlineWordDeck[onlineIndex % onlineWordDeck.length];
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  scoreLabelEl.textContent = `${myDisplayName} ${onlineScore} もん`;
-  renderWord();
-  inputEl.value = "";
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-  fitSpacerToViewport();
-  playSound(correctSoundEl);
-  if(ws && ws.readyState === WebSocket.OPEN){
-    ws.send(JSON.stringify({type:"progress", score:onlineScore, index:onlineIndex}));
-  }
-}
-
-function finishOnlineGame(msg){
-  clearInterval(onlineTimerId);
-  clearInterval(countdownTimerId);
-  countdownEl.classList.remove("visible");
-  isOnlineMode = false;
-  gameEl.classList.remove("visible");
-  headerEl.classList.remove("hidden");
-  document.body.classList.remove("game-active");
-  opponentScoreLabelEl.classList.add("hidden");
-  endGameBtn.classList.remove("hidden");
-  resultEl.classList.add("visible");
-  const you = msg.you;
-  const opponent = msg.opponent;
-  const attempts = you.score + you.miss;
-  const accuracy = attempts === 0 ? 0 : Math.round((you.score / attempts) * 100);
-  const speed = Math.round((onlineChars / 100) * 60);
-  let resultLabel = "ひきわけ";
-  if(msg.result === "win") resultLabel = msg.forfeit ? "不戦勝" : "しょうり";
-  else if(msg.result === "lose") resultLabel = "はいせん";
-  resultScoreEl.textContent = resultLabel;
-  const modeLabel = modeLabels[currentMode] || "ひらがな";
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  const oppDisplayName = opponentName || "GUEST";
-  resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）/ ${myDisplayName} ${you.score}もん・${oppDisplayName} ${opponent.score}もん`;
-  statAccuracyEl.textContent = `${accuracy}%`;
-  statSpeedEl.textContent = speed;
-  statMissEl.textContent = you.miss;
-  if(ws){ ws.close(); ws = null; }
-  opponentName = "";
-}
-
-function pickWord(){
-  const pool = wordListCache[`${currentMode}-${currentLevel}`] || [];
-  let candidates = pool.filter(w => !usedWords.includes(w));
-  if(candidates.length === 0){
-    usedWords = [];
-    candidates = pool;
-  }
-  const word = candidates[Math.floor(Math.random() * candidates.length)];
-  usedWords.push(word);
-  return word;
-}
-
-function renderWord(){
-  wordDisplayEl.innerHTML = currentWord.split("").map(c => `<span class="char">${c}</span>`).join("");
-  fitWordDisplayFontSize();
-  if(inputMode === "realtime"){
-    setupRealtimeWord();
-  }
-}
-
-function resetHintLabel(){
-  hintLabelEl.textContent = inputMode === "realtime" ? "ローマ字でタイピングしよう" : "Enterで確定";
-}
-
-function updateInputModeUI(){
-  const isRealtime = inputMode === "realtime";
-  if(inputRowEl) inputRowEl.classList.toggle("hidden", isRealtime);
-  if(romajiDisplayEl) romajiDisplayEl.classList.toggle("hidden", !isRealtime);
-  resetHintLabel();
-}
-
-document.querySelectorAll(".input-mode-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".input-mode-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    inputMode = btn.dataset.inputMode;
-    updateInputModeUI();
-  });
-});
-
-updateInputModeUI();
-
-function setupRealtimeWord(){
-  const reading = getCurrentWordReading();
-  try{
-    typingText = new TypingText(reading);
-  }catch(e){
-    typingText = null;
-  }
-  renderRomajiDisplay();
-}
-
-function renderRomajiDisplay(){
-  if(!romajiDisplayEl) return;
-  if(!typingText){
-    romajiDisplayEl.innerHTML = "";
-    return;
-  }
-  const doneHtml = `<span class="rchar done">${typingText.completedRoman}</span>`;
-  const restHtml = `<span class="rchar current">${typingText.remainingRoman}</span>`;
-  romajiDisplayEl.innerHTML = doneHtml + restHtml;
-}
-
-function shakeRomaji(){
-  if(!romajiDisplayEl) return;
-  romajiDisplayEl.classList.remove("shake");
-  void romajiDisplayEl.offsetWidth;
-  romajiDisplayEl.classList.add("shake");
-}
-
-function completeRealtimeWord(){
-  if(isOnlineMode){
-    handleOnlineSubmit(currentWord);
-    return;
-  }
-  score++;
-  totalCharsTyped += currentWord.length;
-  scoreLabelEl.textContent = `せいかい ${score} もん`;
-  playSound(correctSoundEl);
-  nextWord();
-}
-
-function handleRealtimeKey(key){
-  if(!typingText) return;
-  recordKeystrokeTiming();
-
-  let result;
-  try{
-    result = typingText.inputKey(key);
-  }catch(e){
-    return;
+    if (!found) break;
+    if (romajiPos >= lowerTyped.length) break;
   }
 
-  if(result === "unmatch"){
-    missCount++;
-    hintLabelEl.textContent = "ちがうキーです";
-    shakeRomaji();
-    playSound(incorrectSoundEl);
-    return;
-  }
-
-  playSound(keySoundEl);
-  hintLabelEl.textContent = "ローマ字でタイピングしよう";
-  renderRomajiDisplay();
-
-  if(result === "complete"){
-    completeRealtimeWord();
-  }
-}
-
-document.addEventListener("keydown", (e) => {
-  if(inputMode !== "realtime") return;
-  if(!gameEl.classList.contains("visible")) return;
-  if(!e.isTrusted) return;
-  if(e.metaKey || e.ctrlKey || e.altKey) return;
-  if(e.key.length !== 1 || !/^[a-zA-Z\-]$/.test(e.key)) return;
-  e.preventDefault();
-  handleRealtimeKey(e.key.toLowerCase());
-});
-
-function fitWordDisplayFontSize(){
-  const baseSize = parseFloat(getComputedStyle(wordDisplayEl).fontSize);
-  const minSize = 12;
-  let size = baseSize;
-  wordDisplayEl.style.fontSize = "";
-  while(wordDisplayEl.scrollWidth > wordDisplayEl.clientWidth && size > minSize){
-    size -= 1;
-    wordDisplayEl.style.fontSize = `${size}px`;
-  }
-}
-
-function updateProgressHighlight(typed){
-  const chars = wordDisplayEl.querySelectorAll(".char");
-  let stillCorrect = true;
-  chars.forEach((el, i) => {
-    if(stillCorrect && i < typed.length && typed[i] === currentWord[i]){
-      el.classList.add("done");
-    } else {
-      stillCorrect = false;
-      el.classList.remove("done");
+  let exact = 0;
+  for (let i = 0; i <= lowerTarget.length; i++) {
+    if (lowerTyped.startsWith(lowerTarget.slice(0, i))) {
+      exact = i;
     }
-  });
+  }
+  const ratio = exact / lowerTarget.length;
+  return Math.floor(ratio * hira.length);
 }
 
-function nextWord(){
-  currentWord = pickWord();
-  renderWord();
-  inputEl.value = "";
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-  fitSpacerToViewport();
+function updateProgress() {
+  progressEl.textContent = currentIndex;
 }
 
-async function startGame(){
-  logPlay(currentMode, currentLevel, "solo", "");
-  currentGameSessionToken = null;
-  requestGameSessionToken(currentMode, currentLevel).then(token => { currentGameSessionToken = token; });
-  await ensureWordList(currentMode, currentLevel);
-  setupEl.classList.add("hidden");
-  resultEl.classList.remove("visible");
-  gameEl.classList.add("visible");
-  headerEl.classList.add("hidden");
-  document.body.classList.add("game-active");
-  endGameBtn.classList.remove("hidden");
-  fitSpacerToViewport();
-  const modeLabel = modeLabels[currentMode] || "ひらがな";
-  levelLabelEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}`;
-  score = 0;
-  missCount = 0;
-  totalCharsTyped = 0;
-  timeLeft = 100;
-  usedWords = [];
-  integrityOk = true;
-  lastKeyTime = 0;
-  suspiciousKeyCount = 0;
-  keyIntervals = [];
-  resultRankBadgeEl.classList.remove("visible");
-  resultRankBadgeEl.textContent = "";
-  newRecordBadgeEl.classList.remove("visible");
-  scoreLabelEl.textContent = `せいかい 0 もん`;
-  timeLabelEl.textContent = `残り 100 秒`;
-  timerFillEl.style.width = "100%";
-  nextWord();
-  inputEl.focus();
-  clearInterval(timerId);
-  timerId = setInterval(() => {
-    timeLeft--;
-    timeLabelEl.textContent = `残り ${timeLeft} 秒`;
-    timerFillEl.style.width = `${(timeLeft / 100) * 100}%`;
-    if(timeLeft <= 0){
-      endGame(true);
-    }
-  }, 1000);
-}
-
-function endGame(isNormalEnd){
-  clearInterval(timerId);
-  gameEl.classList.remove("visible");
-  headerEl.classList.remove("hidden");
-  document.body.classList.remove("game-active");
-  if(isNormalEnd){
-    resultEl.classList.add("visible");
-
-    const attempts = score + missCount;
-    const accuracy = attempts === 0 ? 0 : Math.round((score / attempts) * 100);
-    const speed = Math.round((totalCharsTyped / 100) * 60);
-    const finalScore = Math.max(0, Math.round(score * 100 + speed * 2 - missCount * 30));
-
-    resultScoreEl.textContent = finalScore;
-    const modeLabel = modeLabels[currentMode] || "ひらがな";
-    resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]} / ${score}もん せいかい`;
-    statAccuracyEl.textContent = `${accuracy}%`;
-    statSpeedEl.textContent = speed;
-    statMissEl.textContent = missCount;
-
-    const previousHighScore = getHighScore(currentMode, currentLevel);
-    if(finalScore > previousHighScore){
-      setHighScore(currentMode, currentLevel, finalScore);
-      resultHighScoreEl.textContent = `ハイスコア ${finalScore}`;
-      newRecordBadgeEl.classList.add("visible");
-    } else {
-      resultHighScoreEl.textContent = `ハイスコア ${previousHighScore}`;
-      newRecordBadgeEl.classList.remove("visible");
-    }
-    updateSetupHighScore();
-
-    if(finalScore > 0){
-      handleRankingSubmission(finalScore, currentMode, currentLevel);
-    }
+function updateUI() {
+  if (mode === "realtime") {
+    btnRealtime.classList.add("active");
+    btnTextbox.classList.remove("active");
+    realtimeRomaji.classList.remove("hidden");
   } else {
-    setupEl.classList.remove("hidden");
+    btnRealtime.classList.remove("active");
+    btnTextbox.classList.add("active");
+    realtimeRomaji.classList.add("hidden");
   }
 }
 
-const endGameBtn = document.getElementById("end-game-btn");
-endGameBtn.addEventListener("click", () => {
-  if(isOnlineMode) return;
-  endGame(false);
+btnRealtime.addEventListener("click", () => {
+  mode = "realtime";
+  updateUI();
+  romajiInput.focus();
 });
 
-document.addEventListener("keydown", (e) => {
-  if(e.key === "Escape" && gameEl.classList.contains("visible")){
-    if(isOnlineMode) return;
-    endGame(false);
+btnTextbox.addEventListener("click", () => {
+  mode = "textbox";
+  updateUI();
+  romajiInput.focus();
+});
+
+romajiInput.addEventListener("input", (e) => {
+  typedRomaji = e.target.value;
+  if (mode === "realtime") {
+    realtimeRomaji.textContent = typedRomaji;
+    realtimeRomaji.style.overflow = "hidden";
+    realtimeRomaji.style.textOverflow = "ellipsis";
+    realtimeRomaji.style.whiteSpace = "nowrap";
+  }
+  renderSentence();
+
+  const target = currentSentence.romaji.toLowerCase();
+  if (typedRomaji.toLowerCase() === target) {
+    currentIndex++;
+    setTimeout(() => {
+      loadSentence();
+      romajiInput.focus();
+    }, 300);
   }
 });
 
-function shakeInput(){
-  inputEl.classList.remove("shake");
-  void inputEl.offsetWidth;
-  inputEl.classList.add("shake");
-}
-
-function flagIntegrity(){
-  integrityOk = false;
-}
-
-function recordKeystrokeTiming(){
-  const now = performance.now();
-  if(lastKeyTime > 0){
-    const delta = now - lastKeyTime;
-    keyIntervals.push(delta);
-    if(keyIntervals.length > 20) keyIntervals.shift();
-    if(delta < 20) suspiciousKeyCount++;
-    if(keyIntervals.length >= 10){
-      const mean = keyIntervals.reduce((a, b) => a + b, 0) / keyIntervals.length;
-      const variance = keyIntervals.reduce((a, b) => a + (b - mean) * (b - mean), 0) / keyIntervals.length;
-      const stddev = Math.sqrt(variance);
-      if(stddev < 3 && mean < 120) suspiciousKeyCount++;
+romajiInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && mode === "textbox") {
+    const target = currentSentence.romaji.toLowerCase();
+    if (typedRomaji.toLowerCase() === target) {
+      currentIndex++;
+      loadSentence();
     }
-    if(suspiciousKeyCount >= 6) flagIntegrity();
-  }
-  lastKeyTime = now;
-}
-
-inputEl.addEventListener("compositionstart", () => { isComposing = true; });
-inputEl.addEventListener("compositionend", () => {
-  setTimeout(() => { isComposing = false; }, 0);
-});
-
-inputEl.addEventListener("paste", (e) => {
-  e.preventDefault();
-  flagIntegrity();
-});
-
-inputEl.addEventListener("drop", (e) => {
-  e.preventDefault();
-  flagIntegrity();
-});
-
-inputEl.addEventListener("input", (e) => {
-  if(!e.isTrusted){
-    flagIntegrity();
-    return;
-  }
-  recordKeystrokeTiming();
-  updateProgressHighlight(inputEl.value);
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-});
-
-inputEl.addEventListener("keydown", (e) => {
-  if(e.key !== "Enter") return;
-  if(!e.isTrusted){
-    flagIntegrity();
-    return;
-  }
-  if(isComposing || e.isComposing || e.keyCode === 229) return;
-  e.preventDefault();
-
-  const typed = inputEl.value.trim();
-
-  if(isOnlineMode){
-    handleOnlineSubmit(typed);
-    return;
-  }
-
-  if(typed !== currentWord){
-    missCount++;
-    hintLabelEl.textContent = "まだ違います";
-    shakeInput();
-    playSound(incorrectSoundEl);
-    return;
-  }
-
-  score++;
-  totalCharsTyped += currentWord.length;
-  scoreLabelEl.textContent = `せいかい ${score} もん`;
-  playSound(correctSoundEl);
-  nextWord();
-});
-
-document.addEventListener("visibilitychange", () => {
-  if(document.visibilityState !== "hidden") return;
-  if(searchingEl.classList.contains("visible")){
-    cancelSearch();
-  } else if(friendCreateEl.classList.contains("visible") || friendWaitingEl.classList.contains("visible")){
-    cancelFriend();
-  } else if(countdownEl.classList.contains("visible")){
-    clearInterval(countdownTimerId);
-    countdownEl.classList.remove("visible");
-    if(ws){ ws.close(); ws = null; }
-    setupEl.classList.remove("hidden");
-  } else if(isOnlineMode){
-    if(ws && ws.readyState === WebSocket.OPEN){
-      ws.close();
-    }
-    finishOnlineGame({
-      you:{score:onlineScore, miss:onlineMiss},
-      opponent:{score:opponentScore, miss:0},
-      result:"lose",
-      forfeit:true
-    });
   }
 });
+
+init();
+romajiInput.focus();
 </script>
 </body>
 </html>
