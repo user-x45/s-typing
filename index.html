@@ -1702,13 +1702,16 @@ logoutBtnEl.addEventListener("click", () => {
 });
 
 const appLoadingOverlayEl = document.getElementById("app-loading-overlay");
+let appLoadingCount = 1;
 
 function showAppLoadingOverlay(){
+  appLoadingCount++;
   appLoadingOverlayEl.classList.remove("hidden");
 }
 
 function hideAppLoadingOverlay(){
-  appLoadingOverlayEl.classList.add("hidden");
+  appLoadingCount = Math.max(0, appLoadingCount - 1);
+  if(appLoadingCount === 0) appLoadingOverlayEl.classList.add("hidden");
 }
 
 window.addEventListener("load", async () => {
@@ -1757,7 +1760,6 @@ async function ensureWordList(mode, level){
   const cacheKey = `${mode}-${level}`;
   let list = wordListCache[cacheKey];
   if(!list){
-    showAppLoadingOverlay();
     while(!list){
       try{
         list = await fetchWordList(mode, level);
@@ -1765,7 +1767,6 @@ async function ensureWordList(mode, level){
         await new Promise(resolve => setTimeout(resolve, 1500));
       }
     }
-    hideAppLoadingOverlay();
   }
   if(mode === "sentence" && !sentenceReadingCache[level]){
     await ensureSentenceReadings(level, list);
@@ -2696,7 +2697,9 @@ async function startGame(){
   logPlay(currentMode, currentLevel, "solo", "");
   currentGameSessionToken = null;
   requestGameSessionToken(currentMode, currentLevel).then(token => { currentGameSessionToken = token; });
+  showAppLoadingOverlay();
   await ensureWordList(currentMode, currentLevel);
+  hideAppLoadingOverlay();
   setupEl.classList.add("hidden");
   resultEl.classList.remove("visible");
   gameEl.classList.add("visible");
