@@ -378,6 +378,15 @@
     overflow:hidden;
   }
 
+  .section-heading{
+    font-size:12px;
+    font-weight:700;
+    color:var(--ink-soft);
+    letter-spacing:0.08em;
+    text-align:center;
+    margin:0 0 8px;
+  }
+
   .mode-btn, .input-mode-btn{
     flex:1;
     padding:11px 8px;
@@ -1020,6 +1029,25 @@
     display:block;
   }
 
+  .ranking-submitting-indicator{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin:10px auto 0;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+  }
+
+  .ranking-submitting-indicator.visible{
+    display:flex;
+  }
+
+  .ranking-submitting-indicator .fa-spinner{
+    color:var(--hanko);
+  }
+
   .retry-btn{
     padding:12px 36px;
     background:transparent;
@@ -1229,6 +1257,7 @@
         <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
       </div>
 
+      <div class="section-heading">入力モード</div>
       <div class="mode-tabs input-mode-tabs">
         <button class="input-mode-btn active" data-input-mode="realtime">リアルタイム</button>
         <button class="input-mode-btn" data-input-mode="textbox">テキストボックス</button>
@@ -1350,6 +1379,7 @@
       <div class="result-rank-badge" id="result-rank-badge"></div>
       <div class="high-score-label result-high-score" id="result-high-score">ハイスコア 0</div>
       <div class="new-record-badge" id="new-record-badge">ハイスコア更新！</div>
+      <div class="ranking-submitting-indicator" id="ranking-submitting-indicator"><i class="fa-solid fa-spinner fa-spin"></i>ランキング登録中...</div>
       <div class="stat-grid">
         <div class="stat-box">
           <div class="stat-value" id="stat-accuracy">0%</div>
@@ -1743,6 +1773,27 @@ async function ensureWordList(mode, level){
   return list;
 }
 
+const ALL_MODES = ["hiragana", "katakana", "sentence"];
+const ALL_LEVELS = ["beginner", "intermediate", "advanced"];
+
+async function preloadAllWordLists(){
+  showAppLoadingOverlay();
+  for(const mode of ALL_MODES){
+    for(const level of ALL_LEVELS){
+      let loaded = false;
+      while(!loaded){
+        try{
+          await ensureWordList(mode, level);
+          loaded = true;
+        }catch(e){
+          await new Promise(resolve => setTimeout(resolve, 1500));
+        }
+      }
+    }
+  }
+  hideAppLoadingOverlay();
+}
+
 function getCurrentWordReading(){
   if(currentMode === "katakana") return katakanaToHiragana(currentWord);
   if(currentMode === "sentence"){
@@ -1850,6 +1901,7 @@ const resultRankBadgeEl = document.getElementById("result-rank-badge");
 const setupHighScoreEl = document.getElementById("setup-high-score");
 const resultHighScoreEl = document.getElementById("result-high-score");
 const newRecordBadgeEl = document.getElementById("new-record-badge");
+const rankingSubmittingIndicatorEl = document.getElementById("ranking-submitting-indicator");
 
 function getHighScoreKey(mode, level){
   return `highScore_${mode}_${level}`;
@@ -2013,9 +2065,9 @@ async function handleRankingSubmission(score, mode, level){
   const qualifies = await checkRankQualifies(score, mode, level);
   if(!qualifies) return;
   const name = normalizePlayerName(getPlayerName());
-  showAppLoadingOverlay();
+  if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.add("visible");
   await submitScoreToRanking(score, mode, level, name);
-  hideAppLoadingOverlay();
+  if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.remove("visible");
 }
 
 const initialRankingLoadPromise = loadRanking();
@@ -2072,7 +2124,6 @@ document.querySelectorAll(".mode-btn").forEach(btn => {
     loadRanking();
     updateUrlHash();
     updateSetupHighScore();
-    ensureWordList(currentMode, currentLevel);
   });
 });
 
@@ -2085,7 +2136,6 @@ document.querySelectorAll(".levels").forEach(row => {
       loadRanking();
       updateUrlHash();
       updateSetupHighScore();
-      ensureWordList(currentMode, currentLevel);
     });
   });
 });
@@ -2125,12 +2175,12 @@ function applyStateFromHash(){
 
   loadRanking();
   updateSetupHighScore();
-  ensureWordList(currentMode, currentLevel);
 }
 
 document.getElementById("footer-year").textContent = new Date().getFullYear();
 
 applyStateFromHash();
+preloadAllWordLists();
 window.addEventListener("hashchange", applyStateFromHash);
 
 document.getElementById("start-btn").addEventListener("click", startGame);
@@ -2668,6 +2718,7 @@ async function startGame(){
   resultRankBadgeEl.classList.remove("visible");
   resultRankBadgeEl.textContent = "";
   newRecordBadgeEl.classList.remove("visible");
+  if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.remove("visible");
   scoreLabelEl.textContent = `せいかい 0 もん`;
   timeLabelEl.textContent = `残り 100 秒`;
   timerFillEl.style.width = "100%";
