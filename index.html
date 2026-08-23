@@ -1468,6 +1468,7 @@ nameInputFieldEl.addEventListener("keydown", (e) => {
 const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
 const SESSION_TOKEN_KEY = "sessionToken";
 const GUEST_NAME_KEY = "guestPlayerName";
+const GUEST_INPUT_MODE_KEY = "guestInputMode";
 const currentPlayerLabelEl = document.getElementById("current-player-label");
 const logoutBtnEl = document.getElementById("logout-btn");
 const googleLoginBtnEl = document.getElementById("google-login-btn");
@@ -1546,13 +1547,14 @@ async function loadServerHighScores(token){
   }
 }
 
-async function showLoggedInUi(name, token){
+async function showLoggedInUi(name, token, inputModeFromAccount){
   currentPlayerName = name;
   await loadServerHighScores(token);
   updatePlayerNameLabel();
   updateSetupHighScore();
   googleLoginBtnEl.classList.add("hidden");
   logoutBtnEl.classList.remove("hidden");
+  applyInputMode(inputModeFromAccount || "realtime");
 }
 
 function showLoggedOutUi(){
@@ -1562,6 +1564,7 @@ function showLoggedOutUi(){
   updateSetupHighScore();
   googleLoginBtnEl.classList.remove("hidden");
   logoutBtnEl.classList.add("hidden");
+  applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
 }
 
 async function verifySession(){
@@ -1578,7 +1581,7 @@ async function verifySession(){
     });
     const data = await res.json();
     if(data.valid){
-      await showLoggedInUi(data.name, token);
+      await showLoggedInUi(data.name, token, data.inputMode);
     } else {
       clearSessionToken();
       showLoggedOutUi();
@@ -1621,14 +1624,14 @@ async function handleGoogleCredential(idToken){
       }
       if(regData.token){
         setSessionToken(regData.token);
-        await showLoggedInUi(regData.name, regData.token);
+        await showLoggedInUi(regData.name, regData.token, regData.inputMode);
       } else {
         showCustomAlert("登録に失敗しました");
       }
     });
   } else {
     setSessionToken(data.token);
-    await showLoggedInUi(data.name, data.token);
+    await showLoggedInUi(data.name, data.token, data.inputMode);
   }
 }
 
@@ -2526,19 +2529,36 @@ function updateInputModeUI(){
   updateSentenceProgressHighlight();
 }
 
+function applyInputMode(mode){
+  inputMode = mode === "textbox" ? "textbox" : "realtime";
+  document.querySelectorAll(".input-mode-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.inputMode === inputMode);
+  });
+  updateInputModeUI();
+  if(inputMode === "realtime" && gameEl.classList.contains("visible")){
+    setupRealtimeWord();
+  }
+}
+
 document.querySelectorAll(".input-mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".input-mode-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    inputMode = btn.dataset.inputMode;
-    updateInputModeUI();
-    if(inputMode === "realtime" && gameEl.classList.contains("visible")){
-      setupRealtimeWord();
+    const selectedMode = btn.dataset.inputMode;
+    applyInputMode(selectedMode);
+    const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
+    if(isLoggedIn){
+      const token = getSessionToken();
+      fetch(`${RANKING_API_URL}/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "setInputMode", token, inputMode: selectedMode })
+      }).catch(() => {});
+    } else {
+      localStorage.setItem(GUEST_INPUT_MODE_KEY, selectedMode);
     }
   });
 });
 
-updateInputModeUI();
+applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
 
 function setupRealtimeWord(){
   const reading = getCurrentWordReading();
