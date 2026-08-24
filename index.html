@@ -1,12 +1,5 @@
 <!DOCTYPE html>
-<!--
- ____  _                 _      _____                          
-/ ___|(_)_ __ ___  _ __ | | ___|_   _|   _ _ __ (_)_ __   __ _ 
-\___ \| | '_ ` _ \| '_ \| |/ _ \ | || | | | '_ \| | '_ \ / _` |
- ___) | | | | | | | |_) | |  __/ | || |_| | |_) | | | | | (_| |
-|____/|_|_| |_| |_| .__/|_|\___| |_| \__, | .__/|_|_| |_|\__, |
-                   |_|               |___/|_|            |___/ 
--->
+
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -31,6 +24,260 @@
   "name": "シンプルタイピング",
   "url": "https://s-typing.f5.si/"
 }
+</script>
+<script>
+/*
+ ____  _                 _      _____                          
+/ ___|(_)_ __ ___  _ __ | | ___|_   _|   _ _ __ (_)_ __   __ _ 
+\___ \| | '_ ` _ \| '_ \| |/ _ \ | || | | | '_ \| | '_ \ / _` |
+ ___) | | | | | | | |_) | |  __/ | || |_| | |_) | | | | | (_| |
+|____/|_|_| |_| |_| .__/|_|\___| |_| \__, | .__/|_|_| |_|\__, |
+                   |_|               |___/|_|            |___/ 
+*/
+
+class CharConverter {
+  constructor(origin) {
+    this._result = origin;
+    this.origin = origin;
+  }
+
+  toString() { return this._result; }
+
+  convert(from, to) {
+    const maps = {
+      HG: { start: 12353, end: 12438 },
+      KK: { start: 12449, end: 12534 },
+      HK: {
+        regexp: /([\uff66-\uff9c]\uff9e)|([\uff8a-\uff8e]\uff9f)|([\uff61-\uff9f])/g,
+        list: ["｡","｢","｣","､","･","ｦ","ｧ","ｨ","ｩ","ｪ","ｫ","ｬ","ｭ","ｮ","ｯ","ｰ","ｱ","ｲ","ｳ","ｴ","ｵ","ｶ","ｷ","ｸ","ｹ","ｺ","ｻ","ｼ","ｽ","ｾ","ｿ","ﾀ","ﾁ","ﾂ","ﾃ","ﾄ","ﾅ","ﾆ","ﾇ","ﾈ","ﾉ","ﾊ","ﾋ","ﾌ","ﾍ","ﾎ","ﾏ","ﾐ","ﾑ","ﾒ","ﾓ","ﾔ","ﾕ","ﾖ","ﾗ","ﾘ","ﾙ","ﾚ","ﾛ","ﾜ","ﾝ","ﾞ","ﾟ","ｦﾞ","ｳﾞ","ｶﾞ","ｷﾞ","ｸﾞ","ｹﾞ","ｺﾞ","ｻﾞ","ｼﾞ","ｽﾞ","ｾﾞ","ｿﾞ","ﾀﾞ","ﾁﾞ","ﾂﾞ","ﾃﾞ","ﾄﾞ","ﾊﾞ","ﾊﾟ","ﾋﾞ","ﾋﾟ","ﾌﾞ","ﾌﾟ","ﾍﾞ","ﾍﾟ","ﾎﾞ","ﾎﾟ","ﾜﾞ"]
+      },
+      ZK: {
+        regexp: /([\u3001-\u30fc])/g,
+        list: ["。","「","」","、","・","ヲ","ァ","ィ","ゥ","ェ","ォ","ャ","ュ","ョ","ッ","ー","ア","イ","ウ","エ","オ","カ","キ","ク","ケ","コ","サ","シ","ス","セ","ソ","タ","チ","ツ","テ","ト","ナ","ニ","ヌ","ネ","ノ","ハ","ヒ","フ","ヘ","ホ","マ","ミ","ム","メ","モ","ヤ","ユ","ヨ","ラ","リ","ル","レ","ロ","ワ","ン","゛","゜","ヺ","ヴ","ガ","ギ","グ","ゲ","ゴ","ザ","ジ","ズ","ゼ","ゾ","ダ","ヂ","ヅ","デ","ド","バ","パ","ビ","ピ","ブ","プ","ベ","ペ","ボ","ポ","ヷ"]
+      }
+    };
+
+    const fromMap = maps[from], toMap = maps[to];
+    if(!fromMap || !toMap) return this;
+
+    if(fromMap.start !== undefined && toMap.start !== undefined) {
+      let result = "";
+      for(let i = 0; i < this._result.length; i++) {
+        const code = this._result.charCodeAt(i);
+        if(code >= fromMap.start && code <= fromMap.end) {
+          result += String.fromCharCode(code + (toMap.start - fromMap.start));
+        } else {
+          result += this._result[i];
+        }
+      }
+      this._result = result;
+    } else if(fromMap.regexp && toMap.list) {
+      this._result = this._result.replace(fromMap.regexp, (match) => {
+        const idx = fromMap.list.indexOf(match);
+        return idx >= 0 ? toMap.list[idx] : match;
+      });
+    }
+    return this;
+  }
+}
+
+class TypingChar {
+  constructor(name, expectRomanArray, dict) {
+    this.name = name;
+    this.nextChar = null;
+    this.expectRomanArray = expectRomanArray;
+    this.nextExpectRomanIndex = 0;
+    this.divisionCharChain = null;
+    this.ignoreCapsLock = true;
+    this.isSpecial = false;
+
+    if(Array.isArray(expectRomanArray)) {
+      expectRomanArray.sort((e, t) => {
+        for(let r of expectRomanArray) {
+          if(e.startsWith(r) && !t.startsWith(r)) return -1;
+          if(!e.startsWith(r) && t.startsWith(r)) return 1;
+        }
+        return 0;
+      });
+
+      if(this.name.length > 1) {
+        this.divisionCharChain = this._buildDivisionChain(this.name, dict);
+      }
+    }
+  }
+
+  _buildDivisionChain(name, dict) {
+    let head = null, prev = null;
+    for(let i = 0; i < name.length; i++) {
+      const char = this._createChar(name[i], dict);
+      if(i === 0) head = char;
+      if(prev) prev.nextChar = char;
+      prev = char;
+    }
+    return head;
+  }
+
+  _createChar(char, dict) {
+    const romanList = dict[char] || [char];
+    const c = new TypingChar(char, [...romanList], dict);
+    c.isSpecial = false;
+    return c;
+  }
+
+  expectRoman(prefix = "") {
+    if(this.expectRomanArray.length === 0) return "";
+    if(prefix === "") return this.expectRomanArray[0];
+    return this.expectRomanArray.find(r => r[0] === prefix) || "";
+  }
+
+  inputRoman(key, capsLock) {
+    const k = capsLock && !this.ignoreCapsLock ? key.toLowerCase() : key;
+    const result = this.inputThisCharRoman(k);
+    if(result === "unmatch" && this.divisionCharChain) {
+      return this.inputDivisionCharRoman(k);
+    }
+    return result;
+  }
+
+  inputThisCharRoman(key) {
+    const matched = this.expectRomanArray.filter(r => key === r[this.nextExpectRomanIndex]);
+    if(matched.length === 0) return "unmatch";
+    this.expectRomanArray = matched;
+    this.nextExpectRomanIndex += 1;
+    return this.nextExpectRomanIndex < this.expectRomanArray[0].length ? "incomplete" : "complete";
+  }
+
+  inputDivisionCharRoman(key) {
+    let char = this.divisionCharChain;
+    for(let i = 0; i < this.nextExpectRomanIndex; i++) {
+      if(char.inputRoman(this.expectRomanArray[0][i]) === "unmatch") {
+        char.nextExpectRomanIndex = 0;
+        return "unmatch";
+      }
+    }
+    const result = char.inputRoman(key);
+    if(result === "unmatch") return "unmatch";
+    this.expectRomanArray = [this.expectRomanArray[0]];
+    return result;
+  }
+}
+
+class TypingText {
+  static romanjiDict = {
+    "あ": ["a"], "い": ["i", "yi"], "う": ["u", "wu"], "え": ["e"], "お": ["o"],
+    "か": ["ka", "ca"], "が": ["ga"], "き": ["ki"], "ぎ": ["gi"], "く": ["ku", "cu"], "ぐ": ["gu"],
+    "け": ["ke"], "げ": ["ge"], "こ": ["ko", "co"], "ご": ["go"],
+    "さ": ["sa"], "ざ": ["za"], "し": ["si", "shi", "ci"], "じ": ["zi", "ji"], "す": ["su"], "ず": ["zu"],
+    "せ": ["se"], "ぜ": ["ze"], "そ": ["so"], "ぞ": ["zo"],
+    "た": ["ta"], "だ": ["da"], "ち": ["ti", "chi"], "ぢ": ["di"], "つ": ["tu", "tsu"], "づ": ["du"],
+    "て": ["te"], "で": ["de"], "と": ["to"], "ど": ["do"],
+    "な": ["na"], "に": ["ni"], "ぬ": ["nu"], "ね": ["ne"], "の": ["no"],
+    "は": ["ha"], "ば": ["ba"], "ぱ": ["pa"], "ひ": ["hi"], "び": ["bi"], "ぴ": ["pi"],
+    "ふ": ["hu", "fu"], "ぶ": ["bu"], "ぷ": ["pu"], "へ": ["he"], "べ": ["be"], "ぺ": ["pe"],
+    "ほ": ["ho"], "ぼ": ["bo"], "ぽ": ["po"],
+    "ま": ["ma"], "み": ["mi"], "む": ["mu"], "め": ["me"], "も": ["mo"],
+    "や": ["ya"], "ゆ": ["yu"], "よ": ["yo"],
+    "ら": ["ra"], "り": ["ri"], "る": ["ru"], "れ": ["re"], "ろ": ["ro"],
+    "わ": ["wa", "wha"], "を": ["wo"], "ん": ["n"],
+    "ぁ": ["a"], "ぃ": ["i"], "ぅ": ["u"], "ぇ": ["e"], "ぉ": ["o"],
+    "ゃ": ["ya"], "ゅ": ["yu"], "ょ": ["yo"],
+    "っ": [""]
+  };
+
+  constructor(text) {
+    this.text = this._processText(text);
+    this.completedText = "";
+    this.completedRoman = "";
+    this.remainingRoman = "";
+    this.inputHistory = [];
+    this.smallTsuFlag = false;
+    this.char = this._initChars();
+    this._updateRemainingRoman();
+  }
+
+  _processText(text) {
+    let result = "";
+    for(let char of text) {
+      const code = char.charCodeAt(0);
+      if(code >= 65281 && code <= 65374) {
+        result += String.fromCharCode(code - 65248);
+      } else {
+        result += char;
+      }
+    }
+    result = new CharConverter(result).convert("HK", "ZK").toString();
+    return result;
+  }
+
+  _initChars() {
+    if(this.text.length === 0) return null;
+    if(this.text.length === 1) {
+      return new TypingChar(this.text[0], TypingText.romanjiDict[this.text[0]] || [this.text[0]], TypingText.romanjiDict);
+    }
+
+    let head = null, prev = null;
+    for(let i = 0; i < this.text.length; i++) {
+      const char = this.text[i];
+      const romanList = TypingText.romanjiDict[char] || [char];
+      const typingChar = new TypingChar(char, [...romanList], TypingText.romanjiDict);
+
+      if(char === "っ") {
+        typingChar.isSpecial = true;
+      }
+
+      if(i === 0) head = typingChar;
+      if(prev) prev.nextChar = typingChar;
+      prev = typingChar;
+    }
+    return head;
+  }
+
+  inputKey(key) {
+    if(!this.char) throw new Error("No remaining input");
+    const lowercase = key.toLowerCase();
+    let result = this.char.inputRoman(key, false);
+
+    if(result === "unmatch") return "unmatch";
+
+    if(result === "incomplete") {
+      this.completedRoman += key;
+      this.inputHistory.push(false);
+      this._updateRemainingRoman(lowercase);
+      return "incomplete";
+    }
+
+    if(result === "complete") {
+      if(this.smallTsuFlag) {
+        this.smallTsuFlag = false;
+        this.completedText += "っ";
+      } else if(this.char.name === "ん") {
+        this.completedText += "ん";
+      } else {
+        this.completedText += this.char.name;
+      }
+      this.completedRoman += key;
+      this.inputHistory.push(false);
+      this.char = this.char.nextChar;
+      this._updateRemainingRoman(lowercase);
+      return this.remainingRoman === "" ? "complete" : "incomplete";
+    }
+
+    return "incomplete";
+  }
+
+  _updateRemainingRoman(lastKey = "") {
+    this.remainingRoman = "";
+    let char = this.char;
+    while(char) {
+      const roman = char.expectRoman(lastKey);
+      lastKey = char.name === "っ" && char.isSpecial ? roman : "";
+      this.remainingRoman += roman;
+      char = char.nextChar;
+    }
+  }
+}
+
+window.TypingText = TypingText;
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LSBNPPLE0E"></script>
 <script>
@@ -1659,7 +1906,7 @@ function startGoogleLogin(){
     nonce,
     prompt: "select_account"
   });
-  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+  window.location.href = `https:
 }
 
 function decodeGoogleIdTokenPayload(idToken){
@@ -1869,7 +2116,7 @@ friendCodeInputEl.addEventListener("input", () => {
   friendCodeInputEl.value = friendCodeInputEl.value.replace(/[^0-9]/g, "");
 });
 
-const ONLINE_SERVER_URL = "wss://key-onl.user-x45.workers.dev";
+const ONLINE_SERVER_URL = "wss:
 const RANKING_API_URL = ONLINE_SERVER_URL.replace(/^wss:/, "https:").replace(/^ws:/, "http:");
 
 const clickSoundEl = new Audio("sounds/click.mp3");
