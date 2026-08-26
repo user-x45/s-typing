@@ -46,6 +46,8 @@
 
   html{height:100%;}
 
+  html{overflow-x:hidden;}
+
   body{
     margin:0;
     min-height:100vh;
@@ -57,6 +59,7 @@
     display:flex;
     justify-content:center;
     padding:40px 16px;
+    overflow-x:hidden;
   }
 
   .stage{
@@ -400,6 +403,11 @@
 
   input[type="month"]{
     width:100%;
+    min-width:0;
+    max-width:100%;
+    box-sizing:border-box;
+    -webkit-appearance:none;
+    appearance:none;
     padding:12px 14px;
     background:var(--input-bg);
     border:1.5px solid var(--line);
@@ -441,6 +449,8 @@
       <button class="menu-btn" id="menu-invite-btn">招待コード管理</button>
       <button class="menu-btn" id="menu-playlog-btn">プレイログ</button>
       <button class="menu-btn" id="menu-event-btn">イベントモード</button>
+      <button class="menu-btn hidden" id="menu-device-btn">デバイス管理</button>
+      <button class="logout-btn" id="device-unlock-btn">Google認証でデバイス管理を有効化</button>
       <button class="logout-btn" id="logout-btn">ログアウト</button>
     </div>
   </div>
@@ -500,6 +510,14 @@
       <div class="board-grid" id="event-archive-grid" style="margin-top:16px;"></div>
     </div>
   </div>
+
+  <div id="device-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="device-back-btn">戻る</button>
+      <button class="refresh-btn" id="device-refresh-btn">再読み込み</button>
+    </div>
+    <div class="user-list" id="device-list"></div>
+  </div>
 </div>
 
 <script>
@@ -551,9 +569,21 @@ const eventDisableBtnEl = document.getElementById("event-disable-btn");
 const eventArchiveMonthInputEl = document.getElementById("event-archive-month-input");
 const eventArchiveLoadBtnEl = document.getElementById("event-archive-load-btn");
 const eventArchiveGridEl = document.getElementById("event-archive-grid");
+const menuDeviceBtnEl = document.getElementById("menu-device-btn");
+const deviceUnlockBtnEl = document.getElementById("device-unlock-btn");
+const deviceDashboardEl = document.getElementById("device-dashboard");
+const deviceBackBtnEl = document.getElementById("device-back-btn");
+const deviceRefreshBtnEl = document.getElementById("device-refresh-btn");
+const deviceListEl = document.getElementById("device-list");
+
+const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
+const ADMIN_TOKEN_TEMP_KEY = "adminTokenPending";
+const ADMIN_NONCE_KEY = "adminGoogleAuthNonce";
+
+let deviceAdminIdToken = "";
 
 function showOnly(el){
-  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl, playlogDashboardEl, eventDashboardEl].forEach(node => {
+  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl, playlogDashboardEl, eventDashboardEl, deviceDashboardEl].forEach(node => {
     if(node === el){
       node.classList.remove("hidden");
     } else {
@@ -932,6 +962,149 @@ function renderArchiveBoards(data, month){
   }
 }
 
+function renderDevices(sessions){
+  deviceListEl.innerHTML = "";
+  if(!sessions || sessions.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "ログイン中のデバイスがありません";
+    deviceListEl.appendChild(empty);
+    return;
+  }
+
+  sessions.forEach(session => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const name = document.createElement("div");
+    name.className = "user-name";
+    name.textContent = session.name || "GUEST";
+
+    const sub = document.createElement("div");
+    sub.className = "user-sub";
+    sub.textContent = session.sub;
+
+    const agent = document.createElement("div");
+    agent.className = "user-sub";
+    agent.textContent = session.userAgent || "unknown";
+
+    const ip = document.createElement("div");
+    ip.className = "user-sub";
+    ip.textContent = `IP: ${session.ip || "unknown"}`;
+
+    const loginTime = document.createElement("div");
+    loginTime.className = "user-scores";
+    loginTime.textContent = session.loginAt ? new Date(session.loginAt).toLocaleString("ja-JP") : "不明";
+
+    info.appendChild(name);
+    info.appendChild(sub);
+    info.appendChild(agent);
+    info.appendChild(ip);
+    info.appendChild(loginTime);
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "user-delete-btn";
+    delBtn.textContent = "ログアウト";
+    delBtn.addEventListener("click", async () => {
+      if(!confirm(`「${session.name || "GUEST"}」のこのデバイスを強制的にログアウトしますか？`)) return;
+      showOnly(loadingPanelEl);
+      try{
+        await callAdmin("revokeDevice", { idToken: deviceAdminIdToken, deviceToken: session.token });
+        await loadDeviceDashboard();
+      }catch(e){
+        handleSessionExpired();
+      }
+    });
+
+    row.appendChild(info);
+    row.appendChild(delBtn);
+    deviceListEl.appendChild(row);
+  });
+}
+
+async function loadDeviceDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("listDevices", { idToken: deviceAdminIdToken });
+    renderDevices(data.sessions);
+    showOnly(deviceDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+function generateAdminGoogleAuthNonce(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function decodeGoogleIdTokenPayload(idToken){
+  const payloadPart = idToken.split(".")[1];
+  const base64 = payloadPart.replace(/-/g, "+").replace(/_/g, "/");
+  return JSON.parse(atob(base64));
+}
+
+function startDeviceAdminGoogleLogin(){
+  sessionStorage.setItem(ADMIN_TOKEN_TEMP_KEY, adminToken);
+  const nonce = generateAdminGoogleAuthNonce();
+  sessionStorage.setItem(ADMIN_NONCE_KEY, nonce);
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  const params = new URLSearchParams({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: redirectUri,
+    response_type: "id_token",
+    scope: "openid",
+    nonce,
+    prompt: "select_account"
+  });
+  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+}
+
+async function processDeviceAdminRedirect(){
+  const hash = window.location.hash;
+  if(!hash || !hash.includes("id_token")) return false;
+  const params = new URLSearchParams(hash.substring(1));
+  const idToken = params.get("id_token");
+  const error = params.get("error");
+  history.replaceState(null, "", window.location.pathname + window.location.search);
+
+  const restoredToken = sessionStorage.getItem(ADMIN_TOKEN_TEMP_KEY) || "";
+  sessionStorage.removeItem(ADMIN_TOKEN_TEMP_KEY);
+  const expectedNonce = sessionStorage.getItem(ADMIN_NONCE_KEY);
+  sessionStorage.removeItem(ADMIN_NONCE_KEY);
+
+  if(!restoredToken || error || !idToken) return false;
+
+  try{
+    const payload = decodeGoogleIdTokenPayload(idToken);
+    if(expectedNonce && payload.nonce !== expectedNonce){
+      return false;
+    }
+  }catch(e){
+    return false;
+  }
+
+  adminToken = restoredToken;
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("verifyDeviceAdmin", { idToken });
+    if(data.ok){
+      deviceAdminIdToken = idToken;
+      menuDeviceBtnEl.classList.remove("hidden");
+      deviceUnlockBtnEl.classList.add("hidden");
+    } else {
+      alert("この Google アカウントにはデバイス管理の権限がありません");
+    }
+    showOnly(menuPanelEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+  return true;
+}
+
 async function loadEventDashboard(){
   showOnly(loadingPanelEl);
   try{
@@ -1040,6 +1213,9 @@ async function loadInviteDashboard(){
 
 function handleSessionExpired(){
   adminToken = "";
+  deviceAdminIdToken = "";
+  menuDeviceBtnEl.classList.add("hidden");
+  deviceUnlockBtnEl.classList.remove("hidden");
   showOnly(loginPanelEl);
   loginErrorEl.textContent = "セッションが切れました。もう一度パスワードを入力してください";
 }
@@ -1074,6 +1250,9 @@ menuPlaylogBtnEl.addEventListener("click", loadPlayLogDashboard);
 
 logoutBtnEl.addEventListener("click", () => {
   adminToken = "";
+  deviceAdminIdToken = "";
+  menuDeviceBtnEl.classList.add("hidden");
+  deviceUnlockBtnEl.classList.remove("hidden");
   passwordInputEl.value = "";
   loginErrorEl.textContent = "";
   showOnly(loginPanelEl);
@@ -1099,6 +1278,13 @@ playlogClearBtnEl.addEventListener("click", async () => {
     handleSessionExpired();
   }
 });
+
+menuDeviceBtnEl.addEventListener("click", loadDeviceDashboard);
+deviceUnlockBtnEl.addEventListener("click", startDeviceAdminGoogleLogin);
+deviceBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+deviceRefreshBtnEl.addEventListener("click", loadDeviceDashboard);
+
+processDeviceAdminRedirect();
 </script>
 </body>
 </html>
