@@ -40,35 +40,39 @@
   gtag('config', 'G-LSBNPPLE0E');
 </script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap');
 
   :root{
-    --washi:#ffffff;
-    --washi-deep:#f4f4f5;
-    --ink:#18181b;
-    --ink-soft:#6b7280;
-    --hanko:#a8352a;
-    --hanko-deep:#7e2019;
-    --gold:#b8933f;
-    --line:#e4e4e7;
+    --washi:#fffaf3;
+    --washi-deep:#ffe9f3;
+    --ink:#2c2140;
+    --ink-soft:#8b81a8;
+    --hanko:#ff4f93;
+    --hanko-deep:#ef2b76;
+    --gold:#ffc738;
+    --pop-teal:#25d6c2;
+    --pop-purple:#7c5cff;
+    --line:#ffdcec;
     --panel-bg:#ffffff;
-    --panel-bg-soft:#eceef1;
+    --panel-bg-soft:#fff1f8;
     --input-bg:#ffffff;
   }
 
   @media (prefers-color-scheme: dark){
     :root{
-      --washi:#0f0f11;
-      --washi-deep:#17181a;
-      --ink:#f4f4f5;
-      --ink-soft:#9ca3af;
-      --hanko:#d9584a;
-      --hanko-deep:#f07264;
-      --gold:#d9b45f;
-      --line:#2a2b2e;
-      --panel-bg:#18181b;
-      --panel-bg-soft:#28292d;
-      --input-bg:#18181b;
+      --washi:#1c1430;
+      --washi-deep:#241a3d;
+      --ink:#f7f2ff;
+      --ink-soft:#b6a9dd;
+      --hanko:#ff6fa8;
+      --hanko-deep:#ff8fbe;
+      --gold:#ffd65c;
+      --pop-teal:#3fe9d4;
+      --pop-purple:#9a84ff;
+      --line:#3c2e5e;
+      --panel-bg:#241a3d;
+      --panel-bg-soft:#2d2151;
+      --input-bg:#241a3d;
     }
   }
 
@@ -89,7 +93,7 @@
     min-height:100dvh;
     background:var(--washi);
     color:var(--ink);
-    font-family: "BIZ UDPGothic", "HiraginoSans-W2", "Hiragino Kaku Gothic ProN", Meiryo, "メイリオ", sans-serif;
+    font-family: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", Meiryo, "メイリオ", sans-serif;
     line-height:1.5;
     display:flex;
     justify-content:center;
@@ -115,8 +119,9 @@
     margin-bottom:20px;
     padding:12px 20px;
     background:var(--panel-bg);
-    border:1px solid var(--line);
-    border-radius:12px;
+    border:2.5px solid var(--line);
+    border-radius:24px;
+    box-shadow:0 5px 0 var(--line);
     white-space:nowrap;
   }
 
@@ -139,10 +144,14 @@
 
   .menu-title{
     margin:0;
-    font-weight:800;
+    font-weight:900;
     font-size:20px;
     line-height:normal;
     letter-spacing:0.06em;
+    background:linear-gradient(90deg, var(--hanko), var(--pop-purple));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
     color:var(--ink);
     flex-shrink:0;
   }
@@ -159,7 +168,7 @@
     padding:14px 16px;
     background:var(--washi);
     border:1px solid var(--line);
-    border-radius:12px;
+    border-radius:20px;
     box-shadow:0 10px 30px rgba(0,0,0,0.2);
     white-space:nowrap;
     z-index:10;
@@ -178,7 +187,7 @@
     padding:6px 14px;
     background:transparent;
     border:1.5px solid var(--line);
-    border-radius:10px;
+    border-radius:16px;
     font-size:12px;
     font-weight:600;
     color:var(--ink-soft);
@@ -250,7 +259,7 @@
   .custom-alert-box{
     background:var(--washi);
     border:1px solid var(--line);
-    border-radius:12px;
+    border-radius:20px;
     padding:28px 24px;
     max-width:320px;
     width:100%;
@@ -270,7 +279,7 @@
     background:var(--hanko);
     color:var(--washi);
     border:none;
-    border-radius:10px;
+    border-radius:16px;
     font-size:14px;
     font-weight:600;
     letter-spacing:0.05em;
@@ -297,7 +306,7 @@
     padding:0;
     background:transparent;
     border:1.5px solid var(--line);
-    border-radius:10px;
+    border-radius:16px;
     font-size:11px;
     color:var(--ink-soft);
     cursor:pointer;
@@ -314,7 +323,7 @@
     padding:6px 14px;
     background:transparent;
     border:1.5px solid var(--line);
-    border-radius:10px;
+    border-radius:16px;
     font-size:12px;
     font-weight:600;
     color:var(--ink-soft);
@@ -352,7 +361,7 @@
     background:var(--hanko);
     color:var(--washi);
     border:none;
-    border-radius:10px;
+    border-radius:16px;
     cursor:pointer;
     font-size:12px;
     margin-left:10px;
@@ -360,10 +369,11 @@
 
   .panel{
     background:var(--panel-bg);
-    border:1px solid var(--line);
-    border-radius:12px;
+    border:2.5px solid var(--line);
+    border-radius:28px;
     padding:28px;
     position:relative;
+    box-shadow:0 8px 0 var(--line), 0 16px 34px rgba(255,79,147,0.12);
   }
 
   .mode-tabs{
@@ -373,7 +383,7 @@
     margin-bottom:22px;
     background:var(--panel-bg-soft);
     border:1px solid var(--line);
-    border-radius:12px;
+    border-radius:20px;
     padding:4px;
     overflow:hidden;
   }
@@ -392,7 +402,7 @@
     padding:11px 8px;
     background:transparent;
     border:none;
-    border-radius:8px;
+    border-radius:14px;
     font-size:14px;
     font-weight:600;
     color:var(--ink-soft);
@@ -402,7 +412,8 @@
 
   .mode-btn.active, .input-mode-btn.active{
     background:var(--hanko);
-    color:var(--washi);
+    color:#fff;
+    box-shadow:0 3px 0 var(--hanko-deep);
   }
 
   .hidden{
@@ -421,7 +432,7 @@
     padding:14px 8px;
     background:transparent;
     border:1.5px solid var(--line);
-    border-radius:10px;
+    border-radius:16px;
     font-size:15px;
     font-weight:600;
     color:var(--ink-soft);
@@ -443,13 +454,14 @@
   }
 
   .level-btn.active{
-    background:var(--ink);
-    border-color:var(--ink);
-    color:var(--washi);
+    background:var(--pop-teal);
+    border-color:var(--pop-teal);
+    color:#0b3a34;
+    box-shadow:0 3px 0 #17a897;
   }
 
   .level-btn.active .sub{
-    color:var(--washi);
+    color:#0b3a34;
     opacity:0.75;
   }
 
@@ -462,28 +474,40 @@
   }
 
   .start-btn{
-    padding:12px 24px;
+    padding:14px 28px;
     background:var(--hanko);
-    color:var(--washi);
+    color:#fff;
     border:none;
-    border-radius:10px;
+    border-radius:999px;
     font-size:16px;
-    font-weight:600;
+    font-weight:800;
     letter-spacing:0.1em;
     cursor:pointer;
-    transition:background 0.2s ease;
+    box-shadow:0 5px 0 var(--hanko-deep);
+    transition:transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
   }
 
   .start-btn:hover{
     background:var(--hanko-deep);
   }
 
+  .start-btn:active{
+    transform:translateY(4px);
+    box-shadow:0 1px 0 var(--hanko-deep);
+  }
+
   .start-btn.online-btn{
-    background:var(--ink);
+    background:var(--pop-purple);
+    box-shadow:0 5px 0 #5c3fd6;
   }
 
   .start-btn.online-btn:hover{
-    background:var(--ink-soft);
+    background:var(--pop-purple);
+    filter:brightness(1.06);
+  }
+
+  .start-btn.online-btn:active{
+    box-shadow:0 1px 0 #5c3fd6;
   }
 
   .online-status{
@@ -559,14 +583,14 @@
     height:6px;
     width:100%;
     background:rgba(31,28,25,0.1);
-    border-radius:12px;
+    border-radius:20px;
     overflow:hidden;
     margin-bottom:clamp(12px,3vh,24px);
   }
 
   .timer-fill{
     height:100%;
-    background:var(--hanko);
+    background:linear-gradient(90deg, var(--pop-teal), var(--hanko));
     width:100%;
     transition:width 1s linear;
   }
@@ -579,7 +603,8 @@
     text-align:center;
     padding:clamp(14px,4vh,36px) 12px;
     background:var(--panel-bg-soft);
-    border-radius:12px;
+    border:2.5px dashed var(--line);
+    border-radius:28px;
     margin-bottom:clamp(12px,3vh,26px);
   }
 
@@ -675,12 +700,13 @@
     width:100%;
     padding:clamp(10px,2.5vh,16px) 18px;
     font-size:clamp(16px,3vh,22px);
-    border:1.5px solid var(--line);
-    border-radius:10px;
+    border:2.5px solid var(--line);
+    border-radius:999px;
     background:var(--input-bg);
     color:var(--ink);
     outline:none;
     letter-spacing:0.08em;
+    font-weight:700;
     transition:border-color 0.15s ease;
     text-align: center;
   }
@@ -731,8 +757,11 @@
 
   .result-score{
     font-size:64px;
-    font-weight:800;
-    color:var(--hanko);
+    font-weight:900;
+    background:linear-gradient(90deg, var(--hanko), var(--pop-purple));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
     margin-bottom:4px;
   }
 
@@ -754,7 +783,7 @@
     max-width:140px;
     padding:14px 8px;
     border:1px solid var(--line);
-    border-radius:10px;
+    border-radius:16px;
     background:var(--panel-bg-soft);
   }
 
@@ -779,9 +808,9 @@
     gap:8px;
     margin:0 0 16px;
     padding:10px 14px;
-    border-radius:10px;
-    background:linear-gradient(135deg, var(--gold), #ffcf5c);
-    color:#3a2a00;
+    border-radius:16px;
+    background:linear-gradient(135deg, var(--gold), var(--hanko));
+    color:#fff;
     font-size:13px;
     font-weight:700;
     letter-spacing:0.05em;
@@ -834,7 +863,7 @@
     padding:6px 10px;
     background:var(--panel-bg-soft);
     border:1px solid var(--line);
-    border-radius:10px;
+    border-radius:16px;
     font-size:13px;
   }
 
@@ -938,7 +967,7 @@
   .name-input-box{
     background:var(--washi);
     border:1px solid var(--line);
-    border-radius:12px;
+    border-radius:20px;
     padding:28px 24px;
     max-width:320px;
     width:100%;
@@ -958,7 +987,7 @@
     padding:10px 12px;
     background:var(--input-bg);
     border:1px solid var(--line);
-    border-radius:10px;
+    border-radius:16px;
     font-size:16px;
     color:var(--ink);
     text-align:center;
@@ -975,7 +1004,7 @@
     background:var(--hanko);
     color:var(--washi);
     border:none;
-    border-radius:10px;
+    border-radius:16px;
     font-size:14px;
     font-weight:600;
     letter-spacing:0.05em;
@@ -994,7 +1023,7 @@
     padding:8px 14px;
     background:var(--hanko);
     color:var(--washi);
-    border-radius:10px;
+    border-radius:16px;
     font-size:13px;
     font-weight:700;
     letter-spacing:0.05em;
@@ -1027,7 +1056,7 @@
     padding:8px 14px;
     background:var(--gold);
     color:var(--washi);
-    border-radius:10px;
+    border-radius:16px;
     font-size:13px;
     font-weight:700;
     letter-spacing:0.05em;
@@ -1061,7 +1090,7 @@
     padding:12px 36px;
     background:transparent;
     border:1.5px solid var(--ink);
-    border-radius:10px;
+    border-radius:16px;
     font-size:15px;
     color:var(--ink);
     cursor:pointer;
@@ -1098,7 +1127,7 @@
     padding:10px 12px;
     background:var(--input-bg);
     border:1px solid var(--line);
-    border-radius:10px;
+    border-radius:16px;
     font-size:18px;
     letter-spacing:0.15em;
     color:var(--ink);
