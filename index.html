@@ -1031,8 +1031,23 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:10px;
+    gap:16px;
     margin-top:10px;
+  }
+
+  .mode-and-mute-row .mute-check-label{
+    margin-top:0;
+  }
+
+  .input-mode-toggle-group{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .input-mode-toggle-label{
+    font-size:13px;
+    color:var(--ink-soft);
   }
 
   .input-mode-toggle-btn{
@@ -1398,7 +1413,10 @@
       </div>
 
       <div class="mode-and-mute-row">
-        <button class="input-mode-toggle-btn" id="input-mode-toggle-btn" aria-label="入力モード切替"><i class="fa-solid fa-keyboard"></i></button>
+        <div class="input-mode-toggle-group">
+          <span class="input-mode-toggle-label">入力モード</span>
+          <button class="input-mode-toggle-btn" id="input-mode-toggle-btn" aria-label="入力モード切替"><i class="fa-solid fa-keyboard"></i></button>
+        </div>
         <label class="mute-check-label">
           <input type="checkbox" id="mute-btn" class="mute-check">
           ミュート
