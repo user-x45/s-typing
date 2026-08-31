@@ -1822,13 +1822,11 @@ async function recordPlayResult(mode, level, accuracy, speed, miss, score){
   const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
   if(isLoggedIn){
     const token = getSessionToken();
-    try{
-      await fetch(`${RANKING_API_URL}/auth`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
-      });
-    }catch(e){}
+    await fetchWithRetry(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
+    }, 4);
   } else {
     addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss, score });
   }
@@ -2417,6 +2415,20 @@ function logPlay(mode, level, matchType, opponent){
   }).catch(() => {});
 }
 
+async function fetchWithRetry(url, options, attempts){
+  for(let i = 0; i < attempts; i++){
+    try{
+      const res = await fetch(url, options);
+      if(res.ok) return res;
+    }catch(e){
+    }
+    if(i < attempts - 1){
+      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+    }
+  }
+  return null;
+}
+
 async function requestGameSessionToken(mode, level){
   const attempts = 4;
   for(let i = 0; i < attempts; i++){
@@ -2441,14 +2453,15 @@ async function requestGameSessionToken(mode, level){
 
 async function submitScoreToRanking(score, mode, level, name){
   if(!currentGameSessionToken) return;
+  const token = currentGameSessionToken;
+  currentGameSessionToken = null;
+  const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ score, name, token })
+  }, 4);
+  if(!res) return;
   try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ score, name, token: currentGameSessionToken })
-    });
-    currentGameSessionToken = null;
-    if(!res.ok) return;
     const data = await res.json();
     if(mode === currentMode && level === currentLevel){
       renderRanking(data.top20);
