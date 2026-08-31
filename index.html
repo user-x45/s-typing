@@ -1096,6 +1096,38 @@
     margin-bottom:18px;
   }
 
+  .input-mode-settings{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:20px;
+    padding:14px 16px;
+    background:var(--panel-bg-soft);
+    border-radius:14px;
+  }
+
+  .input-mode-setting-label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+
+  .input-mode-setting-check{
+    width:16px;
+    height:16px;
+    cursor:pointer;
+    accent-color:var(--hanko);
+    flex-shrink:0;
+  }
+
+  .romaji-display.uppercase{
+    text-transform:uppercase;
+  }
+
   .input-mode-close-btn{
     padding:10px 32px;
     background:none;
@@ -1555,6 +1587,20 @@
       <button class="input-mode-btn active" data-input-mode="realtime">リアルタイム</button>
       <button class="input-mode-btn" data-input-mode="textbox">テキストボックス</button>
     </div>
+    <div class="input-mode-settings">
+      <label class="input-mode-setting-label">
+        <input type="checkbox" id="show-romaji-check" class="input-mode-setting-check" checked>
+        ローマ字表示
+      </label>
+      <label class="input-mode-setting-label">
+        <input type="checkbox" id="show-furigana-check" class="input-mode-setting-check" checked>
+        ふりがな表示
+      </label>
+      <label class="input-mode-setting-label">
+        <input type="checkbox" id="romaji-uppercase-check" class="input-mode-setting-check">
+        ローマ字を大文字にする
+      </label>
+    </div>
     <button class="input-mode-close-btn" id="input-mode-close-btn">閉じる</button>
   </div>
 </div>
@@ -1631,6 +1677,9 @@ const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googl
 const SESSION_TOKEN_KEY = "sessionToken";
 const GUEST_NAME_KEY = "guestPlayerName";
 const GUEST_INPUT_MODE_KEY = "guestInputMode";
+const SHOW_ROMAJI_KEY = "showRomaji";
+const SHOW_FURIGANA_KEY = "showFurigana";
+const ROMAJI_UPPERCASE_KEY = "romajiUppercase";
 const currentPlayerLabelEl = document.getElementById("current-player-label");
 const logoutBtnEl = document.getElementById("logout-btn");
 const googleLoginBtnEl = document.getElementById("google-login-btn");
@@ -2735,7 +2784,7 @@ function pickWord(){
 
 function renderSentenceReading(){
   if(!sentenceReadingDisplayEl) return;
-  if(currentMode !== "sentence"){
+  if(currentMode !== "sentence" || !showFurigana){
     sentenceReadingDisplayEl.classList.remove("visible");
     sentenceReadingDisplayEl.innerHTML = "";
     return;
@@ -2762,13 +2811,54 @@ function resetHintLabel(){
 function updateInputModeUI(){
   const isRealtime = inputMode === "realtime";
   if(inputRowEl) inputRowEl.classList.toggle("hidden", isRealtime);
-  if(romajiDisplayEl) romajiDisplayEl.classList.toggle("hidden", !isRealtime);
+  if(romajiDisplayEl) romajiDisplayEl.classList.toggle("hidden", !isRealtime || !showRomaji);
   if(inputMode !== "realtime"){
     typingText = null;
   }
   resetHintLabel();
   updateSentenceProgressHighlight();
 }
+
+let showRomaji = localStorage.getItem(SHOW_ROMAJI_KEY) !== "false";
+let showFurigana = localStorage.getItem(SHOW_FURIGANA_KEY) !== "false";
+let romajiUppercase = localStorage.getItem(ROMAJI_UPPERCASE_KEY) === "true";
+
+const showRomajiCheckEl = document.getElementById("show-romaji-check");
+const showFuriganaCheckEl = document.getElementById("show-furigana-check");
+const romajiUppercaseCheckEl = document.getElementById("romaji-uppercase-check");
+
+function applyRomajiUppercaseUI(){
+  if(romajiDisplayEl) romajiDisplayEl.classList.toggle("uppercase", romajiUppercase);
+}
+
+if(showRomajiCheckEl){
+  showRomajiCheckEl.checked = showRomaji;
+  showRomajiCheckEl.addEventListener("change", () => {
+    showRomaji = showRomajiCheckEl.checked;
+    localStorage.setItem(SHOW_ROMAJI_KEY, String(showRomaji));
+    updateInputModeUI();
+  });
+}
+
+if(showFuriganaCheckEl){
+  showFuriganaCheckEl.checked = showFurigana;
+  showFuriganaCheckEl.addEventListener("change", () => {
+    showFurigana = showFuriganaCheckEl.checked;
+    localStorage.setItem(SHOW_FURIGANA_KEY, String(showFurigana));
+    renderSentenceReading();
+  });
+}
+
+if(romajiUppercaseCheckEl){
+  romajiUppercaseCheckEl.checked = romajiUppercase;
+  romajiUppercaseCheckEl.addEventListener("change", () => {
+    romajiUppercase = romajiUppercaseCheckEl.checked;
+    localStorage.setItem(ROMAJI_UPPERCASE_KEY, String(romajiUppercase));
+    applyRomajiUppercaseUI();
+  });
+}
+
+applyRomajiUppercaseUI();
 
 function applyInputMode(mode){
   inputMode = mode === "textbox" ? "textbox" : "realtime";
