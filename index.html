@@ -1027,6 +1027,88 @@
     background:var(--hanko-deep);
   }
 
+  .mode-and-mute-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top:10px;
+  }
+
+  .input-mode-toggle-btn{
+    width:30px;
+    height:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--panel-bg-soft);
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    color:var(--ink-soft);
+    font-size:13px;
+    cursor:pointer;
+    transition:border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .input-mode-toggle-btn:hover{
+    border-color:var(--gold);
+    color:var(--ink);
+  }
+
+  .input-mode-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(31,28,25,0.55);
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    padding:20px;
+  }
+
+  .input-mode-overlay.visible{
+    display:flex;
+  }
+
+  .input-mode-box{
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 24px;
+    max-width:320px;
+    width:100%;
+    text-align:center;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .input-mode-modal-title{
+    font-size:14px;
+    color:var(--ink);
+    margin-bottom:16px;
+  }
+
+  .input-mode-box .mode-tabs{
+    margin-bottom:18px;
+  }
+
+  .input-mode-close-btn{
+    padding:10px 32px;
+    background:none;
+    color:var(--ink-soft);
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    transition:border-color 0.2s ease;
+  }
+
+  .input-mode-close-btn:hover{
+    border-color:var(--gold);
+  }
+
   .result-rank-badge{
     display:none;
     margin:10px auto 0;
@@ -1307,12 +1389,6 @@
         <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
       </div>
 
-      <div class="section-heading">入力モード</div>
-      <div class="mode-tabs input-mode-tabs">
-        <button class="input-mode-btn active" data-input-mode="realtime">リアルタイム</button>
-        <button class="input-mode-btn" data-input-mode="textbox">テキストボックス</button>
-      </div>
-
       <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
 
       <div class="start-row">
@@ -1321,10 +1397,13 @@
         <button class="start-btn online-btn" id="start-friend-btn"><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
       </div>
 
-      <label class="mute-check-label">
-        <input type="checkbox" id="mute-btn" class="mute-check">
-        ミュート
-      </label>
+      <div class="mode-and-mute-row">
+        <button class="input-mode-toggle-btn" id="input-mode-toggle-btn" aria-label="入力モード切替"><i class="fa-solid fa-keyboard"></i></button>
+        <label class="mute-check-label">
+          <input type="checkbox" id="mute-btn" class="mute-check">
+          ミュート
+        </label>
+      </div>
 
       <div class="ranking-box hidden" id="ranking-box">
         <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
@@ -1465,6 +1544,17 @@
   </div>
 </div>
 
+<div class="input-mode-overlay" id="input-mode-overlay">
+  <div class="input-mode-box">
+    <div class="input-mode-modal-title">入力モードを選択</div>
+    <div class="mode-tabs input-mode-tabs">
+      <button class="input-mode-btn active" data-input-mode="realtime">リアルタイム</button>
+      <button class="input-mode-btn" data-input-mode="textbox">テキストボックス</button>
+    </div>
+    <button class="input-mode-close-btn" id="input-mode-close-btn">閉じる</button>
+  </div>
+</div>
+
 <script src="typing-jp.js"></script>
 <script>
 const customAlertOverlayEl = document.getElementById("custom-alert-overlay");
@@ -1513,6 +1603,24 @@ nameInputFieldEl.addEventListener("keydown", (e) => {
     e.preventDefault();
     confirmNameInput();
   }
+});
+
+const inputModeToggleBtnEl = document.getElementById("input-mode-toggle-btn");
+const inputModeOverlayEl = document.getElementById("input-mode-overlay");
+const inputModeCloseBtnEl = document.getElementById("input-mode-close-btn");
+
+inputModeToggleBtnEl.addEventListener("click", () => {
+  inputModeOverlayEl.classList.add("visible");
+});
+
+inputModeCloseBtnEl.addEventListener("click", () => {
+  inputModeOverlayEl.classList.remove("visible");
+});
+
+inputModeOverlayEl.querySelectorAll(".input-mode-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    inputModeOverlayEl.classList.remove("visible");
+  });
 });
 
 const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
