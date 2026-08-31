@@ -1786,6 +1786,7 @@ function renderPlayRecords(records){
           <span class="play-record-time">${formatPlayRecordTime(r.playedAt)}</span>
         </div>
         <div class="play-record-stats">
+          <span>スコア ${r.score !== undefined ? r.score : "-"}</span>
           <span>正誤率 ${r.accuracy}%</span>
           <span>${r.speed} 文字/分</span>
           <span>ミス ${r.miss}</span>
@@ -1817,7 +1818,7 @@ async function openPlayRecords(){
   renderPlayRecords(records);
 }
 
-async function recordPlayResult(mode, level, accuracy, speed, miss){
+async function recordPlayResult(mode, level, accuracy, speed, miss, score){
   const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
   if(isLoggedIn){
     const token = getSessionToken();
@@ -1825,11 +1826,11 @@ async function recordPlayResult(mode, level, accuracy, speed, miss){
       await fetch(`${RANKING_API_URL}/auth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss })
+        body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
       });
     }catch(e){}
   } else {
-    addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss });
+    addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss, score });
   }
 }
 
@@ -3111,17 +3112,24 @@ document.querySelectorAll(".input-mode-btn").forEach(btn => {
 
 applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
 
+function buildTypingText(reading){
+  try{
+    return new TypingText(reading);
+  }catch(e){}
+  try{
+    const sanitized = [...reading].filter(c => /[ぁ-んー]/.test(c)).join("");
+    if(sanitized) return new TypingText(sanitized);
+  }catch(e){}
+  return null;
+}
+
 function setupRealtimeWord(){
   const reading = getCurrentWordReading();
   if(romajiDisplayEl){
     romajiDisplayEl.classList.remove("shake");
     romajiDisplayEl.scrollLeft = 0;
   }
-  try{
-    typingText = new TypingText(reading);
-  }catch(e){
-    typingText = null;
-  }
+  typingText = buildTypingText(reading);
   renderRomajiDisplay();
   fitRomajiDisplayFontSize();
 }
@@ -3209,7 +3217,10 @@ function completeRealtimeWord(){
 }
 
 function handleRealtimeKey(key){
-  if(!typingText) return;
+  if(!typingText){
+    setupRealtimeWord();
+    if(!typingText) return;
+  }
   recordKeystrokeTiming();
 
   let result;
@@ -3386,7 +3397,7 @@ function endGame(isNormalEnd){
     if(finalScore > 0){
       handleRankingSubmission(finalScore, currentMode, currentLevel);
     }
-    recordPlayResult(currentMode, currentLevel, accuracy, speed, missCount);
+    recordPlayResult(currentMode, currentLevel, accuracy, speed, missCount, finalScore);
   } else {
     setupEl.classList.remove("hidden");
   }
