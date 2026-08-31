@@ -1588,7 +1588,7 @@
       <button class="input-mode-btn" data-input-mode="textbox">テキストボックス</button>
     </div>
     <div class="input-mode-settings">
-      <label class="input-mode-setting-label">
+      <label class="input-mode-setting-label" id="show-romaji-label">
         <input type="checkbox" id="show-romaji-check" class="input-mode-setting-check" checked>
         ローマ字表示
       </label>
@@ -1596,7 +1596,7 @@
         <input type="checkbox" id="show-furigana-check" class="input-mode-setting-check" checked>
         ふりがな表示
       </label>
-      <label class="input-mode-setting-label">
+      <label class="input-mode-setting-label" id="romaji-uppercase-label">
         <input type="checkbox" id="romaji-uppercase-check" class="input-mode-setting-check">
         ローマ字を大文字にする
       </label>
@@ -1665,12 +1665,6 @@ inputModeToggleBtnEl.addEventListener("click", () => {
 
 inputModeCloseBtnEl.addEventListener("click", () => {
   inputModeOverlayEl.classList.remove("visible");
-});
-
-inputModeOverlayEl.querySelectorAll(".input-mode-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    inputModeOverlayEl.classList.remove("visible");
-  });
 });
 
 const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
@@ -2904,11 +2898,17 @@ if(romajiUppercaseCheckEl){
 refreshDisplaySettingCheckboxes();
 applyRomajiUppercaseUI();
 
+const showRomajiLabelEl = document.getElementById("show-romaji-label");
+const romajiUppercaseLabelEl = document.getElementById("romaji-uppercase-label");
+
 function applyInputMode(mode){
   inputMode = mode === "textbox" ? "textbox" : "realtime";
   document.querySelectorAll(".input-mode-btn").forEach(b => {
     b.classList.toggle("active", b.dataset.inputMode === inputMode);
   });
+  const isRealtime = inputMode === "realtime";
+  if(showRomajiLabelEl) showRomajiLabelEl.classList.toggle("hidden", !isRealtime);
+  if(romajiUppercaseLabelEl) romajiUppercaseLabelEl.classList.toggle("hidden", !isRealtime);
   updateInputModeUI();
   if(inputMode === "realtime" && gameEl.classList.contains("visible")){
     setupRealtimeWord();
