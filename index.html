@@ -1031,6 +1031,7 @@
     display:flex;
     align-items:center;
     justify-content:center;
+    flex-wrap:wrap;
     gap:16px;
     margin-top:10px;
   }
@@ -1126,6 +1127,68 @@
 
   .romaji-display.uppercase{
     text-transform:uppercase;
+  }
+
+  .play-records-box{
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 24px;
+    max-width:420px;
+    width:100%;
+    max-height:80vh;
+    display:flex;
+    flex-direction:column;
+    text-align:center;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .play-records-list{
+    list-style:none;
+    margin:0 0 20px;
+    padding:0;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .play-record-item{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:10px 14px;
+    background:var(--panel-bg-soft);
+    border-radius:12px;
+    text-align:left;
+  }
+
+  .play-record-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
+  .play-record-time{
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+
+  .play-record-stats{
+    display:flex;
+    gap:14px;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  .play-records-empty{
+    font-size:13px;
+    color:var(--ink-soft);
+    padding:20px 0;
   }
 
   .input-mode-close-btn{
@@ -1435,6 +1498,7 @@
 
       <div class="mode-and-mute-row">
         <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
+        <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
         <label class="mute-check-label">
           <input type="checkbox" id="mute-btn" class="mute-check">
           ミュート
@@ -1605,6 +1669,14 @@
   </div>
 </div>
 
+<div class="input-mode-overlay" id="play-records-overlay">
+  <div class="play-records-box">
+    <div class="input-mode-modal-title">今までの記録</div>
+    <ul class="play-records-list" id="play-records-list"></ul>
+    <button class="input-mode-close-btn" id="play-records-close-btn">閉じる</button>
+  </div>
+</div>
+
 <script src="typing-jp.js"></script>
 <script>
 const customAlertOverlayEl = document.getElementById("custom-alert-overlay");
@@ -1667,6 +1739,108 @@ inputModeCloseBtnEl.addEventListener("click", () => {
   inputModeOverlayEl.classList.remove("visible");
 });
 
+const playRecordsToggleBtnEl = document.getElementById("play-records-toggle-btn");
+const playRecordsOverlayEl = document.getElementById("play-records-overlay");
+const playRecordsCloseBtnEl = document.getElementById("play-records-close-btn");
+const playRecordsListEl = document.getElementById("play-records-list");
+
+function getGuestPlayRecords(){
+  try{
+    const raw = localStorage.getItem(GUEST_PLAY_RECORDS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  }catch(e){
+    return [];
+  }
+}
+
+function saveGuestPlayRecords(records){
+  localStorage.setItem(GUEST_PLAY_RECORDS_KEY, JSON.stringify(records.slice(0, PLAY_RECORD_MAX)));
+}
+
+function addGuestPlayRecord(record){
+  const records = getGuestPlayRecords();
+  records.unshift(record);
+  saveGuestPlayRecords(records);
+}
+
+function formatPlayRecordTime(playedAt){
+  const date = new Date(playedAt);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function renderPlayRecords(records){
+  if(!playRecordsListEl) return;
+  if(!records || records.length === 0){
+    playRecordsListEl.innerHTML = `<li class="play-records-empty">まだ記録がありません</li>`;
+    return;
+  }
+  playRecordsListEl.innerHTML = records.map(r => {
+    const modeLabel = modeLabels[r.mode] || r.mode;
+    const levelLabel = levelLabels[r.level] || r.level;
+    return `
+      <li class="play-record-item">
+        <div class="play-record-top">
+          <span>${modeLabel}・${levelLabel}</span>
+          <span class="play-record-time">${formatPlayRecordTime(r.playedAt)}</span>
+        </div>
+        <div class="play-record-stats">
+          <span>正誤率 ${r.accuracy}%</span>
+          <span>${r.speed} 文字/分</span>
+          <span>ミス ${r.miss}</span>
+        </div>
+      </li>
+    `;
+  }).join("");
+}
+
+async function fetchAccountPlayRecords(token){
+  try{
+    const res = await fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "getPlayRecords", token })
+    });
+    const data = await res.json();
+    return Array.isArray(data.playRecords) ? data.playRecords : [];
+  }catch(e){
+    return [];
+  }
+}
+
+async function openPlayRecords(){
+  playRecordsOverlayEl.classList.add("visible");
+  playRecordsListEl.innerHTML = `<li class="play-records-empty">読み込み中...</li>`;
+  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
+  const records = isLoggedIn ? await fetchAccountPlayRecords(getSessionToken()) : getGuestPlayRecords();
+  renderPlayRecords(records);
+}
+
+async function recordPlayResult(mode, level, accuracy, speed, miss){
+  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
+  if(isLoggedIn){
+    const token = getSessionToken();
+    try{
+      await fetch(`${RANKING_API_URL}/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss })
+      });
+    }catch(e){}
+  } else {
+    addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss });
+  }
+}
+
+playRecordsToggleBtnEl.addEventListener("click", () => {
+  openPlayRecords();
+});
+
+playRecordsCloseBtnEl.addEventListener("click", () => {
+  playRecordsOverlayEl.classList.remove("visible");
+});
+
 const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
 const SESSION_TOKEN_KEY = "sessionToken";
 const GUEST_NAME_KEY = "guestPlayerName";
@@ -1674,6 +1848,8 @@ const GUEST_INPUT_MODE_KEY = "guestInputMode";
 const SHOW_ROMAJI_KEY = "showRomaji";
 const SHOW_FURIGANA_KEY = "showFurigana";
 const ROMAJI_UPPERCASE_KEY = "romajiUppercase";
+const GUEST_PLAY_RECORDS_KEY = "guestPlayRecords";
+const PLAY_RECORD_MAX = 20;
 const currentPlayerLabelEl = document.getElementById("current-player-label");
 const logoutBtnEl = document.getElementById("logout-btn");
 const googleLoginBtnEl = document.getElementById("google-login-btn");
@@ -3210,6 +3386,7 @@ function endGame(isNormalEnd){
     if(finalScore > 0){
       handleRankingSubmission(finalScore, currentMode, currentLevel);
     }
+    recordPlayResult(currentMode, currentLevel, accuracy, speed, missCount);
   } else {
     setupEl.classList.remove("hidden");
   }
