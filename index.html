@@ -1758,7 +1758,7 @@ async function loadServerHighScores(token){
   }
 }
 
-async function showLoggedInUi(name, token, inputModeFromAccount){
+async function showLoggedInUi(name, token, inputModeFromAccount, displaySettingsFromAccount){
   currentPlayerName = name;
   await loadServerHighScores(token);
   updatePlayerNameLabel();
@@ -1766,6 +1766,7 @@ async function showLoggedInUi(name, token, inputModeFromAccount){
   googleLoginBtnEl.classList.add("hidden");
   logoutBtnEl.classList.remove("hidden");
   applyInputMode(inputModeFromAccount || "realtime");
+  applyDisplaySettings(displaySettingsFromAccount || getGuestDisplaySettings());
 }
 
 function showLoggedOutUi(){
@@ -1776,6 +1777,7 @@ function showLoggedOutUi(){
   googleLoginBtnEl.classList.remove("hidden");
   logoutBtnEl.classList.add("hidden");
   applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
+  applyDisplaySettings(getGuestDisplaySettings());
 }
 
 async function verifySession(){
@@ -1792,7 +1794,7 @@ async function verifySession(){
     });
     const data = await res.json();
     if(data.valid){
-      await showLoggedInUi(data.name, token, data.inputMode);
+      await showLoggedInUi(data.name, token, data.inputMode, data.displaySettings);
     } else {
       clearSessionToken();
       showLoggedOutUi();
@@ -1835,14 +1837,14 @@ async function handleGoogleCredential(idToken){
       }
       if(regData.token){
         setSessionToken(regData.token);
-        await showLoggedInUi(regData.name, regData.token, regData.inputMode);
+        await showLoggedInUi(regData.name, regData.token, regData.inputMode, regData.displaySettings);
       } else {
         showCustomAlert("登録に失敗しました");
       }
     });
   } else {
     setSessionToken(data.token);
-    await showLoggedInUi(data.name, data.token, data.inputMode);
+    await showLoggedInUi(data.name, data.token, data.inputMode, data.displaySettings);
   }
 }
 
@@ -2831,33 +2833,75 @@ function applyRomajiUppercaseUI(){
   if(romajiDisplayEl) romajiDisplayEl.classList.toggle("uppercase", romajiUppercase);
 }
 
+function refreshDisplaySettingCheckboxes(){
+  if(showRomajiCheckEl) showRomajiCheckEl.checked = showRomaji;
+  if(showFuriganaCheckEl) showFuriganaCheckEl.checked = showFurigana;
+  if(romajiUppercaseCheckEl) romajiUppercaseCheckEl.checked = romajiUppercase;
+}
+
+function applyDisplaySettings(settings){
+  showRomaji = settings && settings.showRomaji !== undefined ? settings.showRomaji !== false : true;
+  showFurigana = settings && settings.showFurigana !== undefined ? settings.showFurigana !== false : true;
+  romajiUppercase = settings && settings.romajiUppercase === true;
+  refreshDisplaySettingCheckboxes();
+  updateInputModeUI();
+  renderSentenceReading();
+  applyRomajiUppercaseUI();
+}
+
+function getGuestDisplaySettings(){
+  return {
+    showRomaji: localStorage.getItem(SHOW_ROMAJI_KEY) !== "false",
+    showFurigana: localStorage.getItem(SHOW_FURIGANA_KEY) !== "false",
+    romajiUppercase: localStorage.getItem(ROMAJI_UPPERCASE_KEY) === "true"
+  };
+}
+
+function saveGuestDisplaySettings(){
+  localStorage.setItem(SHOW_ROMAJI_KEY, String(showRomaji));
+  localStorage.setItem(SHOW_FURIGANA_KEY, String(showFurigana));
+  localStorage.setItem(ROMAJI_UPPERCASE_KEY, String(romajiUppercase));
+}
+
+function handleDisplaySettingChange(){
+  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
+  if(isLoggedIn){
+    const token = getSessionToken();
+    fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "setDisplaySettings", token, showRomaji, showFurigana, romajiUppercase })
+    }).catch(() => {});
+  } else {
+    saveGuestDisplaySettings();
+  }
+}
+
 if(showRomajiCheckEl){
-  showRomajiCheckEl.checked = showRomaji;
   showRomajiCheckEl.addEventListener("change", () => {
     showRomaji = showRomajiCheckEl.checked;
-    localStorage.setItem(SHOW_ROMAJI_KEY, String(showRomaji));
     updateInputModeUI();
+    handleDisplaySettingChange();
   });
 }
 
 if(showFuriganaCheckEl){
-  showFuriganaCheckEl.checked = showFurigana;
   showFuriganaCheckEl.addEventListener("change", () => {
     showFurigana = showFuriganaCheckEl.checked;
-    localStorage.setItem(SHOW_FURIGANA_KEY, String(showFurigana));
     renderSentenceReading();
+    handleDisplaySettingChange();
   });
 }
 
 if(romajiUppercaseCheckEl){
-  romajiUppercaseCheckEl.checked = romajiUppercase;
   romajiUppercaseCheckEl.addEventListener("change", () => {
     romajiUppercase = romajiUppercaseCheckEl.checked;
-    localStorage.setItem(ROMAJI_UPPERCASE_KEY, String(romajiUppercase));
     applyRomajiUppercaseUI();
+    handleDisplaySettingChange();
   });
 }
 
+refreshDisplaySettingCheckboxes();
 applyRomajiUppercaseUI();
 
 function applyInputMode(mode){
