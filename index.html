@@ -1782,7 +1782,7 @@ function renderPlayRecords(records){
     return `
       <li class="play-record-item">
         <div class="play-record-top">
-          <span>${modeLabel}・${levelLabel}</span>
+          <span>${r.name ? `${r.name}・` : ""}${modeLabel}・${levelLabel}</span>
           <span class="play-record-time">${formatPlayRecordTime(r.playedAt)}</span>
         </div>
         <div class="play-record-stats">
@@ -1828,7 +1828,7 @@ async function recordPlayResult(mode, level, accuracy, speed, miss, score){
       body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
     }, 4);
   } else {
-    addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss, score });
+    addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss, score, name: currentPlayerName || "GUEST" });
   }
 }
 
