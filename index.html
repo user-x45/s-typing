@@ -1678,6 +1678,15 @@
           <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
         </ul>
 
+        <div class="share-footer" id="share-footer">
+          <span class="site-footer-label">このサイトをシェア</span>
+          <div class="footer-share">
+            <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
+            <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> リンクをコピー</button>
+          </div>
+        </div>
+
         <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
         <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
       </div>
@@ -1781,15 +1790,6 @@
       <button class="retry-btn" id="retry-btn">もう一度</button>
     </div>
 
-  </div>
-
-  <div class="share-footer" id="share-footer">
-    <span class="site-footer-label">このサイトをシェア</span>
-    <div class="footer-share">
-      <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
-      <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-      <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> リンクをコピー</button>
-    </div>
   </div>
 </div>
 
@@ -2037,10 +2037,10 @@ function buildFacebookShareUrl(text){
   return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(text)}`;
 }
 
-async function copyShareLink(){
+async function copyToClipboard(text){
   try{
-    await navigator.clipboard.writeText(SITE_URL);
-    showCustomAlert("リンクをコピーしました");
+    await navigator.clipboard.writeText(text);
+    showCustomAlert("コピーしました");
   }catch(err){
     showCustomAlert("コピーに失敗しました");
   }
@@ -2049,14 +2049,17 @@ async function copyShareLink(){
 shareXBtnEl.href = buildXShareUrl(SITE_SHARE_TEXT);
 shareFacebookBtnEl.href = buildFacebookShareUrl(SITE_SHARE_TEXT);
 
+let resultShareText = SITE_SHARE_TEXT;
+
 function updateResultShareLinks(text){
+  resultShareText = `${text} ${SITE_URL}`;
   resultShareXBtnEl.href = buildXShareUrl(text);
   resultShareFacebookBtnEl.href = buildFacebookShareUrl(text);
 }
 
-shareCopyBtnEl.addEventListener("click", copyShareLink);
+shareCopyBtnEl.addEventListener("click", () => copyToClipboard(SITE_URL));
 
-resultShareCopyBtnEl.addEventListener("click", copyShareLink);
+resultShareCopyBtnEl.addEventListener("click", () => copyToClipboard(resultShareText));
 
 menuToggleBtnEl.addEventListener("click", () => {
   menuAuthPanelEl.classList.toggle("hidden");
@@ -2454,7 +2457,6 @@ const statSpeedEl = document.getElementById("stat-speed");
 const statMissEl = document.getElementById("stat-miss");
 const imeSpacerEl = document.getElementById("ime-spacer");
 const headerEl = document.getElementById("site-header");
-const shareFooterEl = document.getElementById("share-footer");
 const opponentScoreLabelEl = document.getElementById("opponent-score-label");
 const searchingEl = document.getElementById("searching");
 const searchCountLabelEl = document.getElementById("search-count-label");
@@ -2900,7 +2902,6 @@ function quitToTop(){
   friendJoinEl.classList.remove("visible");
   gameEl.classList.remove("visible");
   headerEl.classList.remove("hidden");
-  shareFooterEl.classList.remove("hidden");
   document.body.classList.remove("game-active");
   resultEl.classList.remove("visible");
   setupEl.classList.remove("hidden");
@@ -3054,7 +3055,6 @@ async function beginOnlineMatch(){
   onlineTimeLeft = 100;
   gameEl.classList.add("visible");
   headerEl.classList.add("hidden");
-  shareFooterEl.classList.add("hidden");
   document.body.classList.add("game-active");
   opponentScoreLabelEl.classList.remove("hidden");
   endGameBtn.classList.add("hidden");
@@ -3139,7 +3139,6 @@ function finishOnlineGame(msg){
   isOnlineMode = false;
   gameEl.classList.remove("visible");
   headerEl.classList.remove("hidden");
-  shareFooterEl.classList.remove("hidden");
   document.body.classList.remove("game-active");
   opponentScoreLabelEl.classList.add("hidden");
   endGameBtn.classList.remove("hidden");
@@ -3528,7 +3527,6 @@ async function startGame(){
   await runSoloCountdown();
   gameEl.classList.add("visible");
   headerEl.classList.add("hidden");
-  shareFooterEl.classList.add("hidden");
   document.body.classList.add("game-active");
   endGameBtn.classList.remove("hidden");
   fitSpacerToViewport();
@@ -3592,7 +3590,6 @@ function endGame(isNormalEnd){
   clearInterval(timerId);
   gameEl.classList.remove("visible");
   headerEl.classList.remove("hidden");
-  shareFooterEl.classList.remove("hidden");
   document.body.classList.remove("game-active");
   if(isNormalEnd){
     resultEl.classList.add("visible");
