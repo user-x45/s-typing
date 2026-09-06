@@ -1661,7 +1661,7 @@
           <div class="footer-share">
             <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
             <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> リンクをコピー</button>
+            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
           </div>
         </div>
 
@@ -2035,7 +2035,7 @@ function updateResultShareLinks(text){
   resultShareFacebookBtnEl.href = buildFacebookShareUrl(text);
 }
 
-shareCopyBtnEl.addEventListener("click", () => copyToClipboard(SITE_URL));
+shareCopyBtnEl.addEventListener("click", () => copyToClipboard(`${SITE_SHARE_TEXT} ${SITE_URL}`));
 
 resultShareCopyBtnEl.addEventListener("click", () => copyToClipboard(resultShareText));
 
