@@ -2030,12 +2030,12 @@ shareFacebookBtnEl.href = buildFacebookShareUrl(SITE_SHARE_TEXT);
 let resultShareText = SITE_SHARE_TEXT;
 
 function updateResultShareLinks(text){
-  resultShareText = `${text} ${SITE_URL}`;
+  resultShareText = `${text}\n${SITE_URL}`;
   resultShareXBtnEl.href = buildXShareUrl(text);
   resultShareFacebookBtnEl.href = buildFacebookShareUrl(text);
 }
 
-shareCopyBtnEl.addEventListener("click", () => copyToClipboard(`${SITE_SHARE_TEXT} ${SITE_URL}`));
+shareCopyBtnEl.addEventListener("click", () => copyToClipboard(`${SITE_SHARE_TEXT}\n${SITE_URL}`));
 
 resultShareCopyBtnEl.addEventListener("click", () => copyToClipboard(resultShareText));
 
