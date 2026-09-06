@@ -1060,18 +1060,6 @@
     border-color:var(--gold);
   }
 
-  .name-input-status{
-    font-size:12px;
-    min-height:16px;
-    margin:-10px 0 12px;
-    color:var(--ink-soft);
-  }
-
-  .name-input-status.error{
-    color:var(--hanko-deep);
-    font-weight:600;
-  }
-
   .name-input-btn{
     padding:10px 32px;
     background:var(--hanko);
@@ -1708,7 +1696,6 @@
   <div class="name-input-box">
     <div class="name-input-message" id="name-input-message">お名前を入力してください（6文字まで）</div>
     <input type="text" id="name-input-field" maxlength="6" autocomplete="off" placeholder="GUEST">
-    <div class="name-input-status" id="name-input-status"></div>
     <button class="name-input-btn" id="name-input-btn">登録</button>
   </div>
 </div>
@@ -1764,7 +1751,6 @@ customAlertBtnEl.addEventListener("click", () => {
 const nameInputOverlayEl = document.getElementById("name-input-overlay");
 const nameInputFieldEl = document.getElementById("name-input-field");
 const nameInputBtnEl = document.getElementById("name-input-btn");
-const nameInputStatusEl = document.getElementById("name-input-status");
 let nameInputCallback = null;
 
 function normalizePlayerName(raw){
@@ -1772,43 +1758,15 @@ function normalizePlayerName(raw){
   return trimmed.length === 0 ? "GUEST" : trimmed;
 }
 
-async function checkNameOnServer(name){
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "checkName", name })
-    });
-    const data = await res.json();
-    return data.ok !== false;
-  }catch(e){
-    return true;
-  }
-}
-
 function showNameInputModal(callback, prefill){
   nameInputCallback = callback;
   nameInputFieldEl.value = prefill || "";
-  nameInputStatusEl.textContent = "";
-  nameInputStatusEl.classList.remove("error");
-  nameInputBtnEl.disabled = false;
   nameInputOverlayEl.classList.add("visible");
   nameInputFieldEl.focus();
 }
 
-async function confirmNameInput(){
+function confirmNameInput(){
   const name = normalizePlayerName(nameInputFieldEl.value);
-  nameInputBtnEl.disabled = true;
-  nameInputStatusEl.classList.remove("error");
-  nameInputStatusEl.textContent = "確認中...";
-  const ok = await checkNameOnServer(name);
-  nameInputBtnEl.disabled = false;
-  if(!ok){
-    nameInputStatusEl.textContent = "この名前は使用できません。別の名前を入力してください";
-    nameInputStatusEl.classList.add("error");
-    return;
-  }
-  nameInputStatusEl.textContent = "";
   nameInputOverlayEl.classList.remove("visible");
   if(nameInputCallback){
     const callback = nameInputCallback;
