@@ -237,6 +237,56 @@
   }
 
 
+  .mobile-warning-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(31,28,25,0.55);
+    align-items:center;
+    justify-content:center;
+    z-index:3000;
+    padding:20px;
+  }
+
+  .mobile-warning-overlay.visible{
+    display:flex;
+  }
+
+  .mobile-warning-box{
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 24px;
+    max-width:320px;
+    width:100%;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .mobile-warning-message{
+    font-size:15px;
+    color:var(--ink);
+    margin:0 0 22px;
+    line-height:1.6;
+  }
+
+  .mobile-warning-btn{
+    padding:10px 32px;
+    background:var(--hanko);
+    color:var(--washi);
+    border:none;
+    border-radius:16px;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    transition:background 0.2s ease;
+  }
+
+  .mobile-warning-btn:hover{
+    background:var(--hanko-deep);
+  }
+
   .custom-alert-overlay{
     display:none;
     position:fixed;
@@ -1438,6 +1488,12 @@
 </style>
 </head>
 <body>
+<div class="mobile-warning-overlay" id="mobile-warning-overlay">
+  <div class="mobile-warning-box">
+    <p class="mobile-warning-message">このサイトはスマートフォンに最適化されていません。<br>パソコンでの閲覧を推奨します。</p>
+    <button class="mobile-warning-btn" id="mobile-warning-close">閉じる</button>
+  </div>
+</div>
 <div class="app-loading-overlay" id="app-loading-overlay">
   <div class="app-loading-spinner"></div>
   <div class="app-loading-text">読み込み中...</div>
@@ -3537,6 +3593,17 @@ document.addEventListener("visibilitychange", () => {
     });
   }
 });
+
+(function(){
+  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+  if(!isMobile) return;
+  const overlay = document.getElementById("mobile-warning-overlay");
+  const closeBtn = document.getElementById("mobile-warning-close");
+  overlay.classList.add("visible");
+  closeBtn.addEventListener("click", () => {
+    overlay.classList.remove("visible");
+  });
+})();
 </script>
 </body>
 </html>
