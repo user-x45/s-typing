@@ -2038,10 +2038,10 @@ const resultShareFacebookBtnEl = document.getElementById("result-share-facebook-
 const resultShareCopyBtnEl = document.getElementById("result-share-copy-btn");
 
 const SITE_URL = "https://s-typing.f5.si/";
-const SITE_SHARE_TEXT = "シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム @simple_typingより";
+const SITE_SHARE_TEXT = "シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム";
 
 function buildXShareUrl(text){
-  return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}`;
+  return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}&via=simple_typing`;
 }
 
 function buildFacebookShareUrl(text){
