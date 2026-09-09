@@ -1641,6 +1641,18 @@
     color:#fff;
   }
 
+  .kb-key.next{
+    background:rgba(47,158,148,0.18);
+    border-color:var(--pop-teal);
+    color:var(--pop-teal);
+  }
+
+  .kb-key.active.next{
+    background:var(--hanko);
+    border-color:var(--hanko-deep);
+    color:#fff;
+  }
+
   @media (max-width:480px){
     .kb-key{
       min-width:22px;
@@ -3306,6 +3318,7 @@ function applyKeyboardUI(){
   if(!keyboardGuideEl) return;
   const visible = inputMode === "realtime" && showKeyboard;
   keyboardGuideEl.classList.toggle("visible", visible);
+  showNextKey();
 }
 
 function highlightKeyboardKey(key){
@@ -3315,6 +3328,16 @@ function highlightKeyboardKey(key){
   const upper = key.toUpperCase();
   keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => {
     if(el.textContent.trim() === upper) el.classList.add("active");
+  });
+}
+
+function showNextKey(){
+  if(!keyboardGuideEl || !keyboardGuideEl.classList.contains("visible")) return;
+  keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => el.classList.remove("next"));
+  if(!typingText || !typingText.remainingRoman) return;
+  const next = typingText.remainingRoman[0].toUpperCase();
+  keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => {
+    if(el.textContent.trim() === next) el.classList.add("next");
   });
 }
 
@@ -3463,18 +3486,21 @@ function setupRealtimeWord(){
   typingText = buildTypingText(reading);
   renderRomajiDisplay();
   fitRomajiDisplayFontSize();
+  showNextKey();
 }
 
 function renderRomajiDisplay(){
   if(!romajiDisplayEl) return;
   if(!typingText){
     romajiDisplayEl.innerHTML = "";
+    showNextKey();
     return;
   }
   const doneHtml = `<span class="rchar done">${typingText.completedRoman}</span>`;
   const restHtml = `<span class="rchar current">${typingText.remainingRoman}</span>`;
   romajiDisplayEl.innerHTML = doneHtml + restHtml;
   scrollRomajiDisplayToTypedPosition();
+  showNextKey();
 }
 
 function fitRomajiDisplayFontSize(){
