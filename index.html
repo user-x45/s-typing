@@ -7,6 +7,7 @@
 |____/|_|_| |_| |_| .__/|_|\___| |_| \__, | .__/|_|_| |_|\__, |
                    |_|               |___/|_|            |___/ 
 -->
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -1584,11 +1585,12 @@
   .official-x-link:hover{
     opacity:0.85;
   }
-
   .keyboard-guide{
     display:none;
+    width:100%;
     margin-top:clamp(10px,2vh,16px);
     user-select:none;
+    overflow-x:auto;
   }
 
   .keyboard-guide.visible{
@@ -1602,34 +1604,16 @@
     margin:0 auto 4px;
   }
 
-  .kb-row:nth-child(1){
-    transform:translateX(0);
-  }
-
-  .kb-row:nth-child(2){
-    transform:translateX(10px);
-  }
-
-  .kb-row:nth-child(3){
-    transform:translateX(20px);
-  }
-
-  .kb-row:nth-child(4){
-    transform:translateX(30px);
-  }
-
-  .kb-row:nth-child(5){
-    transform:translateX(18px);
-  }
-
   .kb-key{
     display:inline-flex;
+    flex:0 0 28px;
     align-items:center;
     justify-content:center;
     width:28px;
     min-width:28px;
     height:28px;
     padding:0 4px;
+    box-sizing:border-box;
     background:var(--panel-bg);
     border:1.5px solid var(--line);
     border-bottom-width:3px;
@@ -1643,13 +1627,29 @@
   }
 
   .kb-key.wide{
-    min-width:44px;
+    flex-basis:76px;
+    width:76px;
+    min-width:76px;
     font-size:10px;
     letter-spacing:0.01em;
   }
 
+  .kb-key.wide-2{
+    flex-basis:60px;
+    width:60px;
+    min-width:60px;
+  }
+
+  .kb-key.wide-3{
+    flex-basis:92px;
+    width:92px;
+    min-width:92px;
+  }
+
   .kb-key.space{
-    min-width:120px;
+    flex-basis:156px;
+    width:156px;
+    min-width:156px;
   }
 
   .kb-key.active{
@@ -1665,27 +1665,16 @@
   }
 
   @media (max-width:480px){
+    .keyboard-guide{
+      overflow-x:auto;
+    }
+
     .kb-row{
       gap:3px;
     }
 
-    .kb-row:nth-child(2){
-      transform:translateX(7px);
-    }
-
-    .kb-row:nth-child(3){
-      transform:translateX(14px);
-    }
-
-    .kb-row:nth-child(4){
-      transform:translateX(21px);
-    }
-
-    .kb-row:nth-child(5){
-      transform:translateX(12px);
-    }
-
     .kb-key{
+      flex-basis:22px;
       width:22px;
       min-width:22px;
       height:24px;
@@ -1693,14 +1682,28 @@
     }
 
     .kb-key.wide{
-      width:34px;
-      min-width:34px;
+      flex-basis:60px;
+      width:60px;
+      min-width:60px;
       font-size:8px;
     }
 
+    .kb-key.wide-2{
+      flex-basis:48px;
+      width:48px;
+      min-width:48px;
+    }
+
+    .kb-key.wide-3{
+      flex-basis:72px;
+      width:72px;
+      min-width:72px;
+    }
+
     .kb-key.space{
-      width:90px;
-      min-width:90px;
+      flex-basis:120px;
+      width:120px;
+      min-width:120px;
     }
   }
 
@@ -1890,19 +1893,19 @@
       <div class="hint" id="hint-label">Enterで確定</div>
       <div class="keyboard-guide" id="keyboard-guide">
         <div class="kb-row">
-          <div class="kb-key">1</div><div class="kb-key">2</div><div class="kb-key">3</div><div class="kb-key">4</div><div class="kb-key">5</div><div class="kb-key">6</div><div class="kb-key">7</div><div class="kb-key">8</div><div class="kb-key">9</div><div class="kb-key">0</div><div class="kb-key">-</div>
+          <div class="kb-key"></div><div class="kb-key">1</div><div class="kb-key">2</div><div class="kb-key">3</div><div class="kb-key">4</div><div class="kb-key">5</div><div class="kb-key">6</div><div class="kb-key">7</div><div class="kb-key">8</div><div class="kb-key">9</div><div class="kb-key">0</div><div class="kb-key">-</div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div>
         </div>
         <div class="kb-row">
-          <div class="kb-key">Q</div><div class="kb-key">W</div><div class="kb-key">E</div><div class="kb-key">R</div><div class="kb-key">T</div><div class="kb-key">Y</div><div class="kb-key">U</div><div class="kb-key">I</div><div class="kb-key">O</div><div class="kb-key">P</div><div class="kb-key">@</div>
+          <div class="kb-key"></div><div class="kb-key">Q</div><div class="kb-key">W</div><div class="kb-key">E</div><div class="kb-key">R</div><div class="kb-key">T</div><div class="kb-key">Y</div><div class="kb-key">U</div><div class="kb-key">I</div><div class="kb-key">O</div><div class="kb-key">P</div><div class="kb-key">@</div><div class="kb-key"></div><div class="kb-key wide-2"></div>
         </div>
         <div class="kb-row">
-          <div class="kb-key">A</div><div class="kb-key">S</div><div class="kb-key">D</div><div class="kb-key">F</div><div class="kb-key">G</div><div class="kb-key">H</div><div class="kb-key">J</div><div class="kb-key">K</div><div class="kb-key">L</div><div class="kb-key">;</div><div class="kb-key">:</div>
+          <div class="kb-key wide-2"></div><div class="kb-key">A</div><div class="kb-key">S</div><div class="kb-key">D</div><div class="kb-key">F</div><div class="kb-key">G</div><div class="kb-key">H</div><div class="kb-key">J</div><div class="kb-key">K</div><div class="kb-key">L</div><div class="kb-key">;</div><div class="kb-key">:</div><div class="kb-key"></div><div class="kb-key wide-2"></div>
         </div>
         <div class="kb-row">
-          <div class="kb-key wide" data-key="shift">shift</div><div class="kb-key">Z</div><div class="kb-key">X</div><div class="kb-key">C</div><div class="kb-key">V</div><div class="kb-key">B</div><div class="kb-key">N</div><div class="kb-key">M</div><div class="kb-key">,</div><div class="kb-key">.</div><div class="kb-key">/</div><div class="kb-key wide" data-key="shift">shift</div>
+          <div class="kb-key wide-3" data-key="shift">shift</div><div class="kb-key">Z</div><div class="kb-key">X</div><div class="kb-key">C</div><div class="kb-key">V</div><div class="kb-key">B</div><div class="kb-key">N</div><div class="kb-key">M</div><div class="kb-key">,</div><div class="kb-key">.</div><div class="kb-key">/</div><div class="kb-key"></div><div class="kb-key wide-2" data-key="shift">shift</div>
         </div>
         <div class="kb-row">
-          <div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key space">space</div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div>
+          <div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key space">space</div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div>
         </div>
       </div>
     </div>
