@@ -293,7 +293,6 @@
     to{ transform:rotate(360deg); }
   }
 
-
   .mobile-warning-overlay{
     display:none;
     position:fixed;
@@ -1598,15 +1597,36 @@
 
   .kb-row{
     display:flex;
-    justify-content:center;
+    width:max-content;
     gap:4px;
-    margin-bottom:4px;
+    margin:0 auto 4px;
+  }
+
+  .kb-row:nth-child(1){
+    transform:translateX(0);
+  }
+
+  .kb-row:nth-child(2){
+    transform:translateX(10px);
+  }
+
+  .kb-row:nth-child(3){
+    transform:translateX(20px);
+  }
+
+  .kb-row:nth-child(4){
+    transform:translateX(30px);
+  }
+
+  .kb-row:nth-child(5){
+    transform:translateX(18px);
   }
 
   .kb-key{
     display:inline-flex;
     align-items:center;
     justify-content:center;
+    width:28px;
     min-width:28px;
     height:28px;
     padding:0 4px;
@@ -1645,16 +1665,41 @@
   }
 
   @media (max-width:480px){
+    .kb-row{
+      gap:3px;
+    }
+
+    .kb-row:nth-child(2){
+      transform:translateX(7px);
+    }
+
+    .kb-row:nth-child(3){
+      transform:translateX(14px);
+    }
+
+    .kb-row:nth-child(4){
+      transform:translateX(21px);
+    }
+
+    .kb-row:nth-child(5){
+      transform:translateX(12px);
+    }
+
     .kb-key{
+      width:22px;
       min-width:22px;
       height:24px;
       font-size:9px;
     }
+
     .kb-key.wide{
+      width:34px;
       min-width:34px;
       font-size:8px;
     }
+
     .kb-key.space{
+      width:90px;
       min-width:90px;
     }
   }
@@ -2417,7 +2462,6 @@ window.addEventListener("load", async () => {
   Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
-
 function katakanaToHiragana(str){
   return (str || '').replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
 }
@@ -2522,7 +2566,6 @@ function getCurrentWordReading(){
   }
   return currentWord;
 }
-
 
 const levelLabels = { beginner:"初級", intermediate:"中級", advanced:"上級" };
 const modeLabels = { hiragana:"ひらがな", katakana:"カタカナ", sentence:"文章" };
@@ -2736,7 +2779,6 @@ async function fetchWithRetry(url, options, attempts){
   }
   return null;
 }
-
 
 async function submitScoreToRanking(score, mode, level, name){
   const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}`, {
@@ -3771,7 +3813,6 @@ function shakeInput(){
   void inputEl.offsetWidth;
   inputEl.classList.add("shake");
 }
-
 
 inputEl.addEventListener("compositionstart", () => { isComposing = true; });
 inputEl.addEventListener("compositionend", () => {
