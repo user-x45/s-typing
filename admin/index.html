@@ -413,6 +413,20 @@
   input[type="month"]:focus{
     border-color:var(--gold);
   }
+
+  .event-mode-checks{
+    display:flex;
+    gap:16px;
+    margin-bottom:14px;
+  }
+
+  .event-mode-checks label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+    color:var(--ink);
+  }
 </style>
 </head>
 <body>
@@ -490,6 +504,12 @@
       <div class="event-status" id="event-status-text">読み込み中...</div>
       <label class="field-label" for="event-month-input">対象月</label>
       <input type="month" id="event-month-input">
+      <label class="field-label">対象タイピングモード</label>
+      <div class="event-mode-checks" id="event-mode-checks">
+        <label><input type="checkbox" value="hiragana" checked> ひらがな</label>
+        <label><input type="checkbox" value="katakana" checked> カタカナ</label>
+        <label><input type="checkbox" value="sentence" checked> 文章</label>
+      </div>
       <button class="login-btn" id="event-enable-btn">この月でイベントモードを有効化</button>
       <button class="logout-btn" id="event-disable-btn">無効化</button>
     </div>
@@ -546,6 +566,7 @@ const eventBackBtnEl = document.getElementById("event-back-btn");
 const eventRefreshBtnEl = document.getElementById("event-refresh-btn");
 const eventStatusTextEl = document.getElementById("event-status-text");
 const eventMonthInputEl = document.getElementById("event-month-input");
+const eventModeChecksEl = document.getElementById("event-mode-checks");
 const eventEnableBtnEl = document.getElementById("event-enable-btn");
 const eventDisableBtnEl = document.getElementById("event-disable-btn");
 const eventArchiveMonthInputEl = document.getElementById("event-archive-month-input");
@@ -932,14 +953,27 @@ function renderArchiveBoards(data, month){
   }
 }
 
+function getSelectedEventModes(){
+  return Array.from(eventModeChecksEl.querySelectorAll("input[type=checkbox]:checked")).map(el => el.value);
+}
+
+function setSelectedEventModes(modes){
+  const list = Array.isArray(modes) && modes.length > 0 ? modes : MODES;
+  eventModeChecksEl.querySelectorAll("input[type=checkbox]").forEach(el => {
+    el.checked = list.includes(el.value);
+  });
+}
+
 async function loadEventDashboard(){
   showOnly(loadingPanelEl);
   try{
     const data = await callAdmin("getEventMode", {});
+    const modeLabels = (data.modes && data.modes.length > 0 ? data.modes : MODES).map(m => MODE_LABELS[m]).join("・");
     eventStatusTextEl.textContent = data.enabled
-      ? `イベントモード: 有効中（対象月: ${data.month || "未設定"}）`
+      ? `イベントモード: 有効中（対象月: ${data.month || "未設定"} / 対象モード: ${modeLabels}）`
       : "イベントモード: 無効";
     eventMonthInputEl.value = data.month || "";
+    setSelectedEventModes(data.modes);
     eventArchiveGridEl.innerHTML = "";
     showOnly(eventDashboardEl);
   }catch(e){
@@ -953,10 +987,15 @@ eventEnableBtnEl.addEventListener("click", async () => {
     alert("対象月を選択してください");
     return;
   }
+  const modes = getSelectedEventModes();
+  if(modes.length === 0){
+    alert("対象タイピングモードを1つ以上選択してください");
+    return;
+  }
   if(!confirm(`${month} を対象にイベントモードを有効化しますか？`)) return;
   showOnly(loadingPanelEl);
   try{
-    await callAdmin("setEventMode", { enabled: true, month });
+    await callAdmin("setEventMode", { enabled: true, month, modes });
     await loadEventDashboard();
   }catch(e){
     handleSessionExpired();
@@ -967,7 +1006,7 @@ eventDisableBtnEl.addEventListener("click", async () => {
   if(!confirm("イベントモードを無効化しますか？")) return;
   showOnly(loadingPanelEl);
   try{
-    await callAdmin("setEventMode", { enabled: false, month: eventMonthInputEl.value });
+    await callAdmin("setEventMode", { enabled: false, month: eventMonthInputEl.value, modes: getSelectedEventModes() });
     await loadEventDashboard();
   }catch(e){
     handleSessionExpired();
