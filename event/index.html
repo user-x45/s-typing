@@ -2540,6 +2540,7 @@ const modeLabels = { hiragana:"ひらがな", katakana:"カタカナ", sentence:
 
 let currentMode = "hiragana";
 let currentLevel = "beginner";
+let enabledCombos = [];
 let inputMode = "realtime";
 let typingText = null;
 let currentWord = "";
@@ -2691,6 +2692,71 @@ function renderRanking(scores){
 }
 
 let eventActive = false;
+let eventStatusLoaded = false;
+
+function isComboEnabled(mode, level){
+  if(!eventStatusLoaded) return true;
+  return enabledCombos.includes(`${mode}:${level}`);
+}
+
+function applyComboVisibility(){
+  document.querySelectorAll(".mode-btn").forEach(btn => {
+    const mode = btn.dataset.mode;
+    const hasAnyLevel = ["beginner", "intermediate", "advanced"].some(level => isComboEnabled(mode, level));
+    btn.classList.toggle("hidden", !hasAnyLevel);
+  });
+
+  document.querySelectorAll(".levels").forEach(row => {
+    const mode = row.dataset.row;
+    row.querySelectorAll(".level-btn").forEach(btn => {
+      const level = btn.dataset.level;
+      btn.classList.toggle("hidden", !isComboEnabled(mode, level));
+    });
+  });
+}
+
+function findFirstEnabledCombo(){
+  const modes = ["hiragana", "katakana", "sentence"];
+  const levels = ["beginner", "intermediate", "advanced"];
+  for(const mode of modes){
+    for(const level of levels){
+      if(isComboEnabled(mode, level)) return { mode, level };
+    }
+  }
+  return null;
+}
+
+async function loadEventStatus(){
+  try{
+    const res = await fetch(`${RANKING_API_URL}/event-status`);
+    if(!res.ok) return;
+    const data = await res.json();
+    enabledCombos = Array.isArray(data.combos) ? data.combos : [];
+  }catch(e){
+    enabledCombos = [];
+  }
+  eventStatusLoaded = true;
+  applyComboVisibility();
+  if(!isComboEnabled(currentMode, currentLevel)){
+    const fallback = findFirstEnabledCombo();
+    if(fallback){
+      currentMode = fallback.mode;
+      currentLevel = fallback.level;
+      document.querySelectorAll(".mode-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.mode === currentMode);
+      });
+      document.querySelectorAll(".levels").forEach(row => {
+        row.classList.toggle("hidden", row.dataset.row !== currentMode);
+        row.querySelectorAll(".level-btn").forEach(lb => {
+          lb.classList.toggle("active", lb.dataset.level === currentLevel);
+        });
+      });
+      updateUrlHash();
+      updateSetupHighScore();
+    }
+  }
+  loadRanking();
+}
 
 function applyEventGate(){
   const overlayEl = document.getElementById("no-event-overlay");
@@ -2917,12 +2983,14 @@ function applyStateFromHash(){
 document.getElementById("footer-year").textContent = new Date().getFullYear();
 
 applyStateFromHash();
+loadEventStatus();
 preloadAllWordLists();
 window.addEventListener("hashchange", () => {
   if(isInGameFlow()){
     quitToTop();
   }
   applyStateFromHash();
+  applyComboVisibility();
 });
 
 document.getElementById("start-btn").addEventListener("click", startGame);
