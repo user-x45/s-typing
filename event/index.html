@@ -1,0 +1,3890 @@
+<!DOCTYPE html>
+<!--
+ ____  _                 _      _____                          
+/ ___|(_)_ __ ___  _ __ | | ___|_   _|   _ _ __ (_)_ __   __ _ 
+\___ \| | '_ ` _ \| '_ \| |/ _ \ | || | | | '_ \| | '_ \ / _` |
+ ___) | | | | | | | |_) | |  __/ | || |_| | |_) | | | | | (_| |
+|____/|_|_| |_| |_| .__/|_|\___| |_| \__, | .__/|_|_| |_|\__, |
+                   |_|               |___/|_|            |___/ 
+-->
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="シンプルタイピングのイベント限定ランキングページ。期間限定イベント開催中に記録を投稿して、イベント専用ランキングで競えます。">
+<link rel="canonical" href="https://s-typing.f5.si/event/">
+<meta content="https://s-typing.f5.si/event/" property="og:url">
+<meta content="シンプルタイピング｜イベント" property="og:title">
+<meta content="シンプルタイピングのイベント限定ランキングページ。期間限定イベント開催中に記録を投稿して、イベント専用ランキングで競えます。" property="og:description">
+<meta content="website" property="og:type">
+<meta content="シンプルタイピング" property="og:site_name">
+<title>シンプルタイピング｜イベント限定ランキング</title>
+<link href="favicon/32.png" rel="icon" sizes="32x32" type="image/png">
+<link href="favicon/96.png" rel="icon" sizes="96x96" type="image/png">
+<link href="favicon/144.png" rel="icon" sizes="144x144" type="image/png">
+<link href="favicon/180.png" rel="apple-touch-icon" type="image/png">
+<link href="favicon/152.png" rel="apple-touch-icon-precomposed" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "WebSite",
+  "name": "シンプルタイピング｜イベント",
+  "url": "https://s-typing.f5.si/event/"
+}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSBNPPLE0E"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LSBNPPLE0E');
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap');
+
+  :root{
+    --washi:#faf8f4;
+    --washi-deep:#f0ece2;
+    --ink:#2b2a2e;
+    --ink-soft:#7a7680;
+    --hanko:#e0563f;
+    --hanko-deep:#c4432e;
+    --gold:#dba52a;
+    --pop-teal:#2f9e94;
+    --pop-purple:#6c5a9e;
+    --line:#e5e0d5;
+    --panel-bg:#ffffff;
+    --panel-bg-soft:#f3efe6;
+    --input-bg:#ffffff;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --washi:#1b1a1d;
+      --washi-deep:#232226;
+      --ink:#f0eee9;
+      --ink-soft:#a29d97;
+      --hanko:#e8724f;
+      --hanko-deep:#f28762;
+      --gold:#e0b545;
+      --pop-teal:#4bb3a8;
+      --pop-purple:#8a78bf;
+      --line:#333136;
+      --panel-bg:#232226;
+      --panel-bg-soft:#2b2a2e;
+      --input-bg:#232226;
+    }
+  }
+
+  *{box-sizing:border-box;}
+
+  button, input, select, textarea{
+    font-family: inherit;
+  }
+
+  html{
+    height:100%;
+    overflow-x:hidden;
+  }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    min-height:100dvh;
+    background:var(--washi);
+    color:var(--ink);
+    font-family: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", Meiryo, "メイリオ", sans-serif;
+    line-height:1.5;
+    display:flex;
+    justify-content:center;
+    padding:40px 16px;
+  }
+
+  body.game-active{
+    padding:clamp(8px,2vh,16px) 16px;
+  }
+
+  .stage{
+    width:100%;
+    max-width:640px;
+  }
+
+  .menu-bar{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:nowrap;
+    margin-bottom:20px;
+    padding:12px 20px;
+    background:var(--panel-bg);
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    box-shadow:0 1px 6px rgba(0,0,0,0.04);
+    white-space:nowrap;
+  }
+
+  .menu-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-shrink:0;
+    min-width:0;
+    text-decoration:none;
+    color:inherit;
+  }
+
+  .menu-logo{
+    height:28px;
+    width:auto;
+    display:block;
+    flex-shrink:0;
+  }
+
+  .menu-title{
+    margin:0;
+    font-weight:800;
+    font-size:20px;
+    line-height:normal;
+    letter-spacing:0.06em;
+    color:var(--ink);
+    flex-shrink:0;
+  }
+
+  .menu-auth{
+    position:absolute;
+    top:100%;
+    right:0;
+    margin-top:8px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+    padding:14px 16px;
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    white-space:nowrap;
+    z-index:10;
+  }
+
+  .menu-auth-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .menu-toggle-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 14px;
+    background:transparent;
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all 0.2s ease;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+
+  .menu-toggle-btn:hover{
+    border-color:var(--gold);
+    color:var(--ink);
+  }
+
+  .share-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 14px;
+    border:none;
+    border-radius:14px;
+    font-size:13px;
+    font-weight:600;
+    color:#ffffff;
+    cursor:pointer;
+    transition:opacity 0.2s ease;
+    text-decoration:none;
+  }
+
+  .share-btn:hover{
+    opacity:0.85;
+  }
+
+  .share-btn.x{ background:#000000; border:1px solid #ffffff; }
+  .share-btn.facebook{ background:#1877f2; }
+  .share-btn.copy{ background:var(--pop-teal); }
+
+  .result-share{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin:14px 0;
+    flex-wrap:wrap;
+  }
+
+  .share-footer{
+    width:100%;
+    max-width:640px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    margin-top:24px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+  }
+
+  .site-footer-label{
+    font-size:12px;
+    color:var(--ink-soft);
+    letter-spacing:0.05em;
+  }
+
+  .footer-share{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .app-loading-overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    background:var(--washi);
+    z-index:2000;
+    transition:opacity 0.3s ease;
+  }
+
+  .app-loading-overlay.hidden{
+    opacity:0;
+    pointer-events:none;
+  }
+
+  .app-loading-spinner{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:4px solid var(--line);
+    border-top-color:var(--hanko);
+    animation:app-loading-spin 0.8s linear infinite;
+  }
+
+  .app-loading-text{
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+  }
+
+  @keyframes app-loading-spin{
+    to{ transform:rotate(360deg); }
+  }
+
+
+  .mobile-warning-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(31,28,25,0.55);
+    align-items:center;
+    justify-content:center;
+    z-index:3000;
+    padding:20px;
+  }
+
+  .mobile-warning-overlay.visible{
+    display:flex;
+  }
+
+  .mobile-warning-box{
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 24px;
+    max-width:320px;
+    width:100%;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .mobile-warning-message{
+    font-size:15px;
+    color:var(--ink);
+    margin:0 0 22px;
+    line-height:1.6;
+  }
+
+  .mobile-warning-btn{
+    padding:10px 32px;
+    background:var(--hanko);
+    color:var(--washi);
+    border:none;
+    border-radius:16px;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    transition:background 0.2s ease;
+  }
+
+  .mobile-warning-btn:hover{
+    background:var(--hanko-deep);
+  }
+
+  .custom-alert-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(31,28,25,0.55);
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    padding:20px;
+  }
+
+  .custom-alert-overlay.visible{
+    display:flex;
+  }
+
+  .custom-alert-box{
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 24px;
+    max-width:320px;
+    width:100%;
+    text-align:center;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .custom-alert-message{
+    font-size:15px;
+    color:var(--ink);
+    margin-bottom:22px;
+  }
+
+  .custom-alert-btn{
+    padding:10px 32px;
+    background:var(--hanko);
+    color:var(--washi);
+    border:none;
+    border-radius:16px;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    transition:background 0.2s ease;
+  }
+
+  .custom-alert-btn:hover{
+    background:var(--hanko-deep);
+  }
+
+  .player-name-label{
+    font-size:13px;
+    color:var(--ink-soft);
+    flex-shrink:0;
+  }
+
+  .edit-name-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:24px;
+    height:24px;
+    padding:0;
+    background:transparent;
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    font-size:11px;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all 0.2s ease;
+    flex-shrink:0;
+  }
+
+  .edit-name-btn:hover{
+    border-color:var(--gold);
+    color:var(--ink);
+  }
+
+  .switch-player-btn{
+    padding:6px 14px;
+    background:transparent;
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all 0.2s ease;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+
+  .switch-player-btn:hover{
+    border-color:var(--gold);
+    color:var(--ink);
+  }
+
+  .mute-check-label{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin-top:16px;
+    font-size:13px;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+
+  .mute-check{
+    width:16px;
+    height:16px;
+    cursor:pointer;
+    accent-color:var(--hanko);
+  }
+
+  .end-game-btn{
+    padding:6px 12px;
+    background:var(--hanko);
+    color:var(--washi);
+    border:none;
+    border-radius:16px;
+    cursor:pointer;
+    font-size:12px;
+    margin-left:10px;
+  }
+
+  .panel{
+    background:var(--panel-bg);
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    padding:28px;
+    position:relative;
+    box-shadow:0 2px 12px rgba(0,0,0,0.05);
+  }
+
+  .mode-tabs{
+    display:flex;
+    gap:4px;
+    justify-content:center;
+    margin-bottom:22px;
+    background:var(--panel-bg-soft);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:4px;
+    overflow:hidden;
+  }
+
+  .section-heading{
+    font-size:12px;
+    font-weight:700;
+    color:var(--ink-soft);
+    letter-spacing:0.08em;
+    text-align:center;
+    margin:0 0 8px;
+  }
+
+  .mode-btn, .input-mode-btn{
+    flex:1;
+    padding:11px 8px;
+    background:transparent;
+    border:none;
+    border-radius:14px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all 0.2s ease;
+  }
+
+  .mode-btn.active, .input-mode-btn.active{
+    background:var(--hanko);
+    color:#fff;
+  }
+
+  .hidden{
+    display:none !important;
+  }
+
+  .levels{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-bottom:22px;
+  }
+
+  .level-btn{
+    flex:1;
+    padding:14px 8px;
+    background:transparent;
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    font-size:15px;
+    font-weight:600;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all 0.2s ease;
+  }
+
+  .level-btn .sub{
+    display:block;
+    font-size:11px;
+    font-weight:400;
+    color:var(--ink-soft);
+    opacity:0.6;
+    margin-top:4px;
+  }
+
+  .level-btn:hover{
+    border-color:var(--gold);
+  }
+
+  .level-btn.active{
+    background:var(--pop-teal);
+    border-color:var(--pop-teal);
+    color:#0b3a34;
+  }
+
+  .level-btn.active .sub{
+    color:#0b3a34;
+    opacity:0.75;
+  }
+
+  .start-row{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:8px;
+  }
+
+  .start-btn{
+    padding:13px 26px;
+    background:var(--hanko);
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    cursor:pointer;
+    box-shadow:0 2px 0 var(--hanko-deep);
+    transition:transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+  }
+
+  .start-btn:disabled{
+    background:var(--ink-soft);
+    box-shadow:none;
+    cursor:not-allowed;
+    opacity:0.5;
+  }
+
+  .start-btn:hover{
+    background:var(--hanko-deep);
+  }
+
+  .start-btn:active{
+    transform:translateY(2px);
+    box-shadow:0 0 0 var(--hanko-deep);
+  }
+
+  .start-btn.online-btn{
+    background:var(--pop-purple);
+    box-shadow:0 2px 0 #564a80;
+  }
+
+  .start-btn.online-btn:hover{
+    background:var(--pop-purple);
+    filter:brightness(1.06);
+  }
+
+  .start-btn.online-btn:active{
+    box-shadow:0 0 0 #564a80;
+  }
+
+  .online-status{
+    display:none;
+    text-align:center;
+    padding:20px 8px;
+  }
+
+  .online-status.visible{
+    display:block;
+  }
+
+  .status-title{
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:10px;
+  }
+
+  .search-spinner{
+    width:40px;
+    height:40px;
+    border:3px solid var(--line);
+    border-top-color:var(--hanko);
+    border-radius:50%;
+    margin:20px auto;
+    animation:spin 1s linear infinite;
+  }
+
+  @keyframes spin{
+    to{transform:rotate(360deg);}
+  }
+
+  .search-count{
+    font-size:20px;
+    color:var(--ink-soft);
+    margin-bottom:22px;
+  }
+
+  .countdown-number{
+    font-size:88px;
+    font-weight:800;
+    color:var(--hanko);
+    margin:16px 0 24px;
+  }
+
+  #opponent-score-label.hidden{
+    display:none;
+  }
+
+  .game{
+    display:none;
+  }
+
+  .game.visible{
+    display:block;
+  }
+
+  .setup.hidden{
+    display:none;
+  }
+
+  .no-event-overlay{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    text-align:center;
+    margin:0 0 20px;
+    padding:24px 20px;
+    border-radius:16px;
+    background:var(--panel-bg);
+    border:1.5px dashed var(--line);
+  }
+
+  .no-event-overlay.hidden{
+    display:none;
+  }
+
+  .no-event-overlay i{
+    font-size:28px;
+    color:var(--ink-soft);
+    opacity:0.7;
+  }
+
+  .no-event-overlay p{
+    margin:0;
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
+  .no-event-overlay span{
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  .hud{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    margin-bottom:clamp(8px,2vh,18px);
+    letter-spacing:0.03em;
+  }
+
+  .hud-stat{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    padding:6px 14px;
+    border-radius:12px;
+    font-weight:800;
+    font-size:clamp(13px,2.6vh,16px);
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+
+  #score-label{
+    background:rgba(47,158,148,0.12);
+    color:var(--pop-teal);
+  }
+
+  #opponent-score-label{
+    background:rgba(108,90,158,0.12);
+    color:var(--pop-purple);
+  }
+
+  #time-label{
+    background:rgba(224,86,63,0.12);
+    color:var(--hanko);
+  }
+
+  #time-label.time-warning{
+    background:rgba(224,86,63,0.22);
+    color:var(--hanko-deep);
+    animation:time-pulse 1s ease-in-out infinite;
+  }
+
+  @keyframes time-pulse{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.08); }
+  }
+
+  .timer-track{
+    height:6px;
+    width:100%;
+    background:rgba(31,28,25,0.1);
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:clamp(12px,3vh,24px);
+  }
+
+  .timer-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--pop-teal), var(--hanko));
+    width:100%;
+    transition:width 1s linear;
+  }
+
+  .timer-fill.no-transition{
+    transition:none;
+  }
+
+  .word-frame{
+    text-align:center;
+    padding:clamp(14px,4vh,36px) 12px;
+    background:var(--panel-bg-soft);
+    border-radius:16px;
+    margin-bottom:clamp(12px,3vh,26px);
+  }
+
+  .word-eyebrow{
+    font-size:clamp(10px,1.6vh,11px);
+    letter-spacing:0.3em;
+    color:var(--gold);
+    margin-bottom:clamp(6px,1.5vh,12px);
+  }
+
+  #word-display{
+    font-size:clamp(22px,6vh,46px);
+    font-weight:600;
+    letter-spacing:0.12em;
+    white-space:nowrap;
+    overflow:hidden;
+  }
+
+  .char{
+    display:inline-block;
+    transition:color 0.15s ease;
+  }
+
+  .char.done{
+    color:var(--hanko);
+  }
+
+  .sentence-reading-display{
+    display:none;
+    margin-top:4px;
+    font-size:clamp(11px,2vh,15px);
+    font-weight:600;
+    letter-spacing:0.08em;
+    line-height:1.5;
+    color:var(--ink-soft);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:clip;
+  }
+
+  .sentence-reading-display.visible{
+    display:block;
+  }
+
+  .sentence-reading-char{
+    display:inline-block;
+  }
+
+  .romaji-display{
+    margin-top:clamp(8px,2vh,16px);
+    font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    text-align:left;
+    font-size:26px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    white-space:nowrap;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    max-width:100%;
+    scrollbar-width:none;
+  }
+
+  .romaji-display::-webkit-scrollbar{
+    display:none;
+  }
+
+  .romaji-display.shake{
+    animation:shake 0.3s ease;
+  }
+
+  .romaji-display.centered{
+    text-align:center;
+  }
+
+  .rchar{
+    display:inline-block;
+  }
+
+  .rchar.done{
+    color:var(--hanko);
+  }
+
+  .rchar.current .rtyped{
+    color:var(--hanko);
+  }
+
+  .input-row{
+    position:relative;
+  }
+
+  #typing-input{
+    width:100%;
+    padding:clamp(10px,2.5vh,16px) 18px;
+    font-size:clamp(16px,3vh,22px);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    background:var(--input-bg);
+    color:var(--ink);
+    outline:none;
+    letter-spacing:0.08em;
+    font-weight:700;
+    transition:border-color 0.15s ease;
+    text-align: center;
+  }
+
+  #typing-input:focus{
+    border-color:var(--gold);
+  }
+
+  #typing-input.shake{
+    animation:shake 0.3s ease;
+    border-color:var(--hanko-deep);
+  }
+
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+
+  .ime-spacer{
+    height:0px;
+  }
+
+  .hint{
+    text-align:center;
+    font-size:12px;
+    color:var(--ink-soft);
+    opacity:0.65;
+    margin-top:clamp(6px,1.5vh,10px);
+    min-height:16px;
+  }
+
+  .result{
+    display:none;
+    text-align:center;
+  }
+
+  .result.visible{
+    display:block;
+  }
+
+  .result-title{
+    font-size:14px;
+    letter-spacing:0.3em;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+
+  .result-score{
+    font-size:60px;
+    font-weight:800;
+    color:var(--hanko);
+    margin-bottom:4px;
+  }
+
+  .result-sub{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:26px;
+  }
+
+  .stat-grid{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-bottom:26px;
+  }
+
+  .stat-box{
+    flex:1;
+    max-width:140px;
+    padding:14px 8px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:var(--panel-bg-soft);
+  }
+
+  .stat-value{
+    font-size:22px;
+    font-weight:800;
+    color:var(--ink);
+    margin-bottom:4px;
+  }
+
+  .stat-label{
+    font-size:11px;
+    color:var(--ink-soft);
+    opacity:0.7;
+    letter-spacing:0.05em;
+  }
+
+  .ranking-box{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+  }
+
+  .ranking-title{
+    text-align:center;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:0.1em;
+    color:var(--gold);
+    margin-bottom:12px;
+  }
+
+  .ranking-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px 14px;
+  }
+
+  .ranking-loading{
+    grid-column:1 / -1;
+    text-align:center;
+    padding:14px 10px;
+    font-size:13px;
+    color:var(--ink-soft);
+    opacity:0.75;
+  }
+
+  .ranking-item{
+    display:grid;
+    grid-template-columns:36px 1fr auto;
+    align-items:center;
+    padding:6px 10px;
+    background:var(--panel-bg-soft);
+    border:1px solid var(--line);
+    border-radius:16px;
+    font-size:13px;
+  }
+
+  .ranking-item .rank{
+    font-weight:700;
+    color:var(--hanko);
+  }
+
+  .ranking-item.top3 .rank{
+    color:var(--gold);
+  }
+
+  .ranking-item .name{
+    color:var(--ink-soft);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .ranking-item .score{
+    font-weight:600;
+    color:var(--ink);
+    text-align:right;
+  }
+
+  .info-box{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+  }
+
+  .info-title{
+    text-align:center;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:0.1em;
+    color:var(--gold);
+    margin-bottom:10px;
+  }
+
+  .info-title:not(:first-child){
+    margin-top:18px;
+  }
+
+  .info-list{
+    margin:0;
+    padding:0 0 0 1.2em;
+    font-size:13px;
+    line-height:1.7;
+    color:var(--ink-soft);
+  }
+
+  .info-list li{
+    margin-bottom:4px;
+  }
+
+  .site-footer-links{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    margin-top:16px;
+  }
+
+  .site-footer-links a{
+    font-size:11px;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    opacity:0.8;
+  }
+
+  .site-footer-links a:hover{
+    color:var(--hanko);
+    opacity:1;
+  }
+
+  .site-footer{
+    text-align:center;
+    margin-top:8px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+    font-size:11px;
+    color:var(--ink-soft);
+    opacity:0.7;
+  }
+
+  .name-input-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(31,28,25,0.55);
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    padding:20px;
+  }
+
+  .name-input-overlay.visible{
+    display:flex;
+  }
+
+  .name-input-box{
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 24px;
+    max-width:320px;
+    width:100%;
+    text-align:center;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .name-input-message{
+    font-size:14px;
+    color:var(--ink);
+    margin-bottom:16px;
+  }
+
+  .name-input-box input{
+    width:100%;
+    padding:10px 12px;
+    background:var(--input-bg);
+    border:1px solid var(--line);
+    border-radius:16px;
+    font-size:16px;
+    color:var(--ink);
+    text-align:center;
+    margin-bottom:18px;
+  }
+
+  .name-input-box input:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+
+  .name-input-btn{
+    padding:10px 32px;
+    background:var(--hanko);
+    color:var(--washi);
+    border:none;
+    border-radius:16px;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    transition:background 0.2s ease;
+  }
+
+  .name-input-btn:hover{
+    background:var(--hanko-deep);
+  }
+
+  .mode-and-mute-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:16px;
+    margin-top:10px;
+  }
+
+  .mode-and-mute-row .mute-check-label{
+    margin-top:0;
+  }
+
+  .input-mode-toggle-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    height:30px;
+    padding:0 12px;
+    background:var(--panel-bg-soft);
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    color:var(--ink-soft);
+    font-size:13px;
+    cursor:pointer;
+    transition:border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .input-mode-toggle-btn:hover{
+    border-color:var(--gold);
+    color:var(--ink);
+  }
+
+  .input-mode-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(31,28,25,0.55);
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    padding:20px;
+  }
+
+  .input-mode-overlay.visible{
+    display:flex;
+  }
+
+  .input-mode-box{
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 24px;
+    max-width:320px;
+    width:100%;
+    text-align:center;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .input-mode-modal-title{
+    font-size:14px;
+    color:var(--ink);
+    margin-bottom:16px;
+  }
+
+  .input-mode-box .mode-tabs{
+    margin-bottom:18px;
+  }
+
+  .input-mode-settings{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:20px;
+    padding:14px 16px;
+    background:var(--panel-bg-soft);
+    border-radius:14px;
+  }
+
+  .input-mode-setting-label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+
+  .input-mode-setting-check{
+    width:16px;
+    height:16px;
+    cursor:pointer;
+    accent-color:var(--hanko);
+    flex-shrink:0;
+  }
+
+  .romaji-display.uppercase{
+    text-transform:uppercase;
+  }
+
+  .play-records-box{
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 24px;
+    max-width:420px;
+    width:100%;
+    max-height:80vh;
+    display:flex;
+    flex-direction:column;
+    text-align:center;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .play-records-list{
+    list-style:none;
+    margin:0 0 20px;
+    padding:0;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .play-record-item{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:10px 14px;
+    background:var(--panel-bg-soft);
+    border-radius:12px;
+    text-align:left;
+  }
+
+  .play-record-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
+  .play-record-time{
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+
+  .play-record-stats{
+    display:flex;
+    gap:14px;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  .play-records-empty{
+    font-size:13px;
+    color:var(--ink-soft);
+    padding:20px 0;
+  }
+
+  .input-mode-close-btn{
+    padding:10px 32px;
+    background:none;
+    color:var(--ink-soft);
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    transition:border-color 0.2s ease;
+  }
+
+  .input-mode-close-btn:hover{
+    border-color:var(--gold);
+  }
+
+  .result-rank-badge{
+    display:none;
+    margin:10px auto 0;
+    max-width:280px;
+    padding:8px 14px;
+    background:var(--hanko);
+    color:var(--washi);
+    border-radius:16px;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.05em;
+    text-align:center;
+  }
+
+  .result-rank-badge.visible{
+    display:block;
+  }
+
+  .high-score-label{
+    font-size:12px;
+    color:var(--ink-soft);
+    opacity:0.8;
+  }
+
+  .setup-high-score{
+    text-align:center;
+    margin-bottom:16px;
+  }
+
+  .result-high-score{
+    margin-bottom:14px;
+  }
+
+  .new-record-badge{
+    display:none;
+    margin:10px auto 0;
+    max-width:280px;
+    padding:8px 14px;
+    background:var(--gold);
+    color:var(--washi);
+    border-radius:16px;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.05em;
+    text-align:center;
+  }
+
+  .new-record-badge.visible{
+    display:block;
+  }
+
+  .ranking-submitting-indicator{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin:10px auto 0;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+  }
+
+  .ranking-submitting-indicator.visible{
+    display:flex;
+  }
+
+  .ranking-submitting-indicator .fa-spinner{
+    color:var(--hanko);
+  }
+
+  .retry-btn{
+    padding:12px 36px;
+    background:transparent;
+    border:1.5px solid var(--ink);
+    border-radius:16px;
+    font-size:15px;
+    color:var(--ink);
+    cursor:pointer;
+  }
+
+  .retry-btn:hover{
+    background:var(--ink);
+    color:var(--washi);
+  }
+
+  .friend-menu-row{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    margin-bottom:20px;
+  }
+
+  .friend-code{
+    font-size:40px;
+    font-weight:800;
+    letter-spacing:0.15em;
+    color:var(--hanko);
+    margin-bottom:16px;
+  }
+
+  .friend-copy-btn{
+    margin-bottom:20px;
+  }
+
+  .friend-code-input{
+    width:100%;
+    max-width:220px;
+    padding:10px 12px;
+    background:var(--input-bg);
+    border:1px solid var(--line);
+    border-radius:16px;
+    font-size:18px;
+    letter-spacing:0.15em;
+    color:var(--ink);
+    text-align:center;
+    margin-bottom:18px;
+  }
+
+  .friend-code-input:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+
+  @media (min-width:561px){
+    .menu-toggle-btn{
+      display:none;
+    }
+    .menu-auth{
+      display:flex !important;
+      position:static;
+      flex-direction:row;
+      align-items:center;
+      margin-top:0;
+      padding:0;
+      background:none;
+      border:none;
+      box-shadow:none;
+      gap:10px;
+      flex-wrap:nowrap;
+      flex-shrink:1;
+      min-width:0;
+    }
+    .menu-auth-row{
+      gap:10px;
+    }
+  }
+
+  @media (max-width:560px){
+    .menu-bar{
+      padding:10px 14px;
+      gap:8px;
+    }
+    .menu-brand{
+      gap:8px;
+    }
+    .menu-logo{
+      height:24px;
+    }
+    .menu-title{
+      font-size:17px;
+    }
+    .player-name-label{
+      font-size:12px;
+    }
+    .edit-name-btn{
+      width:22px;
+      height:22px;
+      font-size:10px;
+    }
+    .switch-player-btn{
+      padding:5px 10px;
+      font-size:11px;
+    }
+    .menu-toggle-btn{
+      padding:5px 10px;
+      font-size:11px;
+    }
+    .menu-auth{
+      gap:6px;
+    }
+  }
+
+  @media (max-width:480px){
+    body{padding:24px 10px;}
+    body.game-active{padding:10px 10px;}
+    .panel{padding:18px 14px;}
+    .menu-bar{padding:8px 12px;}
+    .menu-brand{gap:6px;}
+    .menu-logo{height:22px;}
+    .menu-title{font-size:16px;}
+
+    .mode-btn{font-size:12px;padding:9px 6px;}
+    .level-btn{font-size:12px;padding:10px 6px;}
+    .level-btn .sub{font-size:9px;}
+    .start-btn{font-size:13px;padding:10px 18px;}
+
+    .status-title{font-size:15px;}
+    .search-spinner{width:32px;height:32px;}
+    .search-count{font-size:16px;}
+    .countdown-number{font-size:64px;}
+
+    .hud-stat{font-size:12px;padding:5px 12px;}
+    .word-eyebrow{font-size:10px;}
+    #word-display{font-size:26px;}
+    .sentence-reading-display{font-size:11px;}
+    #typing-input{font-size:16px;padding:12px 14px;}
+    .hint{font-size:10px;}
+
+    .result-title{font-size:12px;}
+    .result-score{font-size:44px;}
+    .result-sub{font-size:11px;}
+    .stat-value{font-size:17px;}
+    .stat-label{font-size:9px;}
+    .retry-btn{font-size:13px;padding:10px 24px;}
+  }
+
+  @media (max-height:600px){
+    body.game-active{padding:6px 16px;}
+    .hud{margin-bottom:6px;}
+    .hud-stat{font-size:12px;padding:4px 10px;}
+    .timer-track{margin-bottom:8px;}
+    .word-frame{padding:10px 12px;margin-bottom:8px;}
+    .word-eyebrow{margin-bottom:4px;}
+    #word-display{font-size:clamp(20px,5vh,32px);}
+    #typing-input{padding:8px 14px;font-size:16px;}
+    .hint{margin-top:4px;min-height:14px;}
+  }
+
+  .official-x-banner{
+    display:flex;
+    justify-content:center;
+    margin-top:18px;
+    margin-bottom:14px;
+  }
+
+  .official-x-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 14px;
+    background:#000000;
+    border:1px solid #ffffff;
+    border-radius:14px;
+    font-size:13px;
+    font-weight:600;
+    color:#ffffff;
+    text-decoration:none;
+    transition:opacity 0.2s ease;
+  }
+
+  .official-x-link:hover{
+    opacity:0.85;
+  }
+
+  .keyboard-guide{
+    display:none;
+    margin-top:clamp(10px,2vh,16px);
+    user-select:none;
+  }
+
+  .keyboard-guide.visible{
+    display:block;
+  }
+
+  .kb-row{
+    display:flex;
+    justify-content:center;
+    gap:4px;
+    margin-bottom:4px;
+  }
+
+  .kb-key{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:28px;
+    height:28px;
+    padding:0 4px;
+    background:var(--panel-bg);
+    border:1.5px solid var(--line);
+    border-bottom-width:3px;
+    border-radius:5px;
+    font-size:11px;
+    font-weight:700;
+    color:var(--ink-soft);
+    letter-spacing:0;
+    font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+
+  .kb-key.wide{
+    min-width:44px;
+    font-size:10px;
+    letter-spacing:0.01em;
+  }
+
+  .kb-key.space{
+    min-width:120px;
+  }
+
+  .kb-key.active{
+    background:#ff8c1a;
+    border-color:#e07200;
+    color:#fff;
+  }
+
+  .kb-key.miss{
+    background:#d64545;
+    border-color:#b83838;
+    color:#fff;
+  }
+
+  .kb-key.next{
+    background:#ff8c1a;
+    border-color:#e07200;
+    color:#fff;
+  }
+
+  @media (max-width:480px){
+    .kb-key{
+      min-width:22px;
+      height:24px;
+      font-size:9px;
+    }
+    .kb-key.wide{
+      min-width:34px;
+      font-size:8px;
+    }
+    .kb-key.space{
+      min-width:90px;
+    }
+  }
+
+</style>
+</head>
+<body>
+<div class="mobile-warning-overlay" id="mobile-warning-overlay">
+  <div class="mobile-warning-box">
+    <p class="mobile-warning-message">このサイトはスマートフォンに最適化されていません。<br>パソコンでの閲覧を推奨します。</p>
+    <button class="mobile-warning-btn" id="mobile-warning-close">閉じる</button>
+  </div>
+</div>
+<div class="app-loading-overlay" id="app-loading-overlay">
+  <div class="app-loading-spinner"></div>
+  <div class="app-loading-text">読み込み中...</div>
+</div>
+<div class="stage">
+  <div class="menu-bar" id="site-header">
+    <a href="/" class="menu-brand">
+      <img src="logo.svg" alt="シンプルタイピング" class="menu-logo">
+      <h1 class="menu-title">シンプルタイピング</h1>
+    </a>
+    <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="メニュー"><i class="fas fa-bars"></i> メニュー</button>
+    <div class="menu-auth hidden" id="menu-auth-panel">
+      <div class="menu-auth-row">
+        <span class="player-name-label" id="current-player-label"></span>
+        <button class="edit-name-btn" id="edit-name-btn" aria-label="名前を変更"><i class="fas fa-pen"></i></button>
+      </div>
+      <button class="switch-player-btn" id="google-login-btn"><i class="fab fa-google"></i> ログイン</button>
+      <button class="switch-player-btn hidden" id="logout-btn"><i class="fas fa-right-from-bracket"></i> ログアウト</button>
+    </div>
+  </div>
+
+  <div class="panel">
+
+    <div class="setup" id="setup">
+      <div class="no-event-overlay" id="no-event-overlay">
+        <i class="fas fa-calendar-xmark"></i>
+        <p>現在開催中のイベントはありません</p>
+        <span>イベント開催時にこちらのページからランキングに挑戦できます</span>
+      </div>
+      <div class="mode-tabs">
+        <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
+        <button class="mode-btn" data-mode="katakana">カタカナ</button>
+        <button class="mode-btn" data-mode="sentence">文章</button>
+      </div>
+
+      <div class="levels" data-row="hiragana">
+        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
+        <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
+        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
+      </div>
+
+      <div class="levels hidden" data-row="katakana">
+        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
+        <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
+        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
+      </div>
+
+      <div class="levels hidden" data-row="sentence">
+        <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
+        <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
+        <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
+      </div>
+
+      <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
+
+      <div class="start-row">
+        <button class="start-btn" id="start-btn" disabled><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
+        <button class="start-btn online-btn" id="start-online-btn" disabled><i class="fa-solid fa-globe"></i> オンライン対戦</button>
+        <button class="start-btn online-btn" id="start-friend-btn" disabled><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
+      </div>
+
+      <div class="mode-and-mute-row">
+        <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
+        <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
+        <label class="mute-check-label">
+          <input type="checkbox" id="mute-btn" class="mute-check">
+          ミュート
+        </label>
+      </div>
+
+      <div class="ranking-box hidden" id="ranking-box">
+        <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
+        <ol class="ranking-list" id="ranking-list"></ol>
+      </div>
+
+      <div class="info-box">
+        <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
+        <ul class="info-list">
+          <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
+          <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
+          <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
+          <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
+          <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
+        </ul>
+
+        <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
+        <ul class="info-list">
+          <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
+          <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
+          <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
+          <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
+        </ul>
+
+        <div class="official-x-banner">
+          <a href="https://x.com/simple_typing" target="_blank" rel="noopener" class="official-x-link">
+            <i class="fa-brands fa-x-twitter"></i> 公式Xをフォローする
+          </a>
+        </div>
+
+        <div class="share-footer" id="share-footer">
+          <span class="site-footer-label">このサイトをシェア</span>
+          <div class="footer-share">
+            <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
+            <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
+          </div>
+        </div>
+
+        <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
+        <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
+      </div>
+    </div>
+
+    <div class="online-status" id="searching">
+      <div class="status-title">対戦相手をさがしています</div>
+      <div class="search-spinner"></div>
+      <div class="search-count" id="search-count-label">残り 15 秒</div>
+      <button class="retry-btn" id="cancel-search-btn">キャンセル</button>
+    </div>
+
+    <div class="online-status" id="countdown">
+      <div class="countdown-number" id="countdown-number">3</div>
+    </div>
+
+    <div class="online-status" id="friend-menu">
+      <div class="status-title">フレンド対戦</div>
+      <div class="friend-menu-row">
+        <button class="start-btn online-btn" id="friend-create-btn">招待コードを作成する</button>
+        <button class="start-btn online-btn" id="friend-join-open-btn">招待コードで参加する</button>
+      </div>
+      <button class="retry-btn" id="friend-menu-back-btn">戻る</button>
+    </div>
+
+    <div class="online-status" id="friend-create">
+      <div class="status-title">このコードを友達に伝えてね</div>
+      <div class="friend-code" id="friend-code-label">------</div>
+      <button class="retry-btn friend-copy-btn" id="friend-code-copy-btn">コードをコピー</button>
+      <div class="search-count">相手の参加を待っています…</div>
+      <div class="search-spinner"></div>
+      <button class="retry-btn" id="friend-create-cancel-btn">キャンセル</button>
+    </div>
+
+    <div class="online-status" id="friend-join">
+      <div class="status-title">招待コードを入力してください</div>
+      <input type="text" class="friend-code-input" id="friend-code-input" maxlength="6" autocomplete="off" inputmode="numeric" pattern="[0-9]*" placeholder="コードを入力">
+      <div class="start-row">
+        <button class="start-btn online-btn" id="friend-join-submit-btn">参加する</button>
+      </div>
+      <button class="retry-btn" id="friend-join-cancel-btn">キャンセル</button>
+    </div>
+
+    <div class="online-status" id="friend-waiting">
+      <div class="status-title">相手を待っています</div>
+      <div class="search-spinner"></div>
+      <button class="retry-btn" id="friend-waiting-cancel-btn">キャンセル</button>
+    </div>
+
+    <div class="game" id="game">
+      <div class="hud">
+        <span id="score-label" class="hud-stat">せいかい 0 もん</span>
+        <span id="opponent-score-label" class="hud-stat hidden">あいて 0 もん</span>
+        <span id="time-label" class="hud-stat">残り 100 秒</span>
+        <button id="end-game-btn" class="end-game-btn">終了</button>
+      </div>
+      <div class="timer-track"><div class="timer-fill" id="timer-fill"></div></div>
+
+      <div class="word-frame">
+        <div class="word-eyebrow" id="level-label">初級</div>
+        <div id="word-display"></div>
+        <div id="sentence-reading-display" class="sentence-reading-display"></div>
+        <div id="romaji-display" class="romaji-display hidden"></div>
+      </div>
+
+      <div class="ime-spacer" id="ime-spacer"></div>
+
+      <div class="input-row">
+        <input type="text" id="typing-input" autocomplete="off" placeholder="ここに入力してください">
+      </div>
+      <div class="hint" id="hint-label">Enterで確定</div>
+      <div class="keyboard-guide" id="keyboard-guide">
+        <div class="kb-row">
+          <div class="kb-key">1</div><div class="kb-key">2</div><div class="kb-key">3</div><div class="kb-key">4</div><div class="kb-key">5</div><div class="kb-key">6</div><div class="kb-key">7</div><div class="kb-key">8</div><div class="kb-key">9</div><div class="kb-key">0</div><div class="kb-key">-</div>
+        </div>
+        <div class="kb-row">
+          <div class="kb-key">Q</div><div class="kb-key">W</div><div class="kb-key">E</div><div class="kb-key">R</div><div class="kb-key">T</div><div class="kb-key">Y</div><div class="kb-key">U</div><div class="kb-key">I</div><div class="kb-key">O</div><div class="kb-key">P</div><div class="kb-key">@</div>
+        </div>
+        <div class="kb-row">
+          <div class="kb-key">A</div><div class="kb-key">S</div><div class="kb-key">D</div><div class="kb-key">F</div><div class="kb-key">G</div><div class="kb-key">H</div><div class="kb-key">J</div><div class="kb-key">K</div><div class="kb-key">L</div><div class="kb-key">;</div><div class="kb-key">:</div>
+        </div>
+        <div class="kb-row">
+          <div class="kb-key wide" data-key="shift">shift</div><div class="kb-key">Z</div><div class="kb-key">X</div><div class="kb-key">C</div><div class="kb-key">V</div><div class="kb-key">B</div><div class="kb-key">N</div><div class="kb-key">M</div><div class="kb-key">,</div><div class="kb-key">.</div><div class="kb-key">/</div><div class="kb-key wide" data-key="shift">shift</div>
+        </div>
+        <div class="kb-row">
+          <div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key space">space</div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result" id="result">
+      <div class="result-title">RESULT</div>
+      <div class="result-score" id="result-score">0</div>
+      <div class="result-sub" id="result-sub">総合スコア</div>
+      <div class="result-rank-badge" id="result-rank-badge"></div>
+      <div class="high-score-label result-high-score" id="result-high-score">ハイスコア 0</div>
+      <div class="new-record-badge" id="new-record-badge">ハイスコア更新！</div>
+      <div class="ranking-submitting-indicator" id="ranking-submitting-indicator"><i class="fa-solid fa-spinner fa-spin"></i>ランキング登録中...</div>
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-value" id="stat-accuracy">0%</div>
+          <div class="stat-label">正誤率</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="stat-speed">0</div>
+          <div class="stat-label">文字/分</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="stat-miss">0</div>
+          <div class="stat-label">ミス数</div>
+        </div>
+      </div>
+      <div class="result-share">
+        <a class="share-btn x" id="result-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> Xでシェア</a>
+        <a class="share-btn facebook" id="result-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebookでシェア</a>
+        <button class="share-btn copy" id="result-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
+      </div>
+      <button class="retry-btn" id="retry-btn">もう一度</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="custom-alert-overlay" id="custom-alert-overlay">
+  <div class="custom-alert-box">
+    <div class="custom-alert-message" id="custom-alert-message"></div>
+    <button class="custom-alert-btn" id="custom-alert-btn">OK</button>
+  </div>
+</div>
+
+<div class="name-input-overlay" id="name-input-overlay">
+  <div class="name-input-box">
+    <div class="name-input-message" id="name-input-message">お名前を入力してください（6文字まで）</div>
+    <input type="text" id="name-input-field" maxlength="6" autocomplete="off" placeholder="GUEST">
+    <button class="name-input-btn" id="name-input-btn">登録</button>
+  </div>
+</div>
+
+<div class="input-mode-overlay" id="input-mode-overlay">
+  <div class="input-mode-box">
+    <div class="input-mode-modal-title">入力モードを選択</div>
+    <div class="mode-tabs input-mode-tabs">
+      <button class="input-mode-btn active" data-input-mode="realtime">リアルタイム</button>
+      <button class="input-mode-btn" data-input-mode="textbox">テキストボックス</button>
+    </div>
+    <div class="input-mode-settings">
+      <label class="input-mode-setting-label" id="show-romaji-label">
+        <input type="checkbox" id="show-romaji-check" class="input-mode-setting-check" checked>
+        ローマ字表示
+      </label>
+      <label class="input-mode-setting-label">
+        <input type="checkbox" id="show-hiragana-check" class="input-mode-setting-check" checked>
+        ひらがな表示
+      </label>
+      <label class="input-mode-setting-label" id="show-keyboard-label">
+        <input type="checkbox" id="show-keyboard-check" class="input-mode-setting-check" checked>
+        キーボード表示
+      </label>
+      <label class="input-mode-setting-label" id="romaji-uppercase-label">
+        <input type="checkbox" id="romaji-uppercase-check" class="input-mode-setting-check">
+        ローマ字を大文字にする
+      </label>
+    </div>
+    <button class="input-mode-close-btn" id="input-mode-close-btn">閉じる</button>
+  </div>
+</div>
+
+<div class="input-mode-overlay" id="play-records-overlay">
+  <div class="play-records-box">
+    <div class="input-mode-modal-title">今までの記録</div>
+    <ul class="play-records-list" id="play-records-list"></ul>
+    <button class="input-mode-close-btn" id="play-records-close-btn">閉じる</button>
+  </div>
+</div>
+
+<script src="typing-jp.js"></script>
+<script>
+const customAlertOverlayEl = document.getElementById("custom-alert-overlay");
+const customAlertMessageEl = document.getElementById("custom-alert-message");
+const customAlertBtnEl = document.getElementById("custom-alert-btn");
+
+function showCustomAlert(message){
+  customAlertMessageEl.textContent = message;
+  customAlertOverlayEl.classList.add("visible");
+}
+
+customAlertBtnEl.addEventListener("click", () => {
+  customAlertOverlayEl.classList.remove("visible");
+});
+
+const nameInputOverlayEl = document.getElementById("name-input-overlay");
+const nameInputFieldEl = document.getElementById("name-input-field");
+const nameInputBtnEl = document.getElementById("name-input-btn");
+let nameInputCallback = null;
+
+function normalizePlayerName(raw){
+  const trimmed = (raw || "").trim().slice(0, 6);
+  return trimmed.length === 0 ? "GUEST" : trimmed;
+}
+
+function showNameInputModal(callback, prefill){
+  nameInputCallback = callback;
+  nameInputFieldEl.value = prefill || "";
+  nameInputOverlayEl.classList.add("visible");
+  nameInputFieldEl.focus();
+}
+
+function confirmNameInput(){
+  const name = normalizePlayerName(nameInputFieldEl.value);
+  nameInputOverlayEl.classList.remove("visible");
+  if(nameInputCallback){
+    const callback = nameInputCallback;
+    nameInputCallback = null;
+    callback(name);
+  }
+}
+
+nameInputBtnEl.addEventListener("click", confirmNameInput);
+nameInputFieldEl.addEventListener("keydown", (e) => {
+  if(e.key === "Enter"){
+    e.preventDefault();
+    confirmNameInput();
+  }
+});
+
+const inputModeToggleBtnEl = document.getElementById("input-mode-toggle-btn");
+const inputModeOverlayEl = document.getElementById("input-mode-overlay");
+const inputModeCloseBtnEl = document.getElementById("input-mode-close-btn");
+
+inputModeToggleBtnEl.addEventListener("click", () => {
+  inputModeOverlayEl.classList.add("visible");
+});
+
+inputModeCloseBtnEl.addEventListener("click", () => {
+  inputModeOverlayEl.classList.remove("visible");
+});
+
+const playRecordsToggleBtnEl = document.getElementById("play-records-toggle-btn");
+const playRecordsOverlayEl = document.getElementById("play-records-overlay");
+const playRecordsCloseBtnEl = document.getElementById("play-records-close-btn");
+const playRecordsListEl = document.getElementById("play-records-list");
+
+function getGuestPlayRecords(){
+  try{
+    const raw = localStorage.getItem(GUEST_PLAY_RECORDS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  }catch(e){
+    return [];
+  }
+}
+
+function saveGuestPlayRecords(records){
+  localStorage.setItem(GUEST_PLAY_RECORDS_KEY, JSON.stringify(records.slice(0, PLAY_RECORD_MAX)));
+}
+
+function addGuestPlayRecord(record){
+  const records = getGuestPlayRecords();
+  records.unshift(record);
+  saveGuestPlayRecords(records);
+}
+
+function formatPlayRecordTime(playedAt){
+  const date = new Date(playedAt);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function renderPlayRecords(records){
+  if(!playRecordsListEl) return;
+  if(!records || records.length === 0){
+    playRecordsListEl.innerHTML = `<li class="play-records-empty">まだ記録がありません</li>`;
+    return;
+  }
+  playRecordsListEl.innerHTML = records.map(r => {
+    const modeLabel = modeLabels[r.mode] || r.mode;
+    const levelLabel = levelLabels[r.level] || r.level;
+    return `
+      <li class="play-record-item">
+        <div class="play-record-top">
+          <span>${modeLabel}・${levelLabel}</span>
+          <span class="play-record-time">${formatPlayRecordTime(r.playedAt)}</span>
+        </div>
+        <div class="play-record-stats">
+          <span>スコア ${r.score !== undefined ? r.score : "-"}</span>
+          <span>正誤率 ${r.accuracy}%</span>
+          <span>${r.speed} 文字/分</span>
+          <span>ミス ${r.miss}</span>
+        </div>
+      </li>
+    `;
+  }).join("");
+}
+
+async function fetchAccountPlayRecords(token){
+  try{
+    const res = await fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "getPlayRecords", token })
+    });
+    const data = await res.json();
+    return Array.isArray(data.playRecords) ? data.playRecords : [];
+  }catch(e){
+    return [];
+  }
+}
+
+async function openPlayRecords(){
+  playRecordsOverlayEl.classList.add("visible");
+  playRecordsListEl.innerHTML = `<li class="play-records-empty">読み込み中...</li>`;
+  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
+  const records = isLoggedIn ? await fetchAccountPlayRecords(getSessionToken()) : getGuestPlayRecords();
+  renderPlayRecords(records);
+}
+
+async function recordPlayResult(mode, level, accuracy, speed, miss, score){
+  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
+  if(isLoggedIn){
+    const token = getSessionToken();
+    await fetchWithRetry(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
+    }, 4);
+  } else {
+    addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss, score });
+  }
+}
+
+playRecordsToggleBtnEl.addEventListener("click", () => {
+  openPlayRecords();
+});
+
+playRecordsCloseBtnEl.addEventListener("click", () => {
+  playRecordsOverlayEl.classList.remove("visible");
+});
+
+const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
+const SESSION_TOKEN_KEY = "sessionToken";
+const GUEST_NAME_KEY = "guestPlayerName";
+const GUEST_INPUT_MODE_KEY = "guestInputMode";
+const SHOW_ROMAJI_KEY = "showRomaji";
+const SHOW_HIRAGANA_KEY = "showHiragana";
+const ROMAJI_UPPERCASE_KEY = "romajiUppercase";
+const GUEST_PLAY_RECORDS_KEY = "guestPlayRecords";
+const SHOW_KEYBOARD_KEY = "showKeyboard";
+const PLAY_RECORD_MAX = 20;
+const currentPlayerLabelEl = document.getElementById("current-player-label");
+const logoutBtnEl = document.getElementById("logout-btn");
+const googleLoginBtnEl = document.getElementById("google-login-btn");
+const editNameBtnEl = document.getElementById("edit-name-btn");
+const menuToggleBtnEl = document.getElementById("menu-toggle-btn");
+const menuAuthPanelEl = document.getElementById("menu-auth-panel");
+const shareCopyBtnEl = document.getElementById("footer-share-copy-btn");
+const shareXBtnEl = document.getElementById("footer-share-x-btn");
+const shareFacebookBtnEl = document.getElementById("footer-share-facebook-btn");
+const resultShareXBtnEl = document.getElementById("result-share-x-btn");
+const resultShareFacebookBtnEl = document.getElementById("result-share-facebook-btn");
+const resultShareCopyBtnEl = document.getElementById("result-share-copy-btn");
+
+const SITE_URL = "https://s-typing.f5.si/event/";
+const SITE_SHARE_TEXT = "シンプルタイピング｜イベント限定ランキング";
+
+function buildXShareUrl(text){
+  return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}&via=simple_typing`;
+}
+
+function buildFacebookShareUrl(text){
+  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(text)}`;
+}
+
+async function copyToClipboard(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    showCustomAlert("コピーしました");
+  }catch(err){
+    showCustomAlert("コピーに失敗しました");
+  }
+}
+
+shareXBtnEl.href = buildXShareUrl(SITE_SHARE_TEXT);
+shareFacebookBtnEl.href = buildFacebookShareUrl(SITE_SHARE_TEXT);
+
+let resultShareText = SITE_SHARE_TEXT;
+
+function updateResultShareLinks(text){
+  resultShareText = `${text}\n${SITE_URL}`;
+  resultShareXBtnEl.href = buildXShareUrl(text);
+  resultShareFacebookBtnEl.href = buildFacebookShareUrl(text);
+}
+
+shareCopyBtnEl.addEventListener("click", () => copyToClipboard(`${SITE_SHARE_TEXT}\n${SITE_URL}`));
+
+resultShareCopyBtnEl.addEventListener("click", () => copyToClipboard(resultShareText));
+
+menuToggleBtnEl.addEventListener("click", () => {
+  menuAuthPanelEl.classList.toggle("hidden");
+});
+
+editNameBtnEl.addEventListener("click", () => {
+  const prefill = currentPlayerName || "";
+  showNameInputModal(async (name) => {
+    const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
+    if(isLoggedIn){
+      const token = getSessionToken();
+      try{
+        const res = await fetch(`${RANKING_API_URL}/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "setName", token, name })
+        });
+        const data = await res.json();
+        if(data.name){
+          currentPlayerName = data.name;
+        } else {
+          showCustomAlert("名前の変更に失敗しました");
+        }
+      }catch(e){
+        showCustomAlert("名前の変更に失敗しました");
+      }
+    } else {
+      currentPlayerName = name;
+      localStorage.setItem(GUEST_NAME_KEY, name);
+    }
+    updatePlayerNameLabel();
+    updateSetupHighScore();
+  }, prefill);
+});
+
+let currentPlayerName = null;
+let serverHighScores = null;
+
+function getPlayerName(){
+  return currentPlayerName;
+}
+
+function getSessionToken(){
+  return localStorage.getItem(SESSION_TOKEN_KEY);
+}
+
+function setSessionToken(token){
+  localStorage.setItem(SESSION_TOKEN_KEY, token);
+}
+
+function clearSessionToken(){
+  localStorage.removeItem(SESSION_TOKEN_KEY);
+}
+
+function updatePlayerNameLabel(){
+  currentPlayerLabelEl.textContent = currentPlayerName ? currentPlayerName : "";
+}
+
+async function loadServerHighScores(token){
+  try{
+    const res = await fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "getHighScores", token })
+    });
+    const data = await res.json();
+    serverHighScores = data.highScores || {};
+  }catch(e){
+    serverHighScores = {};
+  }
+}
+
+async function showLoggedInUi(name, token, inputModeFromAccount, displaySettingsFromAccount){
+  currentPlayerName = name;
+  await loadServerHighScores(token);
+  updatePlayerNameLabel();
+  updateSetupHighScore();
+  googleLoginBtnEl.classList.add("hidden");
+  logoutBtnEl.classList.remove("hidden");
+  applyInputMode(inputModeFromAccount || "realtime");
+  applyDisplaySettings(displaySettingsFromAccount || getGuestDisplaySettings());
+}
+
+function showLoggedOutUi(){
+  currentPlayerName = localStorage.getItem(GUEST_NAME_KEY) || "GUEST";
+  serverHighScores = null;
+  updatePlayerNameLabel();
+  updateSetupHighScore();
+  googleLoginBtnEl.classList.remove("hidden");
+  logoutBtnEl.classList.add("hidden");
+  applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
+  applyDisplaySettings(getGuestDisplaySettings());
+}
+
+async function verifySession(){
+  const token = getSessionToken();
+  if(!token){
+    showLoggedOutUi();
+    return;
+  }
+  try{
+    const res = await fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "verify", token })
+    });
+    const data = await res.json();
+    if(data.valid){
+      await showLoggedInUi(data.name, token, data.inputMode, data.displaySettings);
+    } else {
+      clearSessionToken();
+      showLoggedOutUi();
+    }
+  }catch(e){
+    showLoggedOutUi();
+  }
+}
+
+async function handleGoogleCredential(idToken){
+  let data;
+  try{
+    const res = await fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "login", idToken })
+    });
+    data = await res.json();
+  }catch(e){
+    showCustomAlert("ログインに失敗しました");
+    return;
+  }
+  if(data.error){
+    showCustomAlert("ログインに失敗しました");
+    return;
+  }
+  if(data.isNewUser){
+    showNameInputModal(async (name) => {
+      let regData;
+      try{
+        const regRes = await fetch(`${RANKING_API_URL}/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "register", pendingToken: data.pendingToken, name })
+        });
+        regData = await regRes.json();
+      }catch(e){
+        showCustomAlert("登録に失敗しました");
+        return;
+      }
+      if(regData.token){
+        setSessionToken(regData.token);
+        await showLoggedInUi(regData.name, regData.token, regData.inputMode, regData.displaySettings);
+      } else {
+        showCustomAlert("登録に失敗しました");
+      }
+    });
+  } else {
+    setSessionToken(data.token);
+    await showLoggedInUi(data.name, data.token, data.inputMode, data.displaySettings);
+  }
+}
+
+const GOOGLE_AUTH_NONCE_KEY = "googleAuthNonce";
+
+function generateGoogleAuthNonce(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function startGoogleLogin(){
+  const nonce = generateGoogleAuthNonce();
+  sessionStorage.setItem(GOOGLE_AUTH_NONCE_KEY, nonce);
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  const params = new URLSearchParams({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: redirectUri,
+    response_type: "id_token",
+    scope: "openid",
+    nonce,
+    prompt: "select_account"
+  });
+  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+}
+
+function decodeGoogleIdTokenPayload(idToken){
+  const payloadPart = idToken.split(".")[1];
+  const base64 = payloadPart.replace(/-/g, "+").replace(/_/g, "/");
+  return JSON.parse(atob(base64));
+}
+
+async function processGoogleAuthRedirect(){
+  const hash = window.location.hash;
+  if(!hash || !hash.includes("id_token")) return false;
+  const params = new URLSearchParams(hash.substring(1));
+  const idToken = params.get("id_token");
+  const error = params.get("error");
+  history.replaceState(null, "", window.location.pathname + window.location.search);
+  if(error || !idToken) return false;
+  const expectedNonce = sessionStorage.getItem(GOOGLE_AUTH_NONCE_KEY);
+  sessionStorage.removeItem(GOOGLE_AUTH_NONCE_KEY);
+  try{
+    const payload = decodeGoogleIdTokenPayload(idToken);
+    if(expectedNonce && payload.nonce !== expectedNonce){
+      showCustomAlert("ログインに失敗しました");
+      return true;
+    }
+  }catch(e){
+    showCustomAlert("ログインに失敗しました");
+    return true;
+  }
+  await handleGoogleCredential(idToken);
+  return true;
+}
+
+googleLoginBtnEl.addEventListener("click", () => {
+  startGoogleLogin();
+});
+
+logoutBtnEl.addEventListener("click", () => {
+  const token = getSessionToken();
+  clearSessionToken();
+  showLoggedOutUi();
+  if(token){
+    fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "logout", token })
+    }).catch(() => {});
+  }
+});
+
+const appLoadingOverlayEl = document.getElementById("app-loading-overlay");
+let appLoadingCount = 1;
+
+function showAppLoadingOverlay(){
+  appLoadingCount++;
+  appLoadingOverlayEl.classList.remove("hidden");
+}
+
+function hideAppLoadingOverlay(){
+  appLoadingCount = Math.max(0, appLoadingCount - 1);
+  if(appLoadingCount === 0) appLoadingOverlayEl.classList.add("hidden");
+}
+
+window.addEventListener("load", async () => {
+  const handledGoogleRedirect = await processGoogleAuthRedirect();
+  const sessionLoadPromise = handledGoogleRedirect ? Promise.resolve() : verifySession();
+  Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
+});
+
+
+function katakanaToHiragana(str){
+  return (str || '').replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+}
+
+const wordListCache = {};
+const sentenceReadingCache = {};
+
+async function fetchJson(url){
+  const response = await fetch(url);
+  if(!response.ok) throw new Error("failed to load data");
+  return response;
+}
+
+async function fetchWordList(mode, level){
+  const cacheKey = `${mode}-${level}`;
+  if(wordListCache[cacheKey]) return wordListCache[cacheKey];
+  const res = await fetchJson(`words/${cacheKey}.json`);
+  const list = await res.json();
+  wordListCache[cacheKey] = list;
+  return list;
+}
+
+async function ensureSentenceReadings(level, words){
+  if(sentenceReadingCache[level]) return sentenceReadingCache[level];
+  try{
+    const res = await fetchJson(`words/sentence-${level}2.json`);
+    const readings = await res.json();
+    const map = {};
+    (words || []).forEach((word, i) => {
+      map[word] = readings[i] !== undefined ? readings[i] : word;
+    });
+    sentenceReadingCache[level] = map;
+    return map;
+  }catch(e){
+    sentenceReadingCache[level] = {};
+    return sentenceReadingCache[level];
+  }
+}
+
+async function ensureWordList(mode, level){
+  const cacheKey = `${mode}-${level}`;
+  let list = wordListCache[cacheKey];
+  if(!list){
+    while(!list){
+      try{
+        list = await fetchWordList(mode, level);
+      }catch(e){
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+    }
+  }
+  if(mode === "sentence" && !sentenceReadingCache[level]){
+    await ensureSentenceReadings(level, list);
+  }
+  return list;
+}
+
+const ALL_MODES = ["hiragana", "katakana", "sentence"];
+const ALL_LEVELS = ["beginner", "intermediate", "advanced"];
+
+async function preloadAllWordLists(){
+  showAppLoadingOverlay();
+  for(const mode of ALL_MODES){
+    for(const level of ALL_LEVELS){
+      let loaded = false;
+      while(!loaded){
+        try{
+          await ensureWordList(mode, level);
+          loaded = true;
+        }catch(e){
+          await new Promise(resolve => setTimeout(resolve, 1500));
+        }
+      }
+    }
+  }
+  hideAppLoadingOverlay();
+}
+
+function getCurrentWordReading(){
+  if(currentMode === "katakana") return katakanaToHiragana(currentWord);
+  if(currentMode === "sentence"){
+    const map = sentenceReadingCache[currentLevel] || {};
+    return map[currentWord] || currentWord;
+  }
+  return currentWord;
+}
+
+
+const levelLabels = { beginner:"初級", intermediate:"中級", advanced:"上級" };
+const modeLabels = { hiragana:"ひらがな", katakana:"カタカナ", sentence:"文章" };
+
+let currentMode = "hiragana";
+let currentLevel = "beginner";
+let inputMode = "realtime";
+let typingText = null;
+let currentWord = "";
+let usedWords = [];
+let score = 0;
+let missCount = 0;
+let totalCharsTyped = 0;
+let timeLeft = 100;
+let timerId = null;
+let isComposing = false;
+
+const setupEl = document.getElementById("setup");
+const gameEl = document.getElementById("game");
+const resultEl = document.getElementById("result");
+const wordDisplayEl = document.getElementById("word-display");
+const sentenceReadingDisplayEl = document.getElementById("sentence-reading-display");
+const romajiDisplayEl = document.getElementById("romaji-display");
+const inputRowEl = document.querySelector(".input-row");
+const inputEl = document.getElementById("typing-input");
+const scoreLabelEl = document.getElementById("score-label");
+const timeLabelEl = document.getElementById("time-label");
+const timerFillEl = document.getElementById("timer-fill");
+const levelLabelEl = document.getElementById("level-label");
+const hintLabelEl = document.getElementById("hint-label");
+const resultScoreEl = document.getElementById("result-score");
+const resultSubEl = document.getElementById("result-sub");
+const statAccuracyEl = document.getElementById("stat-accuracy");
+const statSpeedEl = document.getElementById("stat-speed");
+const statMissEl = document.getElementById("stat-miss");
+const imeSpacerEl = document.getElementById("ime-spacer");
+const headerEl = document.getElementById("site-header");
+const opponentScoreLabelEl = document.getElementById("opponent-score-label");
+const searchingEl = document.getElementById("searching");
+const searchCountLabelEl = document.getElementById("search-count-label");
+const cancelSearchBtn = document.getElementById("cancel-search-btn");
+const countdownEl = document.getElementById("countdown");
+const countdownNumberEl = document.getElementById("countdown-number");
+const friendMenuEl = document.getElementById("friend-menu");
+const friendCreateEl = document.getElementById("friend-create");
+const friendJoinEl = document.getElementById("friend-join");
+const friendWaitingEl = document.getElementById("friend-waiting");
+const friendCodeLabelEl = document.getElementById("friend-code-label");
+const friendCodeInputEl = document.getElementById("friend-code-input");
+friendCodeInputEl.addEventListener("input", () => {
+  friendCodeInputEl.value = friendCodeInputEl.value.replace(/[^0-9]/g, "");
+});
+
+const ONLINE_SERVER_URL = "wss://key-onl.user-x45.workers.dev";
+const RANKING_API_URL = ONLINE_SERVER_URL.replace(/^wss:/, "https:").replace(/^ws:/, "http:");
+
+const clickSoundEl = new Audio("sounds/click.mp3");
+const keySoundEl = new Audio("sounds/key.mp3");
+const correctSoundEl = new Audio("sounds/correct.mp3");
+const incorrectSoundEl = new Audio("sounds/incorrect.mp3");
+let isMuted = localStorage.getItem("isMuted") === "true";
+
+function playSound(baseAudio){
+  if(isMuted) return;
+  const sound = baseAudio.cloneNode();
+  sound.play().catch(() => {});
+}
+
+document.addEventListener("click", (e) => {
+  if(e.target.closest("button")){
+    playSound(clickSoundEl);
+  }
+});
+
+inputEl.addEventListener("keydown", () => {
+  playSound(keySoundEl);
+});
+
+const muteBtn = document.getElementById("mute-btn");
+muteBtn.checked = isMuted;
+muteBtn.addEventListener("change", () => {
+  isMuted = muteBtn.checked;
+  localStorage.setItem("isMuted", isMuted);
+});
+
+const rankingBoxEl = document.getElementById("ranking-box");
+const rankingListEl = document.getElementById("ranking-list");
+const rankingTitleEl = document.querySelector(".ranking-title");
+const resultRankBadgeEl = document.getElementById("result-rank-badge");
+const setupHighScoreEl = document.getElementById("setup-high-score");
+const resultHighScoreEl = document.getElementById("result-high-score");
+const newRecordBadgeEl = document.getElementById("new-record-badge");
+const rankingSubmittingIndicatorEl = document.getElementById("ranking-submitting-indicator");
+
+function getHighScoreKey(mode, level){
+  return `highScore_${mode}_${level}`;
+}
+
+function getHighScore(mode, level){
+  const key = getHighScoreKey(mode, level);
+  if(serverHighScores){
+    return serverHighScores[key] || 0;
+  }
+  const value = localStorage.getItem(key);
+  return value ? parseInt(value, 10) : 0;
+}
+
+function setHighScore(mode, level, newScore){
+  const key = getHighScoreKey(mode, level);
+  if(serverHighScores){
+    serverHighScores[key] = newScore;
+    const token = getSessionToken();
+    if(token){
+      fetch(`${RANKING_API_URL}/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "setHighScore", token, mode, level, score: newScore })
+      }).catch(() => {});
+    }
+    return;
+  }
+  localStorage.setItem(key, String(newScore));
+}
+
+function updateSetupHighScore(){
+  setupHighScoreEl.textContent = `ハイスコア ${getHighScore(currentMode, currentLevel)}`;
+}
+
+let rankingRequestId = 0;
+const RANKING_DISPLAY_MAX = 20;
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, (ch) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[ch]));
+}
+
+function renderRanking(scores){
+  if(!Array.isArray(scores) || scores.length === 0){
+    rankingBoxEl.classList.add("hidden");
+    rankingListEl.innerHTML = "";
+    return;
+  }
+  rankingListEl.innerHTML = scores.map((s, i) => {
+    const rank = i + 1;
+    const entryScore = typeof s === "object" && s !== null ? s.score : s;
+    const entryName = typeof s === "object" && s !== null && s.name ? s.name : "GUEST";
+    return `<li class="ranking-item${rank <= 3 ? " top3" : ""}"><span class="rank">${rank}位</span><span class="name">${escapeHtml(entryName)}</span><span class="score">${entryScore}</span></li>`;
+  }).join("");
+  rankingBoxEl.classList.remove("hidden");
+}
+
+let eventActive = false;
+
+function applyEventGate(){
+  const overlayEl = document.getElementById("no-event-overlay");
+  if(!overlayEl) return;
+  overlayEl.classList.toggle("hidden", eventActive);
+  document.getElementById("start-btn").disabled = !eventActive;
+  document.getElementById("start-online-btn").disabled = !eventActive;
+  document.getElementById("start-friend-btn").disabled = !eventActive;
+}
+
+async function loadRanking(){
+  const requestId = ++rankingRequestId;
+  const mode = currentMode;
+  const level = currentLevel;
+  const modeLabel = modeLabels[mode] || "ひらがな";
+  rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> イベントランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
+  rankingBoxEl.classList.add("hidden");
+  rankingListEl.innerHTML = "";
+  try{
+    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`);
+    if(requestId !== rankingRequestId) return;
+    if(!res.ok){
+      eventActive = false;
+      applyEventGate();
+      rankingBoxEl.classList.add("hidden");
+      rankingListEl.innerHTML = "";
+      return;
+    }
+    const data = await res.json();
+    if(requestId !== rankingRequestId) return;
+    eventActive = true;
+    applyEventGate();
+    if(data.month){
+      rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ${data.month}限定ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
+    }
+    renderRanking(data.scores);
+  }catch(e){
+    if(requestId !== rankingRequestId) return;
+    eventActive = false;
+    applyEventGate();
+    rankingBoxEl.classList.add("hidden");
+    rankingListEl.innerHTML = "";
+  }
+}
+
+function logPlay(mode, level, matchType, opponent){
+  const name = normalizePlayerName(getPlayerName());
+  fetch(`${RANKING_API_URL}/playlog`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, mode, level, matchType: matchType || "solo", opponent: opponent || "" })
+  }).catch(() => {});
+}
+
+async function fetchWithRetry(url, options, attempts){
+  for(let i = 0; i < attempts; i++){
+    try{
+      const res = await fetch(url, options);
+      if(res.ok) return res;
+    }catch(e){
+    }
+    if(i < attempts - 1){
+      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+    }
+  }
+  return null;
+}
+
+
+async function submitScoreToRanking(score, mode, level, name){
+  const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ score, name })
+  }, 4);
+  if(!res) return;
+  try{
+    const data = await res.json();
+    if(mode === currentMode && level === currentLevel){
+      renderRanking(data.top20);
+    }
+    if(data.rank){
+      resultRankBadgeEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング ${data.rank}位にランクインしました！`;
+      resultRankBadgeEl.classList.add("visible");
+    }
+  }catch(e){
+  }
+}
+
+async function checkRankQualifies(score, mode, level){
+  try{
+    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`);
+    if(!res.ok) return true;
+    const data = await res.json();
+    const scores = data.scores;
+    if(!Array.isArray(scores)) return true;
+    if(scores.length < RANKING_DISPLAY_MAX) return true;
+    const lowestEntry = scores[scores.length - 1];
+    const lowestScore = typeof lowestEntry === "object" && lowestEntry !== null ? lowestEntry.score : lowestEntry;
+    return score >= lowestScore;
+  }catch(e){
+    return true;
+  }
+}
+
+async function handleRankingSubmission(score, mode, level){
+  if(!eventActive) return;
+  const qualifies = await checkRankQualifies(score, mode, level);
+  if(!qualifies) return;
+  const name = normalizePlayerName(getPlayerName());
+  if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.add("visible");
+  await submitScoreToRanking(score, mode, level, name);
+  if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.remove("visible");
+}
+
+const initialRankingLoadPromise = loadRanking();
+
+let ws = null;
+let matchId = null;
+let myRole = null;
+let opponentName = "";
+let isOnlineMode = false;
+let onlineWordDeck = [];
+let onlineIndex = 0;
+let onlineScore = 0;
+let onlineMiss = 0;
+let onlineChars = 0;
+let friendWs = null;
+let friendRole = null;
+let opponentScore = 0;
+let searchCountdownTimer = null;
+let onlineTimerId = null;
+let onlineTimeLeft = 100;
+let countdownTimerId = null;
+
+function fitSpacerToViewport(){
+  imeSpacerEl.style.height = "0px";
+  requestAnimationFrame(() => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const available = window.innerHeight - contentHeight;
+    imeSpacerEl.style.height = `${Math.max(0, available)}px`;
+  });
+}
+
+window.addEventListener("resize", fitSpacerToViewport);
+window.addEventListener("resize", fitWordDisplayFontSize);
+window.addEventListener("resize", fitRomajiDisplayFontSize);
+window.addEventListener("resize", scrollRomajiDisplayToTypedPosition);
+if(window.visualViewport){
+  window.visualViewport.addEventListener("resize", fitSpacerToViewport);
+  window.visualViewport.addEventListener("resize", fitWordDisplayFontSize);
+  window.visualViewport.addEventListener("resize", fitRomajiDisplayFontSize);
+  window.visualViewport.addEventListener("resize", scrollRomajiDisplayToTypedPosition);
+}
+
+document.querySelectorAll(".mode-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentMode = btn.dataset.mode;
+    currentLevel = "beginner";
+    document.querySelectorAll(".levels").forEach(row => {
+      row.classList.toggle("hidden", row.dataset.row !== currentMode);
+      row.querySelectorAll(".level-btn").forEach((lb, i) => {
+        lb.classList.toggle("active", i === 0);
+      });
+    });
+    loadRanking();
+    updateUrlHash();
+    updateSetupHighScore();
+  });
+});
+
+document.querySelectorAll(".levels").forEach(row => {
+  row.querySelectorAll(".level-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      row.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentLevel = btn.dataset.level;
+      loadRanking();
+      updateUrlHash();
+      updateSetupHighScore();
+    });
+  });
+});
+
+function updateUrlHash(){
+  if(currentMode === "hiragana" && currentLevel === "beginner"){
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+  } else {
+    window.location.hash = `${currentMode}-${currentLevel}`;
+  }
+}
+
+function applyStateFromHash(){
+  const hash = window.location.hash.replace("#", "");
+  const validModes = ["hiragana", "katakana", "sentence"];
+  const validLevels = ["beginner", "intermediate", "advanced"];
+  const [mode, level] = hash.split("-");
+
+  if(hash && validModes.includes(mode) && validLevels.includes(level)){
+    currentMode = mode;
+    currentLevel = level;
+  } else {
+    currentMode = "hiragana";
+    currentLevel = "beginner";
+  }
+
+  document.querySelectorAll(".mode-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.mode === currentMode);
+  });
+
+  document.querySelectorAll(".levels").forEach(row => {
+    row.classList.toggle("hidden", row.dataset.row !== currentMode);
+    row.querySelectorAll(".level-btn").forEach(lb => {
+      lb.classList.toggle("active", lb.dataset.level === currentLevel);
+    });
+  });
+
+  loadRanking();
+  updateSetupHighScore();
+}
+
+document.getElementById("footer-year").textContent = new Date().getFullYear();
+
+applyStateFromHash();
+preloadAllWordLists();
+window.addEventListener("hashchange", () => {
+  if(isInGameFlow()){
+    quitToTop();
+  }
+  applyStateFromHash();
+});
+
+document.getElementById("start-btn").addEventListener("click", startGame);
+document.getElementById("start-online-btn").addEventListener("click", startOnlineSearch);
+cancelSearchBtn.addEventListener("click", cancelSearch);
+document.getElementById("retry-btn").addEventListener("click", () => {
+  resultEl.classList.remove("visible");
+  setupEl.classList.remove("hidden");
+});
+
+function startOnlineSearch(){
+  if(!eventActive) return;
+  setupEl.classList.add("hidden");
+  searchingEl.classList.add("visible");
+  let secondsLeft = 15;
+  searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
+  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
+  ws = new WebSocket(`${ONLINE_SERVER_URL}/lobby?mode=${currentMode}&level=${currentLevel}&name=${myName}`);
+  ws.onmessage = (event) => {
+    const msg = JSON.parse(event.data);
+    if(msg.type === "matched"){
+      clearInterval(searchCountdownTimer);
+      matchId = msg.matchId;
+      myRole = msg.role;
+      opponentName = msg.opponentName || "GUEST";
+      connectToMatch();
+    } else if(msg.type === "timeout"){
+      clearInterval(searchCountdownTimer);
+      cancelSearch();
+      showCustomAlert("対戦相手が見つかりませんでした");
+    }
+  };
+  ws.onerror = () => {
+    clearInterval(searchCountdownTimer);
+    cancelSearch();
+    showCustomAlert("サーバーに接続できませんでした");
+  };
+  searchCountdownTimer = setInterval(() => {
+    secondsLeft--;
+    searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
+    if(secondsLeft <= 0){
+      clearInterval(searchCountdownTimer);
+    }
+  }, 1000);
+}
+
+function cancelSearch(){
+  if(ws){ ws.close(); ws = null; }
+  clearInterval(searchCountdownTimer);
+  searchingEl.classList.remove("visible");
+  setupEl.classList.remove("hidden");
+}
+
+function isInGameFlow(){
+  return gameEl.classList.contains("visible") ||
+    countdownEl.classList.contains("visible") ||
+    searchingEl.classList.contains("visible") ||
+    friendMenuEl.classList.contains("visible") ||
+    friendCreateEl.classList.contains("visible") ||
+    friendWaitingEl.classList.contains("visible") ||
+    friendJoinEl.classList.contains("visible");
+}
+
+function quitToTop(){
+  clearInterval(timerId);
+  clearInterval(onlineTimerId);
+  clearInterval(countdownTimerId);
+  clearInterval(searchCountdownTimer);
+  if(ws){ ws.close(); ws = null; }
+  if(friendWs){ friendWs.close(); friendWs = null; }
+  friendRole = null;
+  isOnlineMode = false;
+  countdownEl.classList.remove("visible");
+  searchingEl.classList.remove("visible");
+  friendMenuEl.classList.remove("visible");
+  friendCreateEl.classList.remove("visible");
+  friendWaitingEl.classList.remove("visible");
+  friendJoinEl.classList.remove("visible");
+  gameEl.classList.remove("visible");
+  headerEl.classList.remove("hidden");
+  document.body.classList.remove("game-active");
+  resultEl.classList.remove("visible");
+  setupEl.classList.remove("hidden");
+}
+
+function generateFriendCode(){
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+function connectFriendRoom(code, role){
+  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
+  friendRole = role;
+  friendWs = new WebSocket(`${ONLINE_SERVER_URL}/friend/${code}?role=${role}&mode=${currentMode}&level=${currentLevel}&name=${myName}`);
+  friendWs.onmessage = (event) => {
+    const msg = JSON.parse(event.data);
+    if(msg.type === "matched"){
+      friendWs = null;
+      matchId = msg.matchId;
+      myRole = msg.role;
+      opponentName = msg.opponentName || "GUEST";
+      if(msg.mode) currentMode = msg.mode;
+      if(msg.level) currentLevel = msg.level;
+      friendCreateEl.classList.remove("visible");
+      friendWaitingEl.classList.remove("visible");
+      connectToMatch();
+    } else if(msg.type === "timeout"){
+      cancelFriend();
+      showCustomAlert("相手が見つかりませんでした");
+    }
+  };
+  friendWs.onerror = () => {
+    cancelFriend();
+    showCustomAlert(role === "guest" ? "招待コードが見つかりませんでした" : "サーバーに接続できませんでした");
+  };
+}
+
+function startFriendCreate(){
+  if(!eventActive) return;
+  const code = generateFriendCode();
+  friendCodeLabelEl.textContent = code;
+  friendMenuEl.classList.remove("visible");
+  friendCreateEl.classList.add("visible");
+  connectFriendRoom(code, "host");
+}
+
+function startFriendJoin(){
+  if(!eventActive){
+    showCustomAlert("現在イベントは開催されていません");
+    return;
+  }
+  const code = friendCodeInputEl.value.trim();
+  if(!code){
+    showCustomAlert("招待コードを入力してください");
+    return;
+  }
+  if(!/^[0-9]+$/.test(code)){
+    showCustomAlert("招待コードは数字のみ入力してください");
+    return;
+  }
+  friendJoinEl.classList.remove("visible");
+  friendWaitingEl.classList.add("visible");
+  connectFriendRoom(code, "guest");
+}
+
+function copyFriendCode(){
+  const code = friendCodeLabelEl.textContent;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(code);
+  }
+  showCustomAlert("コードをコピーしました");
+}
+
+function cancelFriend(){
+  if(friendWs){ friendWs.close(); friendWs = null; }
+  friendRole = null;
+  friendCreateEl.classList.remove("visible");
+  friendWaitingEl.classList.remove("visible");
+  friendJoinEl.classList.remove("visible");
+  setupEl.classList.remove("hidden");
+}
+
+document.getElementById("start-friend-btn").addEventListener("click", () => {
+  setupEl.classList.add("hidden");
+  friendMenuEl.classList.add("visible");
+});
+document.getElementById("friend-menu-back-btn").addEventListener("click", () => {
+  friendMenuEl.classList.remove("visible");
+  setupEl.classList.remove("hidden");
+});
+document.getElementById("friend-create-btn").addEventListener("click", startFriendCreate);
+document.getElementById("friend-create-cancel-btn").addEventListener("click", cancelFriend);
+document.getElementById("friend-code-copy-btn").addEventListener("click", copyFriendCode);
+document.getElementById("friend-join-open-btn").addEventListener("click", () => {
+  friendMenuEl.classList.remove("visible");
+  friendCodeInputEl.value = "";
+  friendJoinEl.classList.add("visible");
+  friendCodeInputEl.focus();
+});
+document.getElementById("friend-join-cancel-btn").addEventListener("click", () => {
+  friendJoinEl.classList.remove("visible");
+  setupEl.classList.remove("hidden");
+});
+document.getElementById("friend-join-submit-btn").addEventListener("click", startFriendJoin);
+document.getElementById("friend-waiting-cancel-btn").addEventListener("click", cancelFriend);
+
+function connectToMatch(){
+  if(ws) ws.close();
+  ws = new WebSocket(`${ONLINE_SERVER_URL}/match/${matchId}?role=${myRole}&mode=${currentMode}&level=${currentLevel}`);
+  ws.onmessage = (event) => {
+    const msg = JSON.parse(event.data);
+    if(msg.type === "start"){
+      onlineWordDeck = msg.wordDeck;
+      startOnlineCountdown();
+    } else if(msg.type === "opponentProgress"){
+      opponentScore = msg.score;
+      updateOpponentHud();
+    } else if(msg.type === "end"){
+      finishOnlineGame(msg);
+    } else if(msg.type === "opponentLeft"){
+      finishOnlineGame({
+        you:{score:onlineScore, miss:onlineMiss},
+        opponent:{score:opponentScore, miss:0},
+        result:"win",
+        forfeit:true
+      });
+    }
+  };
+}
+
+function startOnlineCountdown(){
+  searchingEl.classList.remove("visible");
+  countdownEl.classList.add("visible");
+  let count = 3;
+  countdownNumberEl.textContent = count;
+  clearInterval(countdownTimerId);
+  countdownTimerId = setInterval(() => {
+    count--;
+    if(count > 0){
+      countdownNumberEl.textContent = count;
+    } else {
+      clearInterval(countdownTimerId);
+      countdownEl.classList.remove("visible");
+      beginOnlineMatch();
+    }
+  }, 1000);
+}
+
+async function beginOnlineMatch(){
+  logPlay(currentMode, currentLevel, friendRole ? "friend" : "online", opponentName);
+  isOnlineMode = true;
+  onlineIndex = 0;
+  onlineScore = 0;
+  onlineMiss = 0;
+  onlineChars = 0;
+  opponentScore = 0;
+  onlineTimeLeft = 100;
+  gameEl.classList.add("visible");
+  headerEl.classList.add("hidden");
+  document.body.classList.add("game-active");
+  opponentScoreLabelEl.classList.remove("hidden");
+  endGameBtn.classList.add("hidden");
+  const modeLabel = modeLabels[currentMode] || "ひらがな";
+  levelLabelEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）`;
+  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
+  scoreLabelEl.textContent = `${myDisplayName} 0 もん`;
+  timeLabelEl.textContent = `残り 100 秒`;
+  timeLabelEl.classList.remove("time-warning");
+  resetTimerFill();
+  updateOpponentHud();
+  if(currentMode === "sentence"){
+    await ensureSentenceReadings(currentLevel, onlineWordDeck);
+  }
+  currentWord = onlineWordDeck[0];
+  if(romajiDisplayEl){
+    romajiDisplayEl.classList.remove("shake");
+    romajiDisplayEl.scrollLeft = 0;
+  }
+  renderWord();
+  inputEl.value = "";
+  inputEl.classList.remove("shake");
+  resetHintLabel();
+  fitSpacerToViewport();
+  inputEl.focus();
+  clearInterval(onlineTimerId);
+  onlineTimerId = setInterval(() => {
+    onlineTimeLeft--;
+    timeLabelEl.textContent = `残り ${onlineTimeLeft} 秒`;
+    timeLabelEl.classList.toggle("time-warning", onlineTimeLeft <= 10);
+    timerFillEl.style.width = `${(onlineTimeLeft / 100) * 100}%`;
+    if(onlineTimeLeft <= 0){
+      clearInterval(onlineTimerId);
+      if(ws && ws.readyState === WebSocket.OPEN){
+        ws.send(JSON.stringify({type:"finished", score:onlineScore, miss:onlineMiss}));
+      }
+    }
+  }, 1000);
+}
+
+function resetTimerFill(){
+  timerFillEl.classList.add("no-transition");
+  timerFillEl.style.width = "100%";
+  void timerFillEl.offsetWidth;
+  timerFillEl.classList.remove("no-transition");
+}
+
+function updateOpponentHud(){
+  const displayName = opponentName || "GUEST";
+  opponentScoreLabelEl.textContent = `${displayName} ${opponentScore} もん`;
+}
+
+function handleOnlineSubmit(typed){
+  if(typed !== currentWord){
+    onlineMiss++;
+    hintLabelEl.textContent = "まだ違います";
+    shakeInput();
+    playSound(incorrectSoundEl);
+    return;
+  }
+  onlineScore++;
+  onlineChars += currentWord.length;
+  onlineIndex++;
+  currentWord = onlineWordDeck[onlineIndex % onlineWordDeck.length];
+  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
+  scoreLabelEl.textContent = `${myDisplayName} ${onlineScore} もん`;
+  renderWord();
+  inputEl.value = "";
+  inputEl.classList.remove("shake");
+  resetHintLabel();
+  fitSpacerToViewport();
+  playSound(correctSoundEl);
+  if(ws && ws.readyState === WebSocket.OPEN){
+    ws.send(JSON.stringify({type:"progress", score:onlineScore, index:onlineIndex}));
+  }
+}
+
+function finishOnlineGame(msg){
+  clearInterval(onlineTimerId);
+  clearInterval(countdownTimerId);
+  countdownEl.classList.remove("visible");
+  isOnlineMode = false;
+  gameEl.classList.remove("visible");
+  headerEl.classList.remove("hidden");
+  document.body.classList.remove("game-active");
+  opponentScoreLabelEl.classList.add("hidden");
+  endGameBtn.classList.remove("hidden");
+  resultEl.classList.add("visible");
+  const you = msg.you;
+  const opponent = msg.opponent;
+  const attempts = you.score + you.miss;
+  const accuracy = attempts === 0 ? 0 : Math.round((you.score / attempts) * 100);
+  const speed = Math.round((onlineChars / 100) * 60);
+  let resultLabel = "ひきわけ";
+  if(msg.result === "win") resultLabel = msg.forfeit ? "不戦勝" : "しょうり";
+  else if(msg.result === "lose") resultLabel = "はいせん";
+  resultScoreEl.textContent = resultLabel;
+  const modeLabel = modeLabels[currentMode] || "ひらがな";
+  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
+  const oppDisplayName = opponentName || "GUEST";
+  resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）/ ${myDisplayName} ${you.score}もん・${oppDisplayName} ${opponent.score}もん`;
+  updateResultShareLinks(`シンプルタイピングのオンライン対戦で${resultLabel}でした！（${you.score}もん せいかい）`);
+  statAccuracyEl.textContent = `${accuracy}%`;
+  statSpeedEl.textContent = speed;
+  statMissEl.textContent = you.miss;
+  if(ws){ ws.close(); ws = null; }
+  opponentName = "";
+}
+
+function pickWord(){
+  const pool = wordListCache[`${currentMode}-${currentLevel}`] || [];
+  let candidates = pool.filter(w => !usedWords.includes(w));
+  if(candidates.length === 0){
+    usedWords = [];
+    candidates = pool;
+  }
+  const word = candidates[Math.floor(Math.random() * candidates.length)];
+  usedWords.push(word);
+  return word;
+}
+
+function renderSentenceReading(){
+  if(!sentenceReadingDisplayEl) return;
+  if(currentMode !== "sentence" || !showHiragana){
+    sentenceReadingDisplayEl.classList.remove("visible");
+    sentenceReadingDisplayEl.innerHTML = "";
+    return;
+  }
+  const reading = getCurrentWordReading();
+  sentenceReadingDisplayEl.classList.add("visible");
+  sentenceReadingDisplayEl.innerHTML = [...reading].map(c => `<span class="sentence-reading-char">${c}</span>`).join("");
+}
+
+function renderWord(){
+  wordDisplayEl.innerHTML = currentWord.split("").map(c => `<span class="char">${c}</span>`).join("");
+  renderSentenceReading();
+  fitWordDisplayFontSize();
+  if(inputMode === "realtime"){
+    setupRealtimeWord();
+  }
+  updateSentenceProgressHighlight();
+}
+
+function resetHintLabel(){
+  hintLabelEl.textContent = inputMode === "realtime" ? "ローマ字でタイピングしよう" : "Enterで確定";
+}
+
+function updateInputModeUI(){
+  const isRealtime = inputMode === "realtime";
+  if(inputRowEl) inputRowEl.classList.toggle("hidden", isRealtime);
+  if(romajiDisplayEl) romajiDisplayEl.classList.toggle("hidden", !isRealtime || !showRomaji);
+  if(inputMode !== "realtime"){
+    typingText = null;
+  }
+  resetHintLabel();
+  updateSentenceProgressHighlight();
+}
+
+let showRomaji = localStorage.getItem(SHOW_ROMAJI_KEY) !== "false";
+let showHiragana = localStorage.getItem(SHOW_HIRAGANA_KEY) !== "false";
+let romajiUppercase = localStorage.getItem(ROMAJI_UPPERCASE_KEY) === "true";
+let showKeyboard = localStorage.getItem(SHOW_KEYBOARD_KEY) !== "false";
+
+const showRomajiCheckEl = document.getElementById("show-romaji-check");
+const showHiraganaCheckEl = document.getElementById("show-hiragana-check");
+const romajiUppercaseCheckEl = document.getElementById("romaji-uppercase-check");
+const showKeyboardCheckEl = document.getElementById("show-keyboard-check");
+const keyboardGuideEl = document.getElementById("keyboard-guide");
+
+function applyRomajiUppercaseUI(){
+  if(romajiDisplayEl) romajiDisplayEl.classList.toggle("uppercase", romajiUppercase);
+}
+
+function applyKeyboardUI(){
+  if(!keyboardGuideEl) return;
+  const visible = inputMode === "realtime" && showKeyboard;
+  keyboardGuideEl.classList.toggle("visible", visible);
+  showNextKey();
+}
+
+function highlightKeyboardKey(key, isMiss){
+  if(!keyboardGuideEl || !keyboardGuideEl.classList.contains("visible")) return;
+  keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => el.classList.remove("active", "miss"));
+  if(!key) return;
+  const upper = key.toUpperCase();
+  const stateClass = isMiss ? "miss" : "active";
+  keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => {
+    if(el.textContent.trim() === upper) el.classList.add(stateClass);
+  });
+}
+
+function showNextKey(){
+  if(!keyboardGuideEl || !keyboardGuideEl.classList.contains("visible")) return;
+  keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => el.classList.remove("next"));
+  if(!typingText || !typingText.remainingRoman) return;
+  const next = typingText.remainingRoman[0].toUpperCase();
+  keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => {
+    if(el.textContent.trim() === next) el.classList.add("next");
+  });
+}
+
+function refreshDisplaySettingCheckboxes(){
+  if(showRomajiCheckEl) showRomajiCheckEl.checked = showRomaji;
+  if(showHiraganaCheckEl) showHiraganaCheckEl.checked = showHiragana;
+  if(romajiUppercaseCheckEl) romajiUppercaseCheckEl.checked = romajiUppercase;
+  if(showKeyboardCheckEl) showKeyboardCheckEl.checked = showKeyboard;
+}
+
+function applyDisplaySettings(settings){
+  showRomaji = settings && settings.showRomaji !== undefined ? settings.showRomaji !== false : true;
+  showHiragana = settings && settings.showHiragana !== undefined ? settings.showHiragana !== false : true;
+  romajiUppercase = settings && settings.romajiUppercase === true;
+  showKeyboard = settings && settings.showKeyboard !== undefined ? settings.showKeyboard !== false : true;
+  refreshDisplaySettingCheckboxes();
+  updateInputModeUI();
+  renderSentenceReading();
+  applyRomajiUppercaseUI();
+  applyKeyboardUI();
+}
+
+function getGuestDisplaySettings(){
+  return {
+    showRomaji: localStorage.getItem(SHOW_ROMAJI_KEY) !== "false",
+    showHiragana: localStorage.getItem(SHOW_HIRAGANA_KEY) !== "false",
+    romajiUppercase: localStorage.getItem(ROMAJI_UPPERCASE_KEY) === "true",
+    showKeyboard: localStorage.getItem(SHOW_KEYBOARD_KEY) !== "false"
+  };
+}
+
+function saveGuestDisplaySettings(){
+  localStorage.setItem(SHOW_ROMAJI_KEY, String(showRomaji));
+  localStorage.setItem(SHOW_HIRAGANA_KEY, String(showHiragana));
+  localStorage.setItem(ROMAJI_UPPERCASE_KEY, String(romajiUppercase));
+  localStorage.setItem(SHOW_KEYBOARD_KEY, String(showKeyboard));
+}
+
+function handleDisplaySettingChange(){
+  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
+  if(isLoggedIn){
+    const token = getSessionToken();
+    fetch(`${RANKING_API_URL}/auth`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "setDisplaySettings", token, showRomaji, showHiragana, romajiUppercase, showKeyboard })
+    }).catch(() => {});
+  } else {
+    saveGuestDisplaySettings();
+  }
+}
+
+if(showRomajiCheckEl){
+  showRomajiCheckEl.addEventListener("change", () => {
+    showRomaji = showRomajiCheckEl.checked;
+    updateInputModeUI();
+    handleDisplaySettingChange();
+  });
+}
+
+if(showHiraganaCheckEl){
+  showHiraganaCheckEl.addEventListener("change", () => {
+    showHiragana = showHiraganaCheckEl.checked;
+    renderSentenceReading();
+    handleDisplaySettingChange();
+  });
+}
+
+if(romajiUppercaseCheckEl){
+  romajiUppercaseCheckEl.addEventListener("change", () => {
+    romajiUppercase = romajiUppercaseCheckEl.checked;
+    applyRomajiUppercaseUI();
+    handleDisplaySettingChange();
+  });
+}
+
+if(showKeyboardCheckEl){
+  showKeyboardCheckEl.addEventListener("change", () => {
+    showKeyboard = showKeyboardCheckEl.checked;
+    applyKeyboardUI();
+    handleDisplaySettingChange();
+  });
+}
+
+refreshDisplaySettingCheckboxes();
+applyRomajiUppercaseUI();
+applyKeyboardUI();
+
+const showRomajiLabelEl = document.getElementById("show-romaji-label");
+const romajiUppercaseLabelEl = document.getElementById("romaji-uppercase-label");
+const showKeyboardLabelEl = document.getElementById("show-keyboard-label");
+
+function applyInputMode(mode){
+  inputMode = mode === "textbox" ? "textbox" : "realtime";
+  document.querySelectorAll(".input-mode-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.inputMode === inputMode);
+  });
+  const isRealtime = inputMode === "realtime";
+  if(showRomajiLabelEl) showRomajiLabelEl.classList.toggle("hidden", !isRealtime);
+  if(romajiUppercaseLabelEl) romajiUppercaseLabelEl.classList.toggle("hidden", !isRealtime);
+  if(showKeyboardLabelEl) showKeyboardLabelEl.classList.toggle("hidden", !isRealtime);
+  updateInputModeUI();
+  applyKeyboardUI();
+  if(inputMode === "realtime" && gameEl.classList.contains("visible")){
+    setupRealtimeWord();
+  }
+}
+
+document.querySelectorAll(".input-mode-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const selectedMode = btn.dataset.inputMode;
+    applyInputMode(selectedMode);
+    const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
+    if(isLoggedIn){
+      const token = getSessionToken();
+      fetch(`${RANKING_API_URL}/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "setInputMode", token, inputMode: selectedMode })
+      }).catch(() => {});
+    } else {
+      localStorage.setItem(GUEST_INPUT_MODE_KEY, selectedMode);
+    }
+  });
+});
+
+applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
+
+function buildTypingText(reading){
+  try{
+    return new TypingText(reading);
+  }catch(e){}
+  try{
+    const sanitized = [...reading].filter(c => /[ぁ-んー]/.test(c)).join("");
+    if(sanitized) return new TypingText(sanitized);
+  }catch(e){}
+  return null;
+}
+
+function setupRealtimeWord(){
+  const reading = getCurrentWordReading();
+  if(romajiDisplayEl){
+    romajiDisplayEl.classList.remove("shake");
+    romajiDisplayEl.scrollLeft = 0;
+  }
+  typingText = buildTypingText(reading);
+  renderRomajiDisplay();
+  fitRomajiDisplayFontSize();
+  showNextKey();
+}
+
+function renderRomajiDisplay(){
+  if(!romajiDisplayEl) return;
+  if(!typingText){
+    romajiDisplayEl.innerHTML = "";
+    showNextKey();
+    return;
+  }
+  const doneHtml = `<span class="rchar done">${typingText.completedRoman}</span>`;
+  const restHtml = `<span class="rchar current">${typingText.remainingRoman}</span>`;
+  romajiDisplayEl.innerHTML = doneHtml + restHtml;
+  scrollRomajiDisplayToTypedPosition();
+  showNextKey();
+}
+
+function fitRomajiDisplayFontSize(){
+  if(!romajiDisplayEl) return;
+  const baseSize = 26;
+  const minSize = 15;
+  const maxScrollableWidth = romajiDisplayEl.clientWidth * 2.2;
+  let size = baseSize;
+  romajiDisplayEl.style.fontSize = `${size}px`;
+  while(romajiDisplayEl.scrollWidth > maxScrollableWidth && size > minSize){
+    size -= 1;
+    romajiDisplayEl.style.fontSize = `${size}px`;
+  }
+  romajiDisplayEl.classList.toggle("centered", romajiDisplayEl.scrollWidth <= romajiDisplayEl.clientWidth);
+}
+
+function scrollRomajiDisplayToTypedPosition(){
+  if(!romajiDisplayEl || romajiDisplayEl.classList.contains("hidden")) return;
+  const doneEl = romajiDisplayEl.querySelector(".rchar.done");
+  if(!doneEl) return;
+  const typedPosition = doneEl.offsetLeft + doneEl.offsetWidth;
+  const targetScrollLeft = typedPosition - romajiDisplayEl.clientWidth * 0.4;
+  const maxScrollLeft = Math.max(0, romajiDisplayEl.scrollWidth - romajiDisplayEl.clientWidth);
+  romajiDisplayEl.scrollLeft = Math.min(maxScrollLeft, Math.max(0, targetScrollLeft));
+}
+
+function getRealtimeCompletedKanaCount(){
+  if(!typingText || currentMode !== "sentence") return 0;
+  const reading = getCurrentWordReading();
+  const remainingRoman = typingText.remainingRoman;
+  if(!remainingRoman) return [...reading].length;
+
+  const chars = [...reading];
+  for(let i = 0; i <= chars.length; i++){
+    const suffix = chars.slice(i).join("");
+    try{
+      const suffixTypingText = new TypingText(suffix);
+      if(suffixTypingText.remainingRoman === remainingRoman){
+        return i;
+      }
+    }catch(e){
+      break;
+    }
+  }
+  return 0;
+}
+
+function updateSentenceProgressHighlight(){
+  if(!sentenceReadingDisplayEl) return;
+  const readingChars = sentenceReadingDisplayEl.querySelectorAll(".sentence-reading-char");
+  readingChars.forEach(el => el.classList.remove("done"));
+}
+
+function shakeRomaji(){
+  if(!romajiDisplayEl) return;
+  romajiDisplayEl.classList.remove("shake");
+  void romajiDisplayEl.offsetWidth;
+  romajiDisplayEl.classList.add("shake");
+}
+
+function completeRealtimeWord(){
+  if(isOnlineMode){
+    handleOnlineSubmit(currentWord);
+    return;
+  }
+  score++;
+  totalCharsTyped += currentWord.length;
+  scoreLabelEl.textContent = `せいかい ${score} もん`;
+  playSound(correctSoundEl);
+  nextWord();
+}
+
+function handleRealtimeKey(key){
+  if(!typingText){
+    setupRealtimeWord();
+    if(!typingText) return "unmatch";
+  }
+  let result;
+  try{
+    result = typingText.inputKey(key);
+  }catch(e){
+    return "unmatch";
+  }
+
+  if(result === "unmatch"){
+    missCount++;
+    hintLabelEl.textContent = "ちがうキーです";
+    shakeRomaji();
+    playSound(incorrectSoundEl);
+    return result;
+  }
+
+  playSound(keySoundEl);
+  hintLabelEl.textContent = "ローマ字でタイピングしよう";
+  renderRomajiDisplay();
+  updateSentenceProgressHighlight();
+
+  if(result === "complete"){
+    completeRealtimeWord();
+  }
+  return result;
+}
+
+document.addEventListener("keydown", (e) => {
+  if(inputMode !== "realtime") return;
+  if(!gameEl.classList.contains("visible")) return;
+  if(!e.isTrusted) return;
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  if(e.key.length !== 1 || !/^[a-zA-Z\-]$/.test(e.key)) return;
+  e.preventDefault();
+  const result = handleRealtimeKey(e.key.toLowerCase());
+  highlightKeyboardKey(e.key, result === "unmatch");
+});
+
+document.addEventListener("keyup", (e) => {
+  if(inputMode !== "realtime") return;
+  if(!gameEl.classList.contains("visible")) return;
+  highlightKeyboardKey(null);
+});
+
+function fitWordDisplayFontSize(){
+  const baseSize = parseFloat(getComputedStyle(wordDisplayEl).fontSize);
+  const minSize = 12;
+  let size = baseSize;
+  wordDisplayEl.style.fontSize = "";
+  while(wordDisplayEl.scrollWidth > wordDisplayEl.clientWidth && size > minSize){
+    size -= 1;
+    wordDisplayEl.style.fontSize = `${size}px`;
+  }
+}
+
+function updateProgressHighlight(typed){
+  const chars = wordDisplayEl.querySelectorAll(".char");
+  chars.forEach(el => el.classList.remove("done"));
+
+  if(inputMode !== "textbox") return;
+
+  let stillCorrect = true;
+  chars.forEach((el, i) => {
+    if(stillCorrect && i < typed.length && typed[i] === currentWord[i]){
+      el.classList.add("done");
+    }else{
+      stillCorrect = false;
+    }
+  });
+}
+
+function nextWord(){
+  currentWord = pickWord();
+  renderWord();
+  inputEl.value = "";
+  inputEl.classList.remove("shake");
+  resetHintLabel();
+  fitSpacerToViewport();
+}
+
+async function startGame(){
+  if(!eventActive) return;
+  logPlay(currentMode, currentLevel, "solo", "");
+  showAppLoadingOverlay();
+  await ensureWordList(currentMode, currentLevel);
+  hideAppLoadingOverlay();
+  setupEl.classList.add("hidden");
+  resultEl.classList.remove("visible");
+  await runSoloCountdown();
+  gameEl.classList.add("visible");
+  headerEl.classList.add("hidden");
+  document.body.classList.add("game-active");
+  endGameBtn.classList.remove("hidden");
+  fitSpacerToViewport();
+  const modeLabel = modeLabels[currentMode] || "ひらがな";
+  levelLabelEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}`;
+  score = 0;
+  missCount = 0;
+  totalCharsTyped = 0;
+  timeLeft = 100;
+  usedWords = [];
+  if(romajiDisplayEl){
+    romajiDisplayEl.classList.remove("shake");
+    romajiDisplayEl.scrollLeft = 0;
+  }
+  resultRankBadgeEl.classList.remove("visible");
+  resultRankBadgeEl.textContent = "";
+  newRecordBadgeEl.classList.remove("visible");
+  if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.remove("visible");
+  scoreLabelEl.textContent = `せいかい 0 もん`;
+  timeLabelEl.textContent = `残り 100 秒`;
+  timeLabelEl.classList.remove("time-warning");
+  resetTimerFill();
+  nextWord();
+  inputEl.focus();
+  clearInterval(timerId);
+  timerId = setInterval(() => {
+    timeLeft--;
+    timeLabelEl.textContent = `残り ${timeLeft} 秒`;
+    timeLabelEl.classList.toggle("time-warning", timeLeft <= 10);
+    timerFillEl.style.width = `${(timeLeft / 100) * 100}%`;
+    if(timeLeft <= 0){
+      endGame(true);
+    }
+  }, 1000);
+}
+
+function runSoloCountdown(){
+  return new Promise(resolve => {
+    countdownEl.classList.add("visible");
+    let count = 3;
+    countdownNumberEl.textContent = count;
+    clearInterval(countdownTimerId);
+    countdownTimerId = setInterval(() => {
+      count--;
+      if(count > 0){
+        countdownNumberEl.textContent = count;
+      } else {
+        clearInterval(countdownTimerId);
+        countdownEl.classList.remove("visible");
+        resolve();
+      }
+    }, 1000);
+  });
+}
+
+function endGame(isNormalEnd){
+  clearInterval(timerId);
+  gameEl.classList.remove("visible");
+  headerEl.classList.remove("hidden");
+  document.body.classList.remove("game-active");
+  if(isNormalEnd){
+    resultEl.classList.add("visible");
+
+    const attempts = score + missCount;
+    const accuracy = attempts === 0 ? 0 : Math.round((score / attempts) * 100);
+    const speed = Math.round((totalCharsTyped / 100) * 60);
+    const finalScore = Math.max(0, Math.round(score * 100 + speed * 2 - missCount * 30));
+
+    resultScoreEl.textContent = finalScore;
+    const modeLabel = modeLabels[currentMode] || "ひらがな";
+    resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]} / ${score}もん せいかい`;
+    updateResultShareLinks(`シンプルタイピングで${modeLabel}・${levelLabels[currentLevel]}をプレイして${finalScore}点でした！`);
+    statAccuracyEl.textContent = `${accuracy}%`;
+    statSpeedEl.textContent = speed;
+    statMissEl.textContent = missCount;
+
+    const previousHighScore = getHighScore(currentMode, currentLevel);
+    if(finalScore > previousHighScore){
+      setHighScore(currentMode, currentLevel, finalScore);
+      resultHighScoreEl.textContent = `ハイスコア ${finalScore}`;
+      newRecordBadgeEl.classList.add("visible");
+    } else {
+      resultHighScoreEl.textContent = `ハイスコア ${previousHighScore}`;
+      newRecordBadgeEl.classList.remove("visible");
+    }
+    updateSetupHighScore();
+
+    if(finalScore > 0){
+      handleRankingSubmission(finalScore, currentMode, currentLevel);
+    }
+    recordPlayResult(currentMode, currentLevel, accuracy, speed, missCount, finalScore);
+  } else {
+    setupEl.classList.remove("hidden");
+  }
+}
+
+const endGameBtn = document.getElementById("end-game-btn");
+endGameBtn.addEventListener("click", () => {
+  if(isOnlineMode) return;
+  endGame(false);
+});
+
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape" && gameEl.classList.contains("visible")){
+    if(isOnlineMode) return;
+    endGame(false);
+  }
+});
+
+function shakeInput(){
+  inputEl.classList.remove("shake");
+  void inputEl.offsetWidth;
+  inputEl.classList.add("shake");
+}
+
+
+inputEl.addEventListener("compositionstart", () => { isComposing = true; });
+inputEl.addEventListener("compositionend", () => {
+  setTimeout(() => { isComposing = false; }, 0);
+});
+
+inputEl.addEventListener("paste", (e) => {
+  e.preventDefault();
+});
+
+inputEl.addEventListener("drop", (e) => {
+  e.preventDefault();
+});
+
+inputEl.addEventListener("input", (e) => {
+  if(inputMode === "textbox") updateProgressHighlight(inputEl.value);
+  inputEl.classList.remove("shake");
+  resetHintLabel();
+});
+
+inputEl.addEventListener("keydown", (e) => {
+  if(e.key !== "Enter") return;
+  if(isComposing || e.isComposing || e.keyCode === 229) return;
+  e.preventDefault();
+
+  const typed = inputEl.value.trim();
+
+  if(isOnlineMode){
+    handleOnlineSubmit(typed);
+    return;
+  }
+
+  if(typed !== currentWord){
+    missCount++;
+    hintLabelEl.textContent = "まだ違います";
+    shakeInput();
+    playSound(incorrectSoundEl);
+    return;
+  }
+
+  score++;
+  totalCharsTyped += currentWord.length;
+  scoreLabelEl.textContent = `せいかい ${score} もん`;
+  playSound(correctSoundEl);
+  nextWord();
+});
+
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState !== "hidden") return;
+  if(searchingEl.classList.contains("visible")){
+    cancelSearch();
+  } else if(friendCreateEl.classList.contains("visible") || friendWaitingEl.classList.contains("visible")){
+    cancelFriend();
+  } else if(countdownEl.classList.contains("visible")){
+    clearInterval(countdownTimerId);
+    countdownEl.classList.remove("visible");
+    if(ws){ ws.close(); ws = null; }
+    setupEl.classList.remove("hidden");
+  } else if(isOnlineMode){
+    if(ws && ws.readyState === WebSocket.OPEN){
+      ws.close();
+    }
+    finishOnlineGame({
+      you:{score:onlineScore, miss:onlineMiss},
+      opponent:{score:opponentScore, miss:0},
+      result:"lose",
+      forfeit:true
+    });
+  }
+});
+
+(function(){
+  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+  if(!isMobile) return;
+  const overlay = document.getElementById("mobile-warning-overlay");
+  const closeBtn = document.getElementById("mobile-warning-close");
+  overlay.classList.add("visible");
+  closeBtn.addEventListener("click", () => {
+    overlay.classList.remove("visible");
+  });
+})();
+</script>
+</body>
+</html>
