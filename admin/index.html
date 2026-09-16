@@ -414,17 +414,39 @@
     border-color:var(--gold);
   }
 
-  .event-mode-checks{
+  .event-combo-checks{
     display:flex;
-    gap:16px;
+    flex-direction:column;
+    gap:10px;
     margin-bottom:14px;
   }
 
-  .event-mode-checks label{
+  .event-combo-row{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding:10px 12px;
+    background:var(--input-bg);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+  }
+
+  .event-combo-row-title{
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
+  .event-combo-row-checks{
+    display:flex;
+    gap:16px;
+  }
+
+  .event-combo-row-checks label{
     display:flex;
     align-items:center;
     gap:6px;
-    font-size:14px;
+    font-size:13px;
     color:var(--ink);
   }
 </style>
@@ -504,12 +526,8 @@
       <div class="event-status" id="event-status-text">読み込み中...</div>
       <label class="field-label" for="event-month-input">対象月</label>
       <input type="month" id="event-month-input">
-      <label class="field-label">対象タイピングモード</label>
-      <div class="event-mode-checks" id="event-mode-checks">
-        <label><input type="checkbox" value="hiragana" checked> ひらがな</label>
-        <label><input type="checkbox" value="katakana" checked> カタカナ</label>
-        <label><input type="checkbox" value="sentence" checked> 文章</label>
-      </div>
+      <label class="field-label">対象タイピングモード・難易度</label>
+      <div class="event-combo-checks" id="event-combo-checks"></div>
       <button class="login-btn" id="event-enable-btn">この月でイベントモードを有効化</button>
       <button class="logout-btn" id="event-disable-btn">無効化</button>
     </div>
@@ -566,7 +584,7 @@ const eventBackBtnEl = document.getElementById("event-back-btn");
 const eventRefreshBtnEl = document.getElementById("event-refresh-btn");
 const eventStatusTextEl = document.getElementById("event-status-text");
 const eventMonthInputEl = document.getElementById("event-month-input");
-const eventModeChecksEl = document.getElementById("event-mode-checks");
+const eventModeChecksEl = document.getElementById("event-combo-checks");
 const eventEnableBtnEl = document.getElementById("event-enable-btn");
 const eventDisableBtnEl = document.getElementById("event-disable-btn");
 const eventArchiveMonthInputEl = document.getElementById("event-archive-month-input");
@@ -953,27 +971,64 @@ function renderArchiveBoards(data, month){
   }
 }
 
-function getSelectedEventModes(){
+function buildEventComboChecks(){
+  eventModeChecksEl.innerHTML = "";
+  MODES.forEach(mode => {
+    const row = document.createElement("div");
+    row.className = "event-combo-row";
+
+    const title = document.createElement("div");
+    title.className = "event-combo-row-title";
+    title.textContent = MODE_LABELS[mode];
+    row.appendChild(title);
+
+    const checks = document.createElement("div");
+    checks.className = "event-combo-row-checks";
+    LEVELS.forEach(level => {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.value = `${mode}:${level}`;
+      input.checked = true;
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(` ${LEVEL_LABELS[level]}`));
+      checks.appendChild(label);
+    });
+    row.appendChild(checks);
+
+    eventModeChecksEl.appendChild(row);
+  });
+}
+
+function getSelectedEventCombos(){
   return Array.from(eventModeChecksEl.querySelectorAll("input[type=checkbox]:checked")).map(el => el.value);
 }
 
-function setSelectedEventModes(modes){
-  const list = Array.isArray(modes) && modes.length > 0 ? modes : MODES;
+function setSelectedEventCombos(combos){
+  const allCombos = MODES.flatMap(mode => LEVELS.map(level => `${mode}:${level}`));
+  const list = Array.isArray(combos) && combos.length > 0 ? combos : allCombos;
   eventModeChecksEl.querySelectorAll("input[type=checkbox]").forEach(el => {
     el.checked = list.includes(el.value);
   });
 }
 
+buildEventComboChecks();
+
 async function loadEventDashboard(){
   showOnly(loadingPanelEl);
   try{
     const data = await callAdmin("getEventMode", {});
-    const modeLabels = (data.modes && data.modes.length > 0 ? data.modes : MODES).map(m => MODE_LABELS[m]).join("・");
+    const allCombos = MODES.flatMap(mode => LEVELS.map(level => `${mode}:${level}`));
+    const activeCombos = data.combos && data.combos.length > 0 ? data.combos : allCombos;
+    const comboLabels = activeCombos.map(c => {
+      const [mode, level] = c.split(":");
+      return `${MODE_LABELS[mode]}・${LEVEL_LABELS[level]}`;
+    }).join("、");
     eventStatusTextEl.textContent = data.enabled
-      ? `イベントモード: 有効中（対象月: ${data.month || "未設定"} / 対象モード: ${modeLabels}）`
+      ? `イベントモード: 有効中（対象月: ${data.month || "未設定"} / 対象: ${comboLabels}）`
       : "イベントモード: 無効";
     eventMonthInputEl.value = data.month || "";
-    setSelectedEventModes(data.modes);
+    setSelectedEventCombos(data.combos);
     eventArchiveGridEl.innerHTML = "";
     showOnly(eventDashboardEl);
   }catch(e){
@@ -987,15 +1042,15 @@ eventEnableBtnEl.addEventListener("click", async () => {
     alert("対象月を選択してください");
     return;
   }
-  const modes = getSelectedEventModes();
-  if(modes.length === 0){
-    alert("対象タイピングモードを1つ以上選択してください");
+  const combos = getSelectedEventCombos();
+  if(combos.length === 0){
+    alert("対象タイピングモード・難易度を1つ以上選択してください");
     return;
   }
   if(!confirm(`${month} を対象にイベントモードを有効化しますか？`)) return;
   showOnly(loadingPanelEl);
   try{
-    await callAdmin("setEventMode", { enabled: true, month, modes });
+    await callAdmin("setEventMode", { enabled: true, month, combos });
     await loadEventDashboard();
   }catch(e){
     handleSessionExpired();
@@ -1006,7 +1061,7 @@ eventDisableBtnEl.addEventListener("click", async () => {
   if(!confirm("イベントモードを無効化しますか？")) return;
   showOnly(loadingPanelEl);
   try{
-    await callAdmin("setEventMode", { enabled: false, month: eventMonthInputEl.value, modes: getSelectedEventModes() });
+    await callAdmin("setEventMode", { enabled: false, month: eventMonthInputEl.value, combos: getSelectedEventCombos() });
     await loadEventDashboard();
   }catch(e){
     handleSessionExpired();
