@@ -695,6 +695,10 @@
     display:none;
   }
 
+  .game-controls-panel.hidden{
+    display:none;
+  }
+
   .no-event-overlay i{
     font-size:28px;
     color:var(--ink-soft);
@@ -1723,45 +1727,47 @@
         <p>現在開催中のイベントはありません</p>
         <span>イベント開催時にこちらのページからランキングに挑戦できます</span>
       </div>
-      <div class="mode-tabs">
-        <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
-        <button class="mode-btn" data-mode="katakana">カタカナ</button>
-        <button class="mode-btn" data-mode="sentence">文章</button>
-      </div>
+      <div class="game-controls-panel" id="game-controls-panel">
+        <div class="mode-tabs">
+          <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
+          <button class="mode-btn" data-mode="katakana">カタカナ</button>
+          <button class="mode-btn" data-mode="sentence">文章</button>
+        </div>
 
-      <div class="levels" data-row="hiragana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
+        <div class="levels" data-row="hiragana">
+          <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
+          <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
+          <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
+        </div>
 
-      <div class="levels hidden" data-row="katakana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
+        <div class="levels hidden" data-row="katakana">
+          <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
+          <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
+          <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
+        </div>
 
-      <div class="levels hidden" data-row="sentence">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
-      </div>
+        <div class="levels hidden" data-row="sentence">
+          <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
+          <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
+          <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
+        </div>
 
-      <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
+        <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
 
-      <div class="start-row">
-        <button class="start-btn" id="start-btn" disabled><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
-        <button class="start-btn online-btn" id="start-online-btn" disabled><i class="fa-solid fa-globe"></i> オンライン対戦</button>
-        <button class="start-btn online-btn" id="start-friend-btn" disabled><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
-      </div>
+        <div class="start-row">
+          <button class="start-btn" id="start-btn" disabled><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
+          <button class="start-btn online-btn" id="start-online-btn" disabled><i class="fa-solid fa-globe"></i> オンライン対戦</button>
+          <button class="start-btn online-btn" id="start-friend-btn" disabled><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
+        </div>
 
-      <div class="mode-and-mute-row">
-        <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
-        <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
-        <label class="mute-check-label">
-          <input type="checkbox" id="mute-btn" class="mute-check">
-          ミュート
-        </label>
+        <div class="mode-and-mute-row">
+          <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
+          <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
+          <label class="mute-check-label">
+            <input type="checkbox" id="mute-btn" class="mute-check">
+            ミュート
+          </label>
+        </div>
       </div>
 
       <div class="ranking-box hidden" id="ranking-box">
@@ -2761,8 +2767,10 @@ async function loadEventStatus(){
 
 function applyEventGate(){
   const overlayEl = document.getElementById("no-event-overlay");
+  const controlsPanelEl = document.getElementById("game-controls-panel");
   if(!overlayEl) return;
   overlayEl.classList.toggle("hidden", eventActive);
+  if(controlsPanelEl) controlsPanelEl.classList.toggle("hidden", !eventActive);
   document.getElementById("start-btn").disabled = !eventActive;
   document.getElementById("start-online-btn").disabled = !eventActive;
   document.getElementById("start-friend-btn").disabled = !eventActive;
