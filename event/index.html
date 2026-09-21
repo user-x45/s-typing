@@ -2008,6 +2008,7 @@
     <div class="login-provider-list">
       <button class="login-provider-btn" id="google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
       <button class="login-provider-btn" id="x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
+      <button class="login-provider-btn" id="guest-login-btn"><i class="fa-solid fa-user"></i> ログインせずに続行</button>
     </div>
     <button class="input-mode-close-btn" id="login-select-close-btn">閉じる</button>
   </div>
@@ -2200,6 +2201,7 @@ const logoutBtnEl = document.getElementById("logout-btn");
 const loginOpenBtnEl = document.getElementById("login-open-btn");
 const googleLoginBtnEl = document.getElementById("google-login-btn");
 const xLoginBtnEl = document.getElementById("x-login-btn");
+const guestLoginBtnEl = document.getElementById("guest-login-btn");
 const loginSelectOverlayEl = document.getElementById("login-select-overlay");
 const loginSelectCloseBtnEl = document.getElementById("login-select-close-btn");
 const editNameBtnEl = document.getElementById("edit-name-btn");
@@ -2558,6 +2560,18 @@ xLoginBtnEl.addEventListener("click", () => {
   startXLogin();
 });
 
+guestLoginBtnEl.addEventListener("click", () => {
+  loginSelectOverlayEl.classList.remove("visible");
+  showNameInputModal((name) => {
+    currentPlayerName = name;
+    localStorage.setItem(GUEST_NAME_KEY, name);
+    updatePlayerNameLabel();
+    updateSetupHighScore();
+    loginOpenBtnEl.classList.add("hidden");
+    logoutBtnEl.classList.remove("hidden");
+  });
+});
+
 logoutBtnEl.addEventListener("click", () => {
   const token = getSessionToken();
   clearSessionToken();
@@ -2587,6 +2601,11 @@ function hideAppLoadingOverlay(){
 window.addEventListener("load", async () => {
   const handledGoogleRedirect = await processGoogleAuthRedirect();
   if(!handledGoogleRedirect) await processXAuthRedirect();
+
+  const pendingLogin = sessionStorage.getItem("pendingEventLogin");
+  if(pendingLogin === "true"){
+    sessionStorage.removeItem("pendingEventLogin");
+  }
   const sessionLoadPromise = currentPlayerName ? Promise.resolve() : verifySession();
   Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
 });
@@ -4100,6 +4119,12 @@ document.addEventListener("visibilitychange", () => {
     overlay.classList.remove("visible");
   });
 })();
+
+window.addEventListener("beforeunload", () => {
+  localStorage.removeItem(SESSION_TOKEN_KEY);
+  localStorage.removeItem(GUEST_NAME_KEY);
+  sessionStorage.removeItem("pendingEventLogin");
+});
 </script>
 </body>
 </html>
