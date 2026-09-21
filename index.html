@@ -11,14 +11,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。">
-<link rel="canonical" href="https://s-typing.f5.si/">
-<meta content="https://s-typing.f5.si/" property="og:url">
-<meta content="シンプルタイピング" property="og:title">
-<meta content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。" property="og:description">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="シンプルタイピングのイベント限定ランキングページ。期間限定イベント開催中に記録を投稿して、イベント専用ランキングで競えます。">
+<link rel="canonical" href="https://s-typing.f5.si/event/">
+<meta content="https://s-typing.f5.si/event/" property="og:url">
+<meta content="シンプルタイピング｜イベント" property="og:title">
+<meta content="シンプルタイピングのイベント限定ランキングページ。期間限定イベント開催中に記録を投稿して、イベント専用ランキングで競えます。" property="og:description">
 <meta content="website" property="og:type">
 <meta content="シンプルタイピング" property="og:site_name">
-<title>シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム</title>
+<title>シンプルタイピング｜イベント限定ランキング</title>
 <link href="favicon/32.png" rel="icon" sizes="32x32" type="image/png">
 <link href="favicon/96.png" rel="icon" sizes="96x96" type="image/png">
 <link href="favicon/144.png" rel="icon" sizes="144x144" type="image/png">
@@ -29,8 +30,8 @@
 {
   "@context": "https://schema.org/",
   "@type": "WebSite",
-  "name": "シンプルタイピング",
-  "url": "https://s-typing.f5.si/"
+  "name": "シンプルタイピング｜イベント",
+  "url": "https://s-typing.f5.si/event/"
 }
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LSBNPPLE0E"></script>
@@ -293,6 +294,47 @@
     to{ transform:rotate(360deg); }
   }
 
+
+  .input-mode-overlay.gate-overlay{
+    display:flex;
+    z-index:4000;
+  }
+
+  .input-mode-overlay.gate-overlay.hidden{
+    display:none;
+  }
+
+  .gate-divider{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--ink-soft);
+    font-size:12px;
+    margin:14px 0;
+  }
+
+  .gate-divider::before,
+  .gate-divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  .gate-guest-row{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .gate-guest-row input{
+    padding:10px 14px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    background:var(--input-bg);
+    color:var(--ink);
+    font-size:14px;
+  }
 
   .mobile-warning-overlay{
     display:none;
@@ -588,6 +630,13 @@
     transition:transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
   }
 
+  .start-btn:disabled{
+    background:var(--ink-soft);
+    box-shadow:none;
+    cursor:not-allowed;
+    opacity:0.5;
+  }
+
   .start-btn:hover{
     background:var(--hanko-deep);
   }
@@ -668,6 +717,45 @@
 
   .setup.hidden{
     display:none;
+  }
+
+  .no-event-overlay{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    text-align:center;
+    margin:0 0 20px;
+    padding:24px 20px;
+    border-radius:16px;
+    background:var(--panel-bg);
+    border:1.5px dashed var(--line);
+  }
+
+  .no-event-overlay.hidden{
+    display:none;
+  }
+
+  .game-controls-panel.hidden{
+    display:none;
+  }
+
+  .no-event-overlay i{
+    font-size:28px;
+    color:var(--ink-soft);
+    opacity:0.7;
+  }
+
+  .no-event-overlay p{
+    margin:0;
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
+  .no-event-overlay span{
+    font-size:12px;
+    color:var(--ink-soft);
   }
 
   .hud{
@@ -1682,6 +1770,20 @@
   <div class="app-loading-spinner"></div>
   <div class="app-loading-text">読み込み中...</div>
 </div>
+<div class="input-mode-overlay gate-overlay" id="entry-gate-overlay">
+  <div class="input-mode-box">
+    <div class="input-mode-modal-title">はじめる前に</div>
+    <div class="login-provider-list">
+      <button class="login-provider-btn" id="gate-google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
+      <button class="login-provider-btn" id="gate-x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
+    </div>
+    <div class="gate-divider"><span>または</span></div>
+    <div class="gate-guest-row">
+      <input type="text" id="gate-guest-name-field" maxlength="6" autocomplete="off" placeholder="なまえ（6文字まで）">
+      <button class="name-input-btn" id="gate-guest-continue-btn">名前を入力して続行</button>
+    </div>
+  </div>
+</div>
 <div class="stage">
   <div class="menu-bar" id="site-header">
     <a href="/" class="menu-brand">
@@ -1702,45 +1804,52 @@
   <div class="panel">
 
     <div class="setup" id="setup">
-      <div class="mode-tabs">
-        <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
-        <button class="mode-btn" data-mode="katakana">カタカナ</button>
-        <button class="mode-btn" data-mode="sentence">文章</button>
+      <div class="no-event-overlay" id="no-event-overlay">
+        <i class="fas fa-calendar-xmark"></i>
+        <p>現在開催中のイベントはありません</p>
+        <span>イベント開催時にこちらのページからランキングに挑戦できます</span>
       </div>
+      <div class="game-controls-panel" id="game-controls-panel">
+        <div class="mode-tabs">
+          <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
+          <button class="mode-btn" data-mode="katakana">カタカナ</button>
+          <button class="mode-btn" data-mode="sentence">文章</button>
+        </div>
 
-      <div class="levels" data-row="hiragana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
+        <div class="levels" data-row="hiragana">
+          <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
+          <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
+          <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
+        </div>
 
-      <div class="levels hidden" data-row="katakana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
+        <div class="levels hidden" data-row="katakana">
+          <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
+          <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
+          <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
+        </div>
 
-      <div class="levels hidden" data-row="sentence">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
-      </div>
+        <div class="levels hidden" data-row="sentence">
+          <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
+          <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
+          <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
+        </div>
 
-      <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
+        <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
 
-      <div class="start-row">
-        <button class="start-btn" id="start-btn"><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
-        <button class="start-btn online-btn" id="start-online-btn"><i class="fa-solid fa-globe"></i> オンライン対戦</button>
-        <button class="start-btn online-btn" id="start-friend-btn"><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
-      </div>
+        <div class="start-row">
+          <button class="start-btn" id="start-btn" disabled><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
+          <button class="start-btn online-btn" id="start-online-btn" disabled><i class="fa-solid fa-globe"></i> オンライン対戦</button>
+          <button class="start-btn online-btn" id="start-friend-btn" disabled><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
+        </div>
 
-      <div class="mode-and-mute-row">
-        <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
-        <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
-        <label class="mute-check-label">
-          <input type="checkbox" id="mute-btn" class="mute-check">
-          ミュート
-        </label>
+        <div class="mode-and-mute-row">
+          <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
+          <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
+          <label class="mute-check-label">
+            <input type="checkbox" id="mute-btn" class="mute-check">
+            ミュート
+          </label>
+        </div>
       </div>
 
       <div class="ranking-box hidden" id="ranking-box">
@@ -2158,8 +2267,8 @@ const resultShareXBtnEl = document.getElementById("result-share-x-btn");
 const resultShareFacebookBtnEl = document.getElementById("result-share-facebook-btn");
 const resultShareCopyBtnEl = document.getElementById("result-share-copy-btn");
 
-const SITE_URL = "https://s-typing.f5.si/";
-const SITE_SHARE_TEXT = "シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム";
+const SITE_URL = "https://s-typing.f5.si/event/";
+const SITE_SHARE_TEXT = "シンプルタイピング｜イベント限定ランキング";
 
 function buildXShareUrl(text){
   return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}&via=simple_typing`;
@@ -2284,30 +2393,6 @@ function showLoggedOutUi(){
   logoutBtnEl.classList.add("hidden");
   applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
   applyDisplaySettings(getGuestDisplaySettings());
-}
-
-async function verifySession(){
-  const token = getSessionToken();
-  if(!token){
-    showLoggedOutUi();
-    return;
-  }
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "verify", token })
-    });
-    const data = await res.json();
-    if(data.valid){
-      await showLoggedInUi(data.name, token, data.inputMode, data.displaySettings);
-    } else {
-      clearSessionToken();
-      showLoggedOutUi();
-    }
-  }catch(e){
-    showLoggedOutUi();
-  }
 }
 
 async function handleLoginResponse(loginBody){
@@ -2530,11 +2615,67 @@ function hideAppLoadingOverlay(){
   if(appLoadingCount === 0) appLoadingOverlayEl.classList.add("hidden");
 }
 
+const entryGateOverlayEl = document.getElementById("entry-gate-overlay");
+const gateGoogleLoginBtnEl = document.getElementById("gate-google-login-btn");
+const gateXLoginBtnEl = document.getElementById("gate-x-login-btn");
+const gateGuestNameFieldEl = document.getElementById("gate-guest-name-field");
+const gateGuestContinueBtnEl = document.getElementById("gate-guest-continue-btn");
+
+function openEntryGate(){
+  entryGateOverlayEl.classList.remove("hidden");
+  gateGuestNameFieldEl.focus();
+}
+
+function closeEntryGate(){
+  entryGateOverlayEl.classList.add("hidden");
+}
+
+gateGoogleLoginBtnEl.addEventListener("click", () => {
+  startGoogleLogin();
+});
+
+gateXLoginBtnEl.addEventListener("click", () => {
+  startXLogin();
+});
+
+gateGuestContinueBtnEl.addEventListener("click", () => {
+  const name = normalizePlayerName(gateGuestNameFieldEl.value);
+  currentPlayerName = name;
+  localStorage.setItem(GUEST_NAME_KEY, name);
+  updatePlayerNameLabel();
+  updateSetupHighScore();
+  closeEntryGate();
+});
+
+gateGuestNameFieldEl.addEventListener("keydown", (e) => {
+  if(e.key === "Enter"){
+    e.preventDefault();
+    gateGuestContinueBtnEl.click();
+  }
+});
+
+function resetSessionOnClose(){
+  const token = getSessionToken();
+  clearSessionToken();
+  localStorage.removeItem(GUEST_NAME_KEY);
+  if(token && navigator.sendBeacon){
+    const blob = new Blob([JSON.stringify({ action: "logout", token })], { type: "application/json" });
+    navigator.sendBeacon(`${RANKING_API_URL}/auth`, blob);
+  }
+}
+
+window.addEventListener("pagehide", resetSessionOnClose);
+
 window.addEventListener("load", async () => {
   const handledGoogleRedirect = await processGoogleAuthRedirect();
-  if(!handledGoogleRedirect) await processXAuthRedirect();
-  const sessionLoadPromise = currentPlayerName ? Promise.resolve() : verifySession();
-  Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
+  const handledXRedirect = handledGoogleRedirect ? false : await processXAuthRedirect();
+  if(handledGoogleRedirect || handledXRedirect){
+    closeEntryGate();
+  } else {
+    showLoggedOutUi();
+    openEntryGate();
+  }
+  Promise.all([initialRankingLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
 
@@ -2631,6 +2772,7 @@ const modeLabels = { hiragana:"ひらがな", katakana:"カタカナ", sentence:
 
 let currentMode = "hiragana";
 let currentLevel = "beginner";
+let enabledCombos = [];
 let inputMode = "realtime";
 let typingText = null;
 let currentWord = "";
@@ -2781,27 +2923,114 @@ function renderRanking(scores){
   rankingBoxEl.classList.remove("hidden");
 }
 
+let eventActive = false;
+let eventStatusLoaded = false;
+
+function isComboEnabled(mode, level){
+  if(!eventStatusLoaded) return true;
+  return enabledCombos.includes(`${mode}:${level}`);
+}
+
+function applyComboVisibility(){
+  document.querySelectorAll(".mode-btn").forEach(btn => {
+    const mode = btn.dataset.mode;
+    const hasAnyLevel = ["beginner", "intermediate", "advanced"].some(level => isComboEnabled(mode, level));
+    btn.classList.toggle("hidden", !hasAnyLevel);
+  });
+
+  document.querySelectorAll(".levels").forEach(row => {
+    const mode = row.dataset.row;
+    row.querySelectorAll(".level-btn").forEach(btn => {
+      const level = btn.dataset.level;
+      btn.classList.toggle("hidden", !isComboEnabled(mode, level));
+    });
+  });
+}
+
+function findFirstEnabledCombo(){
+  const modes = ["hiragana", "katakana", "sentence"];
+  const levels = ["beginner", "intermediate", "advanced"];
+  for(const mode of modes){
+    for(const level of levels){
+      if(isComboEnabled(mode, level)) return { mode, level };
+    }
+  }
+  return null;
+}
+
+async function loadEventStatus(){
+  try{
+    const res = await fetch(`${RANKING_API_URL}/event-status`);
+    if(!res.ok) return;
+    const data = await res.json();
+    enabledCombos = Array.isArray(data.combos) ? data.combos : [];
+  }catch(e){
+    enabledCombos = [];
+  }
+  eventStatusLoaded = true;
+  applyComboVisibility();
+  if(!isComboEnabled(currentMode, currentLevel)){
+    const fallback = findFirstEnabledCombo();
+    if(fallback){
+      currentMode = fallback.mode;
+      currentLevel = fallback.level;
+      document.querySelectorAll(".mode-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.mode === currentMode);
+      });
+      document.querySelectorAll(".levels").forEach(row => {
+        row.classList.toggle("hidden", row.dataset.row !== currentMode);
+        row.querySelectorAll(".level-btn").forEach(lb => {
+          lb.classList.toggle("active", lb.dataset.level === currentLevel);
+        });
+      });
+      updateUrlHash();
+      updateSetupHighScore();
+    }
+  }
+  loadRanking();
+}
+
+function applyEventGate(){
+  const overlayEl = document.getElementById("no-event-overlay");
+  const controlsPanelEl = document.getElementById("game-controls-panel");
+  if(!overlayEl) return;
+  overlayEl.classList.toggle("hidden", eventActive);
+  if(controlsPanelEl) controlsPanelEl.classList.toggle("hidden", !eventActive);
+  document.getElementById("start-btn").disabled = !eventActive;
+  document.getElementById("start-online-btn").disabled = !eventActive;
+  document.getElementById("start-friend-btn").disabled = !eventActive;
+}
+
 async function loadRanking(){
   const requestId = ++rankingRequestId;
   const mode = currentMode;
   const level = currentLevel;
   const modeLabel = modeLabels[mode] || "ひらがな";
-  rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
+  rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> イベントランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
   rankingBoxEl.classList.add("hidden");
   rankingListEl.innerHTML = "";
   try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=normal`);
+    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`);
     if(requestId !== rankingRequestId) return;
     if(!res.ok){
+      eventActive = false;
+      applyEventGate();
       rankingBoxEl.classList.add("hidden");
       rankingListEl.innerHTML = "";
       return;
     }
     const data = await res.json();
     if(requestId !== rankingRequestId) return;
+    eventActive = true;
+    applyEventGate();
+    if(data.month){
+      rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ${data.month}限定ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
+    }
     renderRanking(data.scores);
   }catch(e){
     if(requestId !== rankingRequestId) return;
+    eventActive = false;
+    applyEventGate();
     rankingBoxEl.classList.add("hidden");
     rankingListEl.innerHTML = "";
   }
@@ -2832,7 +3061,7 @@ async function fetchWithRetry(url, options, attempts){
 
 
 async function submitScoreToRanking(score, mode, level, name){
-  const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=normal`, {
+  const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ score, name })
@@ -2853,7 +3082,7 @@ async function submitScoreToRanking(score, mode, level, name){
 
 async function checkRankQualifies(score, mode, level){
   try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=normal`);
+    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`);
     if(!res.ok) return true;
     const data = await res.json();
     const scores = data.scores;
@@ -2868,6 +3097,7 @@ async function checkRankQualifies(score, mode, level){
 }
 
 async function handleRankingSubmission(score, mode, level){
+  if(!eventActive) return;
   const qualifies = await checkRankQualifies(score, mode, level);
   if(!qualifies) return;
   const name = normalizePlayerName(getPlayerName());
@@ -2987,12 +3217,14 @@ function applyStateFromHash(){
 document.getElementById("footer-year").textContent = new Date().getFullYear();
 
 applyStateFromHash();
+loadEventStatus();
 preloadAllWordLists();
 window.addEventListener("hashchange", () => {
   if(isInGameFlow()){
     quitToTop();
   }
   applyStateFromHash();
+  applyComboVisibility();
 });
 
 document.getElementById("start-btn").addEventListener("click", startGame);
@@ -3004,6 +3236,7 @@ document.getElementById("retry-btn").addEventListener("click", () => {
 });
 
 function startOnlineSearch(){
+  if(!eventActive) return;
   setupEl.classList.add("hidden");
   searchingEl.classList.add("visible");
   let secondsLeft = 15;
@@ -3109,6 +3342,7 @@ function connectFriendRoom(code, role){
 }
 
 function startFriendCreate(){
+  if(!eventActive) return;
   const code = generateFriendCode();
   friendCodeLabelEl.textContent = code;
   friendMenuEl.classList.remove("visible");
@@ -3117,6 +3351,10 @@ function startFriendCreate(){
 }
 
 function startFriendJoin(){
+  if(!eventActive){
+    showCustomAlert("現在イベントは開催されていません");
+    return;
+  }
   const code = friendCodeInputEl.value.trim();
   if(!code){
     showCustomAlert("招待コードを入力してください");
@@ -3743,6 +3981,7 @@ function nextWord(){
 }
 
 async function startGame(){
+  if(!eventActive) return;
   logPlay(currentMode, currentLevel, "solo", "");
   showAppLoadingOverlay();
   await ensureWordList(currentMode, currentLevel);
