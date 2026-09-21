@@ -2548,22 +2548,20 @@ async function processXAuthRedirect(){
   return true;
 }
 
-let loginOverlayForced = false;
-
-function openLoginSelectOverlay(showClose){
+function openLoginSelectOverlay(showClose, showGuest){
   loginSelectOverlayEl.classList.add("visible");
   loginSelectCloseBtnEl.classList.toggle("hidden", !showClose);
-  loginOverlayForced = !showClose;
+  guestLoginBtnEl.classList.toggle("hidden", !showGuest);
 }
 
 function closeLoginSelectOverlay(){
   loginSelectOverlayEl.classList.remove("visible");
-  loginOverlayForced = false;
   loginSelectCloseBtnEl.classList.remove("hidden");
+  guestLoginBtnEl.classList.remove("hidden");
 }
 
 loginOpenBtnEl.addEventListener("click", () => {
-  openLoginSelectOverlay(true);
+  openLoginSelectOverlay(true, false);
 });
 
 loginSelectCloseBtnEl.addEventListener("click", () => {
@@ -2620,7 +2618,7 @@ window.addEventListener("load", async () => {
   Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(() => {
     hideAppLoadingOverlay();
     if(!getSessionToken() && !handledGoogleRedirect){
-      openLoginSelectOverlay(false);
+      openLoginSelectOverlay(false, true);
     }
   });
 });
