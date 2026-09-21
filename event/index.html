@@ -295,6 +295,47 @@
   }
 
 
+  .gate-overlay{
+    display:flex;
+    z-index:4000;
+  }
+
+  .gate-overlay.hidden{
+    display:none;
+  }
+
+  .gate-divider{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--ink-soft);
+    font-size:12px;
+    margin:14px 0;
+  }
+
+  .gate-divider::before,
+  .gate-divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  .gate-guest-row{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .gate-guest-row input{
+    padding:10px 14px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    background:var(--input-bg);
+    color:var(--ink);
+    font-size:14px;
+  }
+
   .mobile-warning-overlay{
     display:none;
     position:fixed;
@@ -1729,6 +1770,20 @@
   <div class="app-loading-spinner"></div>
   <div class="app-loading-text">読み込み中...</div>
 </div>
+<div class="input-mode-overlay gate-overlay" id="entry-gate-overlay">
+  <div class="input-mode-box">
+    <div class="input-mode-modal-title">はじめる前に</div>
+    <div class="login-provider-list">
+      <button class="login-provider-btn" id="gate-google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
+      <button class="login-provider-btn" id="gate-x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
+    </div>
+    <div class="gate-divider"><span>または</span></div>
+    <div class="gate-guest-row">
+      <input type="text" id="gate-guest-name-field" maxlength="6" autocomplete="off" placeholder="なまえ（6文字まで）">
+      <button class="name-input-btn" id="gate-guest-continue-btn">名前を入力して続行</button>
+    </div>
+  </div>
+</div>
 <div class="stage">
   <div class="menu-bar" id="site-header">
     <a href="/" class="menu-brand">
@@ -2008,7 +2063,6 @@
     <div class="login-provider-list">
       <button class="login-provider-btn" id="google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
       <button class="login-provider-btn" id="x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
-      <button class="login-provider-btn" id="guest-login-btn"><i class="fa-solid fa-user"></i> ログインせずに続行</button>
     </div>
     <button class="input-mode-close-btn" id="login-select-close-btn">閉じる</button>
   </div>
@@ -2201,7 +2255,6 @@ const logoutBtnEl = document.getElementById("logout-btn");
 const loginOpenBtnEl = document.getElementById("login-open-btn");
 const googleLoginBtnEl = document.getElementById("google-login-btn");
 const xLoginBtnEl = document.getElementById("x-login-btn");
-const guestLoginBtnEl = document.getElementById("guest-login-btn");
 const loginSelectOverlayEl = document.getElementById("login-select-overlay");
 const loginSelectCloseBtnEl = document.getElementById("login-select-close-btn");
 const editNameBtnEl = document.getElementById("edit-name-btn");
@@ -2331,8 +2384,8 @@ async function showLoggedInUi(name, token, inputModeFromAccount, displaySettings
   applyDisplaySettings(displaySettingsFromAccount || getGuestDisplaySettings());
 }
 
-function showGuestUi(name){
-  currentPlayerName = name;
+function showLoggedOutUi(){
+  currentPlayerName = localStorage.getItem(GUEST_NAME_KEY) || "GUEST";
   serverHighScores = null;
   updatePlayerNameLabel();
   updateSetupHighScore();
@@ -2340,34 +2393,6 @@ function showGuestUi(name){
   logoutBtnEl.classList.add("hidden");
   applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
   applyDisplaySettings(getGuestDisplaySettings());
-}
-
-function showLoggedOutUi(){
-  showGuestUi(localStorage.getItem(GUEST_NAME_KEY) || "GUEST");
-}
-
-async function verifySession(){
-  const token = getSessionToken();
-  if(!token){
-    showLoggedOutUi();
-    return;
-  }
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "verify", token })
-    });
-    const data = await res.json();
-    if(data.valid){
-      await showLoggedInUi(data.name, token, data.inputMode, data.displaySettings);
-    } else {
-      clearSessionToken();
-      showLoggedOutUi();
-    }
-  }catch(e){
-    showLoggedOutUi();
-  }
 }
 
 async function handleLoginResponse(loginBody){
@@ -2548,24 +2573,12 @@ async function processXAuthRedirect(){
   return true;
 }
 
-function openLoginSelectOverlay(showClose, showGuest){
-  loginSelectOverlayEl.classList.add("visible");
-  loginSelectCloseBtnEl.classList.toggle("hidden", !showClose);
-  guestLoginBtnEl.classList.toggle("hidden", !showGuest);
-}
-
-function closeLoginSelectOverlay(){
-  loginSelectOverlayEl.classList.remove("visible");
-  loginSelectCloseBtnEl.classList.remove("hidden");
-  guestLoginBtnEl.classList.remove("hidden");
-}
-
 loginOpenBtnEl.addEventListener("click", () => {
-  openLoginSelectOverlay(true, false);
+  loginSelectOverlayEl.classList.add("visible");
 });
 
 loginSelectCloseBtnEl.addEventListener("click", () => {
-  closeLoginSelectOverlay();
+  loginSelectOverlayEl.classList.remove("visible");
 });
 
 googleLoginBtnEl.addEventListener("click", () => {
@@ -2574,14 +2587,6 @@ googleLoginBtnEl.addEventListener("click", () => {
 
 xLoginBtnEl.addEventListener("click", () => {
   startXLogin();
-});
-
-guestLoginBtnEl.addEventListener("click", () => {
-  closeLoginSelectOverlay();
-  showNameInputModal((name) => {
-    localStorage.setItem(GUEST_NAME_KEY, name);
-    showGuestUi(name);
-  });
 });
 
 logoutBtnEl.addEventListener("click", () => {
@@ -2610,17 +2615,67 @@ function hideAppLoadingOverlay(){
   if(appLoadingCount === 0) appLoadingOverlayEl.classList.add("hidden");
 }
 
+const entryGateOverlayEl = document.getElementById("entry-gate-overlay");
+const gateGoogleLoginBtnEl = document.getElementById("gate-google-login-btn");
+const gateXLoginBtnEl = document.getElementById("gate-x-login-btn");
+const gateGuestNameFieldEl = document.getElementById("gate-guest-name-field");
+const gateGuestContinueBtnEl = document.getElementById("gate-guest-continue-btn");
+
+function openEntryGate(){
+  entryGateOverlayEl.classList.remove("hidden");
+  gateGuestNameFieldEl.focus();
+}
+
+function closeEntryGate(){
+  entryGateOverlayEl.classList.add("hidden");
+}
+
+gateGoogleLoginBtnEl.addEventListener("click", () => {
+  startGoogleLogin();
+});
+
+gateXLoginBtnEl.addEventListener("click", () => {
+  startXLogin();
+});
+
+gateGuestContinueBtnEl.addEventListener("click", () => {
+  const name = normalizePlayerName(gateGuestNameFieldEl.value);
+  currentPlayerName = name;
+  localStorage.setItem(GUEST_NAME_KEY, name);
+  updatePlayerNameLabel();
+  updateSetupHighScore();
+  closeEntryGate();
+});
+
+gateGuestNameFieldEl.addEventListener("keydown", (e) => {
+  if(e.key === "Enter"){
+    e.preventDefault();
+    gateGuestContinueBtnEl.click();
+  }
+});
+
+function resetSessionOnClose(){
+  const token = getSessionToken();
+  clearSessionToken();
+  localStorage.removeItem(GUEST_NAME_KEY);
+  if(token && navigator.sendBeacon){
+    const blob = new Blob([JSON.stringify({ action: "logout", token })], { type: "application/json" });
+    navigator.sendBeacon(`${RANKING_API_URL}/auth`, blob);
+  }
+}
+
+window.addEventListener("pagehide", resetSessionOnClose);
+
 window.addEventListener("load", async () => {
   const handledGoogleRedirect = await processGoogleAuthRedirect();
-  if(!handledGoogleRedirect) await processXAuthRedirect();
-
-  const sessionLoadPromise = currentPlayerName ? Promise.resolve() : verifySession();
-  Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(() => {
-    hideAppLoadingOverlay();
-    if(!getSessionToken() && !handledGoogleRedirect){
-      openLoginSelectOverlay(false, true);
-    }
-  });
+  const handledXRedirect = handledGoogleRedirect ? false : await processXAuthRedirect();
+  if(handledGoogleRedirect || handledXRedirect){
+    closeEntryGate();
+  } else {
+    showLoggedOutUi();
+    openEntryGate();
+  }
+  Promise.all([initialRankingLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
 
@@ -4132,11 +4187,6 @@ document.addEventListener("visibilitychange", () => {
     overlay.classList.remove("visible");
   });
 })();
-
-window.addEventListener("beforeunload", () => {
-  localStorage.removeItem(SESSION_TOKEN_KEY);
-  localStorage.removeItem(GUEST_NAME_KEY);
-});
 </script>
 </body>
 </html>
