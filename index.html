@@ -1292,6 +1292,33 @@
     padding:20px 0;
   }
 
+  .login-provider-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:18px;
+  }
+
+  .login-provider-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:12px 16px;
+    background:var(--panel-bg-soft);
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color 0.2s ease;
+  }
+
+  .login-provider-btn:hover{
+    border-color:var(--gold);
+  }
+
   .input-mode-close-btn{
     padding:10px 32px;
     background:none;
@@ -1667,7 +1694,7 @@
         <span class="player-name-label" id="current-player-label"></span>
         <button class="edit-name-btn" id="edit-name-btn" aria-label="名前を変更"><i class="fas fa-pen"></i></button>
       </div>
-      <button class="switch-player-btn" id="google-login-btn"><i class="fab fa-google"></i> ログイン</button>
+      <button class="switch-player-btn" id="login-open-btn"><i class="fas fa-right-to-bracket"></i> ログイン</button>
       <button class="switch-player-btn hidden" id="logout-btn"><i class="fas fa-right-from-bracket"></i> ログアウト</button>
     </div>
   </div>
@@ -1921,6 +1948,17 @@
   </div>
 </div>
 
+<div class="input-mode-overlay" id="login-select-overlay">
+  <div class="input-mode-box">
+    <div class="input-mode-modal-title">ログイン方法を選択</div>
+    <div class="login-provider-list">
+      <button class="login-provider-btn" id="google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
+      <button class="login-provider-btn" id="x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
+    </div>
+    <button class="input-mode-close-btn" id="login-select-close-btn">閉じる</button>
+  </div>
+</div>
+
 <div class="input-mode-overlay" id="play-records-overlay">
   <div class="play-records-box">
     <div class="input-mode-modal-title">今までの記録</div>
@@ -2093,6 +2131,7 @@ playRecordsCloseBtnEl.addEventListener("click", () => {
 });
 
 const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
+const X_CLIENT_ID = "UjYwZ1NXM0JBamtyVjhwWno4Ujk6MTpjaQ";
 const SESSION_TOKEN_KEY = "sessionToken";
 const GUEST_NAME_KEY = "guestPlayerName";
 const GUEST_INPUT_MODE_KEY = "guestInputMode";
@@ -2104,7 +2143,11 @@ const SHOW_KEYBOARD_KEY = "showKeyboard";
 const PLAY_RECORD_MAX = 20;
 const currentPlayerLabelEl = document.getElementById("current-player-label");
 const logoutBtnEl = document.getElementById("logout-btn");
+const loginOpenBtnEl = document.getElementById("login-open-btn");
 const googleLoginBtnEl = document.getElementById("google-login-btn");
+const xLoginBtnEl = document.getElementById("x-login-btn");
+const loginSelectOverlayEl = document.getElementById("login-select-overlay");
+const loginSelectCloseBtnEl = document.getElementById("login-select-close-btn");
 const editNameBtnEl = document.getElementById("edit-name-btn");
 const menuToggleBtnEl = document.getElementById("menu-toggle-btn");
 const menuAuthPanelEl = document.getElementById("menu-auth-panel");
@@ -2226,7 +2269,7 @@ async function showLoggedInUi(name, token, inputModeFromAccount, displaySettings
   await loadServerHighScores(token);
   updatePlayerNameLabel();
   updateSetupHighScore();
-  googleLoginBtnEl.classList.add("hidden");
+  loginOpenBtnEl.classList.add("hidden");
   logoutBtnEl.classList.remove("hidden");
   applyInputMode(inputModeFromAccount || "realtime");
   applyDisplaySettings(displaySettingsFromAccount || getGuestDisplaySettings());
@@ -2237,7 +2280,7 @@ function showLoggedOutUi(){
   serverHighScores = null;
   updatePlayerNameLabel();
   updateSetupHighScore();
-  googleLoginBtnEl.classList.remove("hidden");
+  loginOpenBtnEl.classList.remove("hidden");
   logoutBtnEl.classList.add("hidden");
   applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
   applyDisplaySettings(getGuestDisplaySettings());
@@ -2267,13 +2310,14 @@ async function verifySession(){
   }
 }
 
-async function handleGoogleCredential(idToken){
+async function handleLoginResponse(loginBody){
+  loginSelectOverlayEl.classList.remove("visible");
   let data;
   try{
     const res = await fetch(`${RANKING_API_URL}/auth`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "login", idToken })
+      body: JSON.stringify(loginBody)
     });
     data = await res.json();
   }catch(e){
@@ -2311,7 +2355,17 @@ async function handleGoogleCredential(idToken){
   }
 }
 
+async function handleGoogleCredential(idToken){
+  await handleLoginResponse({ action: "login", idToken });
+}
+
+async function handleXCredential(code, codeVerifier, redirectUri){
+  await handleLoginResponse({ action: "login", provider: "x", code, codeVerifier, redirectUri });
+}
+
 const GOOGLE_AUTH_NONCE_KEY = "googleAuthNonce";
+const X_AUTH_STATE_KEY = "xAuthState";
+const X_AUTH_VERIFIER_KEY = "xAuthVerifier";
 
 function generateGoogleAuthNonce(){
   if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -2363,8 +2417,87 @@ async function processGoogleAuthRedirect(){
   return true;
 }
 
+function generateXAuthState(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function base64UrlEncode(buffer){
+  let binary = "";
+  const bytes = new Uint8Array(buffer);
+  for(let i = 0; i < bytes.byteLength; i++){
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+function generateXCodeVerifier(){
+  const array = new Uint8Array(64);
+  crypto.getRandomValues(array);
+  return base64UrlEncode(array.buffer);
+}
+
+async function generateXCodeChallenge(verifier){
+  const encoder = new TextEncoder();
+  const data = encoder.encode(verifier);
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  return base64UrlEncode(digest);
+}
+
+async function startXLogin(){
+  const state = generateXAuthState();
+  const codeVerifier = generateXCodeVerifier();
+  const codeChallenge = await generateXCodeChallenge(codeVerifier);
+  sessionStorage.setItem(X_AUTH_STATE_KEY, state);
+  sessionStorage.setItem(X_AUTH_VERIFIER_KEY, codeVerifier);
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  const params = new URLSearchParams({
+    response_type: "code",
+    client_id: X_CLIENT_ID,
+    redirect_uri: redirectUri,
+    scope: "users.read tweet.read",
+    state,
+    code_challenge: codeChallenge,
+    code_challenge_method: "S256"
+  });
+  window.location.href = `https://x.com/i/oauth2/authorize?${params.toString()}`;
+}
+
+async function processXAuthRedirect(){
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const state = params.get("state");
+  const error = params.get("error");
+  if(!code && !error) return false;
+  history.replaceState(null, "", window.location.pathname);
+  if(error) return true;
+  const expectedState = sessionStorage.getItem(X_AUTH_STATE_KEY);
+  const codeVerifier = sessionStorage.getItem(X_AUTH_VERIFIER_KEY);
+  sessionStorage.removeItem(X_AUTH_STATE_KEY);
+  sessionStorage.removeItem(X_AUTH_VERIFIER_KEY);
+  if(!codeVerifier || (expectedState && state !== expectedState)){
+    showCustomAlert("ログインに失敗しました");
+    return true;
+  }
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  await handleXCredential(code, codeVerifier, redirectUri);
+  return true;
+}
+
+loginOpenBtnEl.addEventListener("click", () => {
+  loginSelectOverlayEl.classList.add("visible");
+});
+
+loginSelectCloseBtnEl.addEventListener("click", () => {
+  loginSelectOverlayEl.classList.remove("visible");
+});
+
 googleLoginBtnEl.addEventListener("click", () => {
   startGoogleLogin();
+});
+
+xLoginBtnEl.addEventListener("click", () => {
+  startXLogin();
 });
 
 logoutBtnEl.addEventListener("click", () => {
@@ -2395,7 +2528,8 @@ function hideAppLoadingOverlay(){
 
 window.addEventListener("load", async () => {
   const handledGoogleRedirect = await processGoogleAuthRedirect();
-  const sessionLoadPromise = handledGoogleRedirect ? Promise.resolve() : verifySession();
+  const handledXRedirect = handledGoogleRedirect ? false : await processXAuthRedirect();
+  const sessionLoadPromise = (handledGoogleRedirect || handledXRedirect) ? Promise.resolve() : verifySession();
   Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
