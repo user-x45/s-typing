@@ -2470,7 +2470,11 @@ async function processXAuthRedirect(){
   const error = params.get("error");
   if(!code && !error) return false;
   history.replaceState(null, "", window.location.pathname);
-  if(error) return true;
+  if(error){
+    sessionStorage.removeItem(X_AUTH_STATE_KEY);
+    sessionStorage.removeItem(X_AUTH_VERIFIER_KEY);
+    return false;
+  }
   const expectedState = sessionStorage.getItem(X_AUTH_STATE_KEY);
   const codeVerifier = sessionStorage.getItem(X_AUTH_VERIFIER_KEY);
   sessionStorage.removeItem(X_AUTH_STATE_KEY);
@@ -2528,8 +2532,8 @@ function hideAppLoadingOverlay(){
 
 window.addEventListener("load", async () => {
   const handledGoogleRedirect = await processGoogleAuthRedirect();
-  const handledXRedirect = handledGoogleRedirect ? false : await processXAuthRedirect();
-  const sessionLoadPromise = (handledGoogleRedirect || handledXRedirect) ? Promise.resolve() : verifySession();
+  if(!handledGoogleRedirect) await processXAuthRedirect();
+  const sessionLoadPromise = currentPlayerName ? Promise.resolve() : verifySession();
   Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
