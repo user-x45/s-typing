@@ -2331,8 +2331,8 @@ async function showLoggedInUi(name, token, inputModeFromAccount, displaySettings
   applyDisplaySettings(displaySettingsFromAccount || getGuestDisplaySettings());
 }
 
-function showLoggedOutUi(){
-  currentPlayerName = localStorage.getItem(GUEST_NAME_KEY) || "GUEST";
+function showGuestUi(name){
+  currentPlayerName = name;
   serverHighScores = null;
   updatePlayerNameLabel();
   updateSetupHighScore();
@@ -2340,6 +2340,10 @@ function showLoggedOutUi(){
   logoutBtnEl.classList.add("hidden");
   applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
   applyDisplaySettings(getGuestDisplaySettings());
+}
+
+function showLoggedOutUi(){
+  showGuestUi(localStorage.getItem(GUEST_NAME_KEY) || "GUEST");
 }
 
 async function verifySession(){
@@ -2544,12 +2548,26 @@ async function processXAuthRedirect(){
   return true;
 }
 
-loginOpenBtnEl.addEventListener("click", () => {
+let loginOverlayForced = false;
+
+function openLoginSelectOverlay(showClose){
   loginSelectOverlayEl.classList.add("visible");
+  loginSelectCloseBtnEl.classList.toggle("hidden", !showClose);
+  loginOverlayForced = !showClose;
+}
+
+function closeLoginSelectOverlay(){
+  loginSelectOverlayEl.classList.remove("visible");
+  loginOverlayForced = false;
+  loginSelectCloseBtnEl.classList.remove("hidden");
+}
+
+loginOpenBtnEl.addEventListener("click", () => {
+  openLoginSelectOverlay(true);
 });
 
 loginSelectCloseBtnEl.addEventListener("click", () => {
-  loginSelectOverlayEl.classList.remove("visible");
+  closeLoginSelectOverlay();
 });
 
 googleLoginBtnEl.addEventListener("click", () => {
@@ -2561,14 +2579,10 @@ xLoginBtnEl.addEventListener("click", () => {
 });
 
 guestLoginBtnEl.addEventListener("click", () => {
-  loginSelectOverlayEl.classList.remove("visible");
+  closeLoginSelectOverlay();
   showNameInputModal((name) => {
-    currentPlayerName = name;
     localStorage.setItem(GUEST_NAME_KEY, name);
-    updatePlayerNameLabel();
-    updateSetupHighScore();
-    loginOpenBtnEl.classList.add("hidden");
-    logoutBtnEl.classList.remove("hidden");
+    showGuestUi(name);
   });
 });
 
@@ -2602,12 +2616,13 @@ window.addEventListener("load", async () => {
   const handledGoogleRedirect = await processGoogleAuthRedirect();
   if(!handledGoogleRedirect) await processXAuthRedirect();
 
-  const pendingLogin = sessionStorage.getItem("pendingEventLogin");
-  if(pendingLogin === "true"){
-    sessionStorage.removeItem("pendingEventLogin");
-  }
   const sessionLoadPromise = currentPlayerName ? Promise.resolve() : verifySession();
-  Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
+  Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(() => {
+    hideAppLoadingOverlay();
+    if(!getSessionToken() && !handledGoogleRedirect){
+      openLoginSelectOverlay(false);
+    }
+  });
 });
 
 
@@ -4123,7 +4138,6 @@ document.addEventListener("visibilitychange", () => {
 window.addEventListener("beforeunload", () => {
   localStorage.removeItem(SESSION_TOKEN_KEY);
   localStorage.removeItem(GUEST_NAME_KEY);
-  sessionStorage.removeItem("pendingEventLogin");
 });
 </script>
 </body>
