@@ -2592,7 +2592,10 @@ xLoginBtnEl.addEventListener("click", () => {
 logoutBtnEl.addEventListener("click", () => {
   const token = getSessionToken();
   clearSessionToken();
+  localStorage.removeItem(GUEST_NAME_KEY);
   showLoggedOutUi();
+  menuAuthPanelEl.classList.add("hidden");
+  openEntryGate();
   if(token){
     fetch(`${RANKING_API_URL}/auth`, {
       method: "POST",
