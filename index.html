@@ -297,14 +297,15 @@
   .setup-mobile-message{
     display:none;
     text-align:center;
-    padding:40px 24px;
+    padding:20px 24px;
     color:var(--ink);
     font-size:15px;
     line-height:1.6;
   }
 
   @media (max-width:768px){
-    #setup{
+    #start-row,
+    #mode-and-mute-row{
       display:none;
     }
     .setup-mobile-message{
@@ -1663,7 +1664,6 @@
 
   <div class="panel">
 
-    <div class="setup-mobile-message" id="setup-mobile-message">スマートフォンではこの機能はご利用いただけません。<br>パソコンでの閲覧をお願いします。</div>
     <div class="setup" id="setup">
       <div class="mode-tabs">
         <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
@@ -1691,13 +1691,15 @@
 
       <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
 
-      <div class="start-row">
+      <div class="setup-mobile-message" id="setup-mobile-message">スマートフォンでのタイピングには対応していません。<br>パソコンからアクセスしてプレイしてください。</div>
+
+      <div class="start-row" id="start-row">
         <button class="start-btn" id="start-btn"><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
         <button class="start-btn online-btn" id="start-online-btn"><i class="fa-solid fa-globe"></i> オンライン対戦</button>
         <button class="start-btn online-btn" id="start-friend-btn"><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
       </div>
 
-      <div class="mode-and-mute-row">
+      <div class="mode-and-mute-row" id="mode-and-mute-row">
         <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
         <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
         <label class="mute-check-label">
@@ -3901,12 +3903,6 @@ document.addEventListener("visibilitychange", () => {
     });
   }
 });
-
-(function(){
-  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
-  if(!isMobile) return;
-  document.body.classList.add("is-mobile-device");
-})();
 </script>
 </body>
 </html>
