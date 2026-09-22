@@ -294,53 +294,54 @@
   }
 
 
-  .mobile-select-row{
+  .mobile-warning-overlay{
     display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(31,28,25,0.55);
+    align-items:center;
+    justify-content:center;
+    z-index:3000;
+    padding:20px;
   }
 
-  .mobile-select{
+  .mobile-warning-overlay.visible{
+    display:flex;
+  }
+
+  .mobile-warning-box{
+    background:var(--washi);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 24px;
+    max-width:320px;
     width:100%;
-    padding:12px 14px;
-    background:var(--panel-bg);
-    border:1.5px solid var(--line);
-    border-radius:12px;
-    font-size:15px;
-    font-weight:600;
-    color:var(--ink);
-    appearance:none;
-    -webkit-appearance:none;
-    background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a7680' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;
-    background-position:right 14px center;
-    background-size:18px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
   }
 
-  .setup-mobile-message{
-    display:none;
-    text-align:center;
-    padding:20px 24px;
-    color:var(--ink);
+  .mobile-warning-message{
     font-size:15px;
+    color:var(--ink);
+    margin:0 0 22px;
     line-height:1.6;
   }
 
-  @media (max-width:768px){
-    .desktop-only{
-      display:none;
-    }
-    .mobile-select-row{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-bottom:16px;
-    }
-    #start-row,
-    #mode-and-mute-row{
-      display:none;
-    }
-    .setup-mobile-message{
-      display:block;
-    }
+  .mobile-warning-btn{
+    padding:10px 32px;
+    background:var(--hanko);
+    color:var(--washi);
+    border:none;
+    border-radius:16px;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    transition:background 0.2s ease;
+  }
+
+  .mobile-warning-btn:hover{
+    background:var(--hanko-deep);
   }
 
   .custom-alert-overlay{
@@ -1671,6 +1672,12 @@
 </style>
 </head>
 <body>
+<div class="mobile-warning-overlay" id="mobile-warning-overlay">
+  <div class="mobile-warning-box">
+    <p class="mobile-warning-message">このサイトはスマートフォンに最適化されていません。<br>パソコンでの閲覧を推奨します。</p>
+    <button class="mobile-warning-btn" id="mobile-warning-close">閉じる</button>
+  </div>
+</div>
 <div class="app-loading-overlay" id="app-loading-overlay">
   <div class="app-loading-spinner"></div>
   <div class="app-loading-text">読み込み中...</div>
@@ -1695,54 +1702,39 @@
   <div class="panel">
 
     <div class="setup" id="setup">
-      <div class="mode-tabs desktop-only">
+      <div class="mode-tabs">
         <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
         <button class="mode-btn" data-mode="katakana">カタカナ</button>
         <button class="mode-btn" data-mode="sentence">文章</button>
       </div>
 
-      <div class="levels desktop-only" data-row="hiragana">
+      <div class="levels" data-row="hiragana">
         <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
         <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
         <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
       </div>
 
-      <div class="levels desktop-only hidden" data-row="katakana">
+      <div class="levels hidden" data-row="katakana">
         <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
         <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
         <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
       </div>
 
-      <div class="levels desktop-only hidden" data-row="sentence">
+      <div class="levels hidden" data-row="sentence">
         <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
         <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
         <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
       </div>
 
-      <div class="mobile-select-row" id="mobile-select-row">
-        <select class="mobile-select" id="mobile-mode-select" aria-label="モード">
-          <option value="hiragana">ひらがな</option>
-          <option value="katakana">カタカナ</option>
-          <option value="sentence">文章</option>
-        </select>
-        <select class="mobile-select" id="mobile-level-select" aria-label="難易度">
-          <option value="beginner">初級（2〜4文字）</option>
-          <option value="intermediate">中級（5〜7文字）</option>
-          <option value="advanced">上級（8文字以上）</option>
-        </select>
-      </div>
-
       <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
 
-      <div class="setup-mobile-message" id="setup-mobile-message">スマートフォンでのタイピングには対応していません。<br>パソコンからアクセスしてプレイしてください。</div>
-
-      <div class="start-row" id="start-row">
+      <div class="start-row">
         <button class="start-btn" id="start-btn"><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
         <button class="start-btn online-btn" id="start-online-btn"><i class="fa-solid fa-globe"></i> オンライン対戦</button>
         <button class="start-btn online-btn" id="start-friend-btn"><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
       </div>
 
-      <div class="mode-and-mute-row" id="mode-and-mute-row">
+      <div class="mode-and-mute-row">
         <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
         <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
         <label class="mute-check-label">
@@ -1751,48 +1743,47 @@
         </label>
       </div>
 
-    </div>
-
-    <div class="ranking-box hidden" id="ranking-box">
-      <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
-      <ol class="ranking-list" id="ranking-list"></ol>
-    </div>
-
-    <div class="info-box">
-      <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
-      <ul class="info-list">
-        <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
-        <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
-        <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
-        <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
-        <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
-      </ul>
-
-      <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
-      <ul class="info-list">
-        <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
-        <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
-        <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
-        <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
-      </ul>
-
-      <div class="official-x-banner">
-        <a href="https://x.com/simple_typing" target="_blank" rel="noopener" class="official-x-link">
-          <i class="fa-brands fa-x-twitter"></i> 公式Xをフォローする
-        </a>
+      <div class="ranking-box hidden" id="ranking-box">
+        <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
+        <ol class="ranking-list" id="ranking-list"></ol>
       </div>
 
-      <div class="share-footer" id="share-footer">
-        <span class="site-footer-label">このサイトをシェア</span>
-        <div class="footer-share">
-          <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
-          <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-          <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
+      <div class="info-box">
+        <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
+        <ul class="info-list">
+          <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
+          <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
+          <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
+          <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
+          <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
+        </ul>
+
+        <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
+        <ul class="info-list">
+          <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
+          <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
+          <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
+          <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
+        </ul>
+
+        <div class="official-x-banner">
+          <a href="https://x.com/simple_typing" target="_blank" rel="noopener" class="official-x-link">
+            <i class="fa-brands fa-x-twitter"></i> 公式Xをフォローする
+          </a>
         </div>
-      </div>
 
-      <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
-      <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
+        <div class="share-footer" id="share-footer">
+          <span class="site-footer-label">このサイトをシェア</span>
+          <div class="footer-share">
+            <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
+            <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
+          </div>
+        </div>
+
+        <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
+        <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
+      </div>
     </div>
 
     <div class="online-status" id="searching">
@@ -2720,8 +2711,6 @@ muteBtn.addEventListener("change", () => {
 });
 
 const rankingBoxEl = document.getElementById("ranking-box");
-const mobileModeSelectEl = document.getElementById("mobile-mode-select");
-const mobileLevelSelectEl = document.getElementById("mobile-level-select");
 const rankingListEl = document.getElementById("ranking-list");
 const rankingTitleEl = document.querySelector(".ranking-title");
 const resultRankBadgeEl = document.getElementById("result-rank-badge");
@@ -2927,47 +2916,35 @@ if(window.visualViewport){
   window.visualViewport.addEventListener("resize", scrollRomajiDisplayToTypedPosition);
 }
 
-function applySelection(mode, level){
-  currentMode = mode;
-  currentLevel = level;
-
-  document.querySelectorAll(".mode-btn").forEach(b => {
-    b.classList.toggle("active", b.dataset.mode === mode);
-  });
-  document.querySelectorAll(".levels").forEach(row => {
-    row.classList.toggle("hidden", row.dataset.row !== mode);
-    row.querySelectorAll(".level-btn").forEach(lb => {
-      lb.classList.toggle("active", lb.dataset.level === level);
-    });
-  });
-  mobileModeSelectEl.value = mode;
-  mobileLevelSelectEl.value = level;
-
-  loadRanking();
-  updateUrlHash();
-  updateSetupHighScore();
-}
-
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    applySelection(btn.dataset.mode, "beginner");
+    document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentMode = btn.dataset.mode;
+    currentLevel = "beginner";
+    document.querySelectorAll(".levels").forEach(row => {
+      row.classList.toggle("hidden", row.dataset.row !== currentMode);
+      row.querySelectorAll(".level-btn").forEach((lb, i) => {
+        lb.classList.toggle("active", i === 0);
+      });
+    });
+    loadRanking();
+    updateUrlHash();
+    updateSetupHighScore();
   });
 });
 
 document.querySelectorAll(".levels").forEach(row => {
   row.querySelectorAll(".level-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      applySelection(currentMode, btn.dataset.level);
+      row.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentLevel = btn.dataset.level;
+      loadRanking();
+      updateUrlHash();
+      updateSetupHighScore();
     });
   });
-});
-
-mobileModeSelectEl.addEventListener("change", () => {
-  applySelection(mobileModeSelectEl.value, "beginner");
-});
-
-mobileLevelSelectEl.addEventListener("change", () => {
-  applySelection(currentMode, mobileLevelSelectEl.value);
 });
 
 function updateUrlHash(){
@@ -3002,9 +2979,6 @@ function applyStateFromHash(){
       lb.classList.toggle("active", lb.dataset.level === currentLevel);
     });
   });
-
-  mobileModeSelectEl.value = currentMode;
-  mobileLevelSelectEl.value = currentLevel;
 
   loadRanking();
   updateSetupHighScore();
@@ -3963,6 +3937,17 @@ document.addEventListener("visibilitychange", () => {
     });
   }
 });
+
+(function(){
+  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+  if(!isMobile) return;
+  const overlay = document.getElementById("mobile-warning-overlay");
+  const closeBtn = document.getElementById("mobile-warning-close");
+  overlay.classList.add("visible");
+  closeBtn.addEventListener("click", () => {
+    overlay.classList.remove("visible");
+  });
+})();
 </script>
 </body>
 </html>
