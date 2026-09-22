@@ -2460,7 +2460,6 @@ async function startXLogin(){
     code_challenge: codeChallenge,
     code_challenge_method: "S256"
   });
-  history.pushState(null, "", window.location.pathname + window.location.search);
   window.location.href = `https://x.com/i/oauth2/authorize?${params.toString()}`;
 }
 
