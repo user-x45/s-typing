@@ -294,6 +294,27 @@
   }
 
 
+  .mobile-select-row{
+    display:none;
+  }
+
+  .mobile-select{
+    width:100%;
+    padding:12px 14px;
+    background:var(--panel-bg);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    font-size:15px;
+    font-weight:600;
+    color:var(--ink);
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a7680' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    background-size:18px;
+  }
+
   .setup-mobile-message{
     display:none;
     text-align:center;
@@ -304,6 +325,15 @@
   }
 
   @media (max-width:768px){
+    .desktop-only{
+      display:none;
+    }
+    .mobile-select-row{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-bottom:16px;
+    }
     #start-row,
     #mode-and-mute-row{
       display:none;
@@ -1665,28 +1695,41 @@
   <div class="panel">
 
     <div class="setup" id="setup">
-      <div class="mode-tabs">
+      <div class="mode-tabs desktop-only">
         <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
         <button class="mode-btn" data-mode="katakana">カタカナ</button>
         <button class="mode-btn" data-mode="sentence">文章</button>
       </div>
 
-      <div class="levels" data-row="hiragana">
+      <div class="levels desktop-only" data-row="hiragana">
         <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
         <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
         <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
       </div>
 
-      <div class="levels hidden" data-row="katakana">
+      <div class="levels desktop-only hidden" data-row="katakana">
         <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
         <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
         <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
       </div>
 
-      <div class="levels hidden" data-row="sentence">
+      <div class="levels desktop-only hidden" data-row="sentence">
         <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
         <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
         <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
+      </div>
+
+      <div class="mobile-select-row" id="mobile-select-row">
+        <select class="mobile-select" id="mobile-mode-select" aria-label="モード">
+          <option value="hiragana">ひらがな</option>
+          <option value="katakana">カタカナ</option>
+          <option value="sentence">文章</option>
+        </select>
+        <select class="mobile-select" id="mobile-level-select" aria-label="難易度">
+          <option value="beginner">初級（2〜4文字）</option>
+          <option value="intermediate">中級（5〜7文字）</option>
+          <option value="advanced">上級（8文字以上）</option>
+        </select>
       </div>
 
       <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
@@ -2677,6 +2720,8 @@ muteBtn.addEventListener("change", () => {
 });
 
 const rankingBoxEl = document.getElementById("ranking-box");
+const mobileModeSelectEl = document.getElementById("mobile-mode-select");
+const mobileLevelSelectEl = document.getElementById("mobile-level-select");
 const rankingListEl = document.getElementById("ranking-list");
 const rankingTitleEl = document.querySelector(".ranking-title");
 const resultRankBadgeEl = document.getElementById("result-rank-badge");
@@ -2882,35 +2927,47 @@ if(window.visualViewport){
   window.visualViewport.addEventListener("resize", scrollRomajiDisplayToTypedPosition);
 }
 
+function applySelection(mode, level){
+  currentMode = mode;
+  currentLevel = level;
+
+  document.querySelectorAll(".mode-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.mode === mode);
+  });
+  document.querySelectorAll(".levels").forEach(row => {
+    row.classList.toggle("hidden", row.dataset.row !== mode);
+    row.querySelectorAll(".level-btn").forEach(lb => {
+      lb.classList.toggle("active", lb.dataset.level === level);
+    });
+  });
+  mobileModeSelectEl.value = mode;
+  mobileLevelSelectEl.value = level;
+
+  loadRanking();
+  updateUrlHash();
+  updateSetupHighScore();
+}
+
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentMode = btn.dataset.mode;
-    currentLevel = "beginner";
-    document.querySelectorAll(".levels").forEach(row => {
-      row.classList.toggle("hidden", row.dataset.row !== currentMode);
-      row.querySelectorAll(".level-btn").forEach((lb, i) => {
-        lb.classList.toggle("active", i === 0);
-      });
-    });
-    loadRanking();
-    updateUrlHash();
-    updateSetupHighScore();
+    applySelection(btn.dataset.mode, "beginner");
   });
 });
 
 document.querySelectorAll(".levels").forEach(row => {
   row.querySelectorAll(".level-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      row.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentLevel = btn.dataset.level;
-      loadRanking();
-      updateUrlHash();
-      updateSetupHighScore();
+      applySelection(currentMode, btn.dataset.level);
     });
   });
+});
+
+mobileModeSelectEl.addEventListener("change", () => {
+  applySelection(mobileModeSelectEl.value, "beginner");
+});
+
+mobileLevelSelectEl.addEventListener("change", () => {
+  applySelection(currentMode, mobileLevelSelectEl.value);
 });
 
 function updateUrlHash(){
@@ -2945,6 +3002,9 @@ function applyStateFromHash(){
       lb.classList.toggle("active", lb.dataset.level === currentLevel);
     });
   });
+
+  mobileModeSelectEl.value = currentMode;
+  mobileLevelSelectEl.value = currentLevel;
 
   loadRanking();
   updateSetupHighScore();
