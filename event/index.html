@@ -200,62 +200,6 @@
     color:var(--ink);
   }
 
-  .share-btn{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:8px 14px;
-    border:none;
-    border-radius:14px;
-    font-size:13px;
-    font-weight:600;
-    color:#ffffff;
-    cursor:pointer;
-    transition:opacity 0.2s ease;
-    text-decoration:none;
-  }
-
-  .share-btn:hover{
-    opacity:0.85;
-  }
-
-  .share-btn.x{ background:#000000; border:1px solid #ffffff; }
-  .share-btn.facebook{ background:#1877f2; }
-  .share-btn.copy{ background:var(--pop-teal); }
-
-  .result-share{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin:14px 0;
-    flex-wrap:wrap;
-  }
-
-  .share-footer{
-    width:100%;
-    max-width:640px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-    margin-top:24px;
-    padding-top:20px;
-    border-top:1px solid var(--line);
-  }
-
-  .site-footer-label{
-    font-size:12px;
-    color:var(--ink-soft);
-    letter-spacing:0.05em;
-  }
-
-  .footer-share{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-
   .app-loading-overlay{
     position:fixed;
     inset:0;
@@ -614,20 +558,6 @@
     box-shadow:0 0 0 var(--hanko-deep);
   }
 
-  .start-btn.online-btn{
-    background:var(--pop-purple);
-    box-shadow:0 2px 0 #564a80;
-  }
-
-  .start-btn.online-btn:hover{
-    background:var(--pop-purple);
-    filter:brightness(1.06);
-  }
-
-  .start-btn.online-btn:active{
-    box-shadow:0 0 0 #564a80;
-  }
-
   .online-status{
     display:none;
     text-align:center;
@@ -638,41 +568,11 @@
     display:block;
   }
 
-  .status-title{
-    font-size:18px;
-    font-weight:600;
-    margin-bottom:10px;
-  }
-
-  .search-spinner{
-    width:40px;
-    height:40px;
-    border:3px solid var(--line);
-    border-top-color:var(--hanko);
-    border-radius:50%;
-    margin:20px auto;
-    animation:spin 1s linear infinite;
-  }
-
-  @keyframes spin{
-    to{transform:rotate(360deg);}
-  }
-
-  .search-count{
-    font-size:20px;
-    color:var(--ink-soft);
-    margin-bottom:22px;
-  }
-
   .countdown-number{
     font-size:88px;
     font-weight:800;
     color:var(--hanko);
     margin:16px 0 24px;
-  }
-
-  #opponent-score-label.hidden{
-    display:none;
   }
 
   .game{
@@ -750,11 +650,6 @@
   #score-label{
     background:rgba(47,158,148,0.12);
     color:var(--pop-teal);
-  }
-
-  #opponent-score-label{
-    background:rgba(108,90,158,0.12);
-    color:var(--pop-purple);
   }
 
   #time-label{
@@ -1477,45 +1372,6 @@
     color:var(--washi);
   }
 
-  .friend-menu-row{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-    margin-bottom:20px;
-  }
-
-  .friend-code{
-    font-size:40px;
-    font-weight:800;
-    letter-spacing:0.15em;
-    color:var(--hanko);
-    margin-bottom:16px;
-  }
-
-  .friend-copy-btn{
-    margin-bottom:20px;
-  }
-
-  .friend-code-input{
-    width:100%;
-    max-width:220px;
-    padding:10px 12px;
-    background:var(--input-bg);
-    border:1px solid var(--line);
-    border-radius:16px;
-    font-size:18px;
-    letter-spacing:0.15em;
-    color:var(--ink);
-    text-align:center;
-    margin-bottom:18px;
-  }
-
-  .friend-code-input:focus{
-    outline:none;
-    border-color:var(--gold);
-  }
-
   @media (min-width:561px){
     .menu-toggle-btn{
       display:none;
@@ -1589,9 +1445,6 @@
     .level-btn .sub{font-size:9px;}
     .start-btn{font-size:13px;padding:10px 18px;}
 
-    .status-title{font-size:15px;}
-    .search-spinner{width:32px;height:32px;}
-    .search-count{font-size:16px;}
     .countdown-number{font-size:64px;}
 
     .hud-stat{font-size:12px;padding:5px 12px;}
@@ -1801,8 +1654,6 @@
 
         <div class="start-row">
           <button class="start-btn" id="start-btn" disabled><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
-          <button class="start-btn online-btn" id="start-online-btn" disabled><i class="fa-solid fa-globe"></i> オンライン対戦</button>
-          <button class="start-btn online-btn" id="start-friend-btn" disabled><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
         </div>
 
         <div class="mode-and-mute-row">
@@ -1844,68 +1695,18 @@
           </a>
         </div>
 
-        <div class="share-footer" id="share-footer">
-          <span class="site-footer-label">このサイトをシェア</span>
-          <div class="footer-share">
-            <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
-            <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
-          </div>
-        </div>
-
         <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
         <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
       </div>
-    </div>
-
-    <div class="online-status" id="searching">
-      <div class="status-title">対戦相手をさがしています</div>
-      <div class="search-spinner"></div>
-      <div class="search-count" id="search-count-label">残り 15 秒</div>
-      <button class="retry-btn" id="cancel-search-btn">キャンセル</button>
     </div>
 
     <div class="online-status" id="countdown">
       <div class="countdown-number" id="countdown-number">3</div>
     </div>
 
-    <div class="online-status" id="friend-menu">
-      <div class="status-title">フレンド対戦</div>
-      <div class="friend-menu-row">
-        <button class="start-btn online-btn" id="friend-create-btn">招待コードを作成する</button>
-        <button class="start-btn online-btn" id="friend-join-open-btn">招待コードで参加する</button>
-      </div>
-      <button class="retry-btn" id="friend-menu-back-btn">戻る</button>
-    </div>
-
-    <div class="online-status" id="friend-create">
-      <div class="status-title">このコードを友達に伝えてね</div>
-      <div class="friend-code" id="friend-code-label">------</div>
-      <button class="retry-btn friend-copy-btn" id="friend-code-copy-btn">コードをコピー</button>
-      <div class="search-count">相手の参加を待っています…</div>
-      <div class="search-spinner"></div>
-      <button class="retry-btn" id="friend-create-cancel-btn">キャンセル</button>
-    </div>
-
-    <div class="online-status" id="friend-join">
-      <div class="status-title">招待コードを入力してください</div>
-      <input type="text" class="friend-code-input" id="friend-code-input" maxlength="6" autocomplete="off" inputmode="numeric" pattern="[0-9]*" placeholder="コードを入力">
-      <div class="start-row">
-        <button class="start-btn online-btn" id="friend-join-submit-btn">参加する</button>
-      </div>
-      <button class="retry-btn" id="friend-join-cancel-btn">キャンセル</button>
-    </div>
-
-    <div class="online-status" id="friend-waiting">
-      <div class="status-title">相手を待っています</div>
-      <div class="search-spinner"></div>
-      <button class="retry-btn" id="friend-waiting-cancel-btn">キャンセル</button>
-    </div>
-
     <div class="game" id="game">
       <div class="hud">
         <span id="score-label" class="hud-stat">せいかい 0 もん</span>
-        <span id="opponent-score-label" class="hud-stat hidden">あいて 0 もん</span>
         <span id="time-label" class="hud-stat">残り 100 秒</span>
         <button id="end-game-btn" class="end-game-btn">終了</button>
       </div>
@@ -1964,11 +1765,6 @@
           <div class="stat-value" id="stat-miss">0</div>
           <div class="stat-label">ミス数</div>
         </div>
-      </div>
-      <div class="result-share">
-        <a class="share-btn x" id="result-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> Xでシェア</a>
-        <a class="share-btn facebook" id="result-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebookでシェア</a>
-        <button class="share-btn copy" id="result-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
       </div>
       <button class="retry-btn" id="retry-btn">もう一度</button>
     </div>
@@ -2196,47 +1992,6 @@ const loginSelectCloseBtnEl = document.getElementById("login-select-close-btn");
 const editNameBtnEl = document.getElementById("edit-name-btn");
 const menuToggleBtnEl = document.getElementById("menu-toggle-btn");
 const menuAuthPanelEl = document.getElementById("menu-auth-panel");
-const shareCopyBtnEl = document.getElementById("footer-share-copy-btn");
-const shareXBtnEl = document.getElementById("footer-share-x-btn");
-const shareFacebookBtnEl = document.getElementById("footer-share-facebook-btn");
-const resultShareXBtnEl = document.getElementById("result-share-x-btn");
-const resultShareFacebookBtnEl = document.getElementById("result-share-facebook-btn");
-const resultShareCopyBtnEl = document.getElementById("result-share-copy-btn");
-
-const SITE_URL = "https://s-typing.f5.si/event/";
-const SITE_SHARE_TEXT = "シンプルタイピング｜イベント限定ランキング";
-
-function buildXShareUrl(text){
-  return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}&via=simple_typing`;
-}
-
-function buildFacebookShareUrl(text){
-  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(text)}`;
-}
-
-async function copyToClipboard(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    showCustomAlert("コピーしました");
-  }catch(err){
-    showCustomAlert("コピーに失敗しました");
-  }
-}
-
-shareXBtnEl.href = buildXShareUrl(SITE_SHARE_TEXT);
-shareFacebookBtnEl.href = buildFacebookShareUrl(SITE_SHARE_TEXT);
-
-let resultShareText = SITE_SHARE_TEXT;
-
-function updateResultShareLinks(text){
-  resultShareText = `${text}\n${SITE_URL}`;
-  resultShareXBtnEl.href = buildXShareUrl(text);
-  resultShareFacebookBtnEl.href = buildFacebookShareUrl(text);
-}
-
-shareCopyBtnEl.addEventListener("click", () => copyToClipboard(`${SITE_SHARE_TEXT}\n${SITE_URL}`));
-
-resultShareCopyBtnEl.addEventListener("click", () => copyToClipboard(resultShareText));
 
 menuToggleBtnEl.addEventListener("click", () => {
   menuAuthPanelEl.classList.toggle("hidden");
@@ -2717,24 +2472,9 @@ const statSpeedEl = document.getElementById("stat-speed");
 const statMissEl = document.getElementById("stat-miss");
 const imeSpacerEl = document.getElementById("ime-spacer");
 const headerEl = document.getElementById("site-header");
-const opponentScoreLabelEl = document.getElementById("opponent-score-label");
-const searchingEl = document.getElementById("searching");
-const searchCountLabelEl = document.getElementById("search-count-label");
-const cancelSearchBtn = document.getElementById("cancel-search-btn");
 const countdownEl = document.getElementById("countdown");
 const countdownNumberEl = document.getElementById("countdown-number");
-const friendMenuEl = document.getElementById("friend-menu");
-const friendCreateEl = document.getElementById("friend-create");
-const friendJoinEl = document.getElementById("friend-join");
-const friendWaitingEl = document.getElementById("friend-waiting");
-const friendCodeLabelEl = document.getElementById("friend-code-label");
-const friendCodeInputEl = document.getElementById("friend-code-input");
-friendCodeInputEl.addEventListener("input", () => {
-  friendCodeInputEl.value = friendCodeInputEl.value.replace(/[^0-9]/g, "");
-});
-
-const ONLINE_SERVER_URL = "wss://key-onl.user-x45.workers.dev";
-const RANKING_API_URL = ONLINE_SERVER_URL.replace(/^wss:/, "https:").replace(/^ws:/, "http:");
+const RANKING_API_URL = "https://key-onl.user-x45.workers.dev";
 
 const clickSoundEl = new Audio("sounds/click.mp3");
 const keySoundEl = new Audio("sounds/key.mp3");
@@ -2910,8 +2650,6 @@ function applyEventGate(){
   overlayEl.classList.toggle("hidden", eventActive);
   if(controlsPanelEl) controlsPanelEl.classList.toggle("hidden", !eventActive);
   document.getElementById("start-btn").disabled = !eventActive;
-  document.getElementById("start-online-btn").disabled = !eventActive;
-  document.getElementById("start-friend-btn").disabled = !eventActive;
 }
 
 async function loadRanking(){
@@ -2949,12 +2687,12 @@ async function loadRanking(){
   }
 }
 
-function logPlay(mode, level, matchType, opponent){
+function logPlay(mode, level){
   const name = normalizePlayerName(getPlayerName());
   fetch(`${RANKING_API_URL}/playlog`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, mode, level, matchType: matchType || "solo", opponent: opponent || "" })
+    body: JSON.stringify({ name, mode, level, matchType: "solo" })
   }).catch(() => {});
 }
 
@@ -3023,22 +2761,6 @@ async function handleRankingSubmission(score, mode, level){
 
 const initialRankingLoadPromise = loadRanking();
 
-let ws = null;
-let matchId = null;
-let myRole = null;
-let opponentName = "";
-let isOnlineMode = false;
-let onlineWordDeck = [];
-let onlineIndex = 0;
-let onlineScore = 0;
-let onlineMiss = 0;
-let onlineChars = 0;
-let friendWs = null;
-let friendRole = null;
-let opponentScore = 0;
-let searchCountdownTimer = null;
-let onlineTimerId = null;
-let onlineTimeLeft = 100;
 let countdownTimerId = null;
 
 function fitSpacerToViewport(){
@@ -3143,279 +2865,25 @@ window.addEventListener("hashchange", () => {
 });
 
 document.getElementById("start-btn").addEventListener("click", startGame);
-document.getElementById("start-online-btn").addEventListener("click", startOnlineSearch);
-cancelSearchBtn.addEventListener("click", cancelSearch);
 document.getElementById("retry-btn").addEventListener("click", () => {
   resultEl.classList.remove("visible");
   setupEl.classList.remove("hidden");
 });
 
-function startOnlineSearch(){
-  if(!eventActive) return;
-  setupEl.classList.add("hidden");
-  searchingEl.classList.add("visible");
-  let secondsLeft = 15;
-  searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
-  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
-  ws = new WebSocket(`${ONLINE_SERVER_URL}/lobby?mode=${currentMode}&level=${currentLevel}&name=${myName}`);
-  ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "matched"){
-      clearInterval(searchCountdownTimer);
-      matchId = msg.matchId;
-      myRole = msg.role;
-      opponentName = msg.opponentName || "GUEST";
-      connectToMatch();
-    } else if(msg.type === "timeout"){
-      clearInterval(searchCountdownTimer);
-      cancelSearch();
-      showCustomAlert("対戦相手が見つかりませんでした");
-    }
-  };
-  ws.onerror = () => {
-    clearInterval(searchCountdownTimer);
-    cancelSearch();
-    showCustomAlert("サーバーに接続できませんでした");
-  };
-  searchCountdownTimer = setInterval(() => {
-    secondsLeft--;
-    searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
-    if(secondsLeft <= 0){
-      clearInterval(searchCountdownTimer);
-    }
-  }, 1000);
-}
-
-function cancelSearch(){
-  if(ws){ ws.close(); ws = null; }
-  clearInterval(searchCountdownTimer);
-  searchingEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-}
-
 function isInGameFlow(){
   return gameEl.classList.contains("visible") ||
-    countdownEl.classList.contains("visible") ||
-    searchingEl.classList.contains("visible") ||
-    friendMenuEl.classList.contains("visible") ||
-    friendCreateEl.classList.contains("visible") ||
-    friendWaitingEl.classList.contains("visible") ||
-    friendJoinEl.classList.contains("visible");
+    countdownEl.classList.contains("visible");
 }
 
 function quitToTop(){
   clearInterval(timerId);
-  clearInterval(onlineTimerId);
   clearInterval(countdownTimerId);
-  clearInterval(searchCountdownTimer);
-  if(ws){ ws.close(); ws = null; }
-  if(friendWs){ friendWs.close(); friendWs = null; }
-  friendRole = null;
-  isOnlineMode = false;
   countdownEl.classList.remove("visible");
-  searchingEl.classList.remove("visible");
-  friendMenuEl.classList.remove("visible");
-  friendCreateEl.classList.remove("visible");
-  friendWaitingEl.classList.remove("visible");
-  friendJoinEl.classList.remove("visible");
   gameEl.classList.remove("visible");
   headerEl.classList.remove("hidden");
   document.body.classList.remove("game-active");
   resultEl.classList.remove("visible");
   setupEl.classList.remove("hidden");
-}
-
-function generateFriendCode(){
-  return String(Math.floor(100000 + Math.random() * 900000));
-}
-
-function connectFriendRoom(code, role){
-  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
-  friendRole = role;
-  friendWs = new WebSocket(`${ONLINE_SERVER_URL}/friend/${code}?role=${role}&mode=${currentMode}&level=${currentLevel}&name=${myName}`);
-  friendWs.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "matched"){
-      friendWs = null;
-      matchId = msg.matchId;
-      myRole = msg.role;
-      opponentName = msg.opponentName || "GUEST";
-      if(msg.mode) currentMode = msg.mode;
-      if(msg.level) currentLevel = msg.level;
-      friendCreateEl.classList.remove("visible");
-      friendWaitingEl.classList.remove("visible");
-      connectToMatch();
-    } else if(msg.type === "timeout"){
-      cancelFriend();
-      showCustomAlert("相手が見つかりませんでした");
-    }
-  };
-  friendWs.onerror = () => {
-    cancelFriend();
-    showCustomAlert(role === "guest" ? "招待コードが見つかりませんでした" : "サーバーに接続できませんでした");
-  };
-}
-
-function startFriendCreate(){
-  if(!eventActive) return;
-  const code = generateFriendCode();
-  friendCodeLabelEl.textContent = code;
-  friendMenuEl.classList.remove("visible");
-  friendCreateEl.classList.add("visible");
-  connectFriendRoom(code, "host");
-}
-
-function startFriendJoin(){
-  if(!eventActive){
-    showCustomAlert("現在イベントは開催されていません");
-    return;
-  }
-  const code = friendCodeInputEl.value.trim();
-  if(!code){
-    showCustomAlert("招待コードを入力してください");
-    return;
-  }
-  if(!/^[0-9]+$/.test(code)){
-    showCustomAlert("招待コードは数字のみ入力してください");
-    return;
-  }
-  friendJoinEl.classList.remove("visible");
-  friendWaitingEl.classList.add("visible");
-  connectFriendRoom(code, "guest");
-}
-
-function copyFriendCode(){
-  const code = friendCodeLabelEl.textContent;
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(code);
-  }
-  showCustomAlert("コードをコピーしました");
-}
-
-function cancelFriend(){
-  if(friendWs){ friendWs.close(); friendWs = null; }
-  friendRole = null;
-  friendCreateEl.classList.remove("visible");
-  friendWaitingEl.classList.remove("visible");
-  friendJoinEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-}
-
-document.getElementById("start-friend-btn").addEventListener("click", () => {
-  setupEl.classList.add("hidden");
-  friendMenuEl.classList.add("visible");
-});
-document.getElementById("friend-menu-back-btn").addEventListener("click", () => {
-  friendMenuEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-});
-document.getElementById("friend-create-btn").addEventListener("click", startFriendCreate);
-document.getElementById("friend-create-cancel-btn").addEventListener("click", cancelFriend);
-document.getElementById("friend-code-copy-btn").addEventListener("click", copyFriendCode);
-document.getElementById("friend-join-open-btn").addEventListener("click", () => {
-  friendMenuEl.classList.remove("visible");
-  friendCodeInputEl.value = "";
-  friendJoinEl.classList.add("visible");
-  friendCodeInputEl.focus();
-});
-document.getElementById("friend-join-cancel-btn").addEventListener("click", () => {
-  friendJoinEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-});
-document.getElementById("friend-join-submit-btn").addEventListener("click", startFriendJoin);
-document.getElementById("friend-waiting-cancel-btn").addEventListener("click", cancelFriend);
-
-function connectToMatch(){
-  if(ws) ws.close();
-  ws = new WebSocket(`${ONLINE_SERVER_URL}/match/${matchId}?role=${myRole}&mode=${currentMode}&level=${currentLevel}`);
-  ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "start"){
-      onlineWordDeck = msg.wordDeck;
-      startOnlineCountdown();
-    } else if(msg.type === "opponentProgress"){
-      opponentScore = msg.score;
-      updateOpponentHud();
-    } else if(msg.type === "end"){
-      finishOnlineGame(msg);
-    } else if(msg.type === "opponentLeft"){
-      finishOnlineGame({
-        you:{score:onlineScore, miss:onlineMiss},
-        opponent:{score:opponentScore, miss:0},
-        result:"win",
-        forfeit:true
-      });
-    }
-  };
-}
-
-function startOnlineCountdown(){
-  searchingEl.classList.remove("visible");
-  countdownEl.classList.add("visible");
-  let count = 3;
-  countdownNumberEl.textContent = count;
-  clearInterval(countdownTimerId);
-  countdownTimerId = setInterval(() => {
-    count--;
-    if(count > 0){
-      countdownNumberEl.textContent = count;
-    } else {
-      clearInterval(countdownTimerId);
-      countdownEl.classList.remove("visible");
-      beginOnlineMatch();
-    }
-  }, 1000);
-}
-
-async function beginOnlineMatch(){
-  logPlay(currentMode, currentLevel, friendRole ? "friend" : "online", opponentName);
-  isOnlineMode = true;
-  onlineIndex = 0;
-  onlineScore = 0;
-  onlineMiss = 0;
-  onlineChars = 0;
-  opponentScore = 0;
-  onlineTimeLeft = 100;
-  gameEl.classList.add("visible");
-  headerEl.classList.add("hidden");
-  document.body.classList.add("game-active");
-  opponentScoreLabelEl.classList.remove("hidden");
-  endGameBtn.classList.add("hidden");
-  const modeLabel = modeLabels[currentMode] || "ひらがな";
-  levelLabelEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）`;
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  scoreLabelEl.textContent = `${myDisplayName} 0 もん`;
-  timeLabelEl.textContent = `残り 100 秒`;
-  timeLabelEl.classList.remove("time-warning");
-  resetTimerFill();
-  updateOpponentHud();
-  if(currentMode === "sentence"){
-    await ensureSentenceReadings(currentLevel, onlineWordDeck);
-  }
-  currentWord = onlineWordDeck[0];
-  if(romajiDisplayEl){
-    romajiDisplayEl.classList.remove("shake");
-    romajiDisplayEl.scrollLeft = 0;
-  }
-  renderWord();
-  inputEl.value = "";
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-  fitSpacerToViewport();
-  inputEl.focus();
-  clearInterval(onlineTimerId);
-  onlineTimerId = setInterval(() => {
-    onlineTimeLeft--;
-    timeLabelEl.textContent = `残り ${onlineTimeLeft} 秒`;
-    timeLabelEl.classList.toggle("time-warning", onlineTimeLeft <= 10);
-    timerFillEl.style.width = `${(onlineTimeLeft / 100) * 100}%`;
-    if(onlineTimeLeft <= 0){
-      clearInterval(onlineTimerId);
-      if(ws && ws.readyState === WebSocket.OPEN){
-        ws.send(JSON.stringify({type:"finished", score:onlineScore, miss:onlineMiss}));
-      }
-    }
-  }, 1000);
 }
 
 function resetTimerFill(){
@@ -3423,68 +2891,6 @@ function resetTimerFill(){
   timerFillEl.style.width = "100%";
   void timerFillEl.offsetWidth;
   timerFillEl.classList.remove("no-transition");
-}
-
-function updateOpponentHud(){
-  const displayName = opponentName || "GUEST";
-  opponentScoreLabelEl.textContent = `${displayName} ${opponentScore} もん`;
-}
-
-function handleOnlineSubmit(typed){
-  if(typed !== currentWord){
-    onlineMiss++;
-    hintLabelEl.textContent = "まだ違います";
-    shakeInput();
-    playSound(incorrectSoundEl);
-    return;
-  }
-  onlineScore++;
-  onlineChars += currentWord.length;
-  onlineIndex++;
-  currentWord = onlineWordDeck[onlineIndex % onlineWordDeck.length];
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  scoreLabelEl.textContent = `${myDisplayName} ${onlineScore} もん`;
-  renderWord();
-  inputEl.value = "";
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-  fitSpacerToViewport();
-  playSound(correctSoundEl);
-  if(ws && ws.readyState === WebSocket.OPEN){
-    ws.send(JSON.stringify({type:"progress", score:onlineScore, index:onlineIndex}));
-  }
-}
-
-function finishOnlineGame(msg){
-  clearInterval(onlineTimerId);
-  clearInterval(countdownTimerId);
-  countdownEl.classList.remove("visible");
-  isOnlineMode = false;
-  gameEl.classList.remove("visible");
-  headerEl.classList.remove("hidden");
-  document.body.classList.remove("game-active");
-  opponentScoreLabelEl.classList.add("hidden");
-  endGameBtn.classList.remove("hidden");
-  resultEl.classList.add("visible");
-  const you = msg.you;
-  const opponent = msg.opponent;
-  const attempts = you.score + you.miss;
-  const accuracy = attempts === 0 ? 0 : Math.round((you.score / attempts) * 100);
-  const speed = Math.round((onlineChars / 100) * 60);
-  let resultLabel = "ひきわけ";
-  if(msg.result === "win") resultLabel = msg.forfeit ? "不戦勝" : "しょうり";
-  else if(msg.result === "lose") resultLabel = "はいせん";
-  resultScoreEl.textContent = resultLabel;
-  const modeLabel = modeLabels[currentMode] || "ひらがな";
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  const oppDisplayName = opponentName || "GUEST";
-  resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）/ ${myDisplayName} ${you.score}もん・${oppDisplayName} ${opponent.score}もん`;
-  updateResultShareLinks(`シンプルタイピングのオンライン対戦で${resultLabel}でした！（${you.score}もん せいかい）`);
-  statAccuracyEl.textContent = `${accuracy}%`;
-  statSpeedEl.textContent = speed;
-  statMissEl.textContent = you.miss;
-  if(ws){ ws.close(); ws = null; }
-  opponentName = "";
 }
 
 function pickWord(){
@@ -3800,10 +3206,6 @@ function shakeRomaji(){
 }
 
 function completeRealtimeWord(){
-  if(isOnlineMode){
-    handleOnlineSubmit(currentWord);
-    return;
-  }
   score++;
   totalCharsTyped += currentWord.length;
   scoreLabelEl.textContent = `せいかい ${score} もん`;
@@ -3897,7 +3299,7 @@ function nextWord(){
 
 async function startGame(){
   if(!eventActive) return;
-  logPlay(currentMode, currentLevel, "solo", "");
+  logPlay(currentMode, currentLevel);
   showAppLoadingOverlay();
   await ensureWordList(currentMode, currentLevel);
   hideAppLoadingOverlay();
@@ -3977,7 +3379,6 @@ function endGame(isNormalEnd){
     resultScoreEl.textContent = finalScore;
     const modeLabel = modeLabels[currentMode] || "ひらがな";
     resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]} / ${score}もん せいかい`;
-    updateResultShareLinks(`シンプルタイピングで${modeLabel}・${levelLabels[currentLevel]}をプレイして${finalScore}点でした！`);
     statAccuracyEl.textContent = `${accuracy}%`;
     statSpeedEl.textContent = speed;
     statMissEl.textContent = missCount;
@@ -4004,13 +3405,11 @@ function endGame(isNormalEnd){
 
 const endGameBtn = document.getElementById("end-game-btn");
 endGameBtn.addEventListener("click", () => {
-  if(isOnlineMode) return;
   endGame(false);
 });
 
 document.addEventListener("keydown", (e) => {
   if(e.key === "Escape" && gameEl.classList.contains("visible")){
-    if(isOnlineMode) return;
     endGame(false);
   }
 });
@@ -4048,11 +3447,6 @@ inputEl.addEventListener("keydown", (e) => {
 
   const typed = inputEl.value.trim();
 
-  if(isOnlineMode){
-    handleOnlineSubmit(typed);
-    return;
-  }
-
   if(typed !== currentWord){
     missCount++;
     hintLabelEl.textContent = "まだ違います";
@@ -4070,25 +3464,10 @@ inputEl.addEventListener("keydown", (e) => {
 
 document.addEventListener("visibilitychange", () => {
   if(document.visibilityState !== "hidden") return;
-  if(searchingEl.classList.contains("visible")){
-    cancelSearch();
-  } else if(friendCreateEl.classList.contains("visible") || friendWaitingEl.classList.contains("visible")){
-    cancelFriend();
-  } else if(countdownEl.classList.contains("visible")){
+  if(countdownEl.classList.contains("visible")){
     clearInterval(countdownTimerId);
     countdownEl.classList.remove("visible");
-    if(ws){ ws.close(); ws = null; }
     setupEl.classList.remove("hidden");
-  } else if(isOnlineMode){
-    if(ws && ws.readyState === WebSocket.OPEN){
-      ws.close();
-    }
-    finishOnlineGame({
-      you:{score:onlineScore, miss:onlineMiss},
-      opponent:{score:opponentScore, miss:0},
-      result:"lose",
-      forfeit:true
-    });
   }
 });
 
