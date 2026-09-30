@@ -304,38 +304,6 @@
     display:none;
   }
 
-  .gate-divider{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    color:var(--ink-soft);
-    font-size:12px;
-    margin:14px 0;
-  }
-
-  .gate-divider::before,
-  .gate-divider::after{
-    content:"";
-    flex:1;
-    height:1px;
-    background:var(--line);
-  }
-
-  .gate-guest-row{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
-
-  .gate-guest-row input{
-    padding:10px 14px;
-    border:1.5px solid var(--line);
-    border-radius:12px;
-    background:var(--input-bg);
-    color:var(--ink);
-    font-size:14px;
-  }
-
   .mobile-warning-overlay{
     display:none;
     position:fixed;
@@ -1777,11 +1745,6 @@
       <button class="login-provider-btn" id="gate-google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
       <button class="login-provider-btn" id="gate-x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
     </div>
-    <div class="gate-divider"><span>または</span></div>
-    <div class="gate-guest-row">
-      <input type="text" id="gate-guest-name-field" maxlength="6" autocomplete="off" placeholder="なまえ（6文字まで）">
-      <button class="name-input-btn" id="gate-guest-continue-btn">名前を入力して続行</button>
-    </div>
   </div>
 </div>
 <div class="stage">
@@ -2143,26 +2106,6 @@ const playRecordsOverlayEl = document.getElementById("play-records-overlay");
 const playRecordsCloseBtnEl = document.getElementById("play-records-close-btn");
 const playRecordsListEl = document.getElementById("play-records-list");
 
-function getGuestPlayRecords(){
-  try{
-    const raw = localStorage.getItem(GUEST_PLAY_RECORDS_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
-  }catch(e){
-    return [];
-  }
-}
-
-function saveGuestPlayRecords(records){
-  localStorage.setItem(GUEST_PLAY_RECORDS_KEY, JSON.stringify(records.slice(0, PLAY_RECORD_MAX)));
-}
-
-function addGuestPlayRecord(record){
-  const records = getGuestPlayRecords();
-  records.unshift(record);
-  saveGuestPlayRecords(records);
-}
-
 function formatPlayRecordTime(playedAt){
   const date = new Date(playedAt);
   const pad = (n) => String(n).padStart(2, "0");
@@ -2212,23 +2155,18 @@ async function fetchAccountPlayRecords(token){
 async function openPlayRecords(){
   playRecordsOverlayEl.classList.add("visible");
   playRecordsListEl.innerHTML = `<li class="play-records-empty">読み込み中...</li>`;
-  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-  const records = isLoggedIn ? await fetchAccountPlayRecords(getSessionToken()) : getGuestPlayRecords();
+  const records = await fetchAccountPlayRecords(getSessionToken());
   renderPlayRecords(records);
 }
 
 async function recordPlayResult(mode, level, accuracy, speed, miss, score){
-  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-  if(isLoggedIn){
-    const token = getSessionToken();
-    await fetchWithRetry(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
-    }, 4);
-  } else {
-    addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss, score });
-  }
+  const token = getSessionToken();
+  if(!token) return;
+  await fetchWithRetry(`${RANKING_API_URL}/auth`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
+  }, 4);
 }
 
 playRecordsToggleBtnEl.addEventListener("click", () => {
@@ -2242,12 +2180,10 @@ playRecordsCloseBtnEl.addEventListener("click", () => {
 const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
 const X_CLIENT_ID = "UjYwZ1NXM0JBamtyVjhwWno4Ujk6MTpjaQ";
 const SESSION_TOKEN_KEY = "sessionToken";
-const GUEST_NAME_KEY = "guestPlayerName";
 const GUEST_INPUT_MODE_KEY = "guestInputMode";
 const SHOW_ROMAJI_KEY = "showRomaji";
 const SHOW_HIRAGANA_KEY = "showHiragana";
 const ROMAJI_UPPERCASE_KEY = "romajiUppercase";
-const GUEST_PLAY_RECORDS_KEY = "guestPlayRecords";
 const SHOW_KEYBOARD_KEY = "showKeyboard";
 const PLAY_RECORD_MAX = 20;
 const currentPlayerLabelEl = document.getElementById("current-player-label");
@@ -2308,28 +2244,23 @@ menuToggleBtnEl.addEventListener("click", () => {
 
 editNameBtnEl.addEventListener("click", () => {
   const prefill = currentPlayerName || "";
+  const token = getSessionToken();
+  if(!token) return;
   showNameInputModal(async (name) => {
-    const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-    if(isLoggedIn){
-      const token = getSessionToken();
-      try{
-        const res = await fetch(`${RANKING_API_URL}/auth`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "setName", token, name })
-        });
-        const data = await res.json();
-        if(data.name){
-          currentPlayerName = data.name;
-        } else {
-          showCustomAlert("名前の変更に失敗しました");
-        }
-      }catch(e){
+    try{
+      const res = await fetch(`${RANKING_API_URL}/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "setName", token, name })
+      });
+      const data = await res.json();
+      if(data.name){
+        currentPlayerName = data.name;
+      } else {
         showCustomAlert("名前の変更に失敗しました");
       }
-    } else {
-      currentPlayerName = name;
-      localStorage.setItem(GUEST_NAME_KEY, name);
+    }catch(e){
+      showCustomAlert("名前の変更に失敗しました");
     }
     updatePlayerNameLabel();
     updateSetupHighScore();
@@ -2385,7 +2316,7 @@ async function showLoggedInUi(name, token, inputModeFromAccount, displaySettings
 }
 
 function showLoggedOutUi(){
-  currentPlayerName = localStorage.getItem(GUEST_NAME_KEY) || "GUEST";
+  currentPlayerName = null;
   serverHighScores = null;
   updatePlayerNameLabel();
   updateSetupHighScore();
@@ -2592,7 +2523,6 @@ xLoginBtnEl.addEventListener("click", () => {
 logoutBtnEl.addEventListener("click", () => {
   const token = getSessionToken();
   clearSessionToken();
-  localStorage.removeItem(GUEST_NAME_KEY);
   showLoggedOutUi();
   menuAuthPanelEl.classList.add("hidden");
   openEntryGate();
@@ -2621,12 +2551,9 @@ function hideAppLoadingOverlay(){
 const entryGateOverlayEl = document.getElementById("entry-gate-overlay");
 const gateGoogleLoginBtnEl = document.getElementById("gate-google-login-btn");
 const gateXLoginBtnEl = document.getElementById("gate-x-login-btn");
-const gateGuestNameFieldEl = document.getElementById("gate-guest-name-field");
-const gateGuestContinueBtnEl = document.getElementById("gate-guest-continue-btn");
 
 function openEntryGate(){
   entryGateOverlayEl.classList.remove("hidden");
-  gateGuestNameFieldEl.focus();
 }
 
 function closeEntryGate(){
@@ -2641,26 +2568,9 @@ gateXLoginBtnEl.addEventListener("click", () => {
   startXLogin();
 });
 
-gateGuestContinueBtnEl.addEventListener("click", () => {
-  const name = normalizePlayerName(gateGuestNameFieldEl.value);
-  currentPlayerName = name;
-  localStorage.setItem(GUEST_NAME_KEY, name);
-  updatePlayerNameLabel();
-  updateSetupHighScore();
-  closeEntryGate();
-});
-
-gateGuestNameFieldEl.addEventListener("keydown", (e) => {
-  if(e.key === "Enter"){
-    e.preventDefault();
-    gateGuestContinueBtnEl.click();
-  }
-});
-
 function resetSessionOnClose(){
   const token = getSessionToken();
   clearSessionToken();
-  localStorage.removeItem(GUEST_NAME_KEY);
   if(token && navigator.sendBeacon){
     const blob = new Blob([JSON.stringify({ action: "logout", token })], { type: "application/json" });
     navigator.sendBeacon(`${RANKING_API_URL}/auth`, blob);
@@ -3064,10 +2974,12 @@ async function fetchWithRetry(url, options, attempts){
 
 
 async function submitScoreToRanking(score, mode, level, name){
+  const token = getSessionToken();
+  if(!token) return;
   const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ score, name })
+    body: JSON.stringify({ score, name, token })
   }, 4);
   if(!res) return;
   try{
@@ -3100,7 +3012,7 @@ async function checkRankQualifies(score, mode, level){
 }
 
 async function handleRankingSubmission(score, mode, level){
-  if(!eventActive) return;
+  if(!eventActive || !getSessionToken()) return;
   const qualifies = await checkRankQualifies(score, mode, level);
   if(!qualifies) return;
   const name = normalizePlayerName(getPlayerName());
