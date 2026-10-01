@@ -1669,6 +1669,111 @@
     }
   }
 
+
+  html, body{ height:100%; }
+
+  .stage{
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+  }
+
+  .stage:has(#setup:not(.hidden)){
+    max-width:1180px;
+  }
+
+  .setup-grid{
+    display:grid;
+    grid-template-columns:minmax(250px,1fr) minmax(300px,1.35fr) minmax(280px,1.25fr);
+    gap:clamp(12px,2vw,24px);
+    align-items:start;
+  }
+
+  .setup-main{ grid-column:1; }
+  .setup-grid .ranking-box{ grid-column:2; margin:0; padding:0; border:none; }
+  .setup-grid .info-box{ grid-column:3; margin:0; padding:0; border:none; }
+  .setup-grid .ranking-box.hidden{ display:block !important; visibility:hidden; }
+
+  .setup-main .mode-tabs{ margin-bottom:12px; }
+  .setup-main .levels{ margin-bottom:12px; gap:8px; }
+  .setup-main .level-btn{ padding:10px 4px; font-size:14px; }
+  .setup-main .setup-high-score{ margin-bottom:12px; }
+  .setup-main .start-row{ flex-direction:column; gap:8px; margin-bottom:12px; }
+  .setup-main .start-btn{ width:100%; padding:11px 16px; font-size:15px; }
+  .setup-main .mode-and-mute-row{ gap:8px 12px; margin-top:0; }
+
+  .setup-grid .ranking-title{ font-size:13px; margin-bottom:8px; }
+  .setup-grid .ranking-list{ gap:4px 8px; }
+  .setup-grid .ranking-item{ grid-template-columns:30px 1fr auto; padding:4px 8px; font-size:12px; }
+
+  .setup-grid .info-title{ font-size:13px; margin-bottom:6px; text-align:left; }
+  .setup-grid .info-title:not(:first-child){ margin-top:12px; }
+  .setup-grid .info-list{ font-size:12px; line-height:1.55; }
+  .setup-grid .info-list li{ margin-bottom:3px; }
+
+  .setup-footer{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px 20px;
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px solid var(--line);
+  }
+
+  .setup-footer .official-x-link{ padding:6px 12px; font-size:12px; }
+  .setup-footer .share-footer{
+    flex-direction:row;
+    width:auto;
+    max-width:none;
+    margin:0;
+    padding:0;
+    border:none;
+    gap:10px;
+  }
+  .setup-footer .share-btn{ padding:6px 12px; font-size:12px; }
+  .setup-footer .site-footer-links{ margin-top:0; }
+  .setup-footer .site-footer{ margin:0; padding:0; border:none; }
+
+  @media (min-width:901px) and (min-height:560px){
+    html, body{ overflow:hidden; }
+    body{ padding:clamp(8px,1.6vh,16px) 16px; align-items:flex-start; }
+    .stage{ height:100%; }
+    .menu-bar{ margin-bottom:clamp(8px,1.6vh,14px); padding:8px 18px; }
+    .panel{
+      flex:1;
+      min-height:0;
+      padding:clamp(12px,2.2vh,22px);
+      display:flex;
+      flex-direction:column;
+    }
+    .panel > .setup:not(.hidden){
+      flex:1;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .panel > .result.visible{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .result-score{ font-size:clamp(36px,8vh,56px); }
+    .result-sub{ margin-bottom:clamp(8px,2vh,22px); }
+    .stat-grid{ margin-bottom:clamp(8px,2vh,22px); }
+    .result-share{ margin:clamp(6px,1.5vh,14px) 0; }
+  }
+
+  @media (max-width:900px){
+    .setup-grid{ grid-template-columns:1fr; }
+    .setup-main, .setup-grid .ranking-box, .setup-grid .info-box{ grid-column:1; }
+    .setup-grid .ranking-box.hidden{ display:none !important; }
+    .stage:has(#setup:not(.hidden)){ max-width:640px; }
+  }
+
 </style>
 </head>
 <body>
@@ -1702,76 +1807,79 @@
   <div class="panel">
 
     <div class="setup" id="setup">
-      <div class="mode-tabs">
-        <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
-        <button class="mode-btn" data-mode="katakana">カタカナ</button>
-        <button class="mode-btn" data-mode="sentence">文章</button>
+      <div class="setup-grid">
+        <section class="setup-main">
+          <div class="mode-tabs">
+            <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
+            <button class="mode-btn" data-mode="katakana">カタカナ</button>
+            <button class="mode-btn" data-mode="sentence">文章</button>
+          </div>
+
+          <div class="levels" data-row="hiragana">
+            <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
+            <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
+            <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
+          </div>
+
+          <div class="levels hidden" data-row="katakana">
+            <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
+            <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
+            <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
+          </div>
+
+          <div class="levels hidden" data-row="sentence">
+            <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
+            <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
+            <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
+          </div>
+
+          <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
+
+          <div class="start-row">
+            <button class="start-btn" id="start-btn"><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
+            <button class="start-btn online-btn" id="start-online-btn"><i class="fa-solid fa-globe"></i> オンライン対戦</button>
+            <button class="start-btn online-btn" id="start-friend-btn"><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
+          </div>
+
+          <div class="mode-and-mute-row">
+            <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
+            <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
+            <label class="mute-check-label">
+              <input type="checkbox" id="mute-btn" class="mute-check">
+              ミュート
+            </label>
+          </div>
+        </section>
+
+        <section class="ranking-box hidden" id="ranking-box">
+          <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
+          <ol class="ranking-list" id="ranking-list"></ol>
+        </section>
+
+        <section class="info-box">
+          <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
+          <ul class="info-list">
+            <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
+            <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
+            <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
+            <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
+            <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
+          </ul>
+
+          <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
+          <ul class="info-list">
+            <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
+            <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
+            <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
+            <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
+          </ul>
+        </section>
       </div>
 
-      <div class="levels" data-row="hiragana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
-
-      <div class="levels hidden" data-row="katakana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
-
-      <div class="levels hidden" data-row="sentence">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
-      </div>
-
-      <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
-
-      <div class="start-row">
-        <button class="start-btn" id="start-btn"><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
-        <button class="start-btn online-btn" id="start-online-btn"><i class="fa-solid fa-globe"></i> オンライン対戦</button>
-        <button class="start-btn online-btn" id="start-friend-btn"><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
-      </div>
-
-      <div class="mode-and-mute-row">
-        <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
-        <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
-        <label class="mute-check-label">
-          <input type="checkbox" id="mute-btn" class="mute-check">
-          ミュート
-        </label>
-      </div>
-
-      <div class="ranking-box hidden" id="ranking-box">
-        <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
-        <ol class="ranking-list" id="ranking-list"></ol>
-      </div>
-
-      <div class="info-box">
-        <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
-        <ul class="info-list">
-          <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
-          <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
-          <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
-          <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
-          <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
-        </ul>
-
-        <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
-        <ul class="info-list">
-          <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
-          <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
-          <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
-          <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
-        </ul>
-
-        <div class="official-x-banner">
-          <a href="https://x.com/simple_typing" target="_blank" rel="noopener" class="official-x-link">
-            <i class="fa-brands fa-x-twitter"></i> 公式Xをフォローする
-          </a>
-        </div>
-
+      <div class="setup-footer">
+        <a href="https://x.com/simple_typing" target="_blank" rel="noopener" class="official-x-link">
+          <i class="fa-brands fa-x-twitter"></i> 公式Xをフォローする
+        </a>
         <div class="share-footer" id="share-footer">
           <span class="site-footer-label">このサイトをシェア</span>
           <div class="footer-share">
@@ -1780,7 +1888,6 @@
             <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
           </div>
         </div>
-
         <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
         <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
       </div>
