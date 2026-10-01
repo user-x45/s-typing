@@ -1597,6 +1597,7 @@
     <div class="login-provider-list">
       <button class="login-provider-btn" id="gate-google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
       <button class="login-provider-btn" id="gate-x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
+      <button class="login-provider-btn" id="gate-discord-login-btn"><i class="fa-brands fa-discord"></i> Discordでログイン</button>
     </div>
   </div>
 </div>
@@ -1822,6 +1823,7 @@
     <div class="login-provider-list">
       <button class="login-provider-btn" id="google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
       <button class="login-provider-btn" id="x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
+      <button class="login-provider-btn" id="discord-login-btn"><i class="fa-brands fa-discord"></i> Discordでログイン</button>
     </div>
     <button class="input-mode-close-btn" id="login-select-close-btn">閉じる</button>
   </div>
@@ -1975,6 +1977,7 @@ playRecordsCloseBtnEl.addEventListener("click", () => {
 
 const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
 const X_CLIENT_ID = "UjYwZ1NXM0JBamtyVjhwWno4Ujk6MTpjaQ";
+const DISCORD_CLIENT_ID = "1555238827524755557";
 const SESSION_TOKEN_KEY = "sessionToken";
 const GUEST_INPUT_MODE_KEY = "guestInputMode";
 const SHOW_ROMAJI_KEY = "showRomaji";
@@ -1987,6 +1990,7 @@ const logoutBtnEl = document.getElementById("logout-btn");
 const loginOpenBtnEl = document.getElementById("login-open-btn");
 const googleLoginBtnEl = document.getElementById("google-login-btn");
 const xLoginBtnEl = document.getElementById("x-login-btn");
+const discordLoginBtnEl = document.getElementById("discord-login-btn");
 const loginSelectOverlayEl = document.getElementById("login-select-overlay");
 const loginSelectCloseBtnEl = document.getElementById("login-select-close-btn");
 const editNameBtnEl = document.getElementById("edit-name-btn");
@@ -2134,9 +2138,16 @@ async function handleXCredential(code, codeVerifier, redirectUri){
   await handleLoginResponse({ action: "login", provider: "x", code, codeVerifier, redirectUri });
 }
 
+async function handleDiscordCredential(code, codeVerifier, redirectUri){
+  await handleLoginResponse({ action: "login", provider: "discord", code, codeVerifier, redirectUri });
+}
+
 const GOOGLE_AUTH_NONCE_KEY = "googleAuthNonce";
 const X_AUTH_STATE_KEY = "xAuthState";
 const X_AUTH_VERIFIER_KEY = "xAuthVerifier";
+const DISCORD_AUTH_STATE_KEY = "discordAuthState";
+const DISCORD_AUTH_VERIFIER_KEY = "discordAuthVerifier";
+const DISCORD_STATE_PREFIX = "discord_";
 
 function generateGoogleAuthNonce(){
   if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -2234,12 +2245,54 @@ async function startXLogin(){
   window.location.href = `https://x.com/i/oauth2/authorize?${params.toString()}`;
 }
 
+async function startDiscordLogin(){
+  const state = `${DISCORD_STATE_PREFIX}${generateXAuthState()}`;
+  const codeVerifier = generateXCodeVerifier();
+  const codeChallenge = await generateXCodeChallenge(codeVerifier);
+  sessionStorage.setItem(DISCORD_AUTH_STATE_KEY, state);
+  sessionStorage.setItem(DISCORD_AUTH_VERIFIER_KEY, codeVerifier);
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  const params = new URLSearchParams({
+    response_type: "code",
+    client_id: DISCORD_CLIENT_ID,
+    redirect_uri: redirectUri,
+    scope: "identify",
+    state,
+    code_challenge: codeChallenge,
+    code_challenge_method: "S256"
+  });
+  window.location.href = `https://discord.com/oauth2/authorize?${params.toString()}`;
+}
+
+async function processDiscordAuthRedirect(){
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const state = params.get("state");
+  const error = params.get("error");
+  if(!state || !state.startsWith(DISCORD_STATE_PREFIX)) return false;
+  if(!code && !error) return false;
+  history.replaceState(null, "", window.location.pathname);
+  const expectedState = sessionStorage.getItem(DISCORD_AUTH_STATE_KEY);
+  const codeVerifier = sessionStorage.getItem(DISCORD_AUTH_VERIFIER_KEY);
+  sessionStorage.removeItem(DISCORD_AUTH_STATE_KEY);
+  sessionStorage.removeItem(DISCORD_AUTH_VERIFIER_KEY);
+  if(error) return false;
+  if(!codeVerifier || !expectedState || state !== expectedState){
+    showCustomAlert("ログインに失敗しました");
+    return true;
+  }
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  await handleDiscordCredential(code, codeVerifier, redirectUri);
+  return true;
+}
+
 async function processXAuthRedirect(){
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
   const state = params.get("state");
   const error = params.get("error");
   if(!code && !error) return false;
+  if(state && state.startsWith(DISCORD_STATE_PREFIX)) return false;
   history.replaceState(null, "", window.location.pathname);
   if(error){
     sessionStorage.removeItem(X_AUTH_STATE_KEY);
@@ -2275,6 +2328,10 @@ xLoginBtnEl.addEventListener("click", () => {
   startXLogin();
 });
 
+discordLoginBtnEl.addEventListener("click", () => {
+  startDiscordLogin();
+});
+
 logoutBtnEl.addEventListener("click", () => {
   const token = getSessionToken();
   clearSessionToken();
@@ -2306,6 +2363,7 @@ function hideAppLoadingOverlay(){
 const entryGateOverlayEl = document.getElementById("entry-gate-overlay");
 const gateGoogleLoginBtnEl = document.getElementById("gate-google-login-btn");
 const gateXLoginBtnEl = document.getElementById("gate-x-login-btn");
+const gateDiscordLoginBtnEl = document.getElementById("gate-discord-login-btn");
 
 function openEntryGate(){
   entryGateOverlayEl.classList.remove("hidden");
@@ -2323,6 +2381,10 @@ gateXLoginBtnEl.addEventListener("click", () => {
   startXLogin();
 });
 
+gateDiscordLoginBtnEl.addEventListener("click", () => {
+  startDiscordLogin();
+});
+
 function resetSessionOnClose(){
   const token = getSessionToken();
   clearSessionToken();
@@ -2336,8 +2398,9 @@ window.addEventListener("pagehide", resetSessionOnClose);
 
 window.addEventListener("load", async () => {
   const handledGoogleRedirect = await processGoogleAuthRedirect();
-  const handledXRedirect = handledGoogleRedirect ? false : await processXAuthRedirect();
-  if(handledGoogleRedirect || handledXRedirect){
+  const handledDiscordRedirect = handledGoogleRedirect ? false : await processDiscordAuthRedirect();
+  const handledXRedirect = (handledGoogleRedirect || handledDiscordRedirect) ? false : await processXAuthRedirect();
+  if(handledGoogleRedirect || handledDiscordRedirect || handledXRedirect){
     closeEntryGate();
   } else {
     showLoggedOutUi();
