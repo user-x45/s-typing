@@ -2226,35 +2226,6 @@ async function generateXCodeChallenge(verifier){
   return base64UrlEncode(digest);
 }
 
-const AUTH_BRIDGE_STATE_KEY = "authBridge";
-const AUTH_BRIDGE_PENDING_KEY = "authBridgePending";
-
-function navigateToExternalAuth(url){
-  try{
-    history.pushState({ [AUTH_BRIDGE_STATE_KEY]: true }, "", window.location.href);
-    sessionStorage.setItem(AUTH_BRIDGE_PENDING_KEY, "1");
-  }catch(e){}
-  window.location.href = url;
-}
-
-function skipAuthBridgeEntry(){
-  const isBridge = !!(history.state && history.state[AUTH_BRIDGE_STATE_KEY]);
-  let pending = false;
-  try{ pending = sessionStorage.getItem(AUTH_BRIDGE_PENDING_KEY) === "1"; }catch(e){}
-  if(isBridge && pending){
-    try{ sessionStorage.removeItem(AUTH_BRIDGE_PENDING_KEY); }catch(e){}
-    history.back();
-    return;
-  }
-  if(!isBridge){
-    try{ sessionStorage.removeItem(AUTH_BRIDGE_PENDING_KEY); }catch(e){}
-  }
-}
-
-window.addEventListener("pageshow", skipAuthBridgeEntry);
-window.addEventListener("popstate", skipAuthBridgeEntry);
-skipAuthBridgeEntry();
-
 async function startXLogin(){
   const state = generateXAuthState();
   const codeVerifier = generateXCodeVerifier();
@@ -2271,7 +2242,7 @@ async function startXLogin(){
     code_challenge: codeChallenge,
     code_challenge_method: "S256"
   });
-  navigateToExternalAuth(`https://x.com/i/oauth2/authorize?${params.toString()}`);
+  window.location.href = `https://x.com/i/oauth2/authorize?${params.toString()}`;
 }
 
 async function startDiscordLogin(){
