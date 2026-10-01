@@ -2377,15 +2377,6 @@ const DISCORD_AUTH_STATE_KEY = "discordAuthState";
 const DISCORD_AUTH_VERIFIER_KEY = "discordAuthVerifier";
 const DISCORD_STATE_PREFIX = "discord_";
 
-function navigateTo(url){
-  const a = document.createElement("a");
-  a.href = url;
-  a.rel = "noopener";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-
 function generateGoogleAuthNonce(){
   if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -2479,7 +2470,7 @@ async function startXLogin(){
     code_challenge: codeChallenge,
     code_challenge_method: "S256"
   });
-  navigateTo(`https://x.com/i/oauth2/authorize?${params.toString()}`);
+  window.location.href = `https://x.com/i/oauth2/authorize?${params.toString()}`;
 }
 
 async function startDiscordLogin(){
