@@ -111,6 +111,28 @@
     max-width:640px;
   }
 
+  .event-notice{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:16px;
+    padding:12px 16px;
+    background:var(--panel-bg-soft);
+    border:1.5px solid var(--gold);
+    border-radius:12px;
+    font-size:14px;
+    font-weight:700;
+    line-height:1.6;
+    color:var(--ink);
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+
+  .event-notice i{
+    color:var(--gold);
+    margin-top:4px;
+  }
+
   .menu-bar{
     position:relative;
     display:flex;
@@ -1602,6 +1624,7 @@
   </div>
 </div>
 <div class="stage">
+  <div class="event-notice hidden" id="event-notice"><i class="fas fa-bullhorn"></i><span id="event-notice-text"></span></div>
   <div class="menu-bar" id="site-header">
     <a href="./" class="menu-brand">
       <img src="logo.svg" alt="シンプルタイピング" class="menu-logo">
@@ -2674,12 +2697,21 @@ function findFirstEnabledCombo(){
   return null;
 }
 
+function applyEventNotice(notice){
+  const noticeEl = document.getElementById("event-notice");
+  const textEl = document.getElementById("event-notice-text");
+  const text = String(notice || "").trim();
+  textEl.textContent = text;
+  noticeEl.classList.toggle("hidden", text === "");
+}
+
 async function loadEventStatus(){
   try{
     const res = await fetch(`${RANKING_API_URL}/event-status`);
     if(!res.ok) return;
     const data = await res.json();
     enabledCombos = Array.isArray(data.combos) ? data.combos : [];
+    applyEventNotice(data.notice);
   }catch(e){
     enabledCombos = [];
   }
