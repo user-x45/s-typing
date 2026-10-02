@@ -414,6 +414,24 @@
     border-color:var(--gold);
   }
 
+  #event-notice-input{
+    width:100%;
+    padding:12px 14px;
+    background:var(--input-bg);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    font-size:16px;
+    font-family:inherit;
+    color:var(--ink);
+    outline:none;
+    margin-bottom:14px;
+    resize:vertical;
+  }
+
+  #event-notice-input:focus{
+    border-color:var(--gold);
+  }
+
   .event-combo-checks{
     display:flex;
     flex-direction:column;
@@ -528,6 +546,8 @@
       <input type="month" id="event-month-input">
       <label class="field-label">対象タイピングモード・難易度</label>
       <div class="event-combo-checks" id="event-combo-checks"></div>
+      <label class="field-label" for="event-notice-input">お知らせ（イベント有効中にサイト上部へ表示）</label>
+      <textarea id="event-notice-input" maxlength="200" rows="3" placeholder="空欄の場合はお知らせを表示しません"></textarea>
       <button class="login-btn" id="event-enable-btn">この月でイベントモードを有効化</button>
       <button class="logout-btn" id="event-disable-btn">無効化</button>
     </div>
@@ -584,6 +604,7 @@ const eventBackBtnEl = document.getElementById("event-back-btn");
 const eventRefreshBtnEl = document.getElementById("event-refresh-btn");
 const eventStatusTextEl = document.getElementById("event-status-text");
 const eventMonthInputEl = document.getElementById("event-month-input");
+const eventNoticeInputEl = document.getElementById("event-notice-input");
 const eventModeChecksEl = document.getElementById("event-combo-checks");
 const eventEnableBtnEl = document.getElementById("event-enable-btn");
 const eventDisableBtnEl = document.getElementById("event-disable-btn");
@@ -1028,6 +1049,7 @@ async function loadEventDashboard(){
       ? `イベントモード: 有効中（対象月: ${data.month || "未設定"} / 対象: ${comboLabels}）`
       : "イベントモード: 無効";
     eventMonthInputEl.value = data.month || "";
+    eventNoticeInputEl.value = data.notice || "";
     setSelectedEventCombos(data.combos);
     eventArchiveGridEl.innerHTML = "";
     showOnly(eventDashboardEl);
@@ -1050,7 +1072,7 @@ eventEnableBtnEl.addEventListener("click", async () => {
   if(!confirm(`${month} を対象にイベントモードを有効化しますか？`)) return;
   showOnly(loadingPanelEl);
   try{
-    await callAdmin("setEventMode", { enabled: true, month, combos });
+    await callAdmin("setEventMode", { enabled: true, month, combos, notice: eventNoticeInputEl.value });
     await loadEventDashboard();
   }catch(e){
     handleSessionExpired();
@@ -1061,7 +1083,7 @@ eventDisableBtnEl.addEventListener("click", async () => {
   if(!confirm("イベントモードを無効化しますか？")) return;
   showOnly(loadingPanelEl);
   try{
-    await callAdmin("setEventMode", { enabled: false, month: eventMonthInputEl.value, combos: getSelectedEventCombos() });
+    await callAdmin("setEventMode", { enabled: false, month: eventMonthInputEl.value, combos: getSelectedEventCombos(), notice: eventNoticeInputEl.value });
     await loadEventDashboard();
   }catch(e){
     handleSessionExpired();
