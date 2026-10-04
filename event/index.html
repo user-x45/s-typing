@@ -1632,8 +1632,8 @@
 
   .event-hero{
     position:relative;
-    margin-bottom:20px;
-    padding:46px 20px 26px;
+    margin-bottom:14px;
+    padding:26px 16px 12px;
     text-align:center;
     color:#fff;
     border-radius:20px;
@@ -1648,10 +1648,11 @@
     left:0;
     right:0;
     top:0;
-    height:30px;
+    height:16px;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='30'%3E%3Cpath d='M0 3h120' stroke='%23ffffff' stroke-opacity='.75' stroke-width='2'/%3E%3Cpath d='M6 3h20l-10 22z' fill='%23dba52a'/%3E%3Cpath d='M36 3h20l-10 22z' fill='%232f9e94'/%3E%3Cpath d='M66 3h20l-10 22z' fill='%23faf8f4'/%3E%3Cpath d='M96 3h20l-10 22z' fill='%23dba52a'/%3E%3C/svg%3E");
     background-repeat:repeat-x;
     background-position:center top;
+    background-size:auto 16px;
   }
 
   .event-hero::after{
@@ -1672,20 +1673,20 @@
     display:inline-flex;
     align-items:center;
     gap:8px;
-    margin-bottom:10px;
-    padding:5px 16px;
+    margin-bottom:4px;
+    padding:2px 12px;
     background:var(--gold);
     color:#3a2a00;
     border-radius:20px;
-    font-size:13px;
+    font-size:11px;
     font-weight:800;
-    letter-spacing:0.12em;
+    letter-spacing:0.1em;
     box-shadow:0 3px 0 rgba(0,0,0,0.18);
   }
 
   .event-hero-title{
-    margin:0 0 8px;
-    font-size:clamp(26px,6.4vw,40px);
+    margin:0 0 2px;
+    font-size:clamp(18px,4.4vw,24px);
     font-weight:900;
     line-height:1.25;
     letter-spacing:0.08em;
@@ -1694,9 +1695,9 @@
 
   .event-hero-sub{
     margin:0;
-    font-size:13px;
+    font-size:11px;
     font-weight:700;
-    letter-spacing:0.05em;
+    letter-spacing:0.04em;
     opacity:0.92;
   }
 
@@ -1706,10 +1707,10 @@
     animation:spark-twinkle 2.4s ease-in-out infinite;
   }
 
-  .event-hero .spark.s1{ left:7%; top:48%; font-size:18px; }
-  .event-hero .spark.s2{ right:8%; top:42%; font-size:24px; animation-delay:0.8s; }
-  .event-hero .spark.s3{ right:20%; bottom:14%; font-size:12px; animation-delay:1.5s; }
-  .event-hero .spark.s4{ left:19%; bottom:12%; font-size:12px; animation-delay:0.4s; }
+  .event-hero .spark.s1{ left:7%; top:48%; font-size:12px; }
+  .event-hero .spark.s2{ right:8%; top:42%; font-size:15px; animation-delay:0.8s; }
+  .event-hero .spark.s3{ right:20%; bottom:14%; font-size:9px; animation-delay:1.5s; }
+  .event-hero .spark.s4{ left:19%; bottom:12%; font-size:9px; animation-delay:0.4s; }
 
   @keyframes spark-twinkle{
     0%,100%{ opacity:0.35; transform:scale(0.8) rotate(0deg); }
@@ -1853,10 +1854,10 @@
 
   @media (max-width:480px){
     .event-hero{
-      padding:42px 14px 22px;
+      padding:24px 12px 10px;
     }
     .event-hero-sub{
-      font-size:11px;
+      font-size:10px;
     }
     .result-score{
       font-size:50px;
