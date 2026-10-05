@@ -11,14 +11,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。">
-<link rel="canonical" href="https://s-typing.f5.si/">
-<meta content="https://s-typing.f5.si/" property="og:url">
-<meta content="シンプルタイピング" property="og:title">
-<meta content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。" property="og:description">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="シンプルタイピングのイベント限定ランキングページ。期間限定イベント開催中に記録を投稿して、イベント専用ランキングで競えます。">
+<link rel="canonical" href="https://s-typing.f5.si/event/">
+<meta content="https://s-typing.f5.si/event/" property="og:url">
+<meta content="シンプルタイピング｜イベント" property="og:title">
+<meta content="シンプルタイピングのイベント限定ランキングページ。期間限定イベント開催中に記録を投稿して、イベント専用ランキングで競えます。" property="og:description">
 <meta content="website" property="og:type">
 <meta content="シンプルタイピング" property="og:site_name">
-<title>シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム</title>
+<title>シンプルタイピング｜イベント限定ランキング</title>
 <link href="favicon/32.png" rel="icon" sizes="32x32" type="image/png">
 <link href="favicon/96.png" rel="icon" sizes="96x96" type="image/png">
 <link href="favicon/144.png" rel="icon" sizes="144x144" type="image/png">
@@ -29,8 +30,8 @@
 {
   "@context": "https://schema.org/",
   "@type": "WebSite",
-  "name": "シンプルタイピング",
-  "url": "https://s-typing.f5.si/"
+  "name": "シンプルタイピング｜イベント",
+  "url": "https://s-typing.f5.si/event/"
 }
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LSBNPPLE0E"></script>
@@ -108,6 +109,30 @@
   .stage{
     width:100%;
     max-width:640px;
+  }
+
+  .event-notice{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    text-align:center;
+    gap:10px;
+    margin-bottom:16px;
+    padding:12px 16px;
+    background:var(--panel-bg-soft);
+    border:1.5px solid var(--gold);
+    border-radius:12px;
+    font-size:14px;
+    font-weight:700;
+    line-height:1.6;
+    color:var(--ink);
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+
+  .event-notice i{
+    color:var(--gold);
+    margin-top:4px;
   }
 
   .menu-bar{
@@ -199,62 +224,6 @@
     color:var(--ink);
   }
 
-  .share-btn{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:8px 14px;
-    border:none;
-    border-radius:14px;
-    font-size:13px;
-    font-weight:600;
-    color:#ffffff;
-    cursor:pointer;
-    transition:opacity 0.2s ease;
-    text-decoration:none;
-  }
-
-  .share-btn:hover{
-    opacity:0.85;
-  }
-
-  .share-btn.x{ background:#000000; border:1px solid #ffffff; }
-  .share-btn.facebook{ background:#1877f2; }
-  .share-btn.copy{ background:var(--pop-teal); }
-
-  .result-share{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin:14px 0;
-    flex-wrap:wrap;
-  }
-
-  .share-footer{
-    width:100%;
-    max-width:640px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-    margin-top:24px;
-    padding-top:20px;
-    border-top:1px solid var(--line);
-  }
-
-  .site-footer-label{
-    font-size:12px;
-    color:var(--ink-soft);
-    letter-spacing:0.05em;
-  }
-
-  .footer-share{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-
   .app-loading-overlay{
     position:fixed;
     inset:0;
@@ -293,6 +262,15 @@
     to{ transform:rotate(360deg); }
   }
 
+
+  .input-mode-overlay.gate-overlay{
+    display:flex;
+    z-index:4000;
+  }
+
+  .input-mode-overlay.gate-overlay.hidden{
+    display:none;
+  }
 
   .mobile-warning-overlay{
     display:none;
@@ -588,6 +566,13 @@
     transition:transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
   }
 
+  .start-btn:disabled{
+    background:var(--ink-soft);
+    box-shadow:none;
+    cursor:not-allowed;
+    opacity:0.5;
+  }
+
   .start-btn:hover{
     background:var(--hanko-deep);
   }
@@ -595,20 +580,6 @@
   .start-btn:active{
     transform:translateY(2px);
     box-shadow:0 0 0 var(--hanko-deep);
-  }
-
-  .start-btn.online-btn{
-    background:var(--pop-purple);
-    box-shadow:0 2px 0 #564a80;
-  }
-
-  .start-btn.online-btn:hover{
-    background:var(--pop-purple);
-    filter:brightness(1.06);
-  }
-
-  .start-btn.online-btn:active{
-    box-shadow:0 0 0 #564a80;
   }
 
   .online-status{
@@ -621,41 +592,11 @@
     display:block;
   }
 
-  .status-title{
-    font-size:18px;
-    font-weight:600;
-    margin-bottom:10px;
-  }
-
-  .search-spinner{
-    width:40px;
-    height:40px;
-    border:3px solid var(--line);
-    border-top-color:var(--hanko);
-    border-radius:50%;
-    margin:20px auto;
-    animation:spin 1s linear infinite;
-  }
-
-  @keyframes spin{
-    to{transform:rotate(360deg);}
-  }
-
-  .search-count{
-    font-size:20px;
-    color:var(--ink-soft);
-    margin-bottom:22px;
-  }
-
   .countdown-number{
     font-size:88px;
     font-weight:800;
     color:var(--hanko);
     margin:16px 0 24px;
-  }
-
-  #opponent-score-label.hidden{
-    display:none;
   }
 
   .game{
@@ -668,6 +609,45 @@
 
   .setup.hidden{
     display:none;
+  }
+
+  .no-event-overlay{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    text-align:center;
+    margin:0 0 20px;
+    padding:24px 20px;
+    border-radius:16px;
+    background:var(--panel-bg);
+    border:1.5px dashed var(--line);
+  }
+
+  .no-event-overlay.hidden{
+    display:none;
+  }
+
+  .game-controls-panel.hidden{
+    display:none;
+  }
+
+  .no-event-overlay i{
+    font-size:28px;
+    color:var(--ink-soft);
+    opacity:0.7;
+  }
+
+  .no-event-overlay p{
+    margin:0;
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
+  .no-event-overlay span{
+    font-size:12px;
+    color:var(--ink-soft);
   }
 
   .hud{
@@ -694,11 +674,6 @@
   #score-label{
     background:rgba(47,158,148,0.12);
     color:var(--pop-teal);
-  }
-
-  #opponent-score-label{
-    background:rgba(108,90,158,0.12);
-    color:var(--pop-purple);
   }
 
   #time-label{
@@ -1421,45 +1396,6 @@
     color:var(--washi);
   }
 
-  .friend-menu-row{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-    margin-bottom:20px;
-  }
-
-  .friend-code{
-    font-size:40px;
-    font-weight:800;
-    letter-spacing:0.15em;
-    color:var(--hanko);
-    margin-bottom:16px;
-  }
-
-  .friend-copy-btn{
-    margin-bottom:20px;
-  }
-
-  .friend-code-input{
-    width:100%;
-    max-width:220px;
-    padding:10px 12px;
-    background:var(--input-bg);
-    border:1px solid var(--line);
-    border-radius:16px;
-    font-size:18px;
-    letter-spacing:0.15em;
-    color:var(--ink);
-    text-align:center;
-    margin-bottom:18px;
-  }
-
-  .friend-code-input:focus{
-    outline:none;
-    border-color:var(--gold);
-  }
-
   @media (min-width:561px){
     .menu-toggle-btn{
       display:none;
@@ -1533,9 +1469,6 @@
     .level-btn .sub{font-size:9px;}
     .start-btn{font-size:13px;padding:10px 18px;}
 
-    .status-title{font-size:15px;}
-    .search-spinner{width:32px;height:32px;}
-    .search-count{font-size:16px;}
     .countdown-number{font-size:64px;}
 
     .hud-stat{font-size:12px;padding:5px 12px;}
@@ -1669,6 +1602,178 @@
     }
   }
 
+  :root{
+    --confetti-opacity:1;
+    --festa-gradient:linear-gradient(135deg,var(--hanko),var(--gold),var(--pop-teal),var(--pop-purple));
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --confetti-opacity:0.5;
+    }
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    opacity:var(--confetti-opacity);
+    background-image:
+      radial-gradient(ellipse 70% 38% at 50% 0%, rgba(219,165,42,0.26), transparent 70%),
+      radial-gradient(circle at 12% 22%, rgba(224,86,63,0.28) 0 5px, transparent 6px),
+      radial-gradient(circle at 78% 14%, rgba(47,158,148,0.30) 0 4px, transparent 5px),
+      radial-gradient(circle at 44% 66%, rgba(219,165,42,0.34) 0 5px, transparent 6px),
+      radial-gradient(circle at 90% 82%, rgba(108,90,158,0.28) 0 6px, transparent 7px),
+      radial-gradient(circle at 26% 90%, rgba(47,158,148,0.26) 0 4px, transparent 5px);
+    background-size:100% 100%, 260px 260px, 340px 340px, 300px 300px, 380px 380px, 280px 280px;
+  }
+
+  .panel{
+    border:2px solid transparent;
+    background:
+      linear-gradient(var(--panel-bg),var(--panel-bg)) padding-box,
+      var(--festa-gradient) border-box;
+    box-shadow:0 10px 30px rgba(108,90,158,0.16);
+  }
+
+  .menu-bar{
+    border-color:var(--gold);
+  }
+
+  .event-notice{
+    background:linear-gradient(90deg,rgba(219,165,42,0.22),rgba(224,86,63,0.12));
+    border:2px solid var(--gold);
+    box-shadow:0 4px 14px rgba(219,165,42,0.2);
+  }
+
+  .no-event-overlay{
+    border-color:var(--gold);
+    background:linear-gradient(180deg,rgba(219,165,42,0.1),var(--panel-bg));
+  }
+
+  .mode-btn.active, .input-mode-btn.active{
+    background:linear-gradient(135deg,var(--hanko),#f08a3c);
+    box-shadow:0 2px 8px rgba(224,86,63,0.35);
+  }
+
+  .level-btn.active{
+    box-shadow:0 3px 10px rgba(47,158,148,0.35);
+  }
+
+  .start-btn{
+    padding:15px 34px;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--hanko),#f08a3c);
+    box-shadow:0 4px 0 var(--hanko-deep),0 10px 20px rgba(224,86,63,0.32);
+  }
+
+  .start-btn:not(:disabled):hover{
+    background:linear-gradient(135deg,var(--hanko-deep),#e0762f);
+  }
+
+  .start-btn:not(:disabled):active{
+    transform:translateY(3px);
+    box-shadow:0 1px 0 var(--hanko-deep),0 4px 10px rgba(224,86,63,0.3);
+  }
+
+  .start-btn:disabled,
+  .start-btn:disabled:hover{
+    background:var(--ink-soft);
+    box-shadow:none;
+  }
+
+  .setup-high-score{
+    font-weight:700;
+    color:var(--gold);
+    opacity:1;
+  }
+
+  .ranking-title{
+    font-size:16px;
+    text-shadow:0 1px 0 rgba(219,165,42,0.35);
+  }
+
+  .ranking-item.top3{
+    background:linear-gradient(90deg,rgba(219,165,42,0.24),var(--panel-bg-soft));
+    border-color:var(--gold);
+    box-shadow:0 3px 10px rgba(219,165,42,0.2);
+  }
+
+  .ranking-item.top3 .rank{
+    font-weight:900;
+  }
+
+  .ranking-item.top3 .name{
+    color:var(--ink);
+    font-weight:700;
+  }
+
+  .ranking-item:nth-child(2).top3 .rank{ color:#9aa3ad; }
+  .ranking-item:nth-child(3).top3 .rank{ color:#c8794a; }
+
+  .result-title{
+    font-weight:800;
+  }
+
+  .result-score{
+    font-size:68px;
+    font-weight:900;
+    background:linear-gradient(135deg,var(--hanko),var(--gold));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .result-rank-badge{
+    background:linear-gradient(135deg,var(--hanko),#f08a3c);
+    color:#fff;
+  }
+
+  .new-record-badge{
+    background:linear-gradient(135deg,var(--gold),#f0c75a);
+    color:#3a2a00;
+  }
+
+  .result-rank-badge.visible,
+  .new-record-badge.visible{
+    animation:badge-pop 0.5s cubic-bezier(0.2,1.6,0.4,1);
+  }
+
+  @keyframes badge-pop{
+    from{ transform:scale(0.6); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+  }
+
+  .retry-btn{
+    border-color:var(--hanko);
+    color:var(--hanko);
+    font-weight:700;
+  }
+
+  .retry-btn:hover{
+    background:var(--hanko);
+    color:#fff;
+  }
+
+  .info-title{
+    color:var(--hanko);
+  }
+
+  @media (max-width:480px){
+    .result-score{
+      font-size:50px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .result-rank-badge.visible,
+    .new-record-badge.visible{
+      animation:none;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -1682,9 +1787,19 @@
   <div class="app-loading-spinner"></div>
   <div class="app-loading-text">読み込み中...</div>
 </div>
+<div class="input-mode-overlay gate-overlay hidden" id="entry-gate-overlay">
+  <div class="input-mode-box">
+    <div class="input-mode-modal-title">はじめる前に</div>
+    <div class="login-provider-list">
+      <button class="login-provider-btn" id="gate-google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
+      <button class="login-provider-btn" id="gate-x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
+      <button class="login-provider-btn" id="gate-discord-login-btn"><i class="fa-brands fa-discord"></i> Discordでログイン</button>
+    </div>
+  </div>
+</div>
 <div class="stage">
   <div class="menu-bar" id="site-header">
-    <a href="/" class="menu-brand">
+    <a href="./" class="menu-brand">
       <img src="logo.svg" alt="シンプルタイピング" class="menu-logo">
       <h1 class="menu-title">シンプルタイピング</h1>
     </a>
@@ -1702,45 +1817,51 @@
   <div class="panel">
 
     <div class="setup" id="setup">
-      <div class="mode-tabs">
-        <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
-        <button class="mode-btn" data-mode="katakana">カタカナ</button>
-        <button class="mode-btn" data-mode="sentence">文章</button>
+      <div class="no-event-overlay" id="no-event-overlay">
+        <i class="fas fa-calendar-xmark"></i>
+        <p>現在開催中のイベントはありません</p>
+        <span>イベント開催時にこちらのページからランキングに挑戦できます</span>
       </div>
+      <div class="game-controls-panel" id="game-controls-panel">
+        <div class="event-notice hidden" id="event-notice"><i class="fas fa-bullhorn"></i><span id="event-notice-text"></span></div>
+        <div class="mode-tabs">
+          <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
+          <button class="mode-btn" data-mode="katakana">カタカナ</button>
+          <button class="mode-btn" data-mode="sentence">文章</button>
+        </div>
 
-      <div class="levels" data-row="hiragana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
+        <div class="levels" data-row="hiragana">
+          <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
+          <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
+          <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
+        </div>
 
-      <div class="levels hidden" data-row="katakana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
+        <div class="levels hidden" data-row="katakana">
+          <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
+          <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
+          <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
+        </div>
 
-      <div class="levels hidden" data-row="sentence">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
-      </div>
+        <div class="levels hidden" data-row="sentence">
+          <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
+          <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
+          <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
+        </div>
 
-      <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
+        <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
 
-      <div class="start-row">
-        <button class="start-btn" id="start-btn"><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
-        <button class="start-btn online-btn" id="start-online-btn"><i class="fa-solid fa-globe"></i> オンライン対戦</button>
-        <button class="start-btn online-btn" id="start-friend-btn"><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
-      </div>
+        <div class="start-row">
+          <button class="start-btn" id="start-btn" disabled><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
+        </div>
 
-      <div class="mode-and-mute-row">
-        <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
-        <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
-        <label class="mute-check-label">
-          <input type="checkbox" id="mute-btn" class="mute-check">
-          ミュート
-        </label>
+        <div class="mode-and-mute-row">
+          <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
+          <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
+          <label class="mute-check-label">
+            <input type="checkbox" id="mute-btn" class="mute-check">
+            ミュート
+          </label>
+        </div>
       </div>
 
       <div class="ranking-box hidden" id="ranking-box">
@@ -1772,68 +1893,18 @@
           </a>
         </div>
 
-        <div class="share-footer" id="share-footer">
-          <span class="site-footer-label">このサイトをシェア</span>
-          <div class="footer-share">
-            <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
-            <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
-          </div>
-        </div>
-
         <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
         <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
       </div>
-    </div>
-
-    <div class="online-status" id="searching">
-      <div class="status-title">対戦相手をさがしています</div>
-      <div class="search-spinner"></div>
-      <div class="search-count" id="search-count-label">残り 15 秒</div>
-      <button class="retry-btn" id="cancel-search-btn">キャンセル</button>
     </div>
 
     <div class="online-status" id="countdown">
       <div class="countdown-number" id="countdown-number">3</div>
     </div>
 
-    <div class="online-status" id="friend-menu">
-      <div class="status-title">フレンド対戦</div>
-      <div class="friend-menu-row">
-        <button class="start-btn online-btn" id="friend-create-btn">招待コードを作成する</button>
-        <button class="start-btn online-btn" id="friend-join-open-btn">招待コードで参加する</button>
-      </div>
-      <button class="retry-btn" id="friend-menu-back-btn">戻る</button>
-    </div>
-
-    <div class="online-status" id="friend-create">
-      <div class="status-title">このコードを友達に伝えてね</div>
-      <div class="friend-code" id="friend-code-label">------</div>
-      <button class="retry-btn friend-copy-btn" id="friend-code-copy-btn">コードをコピー</button>
-      <div class="search-count">相手の参加を待っています…</div>
-      <div class="search-spinner"></div>
-      <button class="retry-btn" id="friend-create-cancel-btn">キャンセル</button>
-    </div>
-
-    <div class="online-status" id="friend-join">
-      <div class="status-title">招待コードを入力してください</div>
-      <input type="text" class="friend-code-input" id="friend-code-input" maxlength="6" autocomplete="off" inputmode="numeric" pattern="[0-9]*" placeholder="コードを入力">
-      <div class="start-row">
-        <button class="start-btn online-btn" id="friend-join-submit-btn">参加する</button>
-      </div>
-      <button class="retry-btn" id="friend-join-cancel-btn">キャンセル</button>
-    </div>
-
-    <div class="online-status" id="friend-waiting">
-      <div class="status-title">相手を待っています</div>
-      <div class="search-spinner"></div>
-      <button class="retry-btn" id="friend-waiting-cancel-btn">キャンセル</button>
-    </div>
-
     <div class="game" id="game">
       <div class="hud">
         <span id="score-label" class="hud-stat">せいかい 0 もん</span>
-        <span id="opponent-score-label" class="hud-stat hidden">あいて 0 もん</span>
         <span id="time-label" class="hud-stat">残り 100 秒</span>
         <button id="end-game-btn" class="end-game-btn">終了</button>
       </div>
@@ -1892,11 +1963,6 @@
           <div class="stat-value" id="stat-miss">0</div>
           <div class="stat-label">ミス数</div>
         </div>
-      </div>
-      <div class="result-share">
-        <a class="share-btn x" id="result-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> Xでシェア</a>
-        <a class="share-btn facebook" id="result-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebookでシェア</a>
-        <button class="share-btn copy" id="result-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
       </div>
       <button class="retry-btn" id="retry-btn">もう一度</button>
     </div>
@@ -2035,26 +2101,6 @@ const playRecordsOverlayEl = document.getElementById("play-records-overlay");
 const playRecordsCloseBtnEl = document.getElementById("play-records-close-btn");
 const playRecordsListEl = document.getElementById("play-records-list");
 
-function getGuestPlayRecords(){
-  try{
-    const raw = localStorage.getItem(GUEST_PLAY_RECORDS_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
-  }catch(e){
-    return [];
-  }
-}
-
-function saveGuestPlayRecords(records){
-  localStorage.setItem(GUEST_PLAY_RECORDS_KEY, JSON.stringify(records.slice(0, PLAY_RECORD_MAX)));
-}
-
-function addGuestPlayRecord(record){
-  const records = getGuestPlayRecords();
-  records.unshift(record);
-  saveGuestPlayRecords(records);
-}
-
 function formatPlayRecordTime(playedAt){
   const date = new Date(playedAt);
   const pad = (n) => String(n).padStart(2, "0");
@@ -2104,23 +2150,18 @@ async function fetchAccountPlayRecords(token){
 async function openPlayRecords(){
   playRecordsOverlayEl.classList.add("visible");
   playRecordsListEl.innerHTML = `<li class="play-records-empty">読み込み中...</li>`;
-  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-  const records = isLoggedIn ? await fetchAccountPlayRecords(getSessionToken()) : getGuestPlayRecords();
+  const records = await fetchAccountPlayRecords(getSessionToken());
   renderPlayRecords(records);
 }
 
 async function recordPlayResult(mode, level, accuracy, speed, miss, score){
-  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-  if(isLoggedIn){
-    const token = getSessionToken();
-    await fetchWithRetry(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
-    }, 4);
-  } else {
-    addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss, score });
-  }
+  const token = getSessionToken();
+  if(!token) return;
+  await fetchWithRetry(`${RANKING_API_URL}/auth`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
+  }, 4);
 }
 
 playRecordsToggleBtnEl.addEventListener("click", () => {
@@ -2135,12 +2176,10 @@ const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googl
 const X_CLIENT_ID = "UjYwZ1NXM0JBamtyVjhwWno4Ujk6MTpjaQ";
 const DISCORD_CLIENT_ID = "1555238827524755557";
 const SESSION_TOKEN_KEY = "sessionToken";
-const GUEST_NAME_KEY = "guestPlayerName";
 const GUEST_INPUT_MODE_KEY = "guestInputMode";
 const SHOW_ROMAJI_KEY = "showRomaji";
 const SHOW_HIRAGANA_KEY = "showHiragana";
 const ROMAJI_UPPERCASE_KEY = "romajiUppercase";
-const GUEST_PLAY_RECORDS_KEY = "guestPlayRecords";
 const SHOW_KEYBOARD_KEY = "showKeyboard";
 const PLAY_RECORD_MAX = 20;
 const currentPlayerLabelEl = document.getElementById("current-player-label");
@@ -2154,47 +2193,6 @@ const loginSelectCloseBtnEl = document.getElementById("login-select-close-btn");
 const editNameBtnEl = document.getElementById("edit-name-btn");
 const menuToggleBtnEl = document.getElementById("menu-toggle-btn");
 const menuAuthPanelEl = document.getElementById("menu-auth-panel");
-const shareCopyBtnEl = document.getElementById("footer-share-copy-btn");
-const shareXBtnEl = document.getElementById("footer-share-x-btn");
-const shareFacebookBtnEl = document.getElementById("footer-share-facebook-btn");
-const resultShareXBtnEl = document.getElementById("result-share-x-btn");
-const resultShareFacebookBtnEl = document.getElementById("result-share-facebook-btn");
-const resultShareCopyBtnEl = document.getElementById("result-share-copy-btn");
-
-const SITE_URL = "https://s-typing.f5.si/";
-const SITE_SHARE_TEXT = "シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム";
-
-function buildXShareUrl(text){
-  return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}&via=simple_typing`;
-}
-
-function buildFacebookShareUrl(text){
-  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(text)}`;
-}
-
-async function copyToClipboard(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    showCustomAlert("コピーしました");
-  }catch(err){
-    showCustomAlert("コピーに失敗しました");
-  }
-}
-
-shareXBtnEl.href = buildXShareUrl(SITE_SHARE_TEXT);
-shareFacebookBtnEl.href = buildFacebookShareUrl(SITE_SHARE_TEXT);
-
-let resultShareText = SITE_SHARE_TEXT;
-
-function updateResultShareLinks(text){
-  resultShareText = `${text}\n${SITE_URL}`;
-  resultShareXBtnEl.href = buildXShareUrl(text);
-  resultShareFacebookBtnEl.href = buildFacebookShareUrl(text);
-}
-
-shareCopyBtnEl.addEventListener("click", () => copyToClipboard(`${SITE_SHARE_TEXT}\n${SITE_URL}`));
-
-resultShareCopyBtnEl.addEventListener("click", () => copyToClipboard(resultShareText));
 
 menuToggleBtnEl.addEventListener("click", () => {
   menuAuthPanelEl.classList.toggle("hidden");
@@ -2202,28 +2200,23 @@ menuToggleBtnEl.addEventListener("click", () => {
 
 editNameBtnEl.addEventListener("click", () => {
   const prefill = currentPlayerName || "";
+  const token = getSessionToken();
+  if(!token) return;
   showNameInputModal(async (name) => {
-    const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-    if(isLoggedIn){
-      const token = getSessionToken();
-      try{
-        const res = await fetch(`${RANKING_API_URL}/auth`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "setName", token, name })
-        });
-        const data = await res.json();
-        if(data.name){
-          currentPlayerName = data.name;
-        } else {
-          showCustomAlert("名前の変更に失敗しました");
-        }
-      }catch(e){
+    try{
+      const res = await fetch(`${RANKING_API_URL}/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "setName", token, name })
+      });
+      const data = await res.json();
+      if(data.name){
+        currentPlayerName = data.name;
+      } else {
         showCustomAlert("名前の変更に失敗しました");
       }
-    } else {
-      currentPlayerName = name;
-      localStorage.setItem(GUEST_NAME_KEY, name);
+    }catch(e){
+      showCustomAlert("名前の変更に失敗しました");
     }
     updatePlayerNameLabel();
     updateSetupHighScore();
@@ -2279,7 +2272,7 @@ async function showLoggedInUi(name, token, inputModeFromAccount, displaySettings
 }
 
 function showLoggedOutUi(){
-  currentPlayerName = localStorage.getItem(GUEST_NAME_KEY) || "GUEST";
+  currentPlayerName = null;
   serverHighScores = null;
   updatePlayerNameLabel();
   updateSetupHighScore();
@@ -2287,30 +2280,6 @@ function showLoggedOutUi(){
   logoutBtnEl.classList.add("hidden");
   applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
   applyDisplaySettings(getGuestDisplaySettings());
-}
-
-async function verifySession(){
-  const token = getSessionToken();
-  if(!token){
-    showLoggedOutUi();
-    return;
-  }
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "verify", token })
-    });
-    const data = await res.json();
-    if(data.valid){
-      await showLoggedInUi(data.name, token, data.inputMode, data.displaySettings);
-    } else {
-      clearSessionToken();
-      showLoggedOutUi();
-    }
-  }catch(e){
-    showLoggedOutUi();
-  }
 }
 
 async function handleLoginResponse(loginBody){
@@ -2564,6 +2533,8 @@ logoutBtnEl.addEventListener("click", () => {
   const token = getSessionToken();
   clearSessionToken();
   showLoggedOutUi();
+  menuAuthPanelEl.classList.add("hidden");
+  openEntryGate();
   if(token){
     fetch(`${RANKING_API_URL}/auth`, {
       method: "POST",
@@ -2586,12 +2557,53 @@ function hideAppLoadingOverlay(){
   if(appLoadingCount === 0) appLoadingOverlayEl.classList.add("hidden");
 }
 
+const entryGateOverlayEl = document.getElementById("entry-gate-overlay");
+const gateGoogleLoginBtnEl = document.getElementById("gate-google-login-btn");
+const gateXLoginBtnEl = document.getElementById("gate-x-login-btn");
+const gateDiscordLoginBtnEl = document.getElementById("gate-discord-login-btn");
+
+function openEntryGate(){
+  entryGateOverlayEl.classList.remove("hidden");
+}
+
+function closeEntryGate(){
+  entryGateOverlayEl.classList.add("hidden");
+}
+
+gateGoogleLoginBtnEl.addEventListener("click", () => {
+  startGoogleLogin();
+});
+
+gateXLoginBtnEl.addEventListener("click", () => {
+  startXLogin();
+});
+
+gateDiscordLoginBtnEl.addEventListener("click", () => {
+  startDiscordLogin();
+});
+
+function resetSessionOnClose(){
+  const token = getSessionToken();
+  clearSessionToken();
+  if(token && navigator.sendBeacon){
+    const blob = new Blob([JSON.stringify({ action: "logout", token })], { type: "application/json" });
+    navigator.sendBeacon(`${RANKING_API_URL}/auth`, blob);
+  }
+}
+
+window.addEventListener("pagehide", resetSessionOnClose);
+
 window.addEventListener("load", async () => {
   const handledGoogleRedirect = await processGoogleAuthRedirect();
   const handledDiscordRedirect = handledGoogleRedirect ? false : await processDiscordAuthRedirect();
-  if(!handledGoogleRedirect && !handledDiscordRedirect) await processXAuthRedirect();
-  const sessionLoadPromise = currentPlayerName ? Promise.resolve() : verifySession();
-  Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
+  const handledXRedirect = (handledGoogleRedirect || handledDiscordRedirect) ? false : await processXAuthRedirect();
+  if(handledGoogleRedirect || handledDiscordRedirect || handledXRedirect){
+    closeEntryGate();
+  } else {
+    showLoggedOutUi();
+    openEntryGate();
+  }
+  Promise.all([initialRankingLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
 
@@ -2688,6 +2700,7 @@ const modeLabels = { hiragana:"ひらがな", katakana:"カタカナ", sentence:
 
 let currentMode = "hiragana";
 let currentLevel = "beginner";
+let enabledCombos = [];
 let inputMode = "realtime";
 let typingText = null;
 let currentWord = "";
@@ -2719,24 +2732,9 @@ const statSpeedEl = document.getElementById("stat-speed");
 const statMissEl = document.getElementById("stat-miss");
 const imeSpacerEl = document.getElementById("ime-spacer");
 const headerEl = document.getElementById("site-header");
-const opponentScoreLabelEl = document.getElementById("opponent-score-label");
-const searchingEl = document.getElementById("searching");
-const searchCountLabelEl = document.getElementById("search-count-label");
-const cancelSearchBtn = document.getElementById("cancel-search-btn");
 const countdownEl = document.getElementById("countdown");
 const countdownNumberEl = document.getElementById("countdown-number");
-const friendMenuEl = document.getElementById("friend-menu");
-const friendCreateEl = document.getElementById("friend-create");
-const friendJoinEl = document.getElementById("friend-join");
-const friendWaitingEl = document.getElementById("friend-waiting");
-const friendCodeLabelEl = document.getElementById("friend-code-label");
-const friendCodeInputEl = document.getElementById("friend-code-input");
-friendCodeInputEl.addEventListener("input", () => {
-  friendCodeInputEl.value = friendCodeInputEl.value.replace(/[^0-9]/g, "");
-});
-
-const ONLINE_SERVER_URL = "wss://key-onl.user-x45.workers.dev";
-const RANKING_API_URL = ONLINE_SERVER_URL.replace(/^wss:/, "https:").replace(/^ws:/, "http:");
+const RANKING_API_URL = "https://key-onl.user-x45.workers.dev";
 
 const clickSoundEl = new Audio("sounds/click.mp3");
 const keySoundEl = new Audio("sounds/key.mp3");
@@ -2838,38 +2836,132 @@ function renderRanking(scores){
   rankingBoxEl.classList.remove("hidden");
 }
 
+let eventActive = false;
+let eventStatusLoaded = false;
+
+function isComboEnabled(mode, level){
+  if(!eventStatusLoaded) return true;
+  return enabledCombos.includes(`${mode}:${level}`);
+}
+
+function applyComboVisibility(){
+  document.querySelectorAll(".mode-btn").forEach(btn => {
+    const mode = btn.dataset.mode;
+    const hasAnyLevel = ["beginner", "intermediate", "advanced"].some(level => isComboEnabled(mode, level));
+    btn.classList.toggle("hidden", !hasAnyLevel);
+  });
+
+  document.querySelectorAll(".levels").forEach(row => {
+    const mode = row.dataset.row;
+    row.querySelectorAll(".level-btn").forEach(btn => {
+      const level = btn.dataset.level;
+      btn.classList.toggle("hidden", !isComboEnabled(mode, level));
+    });
+  });
+}
+
+function findFirstEnabledCombo(){
+  const modes = ["hiragana", "katakana", "sentence"];
+  const levels = ["beginner", "intermediate", "advanced"];
+  for(const mode of modes){
+    for(const level of levels){
+      if(isComboEnabled(mode, level)) return { mode, level };
+    }
+  }
+  return null;
+}
+
+function applyEventNotice(notice){
+  const noticeEl = document.getElementById("event-notice");
+  const textEl = document.getElementById("event-notice-text");
+  const text = String(notice || "").trim();
+  textEl.textContent = text;
+  noticeEl.classList.toggle("hidden", text === "");
+}
+
+async function loadEventStatus(){
+  try{
+    const res = await fetch(`${RANKING_API_URL}/event-status`);
+    if(!res.ok) return;
+    const data = await res.json();
+    enabledCombos = Array.isArray(data.combos) ? data.combos : [];
+    applyEventNotice(data.notice);
+  }catch(e){
+    enabledCombos = [];
+  }
+  eventStatusLoaded = true;
+  applyComboVisibility();
+  if(!isComboEnabled(currentMode, currentLevel)){
+    const fallback = findFirstEnabledCombo();
+    if(fallback){
+      currentMode = fallback.mode;
+      currentLevel = fallback.level;
+      document.querySelectorAll(".mode-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.mode === currentMode);
+      });
+      document.querySelectorAll(".levels").forEach(row => {
+        row.classList.toggle("hidden", row.dataset.row !== currentMode);
+        row.querySelectorAll(".level-btn").forEach(lb => {
+          lb.classList.toggle("active", lb.dataset.level === currentLevel);
+        });
+      });
+      updateUrlHash();
+      updateSetupHighScore();
+    }
+  }
+  loadRanking();
+}
+
+function applyEventGate(){
+  const overlayEl = document.getElementById("no-event-overlay");
+  const controlsPanelEl = document.getElementById("game-controls-panel");
+  if(!overlayEl) return;
+  overlayEl.classList.toggle("hidden", eventActive);
+  if(controlsPanelEl) controlsPanelEl.classList.toggle("hidden", !eventActive);
+  document.getElementById("start-btn").disabled = !eventActive;
+}
+
 async function loadRanking(){
   const requestId = ++rankingRequestId;
   const mode = currentMode;
   const level = currentLevel;
   const modeLabel = modeLabels[mode] || "ひらがな";
-  rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
+  rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> イベントランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
   rankingBoxEl.classList.add("hidden");
   rankingListEl.innerHTML = "";
   try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=normal`);
+    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`);
     if(requestId !== rankingRequestId) return;
     if(!res.ok){
+      eventActive = false;
+      applyEventGate();
       rankingBoxEl.classList.add("hidden");
       rankingListEl.innerHTML = "";
       return;
     }
     const data = await res.json();
     if(requestId !== rankingRequestId) return;
+    eventActive = true;
+    applyEventGate();
+    if(data.month){
+      rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ${data.month}限定ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
+    }
     renderRanking(data.scores);
   }catch(e){
     if(requestId !== rankingRequestId) return;
+    eventActive = false;
+    applyEventGate();
     rankingBoxEl.classList.add("hidden");
     rankingListEl.innerHTML = "";
   }
 }
 
-function logPlay(mode, level, matchType, opponent){
+function logPlay(mode, level){
   const name = normalizePlayerName(getPlayerName());
   fetch(`${RANKING_API_URL}/playlog`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, mode, level, matchType: matchType || "solo", opponent: opponent || "" })
+    body: JSON.stringify({ name, mode, level, matchType: "solo" })
   }).catch(() => {});
 }
 
@@ -2889,10 +2981,12 @@ async function fetchWithRetry(url, options, attempts){
 
 
 async function submitScoreToRanking(score, mode, level, name){
-  const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=normal`, {
+  const token = getSessionToken();
+  if(!token) return;
+  const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ score, name })
+    body: JSON.stringify({ score, name, token })
   }, 4);
   if(!res) return;
   try{
@@ -2910,7 +3004,7 @@ async function submitScoreToRanking(score, mode, level, name){
 
 async function checkRankQualifies(score, mode, level){
   try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=normal`);
+    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`);
     if(!res.ok) return true;
     const data = await res.json();
     const scores = data.scores;
@@ -2925,6 +3019,7 @@ async function checkRankQualifies(score, mode, level){
 }
 
 async function handleRankingSubmission(score, mode, level){
+  if(!eventActive || !getSessionToken()) return;
   const qualifies = await checkRankQualifies(score, mode, level);
   if(!qualifies) return;
   const name = normalizePlayerName(getPlayerName());
@@ -2935,22 +3030,6 @@ async function handleRankingSubmission(score, mode, level){
 
 const initialRankingLoadPromise = loadRanking();
 
-let ws = null;
-let matchId = null;
-let myRole = null;
-let opponentName = "";
-let isOnlineMode = false;
-let onlineWordDeck = [];
-let onlineIndex = 0;
-let onlineScore = 0;
-let onlineMiss = 0;
-let onlineChars = 0;
-let friendWs = null;
-let friendRole = null;
-let opponentScore = 0;
-let searchCountdownTimer = null;
-let onlineTimerId = null;
-let onlineTimeLeft = 100;
 let countdownTimerId = null;
 
 function fitSpacerToViewport(){
@@ -3044,282 +3123,36 @@ function applyStateFromHash(){
 document.getElementById("footer-year").textContent = new Date().getFullYear();
 
 applyStateFromHash();
+loadEventStatus();
 preloadAllWordLists();
 window.addEventListener("hashchange", () => {
   if(isInGameFlow()){
     quitToTop();
   }
   applyStateFromHash();
+  applyComboVisibility();
 });
 
 document.getElementById("start-btn").addEventListener("click", startGame);
-document.getElementById("start-online-btn").addEventListener("click", startOnlineSearch);
-cancelSearchBtn.addEventListener("click", cancelSearch);
 document.getElementById("retry-btn").addEventListener("click", () => {
   resultEl.classList.remove("visible");
   setupEl.classList.remove("hidden");
 });
 
-function startOnlineSearch(){
-  setupEl.classList.add("hidden");
-  searchingEl.classList.add("visible");
-  let secondsLeft = 15;
-  searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
-  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
-  ws = new WebSocket(`${ONLINE_SERVER_URL}/lobby?mode=${currentMode}&level=${currentLevel}&name=${myName}`);
-  ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "matched"){
-      clearInterval(searchCountdownTimer);
-      matchId = msg.matchId;
-      myRole = msg.role;
-      opponentName = msg.opponentName || "GUEST";
-      connectToMatch();
-    } else if(msg.type === "timeout"){
-      clearInterval(searchCountdownTimer);
-      cancelSearch();
-      showCustomAlert("対戦相手が見つかりませんでした");
-    }
-  };
-  ws.onerror = () => {
-    clearInterval(searchCountdownTimer);
-    cancelSearch();
-    showCustomAlert("サーバーに接続できませんでした");
-  };
-  searchCountdownTimer = setInterval(() => {
-    secondsLeft--;
-    searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
-    if(secondsLeft <= 0){
-      clearInterval(searchCountdownTimer);
-    }
-  }, 1000);
-}
-
-function cancelSearch(){
-  if(ws){ ws.close(); ws = null; }
-  clearInterval(searchCountdownTimer);
-  searchingEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-}
-
 function isInGameFlow(){
   return gameEl.classList.contains("visible") ||
-    countdownEl.classList.contains("visible") ||
-    searchingEl.classList.contains("visible") ||
-    friendMenuEl.classList.contains("visible") ||
-    friendCreateEl.classList.contains("visible") ||
-    friendWaitingEl.classList.contains("visible") ||
-    friendJoinEl.classList.contains("visible");
+    countdownEl.classList.contains("visible");
 }
 
 function quitToTop(){
   clearInterval(timerId);
-  clearInterval(onlineTimerId);
   clearInterval(countdownTimerId);
-  clearInterval(searchCountdownTimer);
-  if(ws){ ws.close(); ws = null; }
-  if(friendWs){ friendWs.close(); friendWs = null; }
-  friendRole = null;
-  isOnlineMode = false;
   countdownEl.classList.remove("visible");
-  searchingEl.classList.remove("visible");
-  friendMenuEl.classList.remove("visible");
-  friendCreateEl.classList.remove("visible");
-  friendWaitingEl.classList.remove("visible");
-  friendJoinEl.classList.remove("visible");
   gameEl.classList.remove("visible");
   headerEl.classList.remove("hidden");
   document.body.classList.remove("game-active");
   resultEl.classList.remove("visible");
   setupEl.classList.remove("hidden");
-}
-
-function generateFriendCode(){
-  return String(Math.floor(100000 + Math.random() * 900000));
-}
-
-function connectFriendRoom(code, role){
-  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
-  friendRole = role;
-  friendWs = new WebSocket(`${ONLINE_SERVER_URL}/friend/${code}?role=${role}&mode=${currentMode}&level=${currentLevel}&name=${myName}`);
-  friendWs.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "matched"){
-      friendWs = null;
-      matchId = msg.matchId;
-      myRole = msg.role;
-      opponentName = msg.opponentName || "GUEST";
-      if(msg.mode) currentMode = msg.mode;
-      if(msg.level) currentLevel = msg.level;
-      friendCreateEl.classList.remove("visible");
-      friendWaitingEl.classList.remove("visible");
-      connectToMatch();
-    } else if(msg.type === "timeout"){
-      cancelFriend();
-      showCustomAlert("相手が見つかりませんでした");
-    }
-  };
-  friendWs.onerror = () => {
-    cancelFriend();
-    showCustomAlert(role === "guest" ? "招待コードが見つかりませんでした" : "サーバーに接続できませんでした");
-  };
-}
-
-function startFriendCreate(){
-  const code = generateFriendCode();
-  friendCodeLabelEl.textContent = code;
-  friendMenuEl.classList.remove("visible");
-  friendCreateEl.classList.add("visible");
-  connectFriendRoom(code, "host");
-}
-
-function startFriendJoin(){
-  const code = friendCodeInputEl.value.trim();
-  if(!code){
-    showCustomAlert("招待コードを入力してください");
-    return;
-  }
-  if(!/^[0-9]+$/.test(code)){
-    showCustomAlert("招待コードは数字のみ入力してください");
-    return;
-  }
-  friendJoinEl.classList.remove("visible");
-  friendWaitingEl.classList.add("visible");
-  connectFriendRoom(code, "guest");
-}
-
-function copyFriendCode(){
-  const code = friendCodeLabelEl.textContent;
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(code);
-  }
-  showCustomAlert("コードをコピーしました");
-}
-
-function cancelFriend(){
-  if(friendWs){ friendWs.close(); friendWs = null; }
-  friendRole = null;
-  friendCreateEl.classList.remove("visible");
-  friendWaitingEl.classList.remove("visible");
-  friendJoinEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-}
-
-document.getElementById("start-friend-btn").addEventListener("click", () => {
-  setupEl.classList.add("hidden");
-  friendMenuEl.classList.add("visible");
-});
-document.getElementById("friend-menu-back-btn").addEventListener("click", () => {
-  friendMenuEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-});
-document.getElementById("friend-create-btn").addEventListener("click", startFriendCreate);
-document.getElementById("friend-create-cancel-btn").addEventListener("click", cancelFriend);
-document.getElementById("friend-code-copy-btn").addEventListener("click", copyFriendCode);
-document.getElementById("friend-join-open-btn").addEventListener("click", () => {
-  friendMenuEl.classList.remove("visible");
-  friendCodeInputEl.value = "";
-  friendJoinEl.classList.add("visible");
-  friendCodeInputEl.focus();
-});
-document.getElementById("friend-join-cancel-btn").addEventListener("click", () => {
-  friendJoinEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-});
-document.getElementById("friend-join-submit-btn").addEventListener("click", startFriendJoin);
-document.getElementById("friend-waiting-cancel-btn").addEventListener("click", cancelFriend);
-
-function connectToMatch(){
-  if(ws) ws.close();
-  ws = new WebSocket(`${ONLINE_SERVER_URL}/match/${matchId}?role=${myRole}&mode=${currentMode}&level=${currentLevel}`);
-  ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "start"){
-      onlineWordDeck = msg.wordDeck;
-      startOnlineCountdown();
-    } else if(msg.type === "opponentProgress"){
-      opponentScore = msg.score;
-      updateOpponentHud();
-    } else if(msg.type === "end"){
-      finishOnlineGame(msg);
-    } else if(msg.type === "opponentLeft"){
-      finishOnlineGame({
-        you:{score:onlineScore, miss:onlineMiss},
-        opponent:{score:opponentScore, miss:0},
-        result:"win",
-        forfeit:true
-      });
-    }
-  };
-}
-
-function startOnlineCountdown(){
-  searchingEl.classList.remove("visible");
-  countdownEl.classList.add("visible");
-  let count = 3;
-  countdownNumberEl.textContent = count;
-  clearInterval(countdownTimerId);
-  countdownTimerId = setInterval(() => {
-    count--;
-    if(count > 0){
-      countdownNumberEl.textContent = count;
-    } else {
-      clearInterval(countdownTimerId);
-      countdownEl.classList.remove("visible");
-      beginOnlineMatch();
-    }
-  }, 1000);
-}
-
-async function beginOnlineMatch(){
-  logPlay(currentMode, currentLevel, friendRole ? "friend" : "online", opponentName);
-  isOnlineMode = true;
-  onlineIndex = 0;
-  onlineScore = 0;
-  onlineMiss = 0;
-  onlineChars = 0;
-  opponentScore = 0;
-  onlineTimeLeft = 100;
-  gameEl.classList.add("visible");
-  headerEl.classList.add("hidden");
-  document.body.classList.add("game-active");
-  opponentScoreLabelEl.classList.remove("hidden");
-  endGameBtn.classList.add("hidden");
-  const modeLabel = modeLabels[currentMode] || "ひらがな";
-  levelLabelEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）`;
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  scoreLabelEl.textContent = `${myDisplayName} 0 もん`;
-  timeLabelEl.textContent = `残り 100 秒`;
-  timeLabelEl.classList.remove("time-warning");
-  resetTimerFill();
-  updateOpponentHud();
-  if(currentMode === "sentence"){
-    await ensureSentenceReadings(currentLevel, onlineWordDeck);
-  }
-  currentWord = onlineWordDeck[0];
-  if(romajiDisplayEl){
-    romajiDisplayEl.classList.remove("shake");
-    romajiDisplayEl.scrollLeft = 0;
-  }
-  renderWord();
-  inputEl.value = "";
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-  fitSpacerToViewport();
-  inputEl.focus();
-  clearInterval(onlineTimerId);
-  onlineTimerId = setInterval(() => {
-    onlineTimeLeft--;
-    timeLabelEl.textContent = `残り ${onlineTimeLeft} 秒`;
-    timeLabelEl.classList.toggle("time-warning", onlineTimeLeft <= 10);
-    timerFillEl.style.width = `${(onlineTimeLeft / 100) * 100}%`;
-    if(onlineTimeLeft <= 0){
-      clearInterval(onlineTimerId);
-      if(ws && ws.readyState === WebSocket.OPEN){
-        ws.send(JSON.stringify({type:"finished", score:onlineScore, miss:onlineMiss}));
-      }
-    }
-  }, 1000);
 }
 
 function resetTimerFill(){
@@ -3327,68 +3160,6 @@ function resetTimerFill(){
   timerFillEl.style.width = "100%";
   void timerFillEl.offsetWidth;
   timerFillEl.classList.remove("no-transition");
-}
-
-function updateOpponentHud(){
-  const displayName = opponentName || "GUEST";
-  opponentScoreLabelEl.textContent = `${displayName} ${opponentScore} もん`;
-}
-
-function handleOnlineSubmit(typed){
-  if(typed !== currentWord){
-    onlineMiss++;
-    hintLabelEl.textContent = "まだ違います";
-    shakeInput();
-    playSound(incorrectSoundEl);
-    return;
-  }
-  onlineScore++;
-  onlineChars += currentWord.length;
-  onlineIndex++;
-  currentWord = onlineWordDeck[onlineIndex % onlineWordDeck.length];
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  scoreLabelEl.textContent = `${myDisplayName} ${onlineScore} もん`;
-  renderWord();
-  inputEl.value = "";
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-  fitSpacerToViewport();
-  playSound(correctSoundEl);
-  if(ws && ws.readyState === WebSocket.OPEN){
-    ws.send(JSON.stringify({type:"progress", score:onlineScore, index:onlineIndex}));
-  }
-}
-
-function finishOnlineGame(msg){
-  clearInterval(onlineTimerId);
-  clearInterval(countdownTimerId);
-  countdownEl.classList.remove("visible");
-  isOnlineMode = false;
-  gameEl.classList.remove("visible");
-  headerEl.classList.remove("hidden");
-  document.body.classList.remove("game-active");
-  opponentScoreLabelEl.classList.add("hidden");
-  endGameBtn.classList.remove("hidden");
-  resultEl.classList.add("visible");
-  const you = msg.you;
-  const opponent = msg.opponent;
-  const attempts = you.score + you.miss;
-  const accuracy = attempts === 0 ? 0 : Math.round((you.score / attempts) * 100);
-  const speed = Math.round((onlineChars / 100) * 60);
-  let resultLabel = "ひきわけ";
-  if(msg.result === "win") resultLabel = msg.forfeit ? "不戦勝" : "しょうり";
-  else if(msg.result === "lose") resultLabel = "はいせん";
-  resultScoreEl.textContent = resultLabel;
-  const modeLabel = modeLabels[currentMode] || "ひらがな";
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  const oppDisplayName = opponentName || "GUEST";
-  resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）/ ${myDisplayName} ${you.score}もん・${oppDisplayName} ${opponent.score}もん`;
-  updateResultShareLinks(`シンプルタイピングのオンライン対戦で${resultLabel}でした！（${you.score}もん せいかい）`);
-  statAccuracyEl.textContent = `${accuracy}%`;
-  statSpeedEl.textContent = speed;
-  statMissEl.textContent = you.miss;
-  if(ws){ ws.close(); ws = null; }
-  opponentName = "";
 }
 
 function pickWord(){
@@ -3704,10 +3475,6 @@ function shakeRomaji(){
 }
 
 function completeRealtimeWord(){
-  if(isOnlineMode){
-    handleOnlineSubmit(currentWord);
-    return;
-  }
   score++;
   totalCharsTyped += currentWord.length;
   scoreLabelEl.textContent = `せいかい ${score} もん`;
@@ -3800,7 +3567,8 @@ function nextWord(){
 }
 
 async function startGame(){
-  logPlay(currentMode, currentLevel, "solo", "");
+  if(!eventActive) return;
+  logPlay(currentMode, currentLevel);
   showAppLoadingOverlay();
   await ensureWordList(currentMode, currentLevel);
   hideAppLoadingOverlay();
@@ -3875,12 +3643,13 @@ function endGame(isNormalEnd){
     const attempts = score + missCount;
     const accuracy = attempts === 0 ? 0 : Math.round((score / attempts) * 100);
     const speed = Math.round((totalCharsTyped / 100) * 60);
-    const finalScore = Math.max(0, Math.round(score * 100 + speed * 2 - missCount * 30));
+    const baseScore = score * 100 + speed * 2;
+    const missPenalty = Math.min(missCount * 30, baseScore * 0.5);
+    const finalScore = Math.max(0, Math.round(baseScore - missPenalty));
 
     resultScoreEl.textContent = finalScore;
     const modeLabel = modeLabels[currentMode] || "ひらがな";
     resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]} / ${score}もん せいかい`;
-    updateResultShareLinks(`シンプルタイピングで${modeLabel}・${levelLabels[currentLevel]}をプレイして${finalScore}点でした！`);
     statAccuracyEl.textContent = `${accuracy}%`;
     statSpeedEl.textContent = speed;
     statMissEl.textContent = missCount;
@@ -3907,13 +3676,11 @@ function endGame(isNormalEnd){
 
 const endGameBtn = document.getElementById("end-game-btn");
 endGameBtn.addEventListener("click", () => {
-  if(isOnlineMode) return;
   endGame(false);
 });
 
 document.addEventListener("keydown", (e) => {
   if(e.key === "Escape" && gameEl.classList.contains("visible")){
-    if(isOnlineMode) return;
     endGame(false);
   }
 });
@@ -3951,11 +3718,6 @@ inputEl.addEventListener("keydown", (e) => {
 
   const typed = inputEl.value.trim();
 
-  if(isOnlineMode){
-    handleOnlineSubmit(typed);
-    return;
-  }
-
   if(typed !== currentWord){
     missCount++;
     hintLabelEl.textContent = "まだ違います";
@@ -3973,25 +3735,10 @@ inputEl.addEventListener("keydown", (e) => {
 
 document.addEventListener("visibilitychange", () => {
   if(document.visibilityState !== "hidden") return;
-  if(searchingEl.classList.contains("visible")){
-    cancelSearch();
-  } else if(friendCreateEl.classList.contains("visible") || friendWaitingEl.classList.contains("visible")){
-    cancelFriend();
-  } else if(countdownEl.classList.contains("visible")){
+  if(countdownEl.classList.contains("visible")){
     clearInterval(countdownTimerId);
     countdownEl.classList.remove("visible");
-    if(ws){ ws.close(); ws = null; }
     setupEl.classList.remove("hidden");
-  } else if(isOnlineMode){
-    if(ws && ws.readyState === WebSocket.OPEN){
-      ws.close();
-    }
-    finishOnlineGame({
-      you:{score:onlineScore, miss:onlineMiss},
-      opponent:{score:opponentScore, miss:0},
-      result:"lose",
-      forfeit:true
-    });
   }
 });
 
