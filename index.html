@@ -2200,6 +2200,12 @@ menuToggleBtnEl.addEventListener("click", () => {
   menuAuthPanelEl.classList.toggle("hidden");
 });
 
+function nameErrorMessage(data, fallback){
+  if(data && data.error === "name_blocked") return "この名前は使用できません";
+  if(data && data.error === "name_check_failed") return "名前の確認に失敗しました。しばらくしてからもう一度お試しください";
+  return fallback;
+}
+
 editNameBtnEl.addEventListener("click", () => {
   const prefill = currentPlayerName || "";
   showNameInputModal(async (name) => {
@@ -2216,14 +2222,28 @@ editNameBtnEl.addEventListener("click", () => {
         if(data.name){
           currentPlayerName = data.name;
         } else {
-          showCustomAlert("名前の変更に失敗しました");
+          showCustomAlert(nameErrorMessage(data, "名前の変更に失敗しました"));
         }
       }catch(e){
         showCustomAlert("名前の変更に失敗しました");
       }
     } else {
-      currentPlayerName = name;
-      localStorage.setItem(GUEST_NAME_KEY, name);
+      try{
+        const res = await fetch(`${RANKING_API_URL}/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "checkName", name })
+        });
+        const data = await res.json();
+        if(data.ok){
+          currentPlayerName = name;
+          localStorage.setItem(GUEST_NAME_KEY, name);
+        } else {
+          showCustomAlert(nameErrorMessage(data, "名前の変更に失敗しました"));
+        }
+      }catch(e){
+        showCustomAlert("名前の変更に失敗しました");
+      }
     }
     updatePlayerNameLabel();
     updateSetupHighScore();
@@ -2332,26 +2352,32 @@ async function handleLoginResponse(loginBody){
     return;
   }
   if(data.isNewUser){
-    showNameInputModal(async (name) => {
-      let regData;
-      try{
-        const regRes = await fetch(`${RANKING_API_URL}/auth`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "register", pendingToken: data.pendingToken, name })
-        });
-        regData = await regRes.json();
-      }catch(e){
-        showCustomAlert("登録に失敗しました");
-        return;
-      }
-      if(regData.token){
-        setSessionToken(regData.token);
-        await showLoggedInUi(regData.name, regData.token, regData.inputMode, regData.displaySettings);
-      } else {
-        showCustomAlert("登録に失敗しました");
-      }
-    });
+    const promptRegisterName = (prefill) => {
+      showNameInputModal(async (name) => {
+        let regData;
+        try{
+          const regRes = await fetch(`${RANKING_API_URL}/auth`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "register", pendingToken: data.pendingToken, name })
+          });
+          regData = await regRes.json();
+        }catch(e){
+          showCustomAlert("登録に失敗しました");
+          return;
+        }
+        if(regData.token){
+          setSessionToken(regData.token);
+          await showLoggedInUi(regData.name, regData.token, regData.inputMode, regData.displaySettings);
+        } else if(regData.error === "name_blocked" || regData.error === "name_check_failed"){
+          showCustomAlert(nameErrorMessage(regData, "登録に失敗しました"));
+          promptRegisterName("");
+        } else {
+          showCustomAlert("登録に失敗しました");
+        }
+      }, prefill);
+    };
+    promptRegisterName("");
   } else {
     setSessionToken(data.token);
     await showLoggedInUi(data.name, data.token, data.inputMode, data.displaySettings);
