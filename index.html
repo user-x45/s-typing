@@ -1111,6 +1111,26 @@
     border-color:var(--gold);
   }
 
+  .name-input-status{
+    font-size:13px;
+    min-height:18px;
+    margin:-8px 0 14px;
+    color:var(--ink-soft);
+  }
+
+  .name-input-status.error{
+    color:var(--hanko);
+  }
+
+  .name-input-box input:disabled{
+    opacity:0.6;
+  }
+
+  .name-input-btn:disabled{
+    opacity:0.6;
+    cursor:default;
+  }
+
   .name-input-btn{
     padding:10px 32px;
     background:var(--hanko);
@@ -1915,6 +1935,7 @@
   <div class="name-input-box">
     <div class="name-input-message" id="name-input-message">お名前を入力してください（6文字まで）</div>
     <input type="text" id="name-input-field" maxlength="6" autocomplete="off" placeholder="GUEST">
+    <div class="name-input-status" id="name-input-status" role="status" aria-live="polite"></div>
     <button class="name-input-btn" id="name-input-btn">登録</button>
   </div>
 </div>
@@ -1986,28 +2007,58 @@ customAlertBtnEl.addEventListener("click", () => {
 const nameInputOverlayEl = document.getElementById("name-input-overlay");
 const nameInputFieldEl = document.getElementById("name-input-field");
 const nameInputBtnEl = document.getElementById("name-input-btn");
+const nameInputStatusEl = document.getElementById("name-input-status");
 let nameInputCallback = null;
+let nameInputBusy = false;
 
 function normalizePlayerName(raw){
   const trimmed = (raw || "").trim().slice(0, 6);
   return trimmed.length === 0 ? "GUEST" : trimmed;
 }
 
+function setNameInputStatus(text, isError){
+  nameInputStatusEl.textContent = text || "";
+  nameInputStatusEl.classList.toggle("error", !!isError);
+}
+
+function setNameInputBusy(busy){
+  nameInputBusy = busy;
+  nameInputFieldEl.disabled = busy;
+  nameInputBtnEl.disabled = busy;
+}
+
 function showNameInputModal(callback, prefill){
   nameInputCallback = callback;
   nameInputFieldEl.value = prefill || "";
+  setNameInputStatus("", false);
+  setNameInputBusy(false);
   nameInputOverlayEl.classList.add("visible");
   nameInputFieldEl.focus();
 }
 
-function confirmNameInput(){
+async function confirmNameInput(){
+  if(nameInputBusy || !nameInputCallback) return;
   const name = normalizePlayerName(nameInputFieldEl.value);
-  nameInputOverlayEl.classList.remove("visible");
-  if(nameInputCallback){
-    const callback = nameInputCallback;
-    nameInputCallback = null;
-    callback(name);
+  setNameInputBusy(true);
+  setNameInputStatus("チェック中...", false);
+  let result;
+  try{
+    result = await nameInputCallback(name);
+  }catch(e){
+    result = { ok: false, message: "通信に失敗しました" };
   }
+  if(result && result.ok){
+    nameInputCallback = null;
+    nameInputOverlayEl.classList.remove("visible");
+    setNameInputStatus("", false);
+    setNameInputBusy(false);
+    if(typeof result.after === "function") await result.after();
+    return;
+  }
+  setNameInputBusy(false);
+  setNameInputStatus((result && result.message) || "この名前は使用できません", true);
+  nameInputFieldEl.focus();
+  nameInputFieldEl.select();
 }
 
 nameInputBtnEl.addEventListener("click", confirmNameInput);
@@ -2016,6 +2067,10 @@ nameInputFieldEl.addEventListener("keydown", (e) => {
     e.preventDefault();
     confirmNameInput();
   }
+});
+
+nameInputFieldEl.addEventListener("input", () => {
+  if(nameInputStatusEl.classList.contains("error")) setNameInputStatus("", false);
 });
 
 const inputModeToggleBtnEl = document.getElementById("input-mode-toggle-btn");
@@ -2210,43 +2265,31 @@ editNameBtnEl.addEventListener("click", () => {
   const prefill = currentPlayerName || "";
   showNameInputModal(async (name) => {
     const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
+    let data;
+    try{
+      const body = isLoggedIn
+        ? { action: "setName", token: getSessionToken(), name }
+        : { action: "checkName", name };
+      const res = await fetch(`${RANKING_API_URL}/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      data = await res.json();
+    }catch(e){
+      return { ok: false, message: "通信に失敗しました" };
+    }
     if(isLoggedIn){
-      const token = getSessionToken();
-      try{
-        const res = await fetch(`${RANKING_API_URL}/auth`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "setName", token, name })
-        });
-        const data = await res.json();
-        if(data.name){
-          currentPlayerName = data.name;
-        } else {
-          showCustomAlert(nameErrorMessage(data, "名前の変更に失敗しました"));
-        }
-      }catch(e){
-        showCustomAlert("名前の変更に失敗しました");
-      }
+      if(!data.name) return { ok: false, message: nameErrorMessage(data, "名前の変更に失敗しました") };
+      currentPlayerName = data.name;
     } else {
-      try{
-        const res = await fetch(`${RANKING_API_URL}/auth`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "checkName", name })
-        });
-        const data = await res.json();
-        if(data.ok){
-          currentPlayerName = name;
-          localStorage.setItem(GUEST_NAME_KEY, name);
-        } else {
-          showCustomAlert(nameErrorMessage(data, "名前の変更に失敗しました"));
-        }
-      }catch(e){
-        showCustomAlert("名前の変更に失敗しました");
-      }
+      if(!data.ok) return { ok: false, message: nameErrorMessage(data, "名前の変更に失敗しました") };
+      currentPlayerName = name;
+      localStorage.setItem(GUEST_NAME_KEY, name);
     }
     updatePlayerNameLabel();
     updateSetupHighScore();
+    return { ok: true };
   }, prefill);
 });
 
@@ -2352,32 +2395,29 @@ async function handleLoginResponse(loginBody){
     return;
   }
   if(data.isNewUser){
-    const promptRegisterName = (prefill) => {
-      showNameInputModal(async (name) => {
-        let regData;
-        try{
-          const regRes = await fetch(`${RANKING_API_URL}/auth`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "register", pendingToken: data.pendingToken, name })
-          });
-          regData = await regRes.json();
-        }catch(e){
-          showCustomAlert("登録に失敗しました");
-          return;
-        }
-        if(regData.token){
+    showNameInputModal(async (name) => {
+      let regData;
+      try{
+        const regRes = await fetch(`${RANKING_API_URL}/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "register", pendingToken: data.pendingToken, name })
+        });
+        regData = await regRes.json();
+      }catch(e){
+        return { ok: false, message: "通信に失敗しました" };
+      }
+      if(!regData.token){
+        return { ok: false, message: nameErrorMessage(regData, "登録に失敗しました") };
+      }
+      return {
+        ok: true,
+        after: async () => {
           setSessionToken(regData.token);
           await showLoggedInUi(regData.name, regData.token, regData.inputMode, regData.displaySettings);
-        } else if(regData.error === "name_blocked" || regData.error === "name_check_failed"){
-          showCustomAlert(nameErrorMessage(regData, "登録に失敗しました"));
-          promptRegisterName("");
-        } else {
-          showCustomAlert("登録に失敗しました");
         }
-      }, prefill);
-    };
-    promptRegisterName("");
+      };
+    }, "");
   } else {
     setSessionToken(data.token);
     await showLoggedInUi(data.name, data.token, data.inputMode, data.displaySettings);
