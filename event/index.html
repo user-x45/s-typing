@@ -1324,6 +1324,17 @@
     border-color:var(--gold);
   }
 
+  .login-provider-btn.ranking-only-btn{
+    background:transparent;
+    color:var(--ink-soft);
+  }
+
+  body.ranking-only .start-row,
+  body.ranking-only .setup-high-score,
+  body.ranking-only .mode-and-mute-row{
+    display:none !important;
+  }
+
   .input-mode-close-btn{
     padding:10px 32px;
     background:none;
@@ -1824,6 +1835,7 @@
       <button class="login-provider-btn" id="gate-google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
       <button class="login-provider-btn" id="gate-x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
       <button class="login-provider-btn" id="gate-discord-login-btn"><i class="fa-brands fa-discord"></i> Discordでログイン</button>
+      <button class="login-provider-btn ranking-only-btn" id="gate-ranking-only-btn"><i class="fas fa-trophy"></i> ログインせずにランキングを見る</button>
     </div>
   </div>
 </div>
@@ -2332,6 +2344,7 @@ async function loadServerHighScores(token){
 }
 
 async function showLoggedInUi(name, token, inputModeFromAccount, displaySettingsFromAccount){
+  setRankingOnlyMode(false);
   currentPlayerName = name;
   await loadServerHighScores(token);
   updatePlayerNameLabel();
@@ -2635,8 +2648,14 @@ const entryGateOverlayEl = document.getElementById("entry-gate-overlay");
 const gateGoogleLoginBtnEl = document.getElementById("gate-google-login-btn");
 const gateXLoginBtnEl = document.getElementById("gate-x-login-btn");
 const gateDiscordLoginBtnEl = document.getElementById("gate-discord-login-btn");
+const gateRankingOnlyBtnEl = document.getElementById("gate-ranking-only-btn");
+
+function setRankingOnlyMode(enabled){
+  document.body.classList.toggle("ranking-only", enabled);
+}
 
 function openEntryGate(){
+  setRankingOnlyMode(false);
   entryGateOverlayEl.classList.remove("hidden");
 }
 
@@ -2654,6 +2673,11 @@ gateXLoginBtnEl.addEventListener("click", () => {
 
 gateDiscordLoginBtnEl.addEventListener("click", () => {
   startDiscordLogin();
+});
+
+gateRankingOnlyBtnEl.addEventListener("click", () => {
+  setRankingOnlyMode(true);
+  closeEntryGate();
 });
 
 function resetSessionOnClose(){
@@ -3641,7 +3665,7 @@ function nextWord(){
 }
 
 async function startGame(){
-  if(!eventActive) return;
+  if(!eventActive || document.body.classList.contains("ranking-only")) return;
   logPlay(currentMode, currentLevel);
   showAppLoadingOverlay();
   await ensureWordList(currentMode, currentLevel);
