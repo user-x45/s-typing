@@ -1324,6 +1324,22 @@
     border-color:var(--gold);
   }
 
+  .gate-note{
+    margin:-6px 0 18px;
+    font-size:12px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    text-align:left;
+  }
+
+  .gate-note p{
+    margin:0 0 6px;
+  }
+
+  .gate-note p:last-child{
+    margin-bottom:0;
+  }
+
   .login-provider-btn.ranking-only-btn{
     background:transparent;
     color:var(--ink-soft);
@@ -1831,6 +1847,10 @@
 <div class="input-mode-overlay gate-overlay hidden" id="entry-gate-overlay">
   <div class="input-mode-box">
     <div class="input-mode-modal-title">はじめる前に</div>
+    <div class="gate-note">
+      <p><i class="fas fa-circle-info"></i> イベントに参加するにはログインが必要です。</p>
+      <p><i class="fas fa-trophy"></i> ログインしなくても、ランキングのみ見ることができます。</p>
+    </div>
     <div class="login-provider-list">
       <button class="login-provider-btn" id="gate-google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
       <button class="login-provider-btn" id="gate-x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
