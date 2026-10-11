@@ -1322,6 +1322,14 @@
     padding:20px 0;
   }
 
+  .login-select-desc{
+    font-size:12px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    text-align:left;
+    margin:0 0 16px;
+  }
+
   .login-provider-list{
     display:flex;
     flex-direction:column;
@@ -1983,6 +1991,7 @@
 <div class="input-mode-overlay" id="login-select-overlay">
   <div class="input-mode-box">
     <div class="input-mode-modal-title">ログイン方法を選択</div>
+    <p class="login-select-desc">ログインすると、プレイ記録・ハイスコア・表示設定がアカウントに保存され、別のパソコンでも続きから遊べます。</p>
     <div class="login-provider-list">
       <button class="login-provider-btn" id="google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
       <button class="login-provider-btn" id="x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
@@ -2201,7 +2210,7 @@ playRecordsCloseBtnEl.addEventListener("click", () => {
 const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
 const X_CLIENT_ID = "UjYwZ1NXM0JBamtyVjhwWno4Ujk6MTpjaQ";
 const DISCORD_CLIENT_ID = "1555238827524755557";
-const LINE_CHANNEL_ID = "2011967727";
+const LINE_CHANNEL_ID = "YOUR_LINE_CHANNEL_ID";
 const SESSION_TOKEN_KEY = "sessionToken";
 const GUEST_NAME_KEY = "guestPlayerName";
 const GUEST_INPUT_MODE_KEY = "guestInputMode";
