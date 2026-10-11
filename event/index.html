@@ -1297,6 +1297,14 @@
     padding:20px 0;
   }
 
+  .login-select-desc{
+    font-size:12px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    text-align:center;
+    margin:0 0 16px;
+  }
+
   .login-provider-list{
     display:flex;
     flex-direction:column;
@@ -1855,6 +1863,7 @@
       <button class="login-provider-btn" id="gate-google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
       <button class="login-provider-btn" id="gate-x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
       <button class="login-provider-btn" id="gate-discord-login-btn"><i class="fa-brands fa-discord"></i> Discordでログイン</button>
+      <button class="login-provider-btn" id="gate-line-login-btn"><i class="fa-brands fa-line"></i> LINEでログイン</button>
       <button class="login-provider-btn ranking-only-btn" id="gate-ranking-only-btn"><i class="fas fa-trophy"></i> ログインせずにランキングを見る</button>
     </div>
   </div>
@@ -2081,10 +2090,12 @@
 <div class="input-mode-overlay" id="login-select-overlay">
   <div class="input-mode-box">
     <div class="input-mode-modal-title">ログイン方法を選択</div>
+    <p class="login-select-desc">ログインすると、プレイ記録・ハイスコア・表示設定がアカウントに保存され、別のパソコンでも続きから遊べます。</p>
     <div class="login-provider-list">
       <button class="login-provider-btn" id="google-login-btn"><i class="fab fa-google"></i> Googleでログイン</button>
       <button class="login-provider-btn" id="x-login-btn"><i class="fa-brands fa-x-twitter"></i> Xでログイン</button>
       <button class="login-provider-btn" id="discord-login-btn"><i class="fa-brands fa-discord"></i> Discordでログイン</button>
+      <button class="login-provider-btn" id="line-login-btn"><i class="fa-brands fa-line"></i> LINEでログイン</button>
     </div>
     <button class="input-mode-close-btn" id="login-select-close-btn">閉じる</button>
   </div>
@@ -2273,6 +2284,7 @@ playRecordsCloseBtnEl.addEventListener("click", () => {
 const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
 const X_CLIENT_ID = "UjYwZ1NXM0JBamtyVjhwWno4Ujk6MTpjaQ";
 const DISCORD_CLIENT_ID = "1555238827524755557";
+const LINE_CHANNEL_ID = "2011967727";
 const SESSION_TOKEN_KEY = "sessionToken";
 const GUEST_INPUT_MODE_KEY = "guestInputMode";
 const SHOW_ROMAJI_KEY = "showRomaji";
@@ -2286,6 +2298,7 @@ const loginOpenBtnEl = document.getElementById("login-open-btn");
 const googleLoginBtnEl = document.getElementById("google-login-btn");
 const xLoginBtnEl = document.getElementById("x-login-btn");
 const discordLoginBtnEl = document.getElementById("discord-login-btn");
+const lineLoginBtnEl = document.getElementById("line-login-btn");
 const loginSelectOverlayEl = document.getElementById("login-select-overlay");
 const loginSelectCloseBtnEl = document.getElementById("login-select-close-btn");
 const editNameBtnEl = document.getElementById("edit-name-btn");
@@ -2446,12 +2459,19 @@ async function handleDiscordCredential(code, codeVerifier, redirectUri){
   await handleLoginResponse({ action: "login", provider: "discord", code, codeVerifier, redirectUri });
 }
 
+async function handleLineCredential(code, codeVerifier, redirectUri){
+  await handleLoginResponse({ action: "login", provider: "line", code, codeVerifier, redirectUri });
+}
+
 const GOOGLE_AUTH_NONCE_KEY = "googleAuthNonce";
 const X_AUTH_STATE_KEY = "xAuthState";
 const X_AUTH_VERIFIER_KEY = "xAuthVerifier";
 const DISCORD_AUTH_STATE_KEY = "discordAuthState";
 const DISCORD_AUTH_VERIFIER_KEY = "discordAuthVerifier";
 const DISCORD_STATE_PREFIX = "discord_";
+const LINE_AUTH_STATE_KEY = "lineAuthState";
+const LINE_AUTH_VERIFIER_KEY = "lineAuthVerifier";
+const LINE_STATE_PREFIX = "line_";
 
 function generateGoogleAuthNonce(){
   if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -2568,6 +2588,47 @@ async function startDiscordLogin(){
   window.location.href = `https://discord.com/oauth2/authorize?${params.toString()}`;
 }
 
+async function startLineLogin(){
+  const state = `${LINE_STATE_PREFIX}${generateXAuthState()}`;
+  const codeVerifier = generateXCodeVerifier();
+  const codeChallenge = await generateXCodeChallenge(codeVerifier);
+  sessionStorage.setItem(LINE_AUTH_STATE_KEY, state);
+  sessionStorage.setItem(LINE_AUTH_VERIFIER_KEY, codeVerifier);
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  const params = new URLSearchParams({
+    response_type: "code",
+    client_id: LINE_CHANNEL_ID,
+    redirect_uri: redirectUri,
+    scope: "profile",
+    state,
+    code_challenge: codeChallenge,
+    code_challenge_method: "S256"
+  });
+  window.location.href = `https://access.line.me/oauth2/v2.1/authorize?${params.toString()}`;
+}
+
+async function processLineAuthRedirect(){
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const state = params.get("state");
+  const error = params.get("error");
+  if(!state || !state.startsWith(LINE_STATE_PREFIX)) return false;
+  if(!code && !error) return false;
+  history.replaceState(null, "", window.location.pathname);
+  const expectedState = sessionStorage.getItem(LINE_AUTH_STATE_KEY);
+  const codeVerifier = sessionStorage.getItem(LINE_AUTH_VERIFIER_KEY);
+  sessionStorage.removeItem(LINE_AUTH_STATE_KEY);
+  sessionStorage.removeItem(LINE_AUTH_VERIFIER_KEY);
+  if(error) return false;
+  if(!codeVerifier || !expectedState || state !== expectedState){
+    showCustomAlert("ログインに失敗しました");
+    return true;
+  }
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  await handleLineCredential(code, codeVerifier, redirectUri);
+  return true;
+}
+
 async function processDiscordAuthRedirect(){
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
@@ -2596,7 +2657,7 @@ async function processXAuthRedirect(){
   const state = params.get("state");
   const error = params.get("error");
   if(!code && !error) return false;
-  if(state && state.startsWith(DISCORD_STATE_PREFIX)) return false;
+  if(state && (state.startsWith(DISCORD_STATE_PREFIX) || state.startsWith(LINE_STATE_PREFIX))) return false;
   history.replaceState(null, "", window.location.pathname);
   if(error){
     sessionStorage.removeItem(X_AUTH_STATE_KEY);
@@ -2636,6 +2697,10 @@ discordLoginBtnEl.addEventListener("click", () => {
   startDiscordLogin();
 });
 
+lineLoginBtnEl.addEventListener("click", () => {
+  startLineLogin();
+});
+
 logoutBtnEl.addEventListener("click", () => {
   const token = getSessionToken();
   clearSessionToken();
@@ -2668,6 +2733,7 @@ const entryGateOverlayEl = document.getElementById("entry-gate-overlay");
 const gateGoogleLoginBtnEl = document.getElementById("gate-google-login-btn");
 const gateXLoginBtnEl = document.getElementById("gate-x-login-btn");
 const gateDiscordLoginBtnEl = document.getElementById("gate-discord-login-btn");
+const gateLineLoginBtnEl = document.getElementById("gate-line-login-btn");
 const gateRankingOnlyBtnEl = document.getElementById("gate-ranking-only-btn");
 
 function setRankingOnlyMode(enabled){
@@ -2695,6 +2761,10 @@ gateDiscordLoginBtnEl.addEventListener("click", () => {
   startDiscordLogin();
 });
 
+gateLineLoginBtnEl.addEventListener("click", () => {
+  startLineLogin();
+});
+
 gateRankingOnlyBtnEl.addEventListener("click", () => {
   setRankingOnlyMode(true);
   closeEntryGate();
@@ -2712,10 +2782,11 @@ function resetSessionOnClose(){
 window.addEventListener("pagehide", resetSessionOnClose);
 
 window.addEventListener("load", async () => {
-  const handledGoogleRedirect = await processGoogleAuthRedirect();
-  const handledDiscordRedirect = handledGoogleRedirect ? false : await processDiscordAuthRedirect();
-  const handledXRedirect = (handledGoogleRedirect || handledDiscordRedirect) ? false : await processXAuthRedirect();
-  if(handledGoogleRedirect || handledDiscordRedirect || handledXRedirect){
+  let handledRedirect = await processGoogleAuthRedirect();
+  if(!handledRedirect) handledRedirect = await processDiscordAuthRedirect();
+  if(!handledRedirect) handledRedirect = await processLineAuthRedirect();
+  if(!handledRedirect) handledRedirect = await processXAuthRedirect();
+  if(handledRedirect){
     closeEntryGate();
   } else {
     showLoggedOutUi();
