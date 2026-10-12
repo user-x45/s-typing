@@ -2889,11 +2889,13 @@ function setRankingOnlyMode(enabled){
 
 function openEntryGate(){
   setRankingOnlyMode(false);
+  mobileWarningOverlayEl.classList.remove("visible");
   entryGateOverlayEl.classList.remove("hidden");
 }
 
 function closeEntryGate(){
   entryGateOverlayEl.classList.add("hidden");
+  setTimeout(showMobileWarningIfNeeded, 250);
 }
 
 gateGoogleLoginBtnEl.addEventListener("click", () => {
@@ -4078,16 +4080,21 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-(function(){
-  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
-  if(!isMobile) return;
-  const overlay = document.getElementById("mobile-warning-overlay");
-  const closeBtn = document.getElementById("mobile-warning-close");
-  overlay.classList.add("visible");
-  closeBtn.addEventListener("click", () => {
-    overlay.classList.remove("visible");
-  });
-})();
+const isMobileDevice = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+const mobileWarningOverlayEl = document.getElementById("mobile-warning-overlay");
+const mobileWarningCloseEl = document.getElementById("mobile-warning-close");
+let mobileWarningDismissed = false;
+
+function showMobileWarningIfNeeded(){
+  if(!isMobileDevice || mobileWarningDismissed) return;
+  if(!entryGateOverlayEl.classList.contains("hidden")) return;
+  mobileWarningOverlayEl.classList.add("visible");
+}
+
+mobileWarningCloseEl.addEventListener("click", () => {
+  mobileWarningDismissed = true;
+  mobileWarningOverlayEl.classList.remove("visible");
+});
 
 (function(){
   const selector = ".mobile-warning-overlay, .custom-alert-overlay, .name-input-overlay, .input-mode-overlay";
