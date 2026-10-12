@@ -1467,6 +1467,15 @@
     background:#06c755;
   }
 
+  .login-provider-btn.facebook{
+    background:#1877f2;
+  }
+
+  .login-provider-btn.github{
+    background:#24292f;
+    border-color:#ffffff;
+  }
+
   .gate-note{
     margin:-6px 0 18px;
     font-size:12px;
@@ -2008,7 +2017,9 @@
       <button class="login-provider-btn google" id="gate-google-login-btn"><i class="fab fa-google"></i> Google</button>
       <button class="login-provider-btn line" id="gate-line-login-btn"><i class="fa-brands fa-line"></i> LINE</button>
       <button class="login-provider-btn x" id="gate-x-login-btn"><i class="fa-brands fa-x-twitter"></i> X</button>
+      <button class="login-provider-btn facebook" id="gate-facebook-login-btn"><i class="fa-brands fa-facebook-f"></i> Facebook</button>
       <button class="login-provider-btn discord" id="gate-discord-login-btn"><i class="fa-brands fa-discord"></i> Discord</button>
+      <button class="login-provider-btn github" id="gate-github-login-btn"><i class="fa-brands fa-github"></i> GitHub</button>
       <button class="login-provider-btn ranking-only-btn" id="gate-ranking-only-btn"><i class="fas fa-trophy"></i> ログインせずにランキングを見る</button>
     </div>
   </div>
@@ -2240,7 +2251,9 @@
       <button class="login-provider-btn google" id="google-login-btn"><i class="fab fa-google"></i> Google</button>
       <button class="login-provider-btn line" id="line-login-btn"><i class="fa-brands fa-line"></i> LINE</button>
       <button class="login-provider-btn x" id="x-login-btn"><i class="fa-brands fa-x-twitter"></i> X</button>
+      <button class="login-provider-btn facebook" id="facebook-login-btn"><i class="fa-brands fa-facebook-f"></i> Facebook</button>
       <button class="login-provider-btn discord" id="discord-login-btn"><i class="fa-brands fa-discord"></i> Discord</button>
+      <button class="login-provider-btn github" id="github-login-btn"><i class="fa-brands fa-github"></i> GitHub</button>
     </div>
     <button class="input-mode-close-btn" id="login-select-close-btn">閉じる</button>
   </div>
@@ -2430,6 +2443,8 @@ const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googl
 const X_CLIENT_ID = "UjYwZ1NXM0JBamtyVjhwWno4Ujk6MTpjaQ";
 const DISCORD_CLIENT_ID = "1555238827524755557";
 const LINE_CHANNEL_ID = "2011967727";
+const FACEBOOK_APP_ID = "1102163979219229";
+const GITHUB_CLIENT_ID = "YOUR_GITHUB_CLIENT_ID";
 const SESSION_TOKEN_KEY = "sessionToken";
 const GUEST_INPUT_MODE_KEY = "guestInputMode";
 const SHOW_ROMAJI_KEY = "showRomaji";
@@ -2444,6 +2459,8 @@ const googleLoginBtnEl = document.getElementById("google-login-btn");
 const xLoginBtnEl = document.getElementById("x-login-btn");
 const discordLoginBtnEl = document.getElementById("discord-login-btn");
 const lineLoginBtnEl = document.getElementById("line-login-btn");
+const facebookLoginBtnEl = document.getElementById("facebook-login-btn");
+const githubLoginBtnEl = document.getElementById("github-login-btn");
 const loginSelectOverlayEl = document.getElementById("login-select-overlay");
 const loginSelectCloseBtnEl = document.getElementById("login-select-close-btn");
 const editNameBtnEl = document.getElementById("edit-name-btn");
@@ -2608,6 +2625,14 @@ async function handleLineCredential(code, codeVerifier, redirectUri){
   await handleLoginResponse({ action: "login", provider: "line", code, codeVerifier, redirectUri });
 }
 
+async function handleFacebookCredential(code, redirectUri){
+  await handleLoginResponse({ action: "login", provider: "facebook", code, redirectUri });
+}
+
+async function handleGithubCredential(code, redirectUri){
+  await handleLoginResponse({ action: "login", provider: "github", code, redirectUri });
+}
+
 const GOOGLE_AUTH_NONCE_KEY = "googleAuthNonce";
 const X_AUTH_STATE_KEY = "xAuthState";
 const X_AUTH_VERIFIER_KEY = "xAuthVerifier";
@@ -2617,6 +2642,10 @@ const DISCORD_STATE_PREFIX = "discord_";
 const LINE_AUTH_STATE_KEY = "lineAuthState";
 const LINE_AUTH_VERIFIER_KEY = "lineAuthVerifier";
 const LINE_STATE_PREFIX = "line_";
+const FACEBOOK_AUTH_STATE_KEY = "facebookAuthState";
+const FACEBOOK_STATE_PREFIX = "facebook_";
+const GITHUB_AUTH_STATE_KEY = "githubAuthState";
+const GITHUB_STATE_PREFIX = "github_";
 
 function generateGoogleAuthNonce(){
   if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -2796,13 +2825,68 @@ async function processDiscordAuthRedirect(){
   return true;
 }
 
+async function startFacebookLogin(){
+  const state = `${FACEBOOK_STATE_PREFIX}${generateXAuthState()}`;
+  sessionStorage.setItem(FACEBOOK_AUTH_STATE_KEY, state);
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  const params = new URLSearchParams({
+    client_id: FACEBOOK_APP_ID,
+    redirect_uri: redirectUri,
+    response_type: "code",
+    scope: "public_profile",
+    state
+  });
+  window.location.href = `https://www.facebook.com/v22.0/dialog/oauth?${params.toString()}`;
+}
+
+async function startGithubLogin(){
+  const state = `${GITHUB_STATE_PREFIX}${generateXAuthState()}`;
+  sessionStorage.setItem(GITHUB_AUTH_STATE_KEY, state);
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  const params = new URLSearchParams({
+    client_id: GITHUB_CLIENT_ID,
+    redirect_uri: redirectUri,
+    scope: "read:user",
+    state
+  });
+  window.location.href = `https://github.com/login/oauth/authorize?${params.toString()}`;
+}
+
+async function processStatePrefixedAuthRedirect(prefix, stateKey, onCode){
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const state = params.get("state");
+  const error = params.get("error");
+  if(!state || !state.startsWith(prefix)) return false;
+  if(!code && !error) return false;
+  history.replaceState(null, "", window.location.pathname);
+  const expectedState = sessionStorage.getItem(stateKey);
+  sessionStorage.removeItem(stateKey);
+  if(error) return false;
+  if(!expectedState || state !== expectedState){
+    showCustomAlert("ログインに失敗しました");
+    return true;
+  }
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  await onCode(code, redirectUri);
+  return true;
+}
+
+function processFacebookAuthRedirect(){
+  return processStatePrefixedAuthRedirect(FACEBOOK_STATE_PREFIX, FACEBOOK_AUTH_STATE_KEY, handleFacebookCredential);
+}
+
+function processGithubAuthRedirect(){
+  return processStatePrefixedAuthRedirect(GITHUB_STATE_PREFIX, GITHUB_AUTH_STATE_KEY, handleGithubCredential);
+}
+
 async function processXAuthRedirect(){
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
   const state = params.get("state");
   const error = params.get("error");
   if(!code && !error) return false;
-  if(state && (state.startsWith(DISCORD_STATE_PREFIX) || state.startsWith(LINE_STATE_PREFIX))) return false;
+  if(state && (state.startsWith(DISCORD_STATE_PREFIX) || state.startsWith(LINE_STATE_PREFIX) || state.startsWith(FACEBOOK_STATE_PREFIX) || state.startsWith(GITHUB_STATE_PREFIX))) return false;
   history.replaceState(null, "", window.location.pathname);
   if(error){
     sessionStorage.removeItem(X_AUTH_STATE_KEY);
@@ -2846,6 +2930,14 @@ lineLoginBtnEl.addEventListener("click", () => {
   startLineLogin();
 });
 
+facebookLoginBtnEl.addEventListener("click", () => {
+  startFacebookLogin();
+});
+
+githubLoginBtnEl.addEventListener("click", () => {
+  startGithubLogin();
+});
+
 logoutBtnEl.addEventListener("click", () => {
   const token = getSessionToken();
   clearSessionToken();
@@ -2879,6 +2971,8 @@ const gateGoogleLoginBtnEl = document.getElementById("gate-google-login-btn");
 const gateXLoginBtnEl = document.getElementById("gate-x-login-btn");
 const gateDiscordLoginBtnEl = document.getElementById("gate-discord-login-btn");
 const gateLineLoginBtnEl = document.getElementById("gate-line-login-btn");
+const gateFacebookLoginBtnEl = document.getElementById("gate-facebook-login-btn");
+const gateGithubLoginBtnEl = document.getElementById("gate-github-login-btn");
 const gateRankingOnlyBtnEl = document.getElementById("gate-ranking-only-btn");
 
 function setRankingOnlyMode(enabled){
@@ -2912,6 +3006,14 @@ gateLineLoginBtnEl.addEventListener("click", () => {
   startLineLogin();
 });
 
+gateFacebookLoginBtnEl.addEventListener("click", () => {
+  startFacebookLogin();
+});
+
+gateGithubLoginBtnEl.addEventListener("click", () => {
+  startGithubLogin();
+});
+
 gateRankingOnlyBtnEl.addEventListener("click", () => {
   setRankingOnlyMode(true);
   closeEntryGate();
@@ -2932,6 +3034,8 @@ window.addEventListener("load", async () => {
   let handledRedirect = await processGoogleAuthRedirect();
   if(!handledRedirect) handledRedirect = await processDiscordAuthRedirect();
   if(!handledRedirect) handledRedirect = await processLineAuthRedirect();
+  if(!handledRedirect) handledRedirect = await processFacebookAuthRedirect();
+  if(!handledRedirect) handledRedirect = await processGithubAuthRedirect();
   if(!handledRedirect) handledRedirect = await processXAuthRedirect();
   if(handledRedirect){
     closeEntryGate();
