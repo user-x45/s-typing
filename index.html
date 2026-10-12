@@ -115,6 +115,51 @@
     padding:clamp(8px,2vh,16px) 16px;
   }
 
+  .mobile-warning-overlay,
+  .custom-alert-overlay,
+  .name-input-overlay,
+  .input-mode-overlay{
+    -webkit-backdrop-filter:blur(6px);
+    backdrop-filter:blur(6px);
+  }
+
+  .mobile-warning-overlay.visible,
+  .custom-alert-overlay.visible,
+  .name-input-overlay.visible,
+  .input-mode-overlay.visible{
+    animation:overlay-fade-in 0.25s ease both;
+  }
+
+  .mobile-warning-overlay.visible .mobile-warning-box,
+  .custom-alert-overlay.visible .custom-alert-box,
+  .name-input-overlay.visible .name-input-box,
+  .input-mode-overlay.visible .input-mode-box{
+    animation:popup-pop-in 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes overlay-fade-in{
+    from{ opacity:0; }
+    to{ opacity:1; }
+  }
+
+  @keyframes popup-pop-in{
+    from{ opacity:0; transform:translateY(16px) scale(0.92); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .mobile-warning-overlay.visible,
+    .custom-alert-overlay.visible,
+    .name-input-overlay.visible,
+    .input-mode-overlay.visible,
+    .mobile-warning-overlay.visible .mobile-warning-box,
+    .custom-alert-overlay.visible .custom-alert-box,
+    .name-input-overlay.visible .name-input-box,
+    .input-mode-overlay.visible .input-mode-box{
+      animation:none;
+    }
+  }
+
   .stage{
     width:100%;
     max-width:640px;
