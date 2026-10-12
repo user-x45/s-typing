@@ -1417,24 +1417,22 @@
 
   .login-provider-list{
     display:grid;
-    grid-template-columns:repeat(2, 96px);
-    justify-content:center;
+    grid-template-columns:repeat(2, 1fr);
     gap:10px;
     margin-bottom:18px;
   }
 
   .login-provider-btn{
     display:flex;
-    flex-direction:column;
+    flex-direction:row;
     align-items:center;
     justify-content:center;
-    gap:6px;
-    aspect-ratio:1 / 1;
+    gap:8px;
     width:100%;
-    padding:6px;
+    padding:12px 8px;
     border:1.5px solid transparent;
     border-radius:14px;
-    font-size:12px;
+    font-size:13px;
     font-weight:700;
     line-height:1.4;
     color:#ffffff;
@@ -1443,7 +1441,7 @@
   }
 
   .login-provider-btn i{
-    font-size:26px;
+    font-size:20px;
   }
 
   .login-provider-btn:hover{
