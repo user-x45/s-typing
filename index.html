@@ -1485,14 +1485,9 @@
     background:#24292f;
   }
 
-  .login-provider-btn.passkey{
-    background:#5b6b7f;
-  }
-
   @media (prefers-color-scheme: dark){
     .login-provider-btn.x,
-    .login-provider-btn.github,
-    .login-provider-btn.passkey{
+    .login-provider-btn.github{
       border-color:var(--line);
     }
   }
@@ -2139,8 +2134,6 @@
       <button class="login-provider-btn facebook" id="facebook-login-btn"><i class="fa-brands fa-facebook-f"></i> Facebook</button>
       <button class="login-provider-btn discord" id="discord-login-btn"><i class="fa-brands fa-discord"></i> Discord</button>
       <button class="login-provider-btn github" id="github-login-btn"><i class="fa-brands fa-github"></i> GitHub</button>
-      <button class="login-provider-btn passkey" id="passkey-login-btn"><i class="fas fa-fingerprint"></i> パスキー</button>
-      <button class="login-provider-btn passkey" id="passkey-register-btn"><i class="fas fa-key"></i> パスキー新規登録</button>
     </div>
     <button class="input-mode-close-btn" id="login-select-close-btn">閉じる</button>
   </div>
@@ -2375,8 +2368,6 @@ const discordLoginBtnEl = document.getElementById("discord-login-btn");
 const lineLoginBtnEl = document.getElementById("line-login-btn");
 const facebookLoginBtnEl = document.getElementById("facebook-login-btn");
 const githubLoginBtnEl = document.getElementById("github-login-btn");
-const passkeyLoginBtnEl = document.getElementById("passkey-login-btn");
-const passkeyRegisterBtnEl = document.getElementById("passkey-register-btn");
 const loginSelectOverlayEl = document.getElementById("login-select-overlay");
 const loginSelectCloseBtnEl = document.getElementById("login-select-close-btn");
 const editNameBtnEl = document.getElementById("edit-name-btn");
@@ -2840,112 +2831,6 @@ async function startGithubLogin(){
   window.location.href = `https://github.com/login/oauth/authorize?${params.toString()}`;
 }
 
-function base64UrlDecode(str){
-  const base64 = str.replace(/-/g, "+").replace(/_/g, "/");
-  const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-  const binary = atob(padded);
-  const bytes = new Uint8Array(binary.length);
-  for(let i = 0; i < binary.length; i++){
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes.buffer;
-}
-
-async function fetchPasskeyOptions(type){
-  const res = await fetch(`${RANKING_API_URL}/auth`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action: "passkeyOptions", type })
-  });
-  const data = await res.json();
-  if(!res.ok || data.error || !data.options) throw new Error("options failed");
-  return data;
-}
-
-async function startPasskeyRegister(){
-  if(!window.PublicKeyCredential || !navigator.credentials){
-    showCustomAlert("このブラウザはパスキーに対応していません");
-    return;
-  }
-  let credential;
-  let challengeId;
-  try{
-    const data = await fetchPasskeyOptions("register");
-    challengeId = data.challengeId;
-    const o = data.options;
-    credential = await navigator.credentials.create({
-      publicKey: {
-        ...o,
-        challenge: base64UrlDecode(o.challenge),
-        user: { ...o.user, id: base64UrlDecode(o.user.id) }
-      }
-    });
-    if(!credential) throw new Error("no credential");
-  }catch(e){
-    if(e && e.name === "NotAllowedError") return;
-    showCustomAlert("パスキーの登録に失敗しました");
-    return;
-  }
-  const r = credential.response;
-  if(!r.getPublicKey || !r.getAuthenticatorData || !r.getPublicKeyAlgorithm){
-    showCustomAlert("このブラウザはパスキーの登録に対応していません");
-    return;
-  }
-  const publicKey = r.getPublicKey();
-  if(!publicKey){
-    showCustomAlert("パスキーの登録に失敗しました");
-    return;
-  }
-  await handleLoginResponse({
-    action: "login",
-    provider: "passkey",
-    passkeyType: "register",
-    challengeId,
-    credential: {
-      id: credential.id,
-      clientDataJSON: base64UrlEncode(r.clientDataJSON),
-      authenticatorData: base64UrlEncode(r.getAuthenticatorData()),
-      publicKey: base64UrlEncode(publicKey),
-      publicKeyAlgorithm: r.getPublicKeyAlgorithm()
-    }
-  });
-}
-
-async function startPasskeyLogin(){
-  if(!window.PublicKeyCredential || !navigator.credentials){
-    showCustomAlert("このブラウザはパスキーに対応していません");
-    return;
-  }
-  let assertion;
-  let challengeId;
-  try{
-    const data = await fetchPasskeyOptions("login");
-    challengeId = data.challengeId;
-    const o = data.options;
-    assertion = await navigator.credentials.get({
-      publicKey: { ...o, challenge: base64UrlDecode(o.challenge) }
-    });
-    if(!assertion) throw new Error("no assertion");
-  }catch(e){
-    if(e && e.name === "NotAllowedError") return;
-    showCustomAlert("ログインに失敗しました");
-    return;
-  }
-  const r = assertion.response;
-  await handleLoginResponse({
-    action: "login",
-    provider: "passkey",
-    passkeyType: "login",
-    challengeId,
-    credential: {
-      id: assertion.id,
-      clientDataJSON: base64UrlEncode(r.clientDataJSON),
-      authenticatorData: base64UrlEncode(r.authenticatorData),
-      signature: base64UrlEncode(r.signature)
-    }
-  });
-}
-
 async function processStatePrefixedAuthRedirect(prefix, stateKey, onCode){
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
@@ -3030,16 +2915,6 @@ facebookLoginBtnEl.addEventListener("click", () => {
 
 githubLoginBtnEl.addEventListener("click", () => {
   startGithubLogin();
-});
-
-passkeyLoginBtnEl.addEventListener("click", () => {
-  loginSelectOverlayEl.classList.remove("visible");
-  startPasskeyLogin();
-});
-
-passkeyRegisterBtnEl.addEventListener("click", () => {
-  loginSelectOverlayEl.classList.remove("visible");
-  startPasskeyRegister();
 });
 
 logoutBtnEl.addEventListener("click", () => {
