@@ -516,24 +516,6 @@
     color:var(--ink);
   }
 
-  .mute-check-label{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    margin-top:16px;
-    font-size:13px;
-    color:var(--ink-soft);
-    cursor:pointer;
-  }
-
-  .mute-check{
-    width:16px;
-    height:16px;
-    cursor:pointer;
-    accent-color:var(--hanko);
-  }
-
   .end-game-btn{
     padding:6px 12px;
     background:var(--hanko);
@@ -1230,17 +1212,13 @@
     background:var(--hanko-deep);
   }
 
-  .mode-and-mute-row{
+  .mode-btn-row{
     display:flex;
     align-items:center;
     justify-content:center;
     flex-wrap:wrap;
     gap:16px;
     margin-top:10px;
-  }
-
-  .mode-and-mute-row .mute-check-label{
-    margin-top:0;
   }
 
   .input-mode-toggle-btn{
@@ -1512,7 +1490,7 @@
 
   body.ranking-only .start-row,
   body.ranking-only .setup-high-score,
-  body.ranking-only .mode-and-mute-row{
+  body.ranking-only .mode-btn-row{
     display:none !important;
   }
 
@@ -2084,13 +2062,9 @@
           <button class="start-btn" id="start-btn" disabled><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
         </div>
 
-        <div class="mode-and-mute-row">
+        <div class="mode-btn-row">
           <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
           <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
-          <label class="mute-check-label">
-            <input type="checkbox" id="mute-btn" class="mute-check">
-            ミュート
-          </label>
         </div>
       </div>
 
@@ -3179,35 +3153,6 @@ const countdownEl = document.getElementById("countdown");
 const countdownNumberEl = document.getElementById("countdown-number");
 const RANKING_API_URL = "https://key-onl.user-x45.workers.dev";
 
-const clickSoundEl = new Audio("sounds/click.mp3");
-const keySoundEl = new Audio("sounds/key.mp3");
-const correctSoundEl = new Audio("sounds/correct.mp3");
-const incorrectSoundEl = new Audio("sounds/incorrect.mp3");
-let isMuted = localStorage.getItem("isMuted") === "true";
-
-function playSound(baseAudio){
-  if(isMuted) return;
-  const sound = baseAudio.cloneNode();
-  sound.play().catch(() => {});
-}
-
-document.addEventListener("click", (e) => {
-  if(e.target.closest("button")){
-    playSound(clickSoundEl);
-  }
-});
-
-inputEl.addEventListener("keydown", () => {
-  playSound(keySoundEl);
-});
-
-const muteBtn = document.getElementById("mute-btn");
-muteBtn.checked = isMuted;
-muteBtn.addEventListener("change", () => {
-  isMuted = muteBtn.checked;
-  localStorage.setItem("isMuted", isMuted);
-});
-
 const rankingBoxEl = document.getElementById("ranking-box");
 const rankingListEl = document.getElementById("ranking-list");
 const rankingTitleEl = document.querySelector(".ranking-title");
@@ -3921,7 +3866,6 @@ function completeRealtimeWord(){
   score++;
   totalCharsTyped += currentWord.length;
   scoreLabelEl.textContent = `せいかい ${score} もん`;
-  playSound(correctSoundEl);
   nextWord();
 }
 
@@ -3941,11 +3885,9 @@ function handleRealtimeKey(key){
     missCount++;
     hintLabelEl.textContent = "ちがうキーです";
     shakeRomaji();
-    playSound(incorrectSoundEl);
     return result;
   }
 
-  playSound(keySoundEl);
   hintLabelEl.textContent = "ローマ字でタイピングしよう";
   renderRomajiDisplay();
   updateSentenceProgressHighlight();
@@ -4165,14 +4107,12 @@ inputEl.addEventListener("keydown", (e) => {
     missCount++;
     hintLabelEl.textContent = "まだ違います";
     shakeInput();
-    playSound(incorrectSoundEl);
     return;
   }
 
   score++;
   totalCharsTyped += currentWord.length;
   scoreLabelEl.textContent = `せいかい ${score} もん`;
-  playSound(correctSoundEl);
   nextWord();
 });
 
