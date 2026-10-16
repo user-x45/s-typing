@@ -3368,9 +3368,12 @@ async function fetchWithRetry(url, options, attempts){
 }
 
 
+let rankSubmitGeneration = 0;
+
 async function submitScoreToRanking(score, mode, level, name){
   const token = getSessionToken();
   if(!token) return;
+  const generation = rankSubmitGeneration;
   const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=event`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -3382,6 +3385,7 @@ async function submitScoreToRanking(score, mode, level, name){
     if(mode === currentMode && level === currentLevel){
       renderRanking(data.top20);
     }
+    if(generation !== rankSubmitGeneration) return;
     if(data.rank){
       resultRankBadgeEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング ${data.rank}位にランクインしました！`;
       resultRankBadgeEl.classList.add("visible");
@@ -3976,6 +3980,7 @@ async function startGame(){
     romajiDisplayEl.classList.remove("shake");
     romajiDisplayEl.scrollLeft = 0;
   }
+  rankSubmitGeneration++;
   resultRankBadgeEl.classList.remove("visible");
   resultRankBadgeEl.textContent = "";
   newRecordBadgeEl.classList.remove("visible");
