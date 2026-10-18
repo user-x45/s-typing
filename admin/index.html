@@ -499,7 +499,7 @@
       <button class="menu-btn" id="menu-invite-btn">招待コード管理</button>
       <button class="menu-btn" id="menu-playlog-btn">プレイログ</button>
       <button class="menu-btn" id="menu-event-btn">イベントモード</button>
-      <button class="menu-btn" id="menu-passkey-btn">パスキーを追加</button>
+      <button class="menu-btn" id="menu-passkey-btn">パスキー管理</button>
       <button class="logout-btn" id="logout-btn">ログアウト</button>
     </div>
   </div>
@@ -526,6 +526,17 @@
       <button class="refresh-btn" id="invite-refresh-btn">再読み込み</button>
     </div>
     <div class="user-list" id="invite-list"></div>
+  </div>
+
+  <div id="passkey-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="passkey-back-btn">戻る</button>
+      <div>
+        <button class="clear-btn" id="passkey-add-btn">パスキーを追加</button>
+        <button class="refresh-btn" id="passkey-refresh-btn">再読み込み</button>
+      </div>
+    </div>
+    <div class="user-list" id="passkey-list"></div>
   </div>
 
   <div id="playlog-dashboard" class="hidden">
@@ -574,6 +585,7 @@ const MODES = ["hiragana", "katakana", "sentence"];
 const LEVELS = ["beginner", "intermediate", "advanced"];
 
 let adminToken = "";
+let currentCredentialId = "";
 
 const loginPanelEl = document.getElementById("login-panel");
 const loadingPanelEl = document.getElementById("loading-panel");
@@ -582,6 +594,11 @@ const rankingDashboardEl = document.getElementById("ranking-dashboard");
 const userDashboardEl = document.getElementById("user-dashboard");
 const inviteDashboardEl = document.getElementById("invite-dashboard");
 const playlogDashboardEl = document.getElementById("playlog-dashboard");
+const passkeyDashboardEl = document.getElementById("passkey-dashboard");
+const passkeyListEl = document.getElementById("passkey-list");
+const passkeyBackBtnEl = document.getElementById("passkey-back-btn");
+const passkeyAddBtnEl = document.getElementById("passkey-add-btn");
+const passkeyRefreshBtnEl = document.getElementById("passkey-refresh-btn");
 const setupAreaEl = document.getElementById("setup-area");
 const setupInputEl = document.getElementById("setup-input");
 const setupBtnEl = document.getElementById("setup-btn");
@@ -622,7 +639,7 @@ const eventArchiveLoadBtnEl = document.getElementById("event-archive-load-btn");
 const eventArchiveGridEl = document.getElementById("event-archive-grid");
 
 function showOnly(el){
-  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl, playlogDashboardEl, eventDashboardEl].forEach(node => {
+  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl, playlogDashboardEl, eventDashboardEl, passkeyDashboardEl].forEach(node => {
     if(node === el){
       node.classList.remove("hidden");
     } else {
@@ -714,6 +731,7 @@ async function login(){
       }
     }
   });
+  currentCredentialId = assertion.id;
   return data.token;
 }
 
@@ -732,7 +750,7 @@ async function registerPasskey(auth){
       timeout: pk.timeout
     }
   });
-  return postAdmin({
+  const result = await postAdmin({
     action: "register",
     ...auth,
     credential: {
@@ -743,6 +761,7 @@ async function registerPasskey(auth){
       }
     }
   });
+  return { ...result, credentialId: created.id };
 }
 
 function passkeyErrorMessage(e){
@@ -1301,6 +1320,7 @@ async function trySetup(){
     const data = await registerPasskey({ setupCode: setupInputEl.value });
     setupInputEl.value = "";
     adminToken = data.token;
+    currentCredentialId = data.credentialId;
     setupAreaEl.classList.add("hidden");
     loginBtnEl.classList.remove("hidden");
     showOnly(menuPanelEl);
@@ -1331,10 +1351,92 @@ setupInputEl.addEventListener("keydown", (e) => {
   if(e.key === "Enter") trySetup();
 });
 
-menuPasskeyBtnEl.addEventListener("click", async () => {
+function formatDateTime(ts){
+  return ts ? new Date(ts).toLocaleString("ja-JP") : "なし";
+}
+
+function renderPasskeys(credentials){
+  passkeyListEl.innerHTML = "";
+  if(!credentials || credentials.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "登録されているパスキーがありません";
+    passkeyListEl.appendChild(empty);
+    return;
+  }
+
+  credentials.forEach(entry => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const name = document.createElement("div");
+    name.className = "user-name";
+    name.textContent = entry.id === currentCredentialId ? `${entry.label}（この端末）` : entry.label;
+
+    const created = document.createElement("div");
+    created.className = "user-sub";
+    created.textContent = `登録日時: ${formatDateTime(entry.createdAt)}`;
+
+    const used = document.createElement("div");
+    used.className = "user-scores";
+    used.textContent = `最終使用: ${formatDateTime(entry.lastUsedAt)}`;
+
+    info.appendChild(name);
+    info.appendChild(created);
+    info.appendChild(used);
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "user-delete-btn";
+    delBtn.textContent = "削除";
+    delBtn.addEventListener("click", async () => {
+      const isCurrent = entry.id === currentCredentialId;
+      const message = isCurrent
+        ? `この端末のパスキー「${entry.label}」を削除しますか？次回からこの端末ではログインできなくなります`
+        : `パスキー「${entry.label}」を削除しますか？`;
+      if(!confirm(message)) return;
+      showOnly(loadingPanelEl);
+      try{
+        const result = await callAdmin("deletePasskey", { id: entry.id });
+        if(result.error === "last_credential"){
+          alert("最後のパスキーは削除できません");
+        } else if(result.error){
+          alert("削除に失敗しました");
+        }
+        await loadPasskeyDashboard();
+      }catch(e){
+        handleSessionExpired();
+      }
+    });
+
+    row.appendChild(info);
+    row.appendChild(delBtn);
+    passkeyListEl.appendChild(row);
+  });
+}
+
+async function loadPasskeyDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("listPasskeys", {});
+    renderPasskeys(data.credentials);
+    showOnly(passkeyDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+menuPasskeyBtnEl.addEventListener("click", loadPasskeyDashboard);
+passkeyBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+passkeyRefreshBtnEl.addEventListener("click", loadPasskeyDashboard);
+
+passkeyAddBtnEl.addEventListener("click", async () => {
   try{
     await registerPasskey({ token: adminToken });
     alert("パスキーを登録しました");
+    await loadPasskeyDashboard();
   }catch(e){
     if(e.message === "unauthorized"){
       handleSessionExpired();
