@@ -477,10 +477,14 @@
   </header>
 
   <div class="panel login-panel" id="login-panel">
-    <label class="field-label" for="password-input">管理者パスワード</label>
-    <input type="password" id="password-input" autocomplete="off">
-    <button class="login-btn" id="login-btn">ログイン</button>
+    <button class="login-btn" id="login-btn">パスキーでログイン</button>
     <div class="error-text" id="login-error"></div>
+    <div class="hidden" id="setup-area">
+      <label class="field-label" for="setup-input">セットアップコード</label>
+      <input type="password" id="setup-input" autocomplete="off">
+      <button class="login-btn" id="setup-btn">パスキーを登録</button>
+      <div class="error-text" id="setup-error"></div>
+    </div>
   </div>
 
   <div class="panel loading-panel hidden" id="loading-panel">
@@ -495,6 +499,7 @@
       <button class="menu-btn" id="menu-invite-btn">招待コード管理</button>
       <button class="menu-btn" id="menu-playlog-btn">プレイログ</button>
       <button class="menu-btn" id="menu-event-btn">イベントモード</button>
+      <button class="menu-btn" id="menu-passkey-btn">パスキーを追加</button>
       <button class="logout-btn" id="logout-btn">ログアウト</button>
     </div>
   </div>
@@ -577,7 +582,11 @@ const rankingDashboardEl = document.getElementById("ranking-dashboard");
 const userDashboardEl = document.getElementById("user-dashboard");
 const inviteDashboardEl = document.getElementById("invite-dashboard");
 const playlogDashboardEl = document.getElementById("playlog-dashboard");
-const passwordInputEl = document.getElementById("password-input");
+const setupAreaEl = document.getElementById("setup-area");
+const setupInputEl = document.getElementById("setup-input");
+const setupBtnEl = document.getElementById("setup-btn");
+const setupErrorEl = document.getElementById("setup-error");
+const menuPasskeyBtnEl = document.getElementById("menu-passkey-btn");
 const loginBtnEl = document.getElementById("login-btn");
 const loginErrorEl = document.getElementById("login-error");
 const refreshBtnEl = document.getElementById("refresh-btn");
@@ -634,23 +643,126 @@ async function callAdmin(action, extra){
   return res.json();
 }
 
-async function login(password){
+function b64urlToBuffer(str){
+  const s = String(str).replace(/-/g, "+").replace(/_/g, "/");
+  const padded = s + "=".repeat((4 - (s.length % 4)) % 4);
+  const bin = atob(padded);
+  const out = new Uint8Array(bin.length);
+  for(let i = 0; i < bin.length; i++){
+    out[i] = bin.charCodeAt(i);
+  }
+  return out.buffer;
+}
+
+function bufferToB64url(buf){
+  const arr = new Uint8Array(buf);
+  let bin = "";
+  for(let i = 0; i < arr.length; i++){
+    bin += String.fromCharCode(arr[i]);
+  }
+  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+async function postAdmin(payload){
   const res = await fetch(`${WORKER_URL}/admin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action: "login", password })
+    body: JSON.stringify(payload)
   });
+  let data = {};
+  try{
+    data = await res.json();
+  }catch(e){
+    data = {};
+  }
   if(res.status === 429){
-    const data = await res.json();
     const err = new Error("locked");
     err.retryAfterSeconds = data.retryAfterSeconds;
     throw err;
   }
-  if(!res.ok){
+  if(res.status === 401){
     throw new Error("unauthorized");
   }
-  const data = await res.json();
+  if(!res.ok){
+    throw new Error(data.error || "error");
+  }
+  return data;
+}
+
+async function login(){
+  const options = await postAdmin({ action: "authOptions" });
+  if(!options.hasCredentials){
+    throw new Error("no_credentials");
+  }
+  const assertion = await navigator.credentials.get({
+    publicKey: {
+      challenge: b64urlToBuffer(options.challenge),
+      rpId: options.rpId,
+      allowCredentials: options.allowCredentials.map(id => ({ type: "public-key", id: b64urlToBuffer(id) })),
+      userVerification: "required",
+      timeout: 60000
+    }
+  });
+  const data = await postAdmin({
+    action: "login",
+    credential: {
+      id: assertion.id,
+      response: {
+        clientDataJSON: bufferToB64url(assertion.response.clientDataJSON),
+        authenticatorData: bufferToB64url(assertion.response.authenticatorData),
+        signature: bufferToB64url(assertion.response.signature)
+      }
+    }
+  });
   return data.token;
+}
+
+async function registerPasskey(auth){
+  const options = await postAdmin({ action: "registerOptions", ...auth });
+  const pk = options.publicKey;
+  const created = await navigator.credentials.create({
+    publicKey: {
+      challenge: b64urlToBuffer(pk.challenge),
+      rp: pk.rp,
+      user: { id: b64urlToBuffer(pk.user.id), name: pk.user.name, displayName: pk.user.displayName },
+      pubKeyCredParams: pk.pubKeyCredParams,
+      authenticatorSelection: pk.authenticatorSelection,
+      excludeCredentials: pk.excludeCredentials.map(c => ({ type: "public-key", id: b64urlToBuffer(c.id) })),
+      attestation: pk.attestation,
+      timeout: pk.timeout
+    }
+  });
+  return postAdmin({
+    action: "register",
+    ...auth,
+    credential: {
+      id: created.id,
+      response: {
+        clientDataJSON: bufferToB64url(created.response.clientDataJSON),
+        attestationObject: bufferToB64url(created.response.attestationObject)
+      }
+    }
+  });
+}
+
+function passkeyErrorMessage(e){
+  if(e.message === "locked"){
+    const minutes = Math.ceil(e.retryAfterSeconds / 60);
+    return `試行回数が多すぎます。${minutes}分後にもう一度お試しください`;
+  }
+  if(e.name === "NotAllowedError" || e.name === "AbortError"){
+    return "パスキーの操作がキャンセルされました";
+  }
+  if(e.name === "InvalidStateError"){
+    return "このパスキーはすでに登録されています";
+  }
+  if(e.message === "unauthorized"){
+    return "認証に失敗しました";
+  }
+  if(e.message === "passkey_not_configured"){
+    return "サーバーのパスキー設定が未完了です";
+  }
+  return "エラーが発生しました。もう一度お試しください";
 }
 
 function renderBoards(data){
@@ -1157,30 +1269,79 @@ async function loadInviteDashboard(){
 function handleSessionExpired(){
   adminToken = "";
   showOnly(loginPanelEl);
-  loginErrorEl.textContent = "セッションが切れました。もう一度パスワードを入力してください";
+  loginErrorEl.textContent = "セッションが切れました。もう一度パスキーでログインしてください";
 }
 
 async function tryLogin(){
   loginErrorEl.textContent = "";
-  showOnly(loadingPanelEl);
+  if(!window.PublicKeyCredential){
+    loginErrorEl.textContent = "このブラウザはパスキーに対応していません";
+    return;
+  }
   try{
-    adminToken = await login(passwordInputEl.value);
-    passwordInputEl.value = "";
+    adminToken = await login();
     showOnly(menuPanelEl);
   }catch(e){
     showOnly(loginPanelEl);
-    if(e.message === "locked"){
-      const minutes = Math.ceil(e.retryAfterSeconds / 60);
-      loginErrorEl.textContent = `試行回数が多すぎます。${minutes}分後にもう一度お試しください`;
+    if(e.message === "no_credentials"){
+      showSetupArea();
     } else {
-      loginErrorEl.textContent = "パスワードが違います";
+      loginErrorEl.textContent = passkeyErrorMessage(e);
     }
   }
 }
 
+async function trySetup(){
+  setupErrorEl.textContent = "";
+  if(!window.PublicKeyCredential){
+    setupErrorEl.textContent = "このブラウザはパスキーに対応していません";
+    return;
+  }
+  try{
+    const data = await registerPasskey({ setupCode: setupInputEl.value });
+    setupInputEl.value = "";
+    adminToken = data.token;
+    setupAreaEl.classList.add("hidden");
+    loginBtnEl.classList.remove("hidden");
+    showOnly(menuPanelEl);
+  }catch(e){
+    setupErrorEl.textContent = e.message === "unauthorized" ? "セットアップコードが違います" : passkeyErrorMessage(e);
+  }
+}
+
+function showSetupArea(){
+  loginBtnEl.classList.add("hidden");
+  setupAreaEl.classList.remove("hidden");
+}
+
+async function initLogin(){
+  try{
+    const options = await postAdmin({ action: "authOptions" });
+    if(!options.hasCredentials){
+      showSetupArea();
+    }
+  }catch(e){
+    loginErrorEl.textContent = passkeyErrorMessage(e);
+  }
+}
+
 loginBtnEl.addEventListener("click", tryLogin);
-passwordInputEl.addEventListener("keydown", (e) => {
-  if(e.key === "Enter") tryLogin();
+setupBtnEl.addEventListener("click", trySetup);
+setupInputEl.addEventListener("keydown", (e) => {
+  if(e.key === "Enter") trySetup();
+});
+
+menuPasskeyBtnEl.addEventListener("click", async () => {
+  try{
+    await registerPasskey({ token: adminToken });
+    alert("パスキーを登録しました");
+  }catch(e){
+    if(e.message === "unauthorized"){
+      handleSessionExpired();
+    } else {
+      alert(passkeyErrorMessage(e));
+    }
+  }
 });
 
 menuRankingBtnEl.addEventListener("click", loadRankingDashboard);
@@ -1190,7 +1351,6 @@ menuPlaylogBtnEl.addEventListener("click", loadPlayLogDashboard);
 
 logoutBtnEl.addEventListener("click", () => {
   adminToken = "";
-  passwordInputEl.value = "";
   loginErrorEl.textContent = "";
   showOnly(loginPanelEl);
 });
@@ -1215,6 +1375,7 @@ playlogClearBtnEl.addEventListener("click", async () => {
     handleSessionExpired();
   }
 });
+initLogin();
 </script>
 </body>
 </html>
