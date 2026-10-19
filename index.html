@@ -1,59 +1,12 @@
 <!DOCTYPE html>
-<!--
- ____  _                 _      _____                          
-/ ___|(_)_ __ ___  _ __ | | ___|_   _|   _ _ __ (_)_ __   __ _ 
-\___ \| | '_ ` _ \| '_ \| |/ _ \ | || | | | '_ \| | '_ \ / _` |
- ___) | | | | | | | |_) | |  __/ | || |_| | |_) | | | | | (_| |
-|____/|_|_| |_| |_| .__/|_|\___| |_| \__, | .__/|_|_| |_|\__, |
-                   |_|               |___/|_|            |___/ 
--->
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。">
-<link rel="canonical" href="https://s-typing.f5.si/">
-<meta content="https://s-typing.f5.si/" property="og:url">
-<meta content="シンプルタイピング" property="og:title">
-<meta content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。" property="og:description">
-<meta content="website" property="og:type">
-<meta content="シンプルタイピング" property="og:site_name">
-<meta content="https://s-typing.f5.si/ogp.png" property="og:image">
-<meta content="image/png" property="og:image:type">
-<meta content="1200" property="og:image:width">
-<meta content="630" property="og:image:height">
-<meta content="シンプルタイピングのトップ画面" property="og:image:alt">
-<meta content="summary_large_image" name="twitter:card">
-<meta content="@simple_typing" name="twitter:site">
-<meta content="シンプルタイピング" name="twitter:title">
-<meta content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。" name="twitter:description">
-<meta content="https://s-typing.f5.si/ogp.png" name="twitter:image">
-<title>シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム</title>
-<link href="favicon/32.png" rel="icon" sizes="32x32" type="image/png">
-<link href="favicon/96.png" rel="icon" sizes="96x96" type="image/png">
-<link href="favicon/144.png" rel="icon" sizes="144x144" type="image/png">
-<link href="favicon/180.png" rel="apple-touch-icon" type="image/png">
-<link href="favicon/152.png" rel="apple-touch-icon-precomposed" type="image/png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "WebSite",
-  "name": "シンプルタイピング",
-  "url": "https://s-typing.f5.si/",
-  "inLanguage": "ja",
-  "description": "無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。オンライン対戦やフレンド対戦にも対応しています。"
-}
-</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSBNPPLE0E"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-LSBNPPLE0E');
-</script>
+<meta name="robots" content="noindex, nofollow">
+<title>管理者ページ｜シンプルタイピング</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap');
 
   :root{
     --washi:#faf8f4;
@@ -63,8 +16,6 @@
     --hanko:#e0563f;
     --hanko-deep:#c4432e;
     --gold:#dba52a;
-    --pop-teal:#2f9e94;
-    --pop-purple:#6c5a9e;
     --line:#e5e0d5;
     --panel-bg:#ffffff;
     --panel-bg-soft:#f3efe6;
@@ -80,8 +31,6 @@
       --hanko:#e8724f;
       --hanko-deep:#f28762;
       --gold:#e0b545;
-      --pop-teal:#4bb3a8;
-      --pop-purple:#8a78bf;
       --line:#333136;
       --panel-bg:#232226;
       --panel-bg-soft:#2b2a2e;
@@ -95,10 +44,7 @@
     font-family: inherit;
   }
 
-  html{
-    height:100%;
-    overflow-x:hidden;
-  }
+  html{height:100%;}
 
   body{
     margin:0;
@@ -113,4457 +59,1833 @@
     padding:40px 16px;
   }
 
-  body.game-active{
-    padding:clamp(8px,2vh,16px) 16px;
-  }
-
-  .mobile-warning-overlay,
-  .custom-alert-overlay,
-  .name-input-overlay,
-  .input-mode-overlay{
-    -webkit-backdrop-filter:blur(6px);
-    backdrop-filter:blur(6px);
-  }
-
-  .mobile-warning-overlay.visible,
-  .custom-alert-overlay.visible,
-  .name-input-overlay.visible,
-  .input-mode-overlay.visible{
-    animation:overlay-fade-in 0.25s ease both;
-  }
-
-  .mobile-warning-overlay.visible .mobile-warning-box,
-  .custom-alert-overlay.visible .custom-alert-box,
-  .name-input-overlay.visible .name-input-box,
-  .input-mode-overlay.visible .input-mode-box{
-    animation:popup-pop-in 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
-  }
-
-  @keyframes overlay-fade-in{
-    from{ opacity:0; }
-    to{ opacity:1; }
-  }
-
-  @keyframes popup-pop-in{
-    from{ opacity:0; transform:translateY(16px) scale(0.92); }
-    to{ opacity:1; transform:translateY(0) scale(1); }
-  }
-
-  .mobile-warning-overlay.closing,
-  .custom-alert-overlay.closing,
-  .name-input-overlay.closing,
-  .input-mode-overlay.closing{
-    display:flex;
-    pointer-events:none;
-    animation:overlay-fade-out 0.2s ease both;
-  }
-
-  .mobile-warning-overlay.closing .mobile-warning-box,
-  .custom-alert-overlay.closing .custom-alert-box,
-  .name-input-overlay.closing .name-input-box,
-  .input-mode-overlay.closing .input-mode-box{
-    animation:popup-pop-out 0.2s ease both;
-  }
-
-  @keyframes overlay-fade-out{
-    from{ opacity:1; }
-    to{ opacity:0; }
-  }
-
-  @keyframes popup-pop-out{
-    from{ opacity:1; transform:translateY(0) scale(1); }
-    to{ opacity:0; transform:translateY(10px) scale(0.95); }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .mobile-warning-overlay.visible,
-    .custom-alert-overlay.visible,
-    .name-input-overlay.visible,
-    .input-mode-overlay.visible,
-    .mobile-warning-overlay.closing,
-    .custom-alert-overlay.closing,
-    .name-input-overlay.closing,
-    .input-mode-overlay.closing,
-    .mobile-warning-overlay.visible .mobile-warning-box,
-    .custom-alert-overlay.visible .custom-alert-box,
-    .name-input-overlay.visible .name-input-box,
-    .input-mode-overlay.visible .input-mode-box{
-      animation:none;
-    }
-  }
-
   .stage{
     width:100%;
-    max-width:640px;
+    max-width:920px;
   }
 
-  .menu-bar{
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:nowrap;
-    margin-bottom:20px;
-    padding:12px 20px;
-    background:var(--panel-bg);
-    border:1.5px solid var(--line);
-    border-radius:14px;
-    box-shadow:0 1px 6px rgba(0,0,0,0.04);
-    white-space:nowrap;
+  header{
+    text-align:center;
+    margin-bottom:28px;
   }
 
-  .menu-brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-shrink:0;
-    min-width:0;
-    text-decoration:none;
-    color:inherit;
-  }
-
-  .menu-logo{
-    height:28px;
-    width:auto;
-    display:block;
-    flex-shrink:0;
-  }
-
-  .menu-title{
-    margin:0;
-    font-weight:800;
-    font-size:20px;
-    line-height:normal;
-    letter-spacing:0.06em;
-    color:var(--ink);
-    flex-shrink:0;
-  }
-
-  .menu-auth{
-    position:absolute;
-    top:100%;
-    right:0;
-    margin-top:8px;
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    gap:10px;
-    padding:14px 16px;
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.2);
-    white-space:nowrap;
-    z-index:10;
-  }
-
-  .menu-auth-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-
-  .menu-toggle-btn{
-    display:flex;
-    align-items:center;
-    gap:6px;
-    padding:6px 14px;
-    background:transparent;
-    border:1.5px solid var(--line);
-    border-radius:16px;
+  .kicker{
     font-size:12px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-    white-space:nowrap;
-    flex-shrink:0;
-  }
-
-  .menu-toggle-btn:hover{
-    border-color:var(--gold);
-    color:var(--ink);
-  }
-
-  .share-btn{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:8px 14px;
-    border:none;
-    border-radius:14px;
-    font-size:13px;
-    font-weight:600;
-    color:#ffffff;
-    cursor:pointer;
-    transition:opacity 0.2s ease;
-    text-decoration:none;
-  }
-
-  .share-btn:hover{
-    opacity:0.85;
-  }
-
-  .share-btn.x{ background:#000000; border:1px solid #ffffff; }
-  .share-btn.facebook{ background:#1877f2; }
-  .share-btn.copy{ background:var(--pop-teal); }
-
-  .result-share{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin:14px 0;
-    flex-wrap:wrap;
-  }
-
-  .share-footer{
-    width:100%;
-    max-width:640px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-    margin-top:24px;
-    padding-top:20px;
-    border-top:1px solid var(--line);
-  }
-
-  .site-footer-label{
-    font-size:12px;
-    color:var(--ink-soft);
-    letter-spacing:0.05em;
-  }
-
-  .footer-share{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-
-  .app-loading-overlay{
-    position:fixed;
-    inset:0;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:14px;
-    background:var(--washi);
-    z-index:2000;
-    transition:opacity 0.3s ease;
-  }
-
-  .app-loading-overlay.hidden{
-    opacity:0;
-    pointer-events:none;
-  }
-
-  .app-loading-spinner{
-    width:44px;
-    height:44px;
-    border-radius:50%;
-    border:4px solid var(--line);
-    border-top-color:var(--hanko);
-    animation:app-loading-spin 0.8s linear infinite;
-  }
-
-  .app-loading-text{
-    font-size:14px;
-    font-weight:600;
-    letter-spacing:0.08em;
-    color:var(--ink-soft);
-  }
-
-  @keyframes app-loading-spin{
-    to{ transform:rotate(360deg); }
-  }
-
-
-  .mobile-warning-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(31,28,25,0.55);
-    align-items:center;
-    justify-content:center;
-    z-index:3000;
-    padding:20px;
-  }
-
-  .mobile-warning-overlay.visible{
-    display:flex;
-  }
-
-  .mobile-warning-box{
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:28px 24px;
-    max-width:320px;
-    width:100%;
-    text-align:center;
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  }
-
-  .mobile-warning-message{
-    font-size:15px;
-    color:var(--ink);
-    margin:0 0 22px;
-    line-height:1.6;
-  }
-
-  .mobile-warning-check{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    margin:0 0 18px;
-    font-size:13px;
-    color:var(--ink);
-    cursor:pointer;
-    user-select:none;
-  }
-
-  .mobile-warning-check input{
-    width:16px;
-    height:16px;
-    margin:0;
-    accent-color:var(--hanko);
-    cursor:pointer;
-  }
-
-  .mobile-warning-btn{
-    padding:10px 32px;
-    background:var(--hanko);
-    color:var(--washi);
-    border:none;
-    border-radius:16px;
-    font-size:14px;
-    font-weight:600;
-    letter-spacing:0.05em;
-    cursor:pointer;
-    transition:background 0.2s ease;
-  }
-
-  .mobile-warning-btn:hover{
-    background:var(--hanko-deep);
-  }
-
-  .custom-alert-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(31,28,25,0.55);
-    align-items:center;
-    justify-content:center;
-    z-index:1000;
-    padding:20px;
-  }
-
-  .custom-alert-overlay.visible{
-    display:flex;
-  }
-
-  .custom-alert-box{
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:28px 24px;
-    max-width:320px;
-    width:100%;
-    text-align:center;
-    position:relative;
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  }
-
-  .custom-alert-message{
-    font-size:15px;
-    color:var(--ink);
-    margin-bottom:22px;
-  }
-
-  .custom-alert-btn{
-    padding:10px 32px;
-    background:var(--hanko);
-    color:var(--washi);
-    border:none;
-    border-radius:16px;
-    font-size:14px;
-    font-weight:600;
-    letter-spacing:0.05em;
-    cursor:pointer;
-    transition:background 0.2s ease;
-  }
-
-  .custom-alert-btn:hover{
-    background:var(--hanko-deep);
-  }
-
-  .player-name-label{
-    font-size:13px;
-    color:var(--ink-soft);
-    flex-shrink:0;
-  }
-
-  .edit-name-btn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:24px;
-    height:24px;
-    padding:0;
-    background:transparent;
-    border:1.5px solid var(--line);
-    border-radius:16px;
-    font-size:11px;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-    flex-shrink:0;
-  }
-
-  .edit-name-btn:hover{
-    border-color:var(--gold);
-    color:var(--ink);
-  }
-
-  .switch-player-btn{
-    padding:6px 14px;
-    background:transparent;
-    border:1.5px solid var(--line);
-    border-radius:16px;
-    font-size:12px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-    white-space:nowrap;
-    flex-shrink:0;
-  }
-
-  .switch-player-btn:hover{
-    border-color:var(--gold);
-    color:var(--ink);
-  }
-
-  .mute-check-label{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    margin-top:16px;
-    font-size:13px;
-    color:var(--ink-soft);
-    cursor:pointer;
-  }
-
-  .mute-check{
-    width:16px;
-    height:16px;
-    cursor:pointer;
-    accent-color:var(--hanko);
-  }
-
-  .end-game-btn{
-    padding:6px 12px;
-    background:var(--hanko);
-    color:var(--washi);
-    border:none;
-    border-radius:16px;
-    cursor:pointer;
-    font-size:12px;
-    margin-left:10px;
-  }
-
-  .panel{
-    background:var(--panel-bg);
-    border:1.5px solid var(--line);
-    border-radius:16px;
-    padding:28px;
-    position:relative;
-    box-shadow:0 2px 12px rgba(0,0,0,0.05);
-  }
-
-  .mode-tabs{
-    display:flex;
-    gap:4px;
-    justify-content:center;
-    margin-bottom:22px;
-    background:var(--panel-bg-soft);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:4px;
-    overflow:hidden;
-  }
-
-  .section-heading{
-    font-size:12px;
-    font-weight:700;
-    color:var(--ink-soft);
-    letter-spacing:0.08em;
-    text-align:center;
-    margin:0 0 8px;
-  }
-
-  .mode-btn, .input-mode-btn{
-    flex:1;
-    padding:11px 8px;
-    background:transparent;
-    border:none;
-    border-radius:14px;
-    font-size:14px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-  }
-
-  .mode-btn.active, .input-mode-btn.active{
-    background:var(--hanko);
-    color:#fff;
-  }
-
-  .hidden{
-    display:none !important;
-  }
-
-  .levels{
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    margin-bottom:22px;
-  }
-
-  .level-btn{
-    flex:1;
-    padding:14px 8px;
-    background:transparent;
-    border:1.5px solid var(--line);
-    border-radius:16px;
-    font-size:15px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all 0.2s ease;
-  }
-
-  .level-btn .sub{
-    display:block;
-    font-size:11px;
-    font-weight:400;
-    color:var(--ink-soft);
-    opacity:0.6;
-    margin-top:4px;
-  }
-
-  .level-btn:hover{
-    border-color:var(--gold);
-  }
-
-  .level-btn.active{
-    background:var(--pop-teal);
-    border-color:var(--pop-teal);
-    color:#0b3a34;
-  }
-
-  .level-btn.active .sub{
-    color:#0b3a34;
-    opacity:0.75;
-  }
-
-  .start-row{
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin-bottom:8px;
-  }
-
-  .start-btn{
-    padding:13px 26px;
-    background:var(--hanko);
-    color:#fff;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    font-weight:700;
-    letter-spacing:0.08em;
-    cursor:pointer;
-    box-shadow:0 2px 0 var(--hanko-deep);
-    transition:transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
-  }
-
-  .start-btn:hover{
-    background:var(--hanko-deep);
-  }
-
-  .start-btn:active{
-    transform:translateY(2px);
-    box-shadow:0 0 0 var(--hanko-deep);
-  }
-
-  .start-btn.online-btn{
-    background:var(--pop-purple);
-    box-shadow:0 2px 0 #564a80;
-  }
-
-  .start-btn.online-btn:hover{
-    background:var(--pop-purple);
-    filter:brightness(1.06);
-  }
-
-  .start-btn.online-btn:active{
-    box-shadow:0 0 0 #564a80;
-  }
-
-  .online-status{
-    display:none;
-    text-align:center;
-    padding:20px 8px;
-  }
-
-  .online-status.visible{
-    display:block;
-  }
-
-  .status-title{
-    font-size:18px;
-    font-weight:600;
-    margin-bottom:10px;
-  }
-
-  .search-spinner{
-    width:40px;
-    height:40px;
-    border:3px solid var(--line);
-    border-top-color:var(--hanko);
-    border-radius:50%;
-    margin:20px auto;
-    animation:spin 1s linear infinite;
-  }
-
-  @keyframes spin{
-    to{transform:rotate(360deg);}
-  }
-
-  .search-count{
-    font-size:20px;
-    color:var(--ink-soft);
-    margin-bottom:22px;
-  }
-
-  .countdown-number{
-    font-size:88px;
-    font-weight:800;
-    color:var(--hanko);
-    margin:16px 0 24px;
-  }
-
-  #opponent-score-label.hidden{
-    display:none;
-  }
-
-  .game{
-    display:none;
-  }
-
-  .game.visible{
-    display:block;
-  }
-
-  .setup.hidden{
-    display:none;
-  }
-
-  .hud{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:8px;
-    margin-bottom:clamp(8px,2vh,18px);
-    letter-spacing:0.03em;
-  }
-
-  .hud-stat{
-    display:inline-flex;
-    align-items:center;
-    gap:4px;
-    padding:6px 14px;
-    border-radius:12px;
-    font-weight:800;
-    font-size:clamp(13px,2.6vh,16px);
-    font-variant-numeric:tabular-nums;
-    white-space:nowrap;
-  }
-
-  #score-label{
-    background:rgba(47,158,148,0.12);
-    color:var(--pop-teal);
-  }
-
-  #opponent-score-label{
-    background:rgba(108,90,158,0.12);
-    color:var(--pop-purple);
-  }
-
-  #time-label{
-    background:rgba(224,86,63,0.12);
-    color:var(--hanko);
-  }
-
-  #time-label.time-warning{
-    background:rgba(224,86,63,0.22);
-    color:var(--hanko-deep);
-    animation:time-pulse 1s ease-in-out infinite;
-  }
-
-  @keyframes time-pulse{
-    0%,100%{ transform:scale(1); }
-    50%{ transform:scale(1.08); }
-  }
-
-  .timer-track{
-    height:6px;
-    width:100%;
-    background:rgba(31,28,25,0.1);
-    border-radius:20px;
-    overflow:hidden;
-    margin-bottom:clamp(12px,3vh,24px);
-  }
-
-  .timer-fill{
-    height:100%;
-    background:linear-gradient(90deg, var(--pop-teal), var(--hanko));
-    width:100%;
-    transition:width 1s linear;
-  }
-
-  .timer-fill.no-transition{
-    transition:none;
-  }
-
-  .word-frame{
-    text-align:center;
-    padding:clamp(14px,4vh,36px) 12px;
-    background:var(--panel-bg-soft);
-    border-radius:16px;
-    margin-bottom:clamp(12px,3vh,26px);
-  }
-
-  .word-eyebrow{
-    font-size:clamp(10px,1.6vh,11px);
-    letter-spacing:0.3em;
-    color:var(--gold);
-    margin-bottom:clamp(6px,1.5vh,12px);
-  }
-
-  #word-display{
-    font-size:clamp(22px,6vh,46px);
-    font-weight:600;
-    letter-spacing:0.12em;
-    white-space:nowrap;
-    overflow:hidden;
-  }
-
-  .char{
-    display:inline-block;
-    transition:color 0.15s ease;
-  }
-
-  .char.done{
-    color:var(--hanko);
-  }
-
-  .sentence-reading-display{
-    display:none;
-    margin-top:4px;
-    font-size:clamp(11px,2vh,15px);
-    font-weight:600;
-    letter-spacing:0.08em;
-    line-height:1.5;
-    color:var(--ink-soft);
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:clip;
-  }
-
-  .sentence-reading-display.visible{
-    display:block;
-  }
-
-  .sentence-reading-char{
-    display:inline-block;
-  }
-
-  .romaji-display{
-    margin-top:clamp(8px,2vh,16px);
-    font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
-    text-align:left;
-    font-size:26px;
-    font-weight:700;
-    letter-spacing:0.06em;
-    color:var(--ink-soft);
-    white-space:nowrap;
-    overflow-x:hidden;
-    overflow-y:hidden;
-    max-width:100%;
-    scrollbar-width:none;
-  }
-
-  .romaji-display::-webkit-scrollbar{
-    display:none;
-  }
-
-  .romaji-display.shake{
-    animation:shake 0.3s ease;
-  }
-
-  .romaji-display.centered{
-    text-align:center;
-  }
-
-  .rchar{
-    display:inline-block;
-  }
-
-  .rchar.done{
-    color:var(--hanko);
-  }
-
-  .rchar.current .rtyped{
-    color:var(--hanko);
-  }
-
-  .input-row{
-    position:relative;
-  }
-
-  #typing-input{
-    width:100%;
-    padding:clamp(10px,2.5vh,16px) 18px;
-    font-size:clamp(16px,3vh,22px);
-    border:1.5px solid var(--line);
-    border-radius:12px;
-    background:var(--input-bg);
-    color:var(--ink);
-    outline:none;
-    letter-spacing:0.08em;
-    font-weight:700;
-    transition:border-color 0.15s ease;
-    text-align: center;
-  }
-
-  #typing-input:focus{
-    border-color:var(--gold);
-  }
-
-  #typing-input.shake{
-    animation:shake 0.3s ease;
-    border-color:var(--hanko-deep);
-  }
-
-  @keyframes shake{
-    0%,100%{transform:translateX(0);}
-    25%{transform:translateX(-6px);}
-    75%{transform:translateX(6px);}
-  }
-
-  .ime-spacer{
-    height:0px;
-  }
-
-  .hint{
-    text-align:center;
-    font-size:12px;
-    color:var(--ink-soft);
-    opacity:0.65;
-    margin-top:clamp(6px,1.5vh,10px);
-    min-height:16px;
-  }
-
-  .result{
-    display:none;
-    text-align:center;
-  }
-
-  .result.visible{
-    display:block;
-  }
-
-  .result-title{
-    font-size:14px;
-    letter-spacing:0.3em;
+    letter-spacing:0.35em;
     color:var(--gold);
     margin-bottom:6px;
   }
 
-  .result-score{
-    font-size:60px;
+  h1{
     font-weight:800;
-    color:var(--hanko);
-    margin-bottom:4px;
+    font-size:30px;
+    margin:0;
+    letter-spacing:0.06em;
   }
 
-  .result-sub{
+  .panel{
+    background:var(--panel-bg);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:28px;
+  }
+
+  .login-panel{
+    max-width:360px;
+    margin:0 auto;
+  }
+
+  .field-label{
+    display:block;
     font-size:13px;
     color:var(--ink-soft);
-    margin-bottom:26px;
+    margin-bottom:8px;
   }
 
-  .stat-grid{
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    margin-bottom:26px;
-  }
-
-  .stat-box{
-    flex:1;
-    max-width:140px;
-    padding:14px 8px;
-    border:1px solid var(--line);
-    border-radius:16px;
-    background:var(--panel-bg-soft);
-  }
-
-  .stat-value{
-    font-size:22px;
-    font-weight:800;
+  input[type="password"]{
+    width:100%;
+    padding:12px 14px;
+    background:var(--input-bg);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    font-size:16px;
     color:var(--ink);
-    margin-bottom:4px;
+    outline:none;
   }
 
-  .stat-label{
-    font-size:11px;
-    color:var(--ink-soft);
-    opacity:0.7;
-    letter-spacing:0.05em;
+  input[type="password"]:focus{
+    border-color:var(--gold);
   }
 
-  .ranking-box{
-    margin-top:22px;
-    padding-top:18px;
-    border-top:1px solid var(--line);
+  .login-btn{
+    width:100%;
+    margin-top:16px;
+    padding:12px;
+    background:var(--hanko);
+    color:var(--washi);
+    border:none;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
   }
 
-  .ranking-title{
+  .login-btn:hover{
+    background:var(--hanko-deep);
+  }
+
+  .login-btn:disabled{
+    opacity:0.6;
+    cursor:default;
+  }
+
+  .error-text{
+    color:var(--hanko);
+    font-size:13px;
+    margin-top:10px;
+    min-height:1em;
+  }
+
+  .hidden{display:none !important;}
+
+  .loading-panel{
+    max-width:360px;
+    margin:0 auto;
     text-align:center;
+  }
+
+  .loading-text{
+    font-size:15px;
+    color:var(--ink-soft);
+  }
+
+  .spinner{
+    width:32px;
+    height:32px;
+    margin:0 auto 16px;
+    border:3px solid var(--line);
+    border-top-color:var(--hanko);
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+
+  @keyframes spin{
+    to{ transform:rotate(360deg); }
+  }
+
+  .menu-panel{
+    max-width:420px;
+    margin:0 auto;
+  }
+
+  .menu-grid{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .menu-btn{
+    width:100%;
+    padding:18px;
+    background:var(--panel-bg-soft);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+    cursor:pointer;
+    text-align:center;
+  }
+
+  .menu-btn:hover{
+    border-color:var(--hanko);
+    color:var(--hanko);
+  }
+
+  .logout-btn{
+    width:100%;
+    margin-top:6px;
+    padding:12px;
+    background:transparent;
+    border:1.5px solid var(--hanko);
+    border-radius:12px;
     font-size:14px;
     font-weight:700;
-    letter-spacing:0.1em;
-    color:var(--gold);
-    margin-bottom:12px;
-  }
-
-  .ranking-list{
-    list-style:none;
-    margin:0;
-    padding:0;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:6px 14px;
-  }
-
-  .ranking-loading{
-    grid-column:1 / -1;
+    color:var(--hanko);
+    cursor:pointer;
     text-align:center;
-    padding:14px 10px;
-    font-size:13px;
-    color:var(--ink-soft);
-    opacity:0.75;
   }
 
-  .ranking-item{
+  .logout-btn:hover{
+    background:var(--hanko);
+    color:var(--washi);
+  }
+
+  .board-grid{
     display:grid;
-    grid-template-columns:36px 1fr auto;
-    align-items:center;
-    padding:6px 10px;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:16px;
+  }
+
+  .board{
     background:var(--panel-bg-soft);
     border:1px solid var(--line);
-    border-radius:16px;
+    border-radius:12px;
+    padding:16px;
+  }
+
+  .board-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:10px;
+  }
+
+  .board-title{
+    font-weight:700;
+    font-size:15px;
+  }
+
+  .clear-btn{
+    background:transparent;
+    border:1px solid var(--hanko);
+    color:var(--hanko);
+    border-radius:10px;
+    padding:5px 10px;
+    font-size:12px;
+    cursor:pointer;
+  }
+
+  .clear-btn:hover{
+    background:var(--hanko);
+    color:var(--washi);
+  }
+
+  .score-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:7px 4px;
+    border-bottom:1px solid rgba(0,0,0,0.06);
     font-size:13px;
   }
 
-  .ranking-item .rank{
+  .score-row:last-child{
+    border-bottom:none;
+  }
+
+  .score-rank{
     font-weight:700;
     color:var(--hanko);
+    width:40px;
   }
 
-  .ranking-item.top3 .rank{
-    color:var(--gold);
-  }
-
-  .ranking-item .name{
-    color:var(--ink-soft);
+  .score-name{
+    flex:1;
+    padding-right:8px;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
   }
 
-  .ranking-item .score{
+  .score-value{
+    flex:1;
     font-weight:600;
-    color:var(--ink);
-    text-align:right;
   }
 
-  .info-box{
-    margin-top:22px;
-    padding-top:18px;
-    border-top:1px solid var(--line);
-  }
-
-  .info-title{
-    text-align:center;
-    font-size:14px;
-    font-weight:700;
-    letter-spacing:0.1em;
-    color:var(--gold);
-    margin-bottom:10px;
-  }
-
-  .info-title:not(:first-child){
-    margin-top:18px;
-  }
-
-  .info-list{
-    margin:0;
-    padding:0 0 0 1.2em;
-    font-size:13px;
-    line-height:1.7;
+  .delete-btn{
+    background:transparent;
+    border:none;
     color:var(--ink-soft);
+    cursor:pointer;
+    font-size:12px;
+    padding:2px 6px;
   }
 
-  .info-list li{
-    margin-bottom:4px;
-  }
-
-  .about-section{
-    margin-top:22px;
-    padding-top:18px;
-    border-top:1px solid var(--line);
-    font-size:13px;
-    line-height:1.8;
-    color:var(--ink-soft);
-  }
-
-  .about-section h2{
-    text-align:center;
-    font-size:15px;
-    font-weight:700;
-    letter-spacing:0.08em;
-    color:var(--gold);
-    margin:0 0 10px;
-  }
-
-  .about-section h3{
-    font-size:13px;
-    font-weight:700;
-    color:var(--ink);
-    margin:16px 0 4px;
-  }
-
-  .about-section p{
-    margin:0 0 8px;
-  }
-
-  .noscript-message{
-    max-width:640px;
-    margin:40px auto;
-    padding:0 16px;
-    line-height:1.8;
-  }
-
-  .site-footer-links{
-    display:flex;
-    justify-content:center;
-    gap:16px;
-    margin-top:16px;
-  }
-
-  .site-footer-links a{
-    font-size:11px;
-    color:var(--ink-soft);
-    text-decoration:underline;
-    opacity:0.8;
-  }
-
-  .site-footer-links a:hover{
+  .delete-btn:hover{
     color:var(--hanko);
-    opacity:1;
   }
 
-  .site-footer{
-    text-align:center;
-    margin-top:8px;
-    padding-top:14px;
-    border-top:1px solid var(--line);
-    font-size:11px;
+  .empty-text{
+    font-size:13px;
     color:var(--ink-soft);
     opacity:0.7;
+    padding:6px 4px;
   }
 
-  .name-input-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(31,28,25,0.55);
-    align-items:center;
-    justify-content:center;
-    z-index:1000;
-    padding:20px;
-  }
-
-  .name-input-overlay.visible{
-    display:flex;
-  }
-
-  .name-input-box{
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:28px 24px;
-    max-width:320px;
-    width:100%;
-    text-align:center;
-    position:relative;
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  }
-
-  .name-input-message{
-    font-size:14px;
-    color:var(--ink);
-    margin-bottom:16px;
-  }
-
-  .name-input-note{
-    font-size:12px;
-    color:var(--ink-soft);
-    margin:-8px 0 14px;
-    line-height:1.6;
-  }
-
-  .name-input-box input{
-    width:100%;
-    padding:10px 12px;
-    background:var(--input-bg);
-    border:1px solid var(--line);
-    border-radius:16px;
-    font-size:16px;
-    color:var(--ink);
-    text-align:center;
-    margin-bottom:18px;
-  }
-
-  .name-input-box input:focus{
-    outline:none;
-    border-color:var(--gold);
-  }
-
-  .name-input-status{
-    font-size:13px;
-    margin:-8px 0 14px;
-    color:var(--ink-soft);
-  }
-
-  .name-input-status:empty{
-    display:none;
-  }
-
-  .name-input-status.error{
-    color:var(--hanko);
-  }
-
-  .name-input-box input:disabled{
-    opacity:0.6;
-  }
-
-  .name-input-btn:disabled{
-    opacity:0.6;
-    cursor:default;
-  }
-
-  .name-input-btn{
-    padding:10px 32px;
-    background:var(--hanko);
-    color:var(--washi);
-    border:none;
-    border-radius:16px;
-    font-size:14px;
-    font-weight:600;
-    letter-spacing:0.05em;
-    cursor:pointer;
-    transition:background 0.2s ease;
-  }
-
-  .name-input-btn:hover{
-    background:var(--hanko-deep);
-  }
-
-  .mode-and-mute-row{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:16px;
-    margin-top:10px;
-  }
-
-  .mode-and-mute-row .mute-check-label{
-    margin-top:0;
-  }
-
-  .input-mode-toggle-btn{
-    display:flex;
-    align-items:center;
-    gap:6px;
-    height:30px;
-    padding:0 12px;
-    background:var(--panel-bg-soft);
-    border:1.5px solid var(--line);
-    border-radius:8px;
-    color:var(--ink-soft);
-    font-size:13px;
-    cursor:pointer;
-    transition:border-color 0.2s ease, color 0.2s ease;
-  }
-
-  .input-mode-toggle-btn:hover{
-    border-color:var(--gold);
-    color:var(--ink);
-  }
-
-  .input-mode-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(31,28,25,0.55);
-    align-items:center;
-    justify-content:center;
-    z-index:1000;
-    padding:20px;
-  }
-
-  .input-mode-overlay.visible{
-    display:flex;
-  }
-
-  .input-mode-box{
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:28px 24px;
-    max-width:320px;
-    width:100%;
-    text-align:center;
-    position:relative;
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  }
-
-  .input-mode-modal-title{
-    font-size:14px;
-    color:var(--ink);
-    margin-bottom:16px;
-  }
-
-  .input-mode-box .mode-tabs{
-    margin-bottom:18px;
-  }
-
-  .input-mode-settings{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    gap:10px;
-    margin-bottom:20px;
-    padding:14px 16px;
-    background:var(--panel-bg-soft);
-    border-radius:14px;
-  }
-
-  .input-mode-setting-label{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-size:13px;
-    color:var(--ink-soft);
-    cursor:pointer;
-  }
-
-  .input-mode-setting-check{
-    width:16px;
-    height:16px;
-    cursor:pointer;
-    accent-color:var(--hanko);
-    flex-shrink:0;
-  }
-
-  .romaji-display.uppercase{
-    text-transform:uppercase;
-  }
-
-  .play-records-box{
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:28px 24px;
-    max-width:420px;
-    width:100%;
-    max-height:80vh;
-    display:flex;
-    flex-direction:column;
-    text-align:center;
-    position:relative;
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  }
-
-  .play-records-list{
-    list-style:none;
-    margin:0 0 20px;
-    padding:0;
-    overflow-y:auto;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-
-  .play-record-item{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-    padding:10px 14px;
-    background:var(--panel-bg-soft);
-    border-radius:12px;
-    text-align:left;
-  }
-
-  .play-record-top{
+  .top-actions{
     display:flex;
     justify-content:space-between;
-    align-items:center;
-    font-size:13px;
-    font-weight:700;
-    color:var(--ink);
-  }
-
-  .play-record-time{
-    font-size:11px;
-    color:var(--ink-soft);
-  }
-
-  .play-record-stats{
-    display:flex;
-    gap:14px;
-    font-size:12px;
-    color:var(--ink-soft);
-  }
-
-  .play-records-empty{
-    font-size:13px;
-    color:var(--ink-soft);
-    padding:20px 0;
-  }
-
-  .login-select-desc{
-    font-size:12px;
-    line-height:1.7;
-    color:var(--ink-soft);
-    text-align:center;
-    margin:0 0 16px;
-  }
-
-  .login-provider-list{
-    display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    gap:10px;
-    margin-bottom:18px;
-  }
-
-  .login-provider-btn{
-    display:flex;
-    flex-direction:row;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    width:100%;
-    padding:12px 8px;
-    border:1.5px solid transparent;
-    border-radius:14px;
-    font-size:13px;
-    font-weight:700;
-    line-height:1.4;
-    color:#ffffff;
-    cursor:pointer;
-    transition:opacity 0.2s ease, transform 0.2s ease;
-  }
-
-  .login-provider-btn i{
-    font-size:20px;
-  }
-
-  .login-provider-btn:hover{
-    opacity:0.85;
-    transform:translateY(-2px);
-  }
-
-  .login-provider-btn:active{
-    transform:translateY(0);
-  }
-
-  .login-provider-btn.google{
-    background:#ffffff;
-    border-color:#dadce0;
-    color:#3c4043;
-  }
-
-  .login-provider-btn svg{
-    width:20px;
-    height:20px;
-    flex-shrink:0;
-  }
-
-  .login-provider-btn.x{
-    background:#000000;
-  }
-
-  .login-provider-btn.discord{
-    background:#5865f2;
-  }
-
-  .login-provider-btn.line{
-    background:#06c755;
-  }
-
-  .login-provider-btn.facebook{
-    background:#1877f2;
-  }
-
-  .login-provider-btn.github{
-    background:#24292f;
-  }
-
-  @media (prefers-color-scheme: dark){
-    .login-provider-btn.x,
-    .login-provider-btn.github{
-      border-color:var(--line);
-    }
-  }
-
-  .input-mode-close-btn{
-    padding:10px 32px;
-    background:none;
-    color:var(--ink-soft);
-    border:1.5px solid var(--line);
-    border-radius:16px;
-    font-size:14px;
-    font-weight:600;
-    letter-spacing:0.05em;
-    cursor:pointer;
-    transition:border-color 0.2s ease;
-  }
-
-  .input-mode-close-btn:hover{
-    border-color:var(--gold);
-  }
-
-  .result-rank-badge{
-    display:none;
-    margin:10px auto 0;
-    max-width:280px;
-    padding:8px 14px;
-    background:var(--hanko);
-    color:var(--washi);
-    border-radius:16px;
-    font-size:13px;
-    font-weight:700;
-    letter-spacing:0.05em;
-    text-align:center;
-  }
-
-  .result-rank-badge.visible{
-    display:block;
-  }
-
-  .high-score-label{
-    font-size:12px;
-    color:var(--ink-soft);
-    opacity:0.8;
-  }
-
-  .setup-high-score{
-    text-align:center;
     margin-bottom:16px;
   }
 
-  .result-high-score{
-    margin-bottom:14px;
-  }
-
-  .new-record-badge{
-    display:none;
-    margin:10px auto 0;
-    max-width:280px;
-    padding:8px 14px;
-    background:var(--gold);
-    color:var(--washi);
-    border-radius:16px;
-    font-size:13px;
-    font-weight:700;
-    letter-spacing:0.05em;
-    text-align:center;
-  }
-
-  .new-record-badge.visible{
-    display:block;
-  }
-
-  .ranking-submitting-indicator{
-    display:none;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    margin:10px auto 0;
-    font-size:12px;
-    font-weight:600;
-    color:var(--ink-soft);
-  }
-
-  .ranking-submitting-indicator.visible{
-    display:flex;
-  }
-
-  .ranking-submitting-indicator .fa-spinner{
-    color:var(--hanko);
-  }
-
-  .retry-btn{
-    padding:12px 36px;
+  .refresh-btn, .back-btn{
     background:transparent;
     border:1.5px solid var(--ink);
-    border-radius:16px;
-    font-size:15px;
     color:var(--ink);
+    border-radius:10px;
+    padding:8px 18px;
+    font-size:13px;
     cursor:pointer;
   }
 
-  .retry-btn:hover{
+  .refresh-btn:hover, .back-btn:hover{
     background:var(--ink);
     color:var(--washi);
   }
 
-  .friend-menu-row{
+  .user-list{
     display:flex;
     flex-direction:column;
+    gap:10px;
+  }
+
+  .user-row{
+    display:flex;
     align-items:center;
-    gap:12px;
-    margin-bottom:20px;
-  }
-
-  .friend-code{
-    font-size:40px;
-    font-weight:800;
-    letter-spacing:0.15em;
-    color:var(--hanko);
-    margin-bottom:16px;
-  }
-
-  .friend-copy-btn{
-    margin-bottom:20px;
-  }
-
-  .friend-code-input{
-    width:100%;
-    max-width:220px;
-    padding:10px 12px;
-    background:var(--input-bg);
+    justify-content:space-between;
+    background:var(--panel-bg-soft);
     border:1px solid var(--line);
-    border-radius:16px;
-    font-size:18px;
-    letter-spacing:0.15em;
-    color:var(--ink);
-    text-align:center;
+    border-radius:12px;
+    padding:12px 16px;
+  }
+
+  .user-info{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+
+  .user-name{
+    font-weight:700;
+    font-size:14px;
+  }
+
+  .user-sub{
+    font-size:11px;
+    color:var(--ink-soft);
+    opacity:0.7;
+    word-break:break-all;
+  }
+
+  .user-scores{
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
+
+  .user-delete-btn{
+    background:transparent;
+    border:1px solid var(--hanko);
+    color:var(--hanko);
+    border-radius:10px;
+    padding:6px 14px;
+    font-size:12px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+
+  .user-delete-btn:hover{
+    background:var(--hanko);
+    color:var(--washi);
+  }
+
+  .event-status{
+    font-size:14px;
+    font-weight:700;
     margin-bottom:18px;
   }
 
-  .friend-code-input:focus{
+  input[type="month"]{
+    width:100%;
+    padding:12px 14px;
+    background:var(--input-bg);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    font-size:16px;
+    color:var(--ink);
     outline:none;
-    border-color:var(--gold);
-  }
-
-  @media (min-width:561px){
-    .menu-toggle-btn{
-      display:none;
-    }
-    .menu-auth{
-      display:flex !important;
-      position:static;
-      flex-direction:row;
-      align-items:center;
-      margin-top:0;
-      padding:0;
-      background:none;
-      border:none;
-      box-shadow:none;
-      gap:10px;
-      flex-wrap:nowrap;
-      flex-shrink:1;
-      min-width:0;
-    }
-    .menu-auth-row{
-      gap:10px;
-    }
-  }
-
-  @media (max-width:560px){
-    .menu-bar{
-      padding:10px 14px;
-      gap:8px;
-    }
-    .menu-brand{
-      gap:8px;
-    }
-    .menu-logo{
-      height:24px;
-    }
-    .menu-title{
-      font-size:17px;
-    }
-    .player-name-label{
-      font-size:12px;
-    }
-    .edit-name-btn{
-      width:22px;
-      height:22px;
-      font-size:10px;
-    }
-    .switch-player-btn{
-      padding:5px 10px;
-      font-size:11px;
-    }
-    .menu-toggle-btn{
-      padding:5px 10px;
-      font-size:11px;
-    }
-    .menu-auth{
-      gap:6px;
-    }
-  }
-
-  @media (max-width:480px){
-    body{padding:24px 10px;}
-    body.game-active{padding:10px 10px;}
-    .panel{padding:18px 14px;}
-    .menu-bar{padding:8px 12px;}
-    .menu-brand{gap:6px;}
-    .menu-logo{height:22px;}
-    .menu-title{font-size:16px;}
-
-    .mode-btn{font-size:12px;padding:9px 6px;}
-    .level-btn{font-size:12px;padding:10px 6px;}
-    .level-btn .sub{font-size:9px;}
-    .start-btn{font-size:13px;padding:10px 18px;}
-
-    .status-title{font-size:15px;}
-    .search-spinner{width:32px;height:32px;}
-    .search-count{font-size:16px;}
-    .countdown-number{font-size:64px;}
-
-    .hud-stat{font-size:12px;padding:5px 12px;}
-    .word-eyebrow{font-size:10px;}
-    #word-display{font-size:26px;}
-    .sentence-reading-display{font-size:11px;}
-    #typing-input{font-size:16px;padding:12px 14px;}
-    .hint{font-size:10px;}
-
-    .result-title{font-size:12px;}
-    .result-score{font-size:44px;}
-    .result-sub{font-size:11px;}
-    .stat-value{font-size:17px;}
-    .stat-label{font-size:9px;}
-    .retry-btn{font-size:13px;padding:10px 24px;}
-  }
-
-  @media (max-height:600px){
-    body.game-active{padding:6px 16px;}
-    .hud{margin-bottom:6px;}
-    .hud-stat{font-size:12px;padding:4px 10px;}
-    .timer-track{margin-bottom:8px;}
-    .word-frame{padding:10px 12px;margin-bottom:8px;}
-    .word-eyebrow{margin-bottom:4px;}
-    #word-display{font-size:clamp(20px,5vh,32px);}
-    #typing-input{padding:8px 14px;font-size:16px;}
-    .hint{margin-top:4px;min-height:14px;}
-  }
-
-  .official-x-banner{
-    display:flex;
-    justify-content:center;
-    margin-top:18px;
     margin-bottom:14px;
   }
 
-  .official-x-link{
-    display:inline-flex;
+  input[type="month"]:focus{
+    border-color:var(--gold);
+  }
+
+  #event-notice-input{
+    width:100%;
+    padding:12px 14px;
+    background:var(--input-bg);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    font-size:16px;
+    font-family:inherit;
+    color:var(--ink);
+    outline:none;
+    margin-bottom:14px;
+    resize:vertical;
+  }
+
+  #event-notice-input:focus{
+    border-color:var(--gold);
+  }
+
+  .event-combo-checks{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:14px;
+  }
+
+  .event-combo-row{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding:10px 12px;
+    background:var(--input-bg);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+  }
+
+  .event-combo-row-title{
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
+  .event-combo-row-checks{
+    display:flex;
+    gap:16px;
+  }
+
+  .event-combo-row-checks label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    color:var(--ink);
+  }
+
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:12px;
+    margin-bottom:16px;
+  }
+
+  .stat-card{
+    background:var(--panel-bg-soft);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:16px;
+    text-align:center;
+  }
+
+  .stat-value{
+    font-size:32px;
+    font-weight:800;
+    color:var(--hanko);
+    line-height:1.2;
+  }
+
+  .stat-label{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+
+  .live-status{
+    display:flex;
     align-items:center;
     gap:8px;
-    padding:8px 14px;
-    background:#000000;
-    border:1px solid #ffffff;
-    border-radius:14px;
     font-size:13px;
-    font-weight:600;
-    color:#ffffff;
-    text-decoration:none;
-    transition:opacity 0.2s ease;
+    color:var(--ink-soft);
   }
 
-  .official-x-link:hover{
-    opacity:0.85;
+  .live-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--ink-soft);
+    opacity:0.6;
   }
 
-  .keyboard-guide{
-    display:none;
-    margin-top:clamp(10px,2vh,16px);
-    user-select:none;
+  .live-status.connected .live-dot{
+    background:#3fa66b;
+    opacity:1;
+    animation:pulse 1.6s ease-in-out infinite;
   }
 
-  .keyboard-guide.visible{
-    display:block;
+  @keyframes pulse{
+    0%, 100%{ box-shadow:0 0 0 0 rgba(63,166,107,0.5); }
+    50%{ box-shadow:0 0 0 6px rgba(63,166,107,0); }
   }
 
-  .kb-row{
-    display:flex;
-    justify-content:center;
-    gap:4px;
-    margin-bottom:4px;
-  }
-
-  .kb-key{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
+  .presence-count{
+    font-weight:700;
+    font-size:14px;
     min-width:28px;
-    height:28px;
-    padding:0 4px;
-    background:var(--panel-bg);
-    border:1.5px solid var(--line);
-    border-bottom-width:3px;
-    border-radius:5px;
+    text-align:right;
+  }
+
+  .presence-count.zero{
+    opacity:0.4;
+  }
+
+  .presence-mode-grid{
+    margin-bottom:16px;
+  }
+
+  .presence-name-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+
+  .presence-badge{
     font-size:11px;
     font-weight:700;
+    padding:2px 8px;
+    border-radius:999px;
+    border:1px solid var(--line);
     color:var(--ink-soft);
-    letter-spacing:0;
-    font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
   }
 
-  .kb-key.wide{
-    min-width:44px;
-    font-size:10px;
-    letter-spacing:0.01em;
+  .presence-badge.playing{
+    background:var(--hanko);
+    border-color:var(--hanko);
+    color:var(--washi);
   }
 
-  .kb-key.space{
-    min-width:120px;
+  .presence-badge.matching{
+    border-color:var(--gold);
+    color:var(--gold);
   }
-
-  .kb-key.active{
-    background:#ff8c1a;
-    border-color:#e07200;
-    color:#fff;
-  }
-
-  .kb-key.miss{
-    background:#d64545;
-    border-color:#b83838;
-    color:#fff;
-  }
-
-  .kb-key.next{
-    background:#ff8c1a;
-    border-color:#e07200;
-    color:#fff;
-  }
-
-  @media (max-width:480px){
-    .kb-key{
-      min-width:22px;
-      height:24px;
-      font-size:9px;
-    }
-    .kb-key.wide{
-      min-width:34px;
-      font-size:8px;
-    }
-    .kb-key.space{
-      min-width:90px;
-    }
-  }
-
 </style>
 </head>
 <body>
-<noscript>
-  <div class="noscript-message">
-    <h1>シンプルタイピング</h1>
-    <p>シンプルタイピングは、無料で遊べるひらがな・カタカナ・文章のタイピング練習ゲームです。初級・中級・上級からレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競ったりできます。</p>
-    <p>ゲームを遊ぶにはJavaScriptを有効にしてください。</p>
-    <p><a href="/terms/">利用規約</a> ／ <a href="/privacy/">プライバシーポリシー</a></p>
-  </div>
-</noscript>
-<div class="mobile-warning-overlay" id="mobile-warning-overlay">
-  <div class="mobile-warning-box">
-    <p class="mobile-warning-message">このサイトはスマートフォンに最適化されていません。<br>パソコンでの閲覧を推奨します。</p>
-    <label class="mobile-warning-check"><input type="checkbox" id="mobile-warning-hide"><span>今後表示しない</span></label>
-    <button class="mobile-warning-btn" id="mobile-warning-close">閉じる</button>
-  </div>
-</div>
-<div class="app-loading-overlay" id="app-loading-overlay">
-  <div class="app-loading-spinner"></div>
-  <div class="app-loading-text">読み込み中...</div>
-</div>
 <div class="stage">
-  <div class="menu-bar" id="site-header">
-    <a href="/" class="menu-brand">
-      <img src="logo.svg" alt="シンプルタイピング" class="menu-logo">
-      <h1 class="menu-title">シンプルタイピング</h1>
-    </a>
-    <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="メニュー"><i class="fas fa-bars"></i> メニュー</button>
-    <div class="menu-auth hidden" id="menu-auth-panel">
-      <div class="menu-auth-row">
-        <span class="player-name-label" id="current-player-label"></span>
-        <button class="edit-name-btn" id="edit-name-btn" aria-label="名前を変更"><i class="fas fa-pen"></i></button>
-      </div>
-      <button class="switch-player-btn" id="login-open-btn"><i class="fas fa-right-to-bracket"></i> ログイン</button>
-      <button class="switch-player-btn hidden" id="logout-btn"><i class="fas fa-right-from-bracket"></i> ログアウト</button>
+  <header>
+    <div class="kicker">SIMPLE TYPING</div>
+    <h1>管理者ページ</h1>
+  </header>
+
+  <div class="panel login-panel" id="login-panel">
+    <button class="login-btn" id="login-btn">パスキーでログイン</button>
+    <div class="error-text" id="login-error"></div>
+    <div class="hidden" id="setup-area">
+      <label class="field-label" for="setup-input">セットアップコード</label>
+      <input type="password" id="setup-input" autocomplete="off">
+      <button class="login-btn" id="setup-btn">パスキーを登録</button>
+      <div class="error-text" id="setup-error"></div>
     </div>
   </div>
 
-  <div class="panel">
+  <div class="panel loading-panel hidden" id="loading-panel">
+    <div class="spinner"></div>
+    <div class="loading-text">読み込み中...</div>
+  </div>
 
-    <div class="setup" id="setup">
-      <div class="mode-tabs">
-        <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
-        <button class="mode-btn" data-mode="katakana">カタカナ</button>
-        <button class="mode-btn" data-mode="sentence">文章</button>
-      </div>
+  <div class="panel menu-panel hidden" id="menu-panel">
+    <div class="menu-grid">
+      <button class="menu-btn" id="menu-ranking-btn">ランキング管理</button>
+      <button class="menu-btn" id="menu-users-btn">ユーザー管理</button>
+      <button class="menu-btn" id="menu-invite-btn">招待コード管理</button>
+      <button class="menu-btn" id="menu-playlog-btn">プレイログ</button>
+      <button class="menu-btn" id="menu-presence-btn">リアルタイム状況</button>
+      <button class="menu-btn" id="menu-event-btn">イベントモード</button>
+      <button class="menu-btn" id="menu-passkey-btn">パスキー管理</button>
+      <button class="logout-btn" id="logout-btn">ログアウト</button>
+    </div>
+  </div>
 
-      <div class="levels" data-row="hiragana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜4文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">5〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
+  <div id="ranking-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="ranking-back-btn">戻る</button>
+      <button class="refresh-btn" id="refresh-btn">再読み込み</button>
+    </div>
+    <div class="board-grid" id="board-grid"></div>
+  </div>
 
-      <div class="levels hidden" data-row="katakana">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">2〜3文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">4〜7文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">8文字以上</span></button>
-      </div>
+  <div id="user-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="user-back-btn">戻る</button>
+      <button class="refresh-btn" id="user-refresh-btn">再読み込み</button>
+    </div>
+    <div class="user-list" id="user-list"></div>
+  </div>
 
-      <div class="levels hidden" data-row="sentence">
-        <button class="level-btn active" data-level="beginner">初級<span class="sub">10〜12文字</span></button>
-        <button class="level-btn" data-level="intermediate">中級<span class="sub">12〜14文字</span></button>
-        <button class="level-btn" data-level="advanced">上級<span class="sub">14文字以上</span></button>
-      </div>
+  <div id="invite-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="invite-back-btn">戻る</button>
+      <button class="refresh-btn" id="invite-refresh-btn">再読み込み</button>
+    </div>
+    <div class="user-list" id="invite-list"></div>
+  </div>
 
-      <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
-
-      <div class="start-row">
-        <button class="start-btn" id="start-btn"><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
-        <button class="start-btn online-btn" id="start-online-btn"><i class="fa-solid fa-globe"></i> オンライン対戦</button>
-        <button class="start-btn online-btn" id="start-friend-btn"><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
-      </div>
-
-      <div class="mode-and-mute-row">
-        <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
-        <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
-        <label class="mute-check-label">
-          <input type="checkbox" id="mute-btn" class="mute-check">
-          ミュート
-        </label>
-      </div>
-
-      <div class="ranking-box hidden" id="ranking-box">
-        <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
-        <ol class="ranking-list" id="ranking-list"></ol>
-      </div>
-
-      <div class="info-box">
-        <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
-        <ul class="info-list">
-          <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
-          <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
-          <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
-          <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
-          <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
-        </ul>
-
-        <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
-        <ul class="info-list">
-          <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
-          <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
-          <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
-          <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
-        </ul>
-
-        <section class="about-section" id="about">
-          <h2>シンプルタイピングについて</h2>
-          <p>シンプルタイピングは、登録なしですぐに遊べる無料のタイピング練習ゲームです。表示された言葉をローマ字入力やかな入力で素早く正確に打ち込み、制限時間内のスコアを競います。パソコンのキーボードでの練習に向いており、タイピングを始めたばかりの方から、さらに速度を伸ばしたい方まで楽しめます。</p>
-
-          <h3>ひらがな・カタカナ・文章の3つのモード</h3>
-          <p>ひらがなモードでは身近な言葉を、カタカナモードではカタカナ語を練習できます。文章モードでは短い一文を入力するため、実際の文章入力に近い感覚で練習できます。各モードは文字数に応じて初級・中級・上級に分かれているので、自分に合った難易度を選べます。</p>
-
-          <h3>オンライン対戦とフレンド対戦</h3>
-          <p>オンライン対戦では、同じモード・レベルを選んだ相手とリアルタイムでスコアを競えます。フレンド対戦では、招待コードを共有して友達とだけ対戦できます。ログインするとプレイ記録やランキングにも参加できます。</p>
-
-          <h3>タイピング上達のコツ</h3>
-          <p>最初は速さよりも正確さを意識し、ホームポジション（左手はFDSA、右手はJKL;）に指を置いて、画面を見たまま打つ練習を続けるのが上達への近道です。毎日5分でも続けることで、打鍵の速度とミスの少なさが着実に伸びていきます。</p>
-        </section>
-
-        <div class="official-x-banner">
-          <a href="https://x.com/simple_typing" target="_blank" rel="noopener" class="official-x-link">
-            <i class="fa-brands fa-x-twitter"></i> 公式Xをフォローする
-          </a>
-        </div>
-
-        <div class="share-footer" id="share-footer">
-          <span class="site-footer-label">このサイトをシェア</span>
-          <div class="footer-share">
-            <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
-            <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
-          </div>
-        </div>
-
-        <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
-        <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
+  <div id="passkey-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="passkey-back-btn">戻る</button>
+      <div>
+        <button class="clear-btn" id="passkey-add-btn">パスキーを追加</button>
+        <button class="refresh-btn" id="passkey-refresh-btn">再読み込み</button>
       </div>
     </div>
+    <div class="user-list" id="passkey-list"></div>
+  </div>
 
-    <div class="online-status" id="searching">
-      <div class="status-title">対戦相手をさがしています</div>
-      <div class="search-spinner"></div>
-      <div class="search-count" id="search-count-label">残り 15 秒</div>
-      <button class="retry-btn" id="cancel-search-btn">キャンセル</button>
-    </div>
-
-    <div class="online-status" id="countdown">
-      <div class="countdown-number" id="countdown-number">3</div>
-    </div>
-
-    <div class="online-status" id="friend-menu">
-      <div class="status-title">フレンド対戦</div>
-      <div class="friend-menu-row">
-        <button class="start-btn online-btn" id="friend-create-btn">招待コードを作成する</button>
-        <button class="start-btn online-btn" id="friend-join-open-btn">招待コードで参加する</button>
-      </div>
-      <button class="retry-btn" id="friend-menu-back-btn">戻る</button>
-    </div>
-
-    <div class="online-status" id="friend-create">
-      <div class="status-title">このコードを友達に伝えてね</div>
-      <div class="friend-code" id="friend-code-label">------</div>
-      <button class="retry-btn friend-copy-btn" id="friend-code-copy-btn">コードをコピー</button>
-      <div class="search-count">相手の参加を待っています…</div>
-      <div class="search-spinner"></div>
-      <button class="retry-btn" id="friend-create-cancel-btn">キャンセル</button>
-    </div>
-
-    <div class="online-status" id="friend-join">
-      <div class="status-title">招待コードを入力してください</div>
-      <input type="text" class="friend-code-input" id="friend-code-input" maxlength="6" autocomplete="off" inputmode="numeric" pattern="[0-9]*" placeholder="コードを入力">
-      <div class="start-row">
-        <button class="start-btn online-btn" id="friend-join-submit-btn">参加する</button>
-      </div>
-      <button class="retry-btn" id="friend-join-cancel-btn">キャンセル</button>
-    </div>
-
-    <div class="online-status" id="friend-waiting">
-      <div class="status-title">相手を待っています</div>
-      <div class="search-spinner"></div>
-      <button class="retry-btn" id="friend-waiting-cancel-btn">キャンセル</button>
-    </div>
-
-    <div class="game" id="game">
-      <div class="hud">
-        <span id="score-label" class="hud-stat">せいかい 0 もん</span>
-        <span id="opponent-score-label" class="hud-stat hidden">あいて 0 もん</span>
-        <span id="time-label" class="hud-stat">残り 100 秒</span>
-        <button id="end-game-btn" class="end-game-btn">終了</button>
-      </div>
-      <div class="timer-track"><div class="timer-fill" id="timer-fill"></div></div>
-
-      <div class="word-frame">
-        <div class="word-eyebrow" id="level-label">初級</div>
-        <div id="word-display"></div>
-        <div id="sentence-reading-display" class="sentence-reading-display"></div>
-        <div id="romaji-display" class="romaji-display hidden"></div>
-      </div>
-
-      <div class="ime-spacer" id="ime-spacer"></div>
-
-      <div class="input-row">
-        <input type="text" id="typing-input" autocomplete="off" placeholder="ここに入力してください">
-      </div>
-      <div class="hint" id="hint-label">Enterで確定</div>
-      <div class="keyboard-guide" id="keyboard-guide">
-        <div class="kb-row">
-          <div class="kb-key">1</div><div class="kb-key">2</div><div class="kb-key">3</div><div class="kb-key">4</div><div class="kb-key">5</div><div class="kb-key">6</div><div class="kb-key">7</div><div class="kb-key">8</div><div class="kb-key">9</div><div class="kb-key">0</div><div class="kb-key">-</div>
-        </div>
-        <div class="kb-row">
-          <div class="kb-key">Q</div><div class="kb-key">W</div><div class="kb-key">E</div><div class="kb-key">R</div><div class="kb-key">T</div><div class="kb-key">Y</div><div class="kb-key">U</div><div class="kb-key">I</div><div class="kb-key">O</div><div class="kb-key">P</div><div class="kb-key">@</div>
-        </div>
-        <div class="kb-row">
-          <div class="kb-key">A</div><div class="kb-key">S</div><div class="kb-key">D</div><div class="kb-key">F</div><div class="kb-key">G</div><div class="kb-key">H</div><div class="kb-key">J</div><div class="kb-key">K</div><div class="kb-key">L</div><div class="kb-key">;</div><div class="kb-key">:</div>
-        </div>
-        <div class="kb-row">
-          <div class="kb-key wide" data-key="shift">shift</div><div class="kb-key">Z</div><div class="kb-key">X</div><div class="kb-key">C</div><div class="kb-key">V</div><div class="kb-key">B</div><div class="kb-key">N</div><div class="kb-key">M</div><div class="kb-key">,</div><div class="kb-key">.</div><div class="kb-key">/</div><div class="kb-key wide" data-key="shift">shift</div>
-        </div>
-        <div class="kb-row">
-          <div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key space">space</div><div class="kb-key"></div><div class="kb-key"></div><div class="kb-key"></div>
-        </div>
+  <div id="playlog-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="playlog-back-btn">戻る</button>
+      <div>
+        <button class="clear-btn" id="playlog-clear-btn">全削除</button>
+        <button class="refresh-btn" id="playlog-refresh-btn">再読み込み</button>
       </div>
     </div>
+    <div class="user-list" id="playlog-list"></div>
+  </div>
 
-    <div class="result" id="result">
-      <div class="result-title">RESULT</div>
-      <div class="result-score" id="result-score">0</div>
-      <div class="result-sub" id="result-sub">総合スコア</div>
-      <div class="result-rank-badge" id="result-rank-badge"></div>
-      <div class="high-score-label result-high-score" id="result-high-score">ハイスコア 0</div>
-      <div class="new-record-badge" id="new-record-badge">ハイスコア更新！</div>
-      <div class="ranking-submitting-indicator" id="ranking-submitting-indicator"><i class="fa-solid fa-spinner fa-spin"></i>ランキング登録中...</div>
-      <div class="stat-grid">
-        <div class="stat-box">
-          <div class="stat-value" id="stat-accuracy">0%</div>
-          <div class="stat-label">正誤率</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-value" id="stat-speed">0</div>
-          <div class="stat-label">文字/分</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-value" id="stat-miss">0</div>
-          <div class="stat-label">ミス数</div>
-        </div>
+  <div id="presence-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="presence-back-btn">戻る</button>
+      <div class="live-status" id="presence-status">
+        <span class="live-dot"></span>
+        <span id="presence-status-text">接続中...</span>
       </div>
-      <div class="result-share">
-        <a class="share-btn x" id="result-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> Xでシェア</a>
-        <a class="share-btn facebook" id="result-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebookでシェア</a>
-        <button class="share-btn copy" id="result-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
-      </div>
-      <button class="retry-btn" id="retry-btn">もう一度</button>
     </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-value" id="presence-total">0</div><div class="stat-label">サイトを開いている人数</div></div>
+      <div class="stat-card"><div class="stat-value" id="presence-playing">0</div><div class="stat-label">プレイ中</div></div>
+      <div class="stat-card"><div class="stat-value" id="presence-matching">0</div><div class="stat-label">対戦相手を待機中</div></div>
+      <div class="stat-card"><div class="stat-value" id="presence-idle">0</div><div class="stat-label">メニュー画面</div></div>
+    </div>
+    <div class="board-grid presence-mode-grid" id="presence-mode-grid"></div>
+    <div class="user-list" id="presence-list"></div>
+  </div>
 
+  <div id="event-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="event-back-btn">戻る</button>
+      <button class="refresh-btn" id="event-refresh-btn">再読み込み</button>
+    </div>
+    <div class="panel">
+      <label class="field-label">イベントモード状態</label>
+      <div class="event-status" id="event-status-text">読み込み中...</div>
+      <label class="field-label" for="event-month-input">対象月</label>
+      <input type="month" id="event-month-input">
+      <label class="field-label">対象タイピングモード・難易度</label>
+      <div class="event-combo-checks" id="event-combo-checks"></div>
+      <label class="field-label" for="event-notice-input">お知らせ（イベント有効中にサイト上部へ表示）</label>
+      <textarea id="event-notice-input" maxlength="200" rows="3" placeholder="空欄の場合はお知らせを表示しません"></textarea>
+      <button class="login-btn" id="event-enable-btn">この月でイベントモードを有効化</button>
+      <button class="logout-btn" id="event-disable-btn">無効化</button>
+    </div>
+    <div class="panel" style="margin-top:16px;">
+      <label class="field-label">月別ランキングの確認</label>
+      <input type="month" id="event-archive-month-input">
+      <button class="login-btn" id="event-archive-load-btn">月別ランキングを表示</button>
+      <div class="board-grid" id="event-archive-grid" style="margin-top:16px;"></div>
+    </div>
   </div>
 </div>
 
-<div class="custom-alert-overlay" id="custom-alert-overlay">
-  <div class="custom-alert-box">
-    <div class="custom-alert-message" id="custom-alert-message"></div>
-    <button class="custom-alert-btn" id="custom-alert-btn">OK</button>
-  </div>
-</div>
-
-<div class="name-input-overlay" id="name-input-overlay">
-  <div class="name-input-box">
-    <div class="name-input-message" id="name-input-message">お名前を入力してください（6文字まで）</div>
-    <div class="name-input-note">本名など個人を特定できる名前は入力しないでください。<br>不適切な名前は使用できません。</div>
-    <input type="text" id="name-input-field" maxlength="6" autocomplete="off" placeholder="GUEST">
-    <div class="name-input-status" id="name-input-status" role="status" aria-live="polite"></div>
-    <button class="name-input-btn" id="name-input-btn">登録</button>
-  </div>
-</div>
-
-<div class="input-mode-overlay" id="input-mode-overlay">
-  <div class="input-mode-box">
-    <div class="input-mode-modal-title">入力モードを選択</div>
-    <div class="mode-tabs input-mode-tabs">
-      <button class="input-mode-btn active" data-input-mode="realtime">リアルタイム</button>
-      <button class="input-mode-btn" data-input-mode="textbox">テキストボックス</button>
-    </div>
-    <div class="input-mode-settings">
-      <label class="input-mode-setting-label" id="show-romaji-label">
-        <input type="checkbox" id="show-romaji-check" class="input-mode-setting-check" checked>
-        ローマ字表示
-      </label>
-      <label class="input-mode-setting-label">
-        <input type="checkbox" id="show-hiragana-check" class="input-mode-setting-check" checked>
-        ひらがな表示
-      </label>
-      <label class="input-mode-setting-label" id="show-keyboard-label">
-        <input type="checkbox" id="show-keyboard-check" class="input-mode-setting-check" checked>
-        キーボード表示
-      </label>
-      <label class="input-mode-setting-label" id="romaji-uppercase-label">
-        <input type="checkbox" id="romaji-uppercase-check" class="input-mode-setting-check">
-        ローマ字を大文字にする
-      </label>
-    </div>
-    <button class="input-mode-close-btn" id="input-mode-close-btn">閉じる</button>
-  </div>
-</div>
-
-<div class="input-mode-overlay" id="login-select-overlay">
-  <div class="input-mode-box">
-    <div class="input-mode-modal-title">ログイン方法を選択</div>
-    <p class="login-select-desc">ログインすると、プレイ記録・ハイスコア・表示設定がアカウントに保存され、別のパソコンでも続きから遊べます。</p>
-    <div class="login-provider-list">
-      <button class="login-provider-btn google" id="google-login-btn"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google</button>
-      <button class="login-provider-btn line" id="line-login-btn"><i class="fa-brands fa-line"></i> LINE</button>
-      <button class="login-provider-btn x" id="x-login-btn"><i class="fa-brands fa-x-twitter"></i> X</button>
-      <button class="login-provider-btn facebook" id="facebook-login-btn"><i class="fa-brands fa-facebook-f"></i> Facebook</button>
-      <button class="login-provider-btn discord" id="discord-login-btn"><i class="fa-brands fa-discord"></i> Discord</button>
-      <button class="login-provider-btn github" id="github-login-btn"><i class="fa-brands fa-github"></i> GitHub</button>
-    </div>
-    <button class="input-mode-close-btn" id="login-select-close-btn">閉じる</button>
-  </div>
-</div>
-
-<div class="input-mode-overlay" id="play-records-overlay">
-  <div class="play-records-box">
-    <div class="input-mode-modal-title">今までの記録</div>
-    <ul class="play-records-list" id="play-records-list"></ul>
-    <button class="input-mode-close-btn" id="play-records-close-btn">閉じる</button>
-  </div>
-</div>
-
-<script src="typing-jp.js"></script>
 <script>
-const customAlertOverlayEl = document.getElementById("custom-alert-overlay");
-const customAlertMessageEl = document.getElementById("custom-alert-message");
-const customAlertBtnEl = document.getElementById("custom-alert-btn");
+const WORKER_URL = "https://key-onl.user-x45.workers.dev";
+const MODE_LABELS = { hiragana: "ひらがな", katakana: "カタカナ", sentence: "文章" };
+const LEVEL_LABELS = { beginner: "初級", intermediate: "中級", advanced: "上級" };
+const MATCH_TYPE_LABELS = { solo: "一人プレイ", online: "オンライン対戦", friend: "フレンド対戦" };
+const MODES = ["hiragana", "katakana", "sentence"];
+const LEVELS = ["beginner", "intermediate", "advanced"];
 
-function showCustomAlert(message){
-  customAlertMessageEl.textContent = message;
-  customAlertOverlayEl.classList.add("visible");
-}
+let adminToken = "";
+let currentCredentialId = "";
 
-customAlertBtnEl.addEventListener("click", () => {
-  customAlertOverlayEl.classList.remove("visible");
-});
-
-const nameInputOverlayEl = document.getElementById("name-input-overlay");
-const nameInputFieldEl = document.getElementById("name-input-field");
-const nameInputBtnEl = document.getElementById("name-input-btn");
-const nameInputStatusEl = document.getElementById("name-input-status");
-let nameInputCallback = null;
-let nameInputBusy = false;
-
-function normalizePlayerName(raw){
-  const trimmed = (raw || "").trim().slice(0, 6);
-  return trimmed.length === 0 ? "GUEST" : trimmed;
-}
-
-function setNameInputStatus(text, isError){
-  nameInputStatusEl.textContent = text || "";
-  nameInputStatusEl.classList.toggle("error", !!isError);
-}
-
-function setNameInputBusy(busy){
-  nameInputBusy = busy;
-  nameInputFieldEl.disabled = busy;
-  nameInputBtnEl.disabled = busy;
-}
-
-function showNameInputModal(callback, prefill){
-  nameInputCallback = callback;
-  nameInputFieldEl.value = prefill || "";
-  setNameInputStatus("", false);
-  setNameInputBusy(false);
-  nameInputOverlayEl.classList.add("visible");
-  nameInputFieldEl.focus();
-}
-
-async function confirmNameInput(){
-  if(nameInputBusy || !nameInputCallback) return;
-  const name = normalizePlayerName(nameInputFieldEl.value);
-  setNameInputBusy(true);
-  setNameInputStatus("チェック中...", false);
-  let result;
-  try{
-    result = await nameInputCallback(name);
-  }catch(e){
-    result = { ok: false, message: "通信に失敗しました" };
-  }
-  if(result && result.ok){
-    nameInputCallback = null;
-    nameInputOverlayEl.classList.remove("visible");
-    setNameInputStatus("", false);
-    setNameInputBusy(false);
-    if(typeof result.after === "function") await result.after();
-    return;
-  }
-  setNameInputBusy(false);
-  setNameInputStatus((result && result.message) || "この名前は使用できません", true);
-  nameInputFieldEl.focus();
-  nameInputFieldEl.select();
-}
-
-nameInputBtnEl.addEventListener("click", confirmNameInput);
-nameInputFieldEl.addEventListener("keydown", (e) => {
-  if(e.key === "Enter"){
-    e.preventDefault();
-    confirmNameInput();
-  }
-});
-
-nameInputFieldEl.addEventListener("input", () => {
-  if(nameInputStatusEl.classList.contains("error")) setNameInputStatus("", false);
-});
-
-const inputModeToggleBtnEl = document.getElementById("input-mode-toggle-btn");
-const inputModeOverlayEl = document.getElementById("input-mode-overlay");
-const inputModeCloseBtnEl = document.getElementById("input-mode-close-btn");
-
-inputModeToggleBtnEl.addEventListener("click", () => {
-  inputModeOverlayEl.classList.add("visible");
-});
-
-inputModeCloseBtnEl.addEventListener("click", () => {
-  inputModeOverlayEl.classList.remove("visible");
-});
-
-const playRecordsToggleBtnEl = document.getElementById("play-records-toggle-btn");
-const playRecordsOverlayEl = document.getElementById("play-records-overlay");
-const playRecordsCloseBtnEl = document.getElementById("play-records-close-btn");
-const playRecordsListEl = document.getElementById("play-records-list");
-
-function getGuestPlayRecords(){
-  try{
-    const raw = localStorage.getItem(GUEST_PLAY_RECORDS_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
-  }catch(e){
-    return [];
-  }
-}
-
-function saveGuestPlayRecords(records){
-  localStorage.setItem(GUEST_PLAY_RECORDS_KEY, JSON.stringify(records.slice(0, PLAY_RECORD_MAX)));
-}
-
-function addGuestPlayRecord(record){
-  const records = getGuestPlayRecords();
-  records.unshift(record);
-  saveGuestPlayRecords(records);
-}
-
-function formatPlayRecordTime(playedAt){
-  const date = new Date(playedAt);
-  const pad = (n) => String(n).padStart(2, "0");
-  return `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
-}
-
-function renderPlayRecords(records){
-  if(!playRecordsListEl) return;
-  if(!records || records.length === 0){
-    playRecordsListEl.innerHTML = `<li class="play-records-empty">まだ記録がありません</li>`;
-    return;
-  }
-  playRecordsListEl.innerHTML = records.map(r => {
-    const modeLabel = modeLabels[r.mode] || r.mode;
-    const levelLabel = levelLabels[r.level] || r.level;
-    return `
-      <li class="play-record-item">
-        <div class="play-record-top">
-          <span>${modeLabel}・${levelLabel}</span>
-          <span class="play-record-time">${formatPlayRecordTime(r.playedAt)}</span>
-        </div>
-        <div class="play-record-stats">
-          <span>スコア ${r.score !== undefined ? r.score : "-"}</span>
-          <span>正誤率 ${r.accuracy}%</span>
-          <span>${r.speed} 文字/分</span>
-          <span>ミス ${r.miss}</span>
-        </div>
-      </li>
-    `;
-  }).join("");
-}
-
-async function fetchAccountPlayRecords(token){
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "getPlayRecords", token })
-    });
-    const data = await res.json();
-    return Array.isArray(data.playRecords) ? data.playRecords : [];
-  }catch(e){
-    return [];
-  }
-}
-
-async function openPlayRecords(){
-  playRecordsOverlayEl.classList.add("visible");
-  playRecordsListEl.innerHTML = `<li class="play-records-empty">読み込み中...</li>`;
-  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-  const records = isLoggedIn ? await fetchAccountPlayRecords(getSessionToken()) : getGuestPlayRecords();
-  renderPlayRecords(records);
-}
-
-async function recordPlayResult(mode, level, accuracy, speed, miss, score){
-  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-  if(isLoggedIn){
-    const token = getSessionToken();
-    await fetchWithRetry(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
-    }, 4);
-  } else {
-    addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss, score });
-  }
-}
-
-playRecordsToggleBtnEl.addEventListener("click", () => {
-  openPlayRecords();
-});
-
-playRecordsCloseBtnEl.addEventListener("click", () => {
-  playRecordsOverlayEl.classList.remove("visible");
-});
-
-const GOOGLE_CLIENT_ID = "7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
-const X_CLIENT_ID = "UjYwZ1NXM0JBamtyVjhwWno4Ujk6MTpjaQ";
-const DISCORD_CLIENT_ID = "1555238827524755557";
-const LINE_CHANNEL_ID = "2011967727";
-const FACEBOOK_APP_ID = "1102163979219229";
-const GITHUB_CLIENT_ID = "Ov23lir193cZSwg32bcj";
-const SESSION_TOKEN_KEY = "sessionToken";
-const GUEST_NAME_KEY = "guestPlayerName";
-const GUEST_INPUT_MODE_KEY = "guestInputMode";
-const SHOW_ROMAJI_KEY = "showRomaji";
-const SHOW_HIRAGANA_KEY = "showHiragana";
-const ROMAJI_UPPERCASE_KEY = "romajiUppercase";
-const GUEST_PLAY_RECORDS_KEY = "guestPlayRecords";
-const SHOW_KEYBOARD_KEY = "showKeyboard";
-const PLAY_RECORD_MAX = 20;
-const currentPlayerLabelEl = document.getElementById("current-player-label");
+const loginPanelEl = document.getElementById("login-panel");
+const loadingPanelEl = document.getElementById("loading-panel");
+const menuPanelEl = document.getElementById("menu-panel");
+const rankingDashboardEl = document.getElementById("ranking-dashboard");
+const userDashboardEl = document.getElementById("user-dashboard");
+const inviteDashboardEl = document.getElementById("invite-dashboard");
+const playlogDashboardEl = document.getElementById("playlog-dashboard");
+const passkeyDashboardEl = document.getElementById("passkey-dashboard");
+const passkeyListEl = document.getElementById("passkey-list");
+const passkeyBackBtnEl = document.getElementById("passkey-back-btn");
+const passkeyAddBtnEl = document.getElementById("passkey-add-btn");
+const passkeyRefreshBtnEl = document.getElementById("passkey-refresh-btn");
+const setupAreaEl = document.getElementById("setup-area");
+const setupInputEl = document.getElementById("setup-input");
+const setupBtnEl = document.getElementById("setup-btn");
+const setupErrorEl = document.getElementById("setup-error");
+const menuPasskeyBtnEl = document.getElementById("menu-passkey-btn");
+const loginBtnEl = document.getElementById("login-btn");
+const loginErrorEl = document.getElementById("login-error");
+const refreshBtnEl = document.getElementById("refresh-btn");
+const boardGridEl = document.getElementById("board-grid");
+const userListEl = document.getElementById("user-list");
+const inviteListEl = document.getElementById("invite-list");
+const menuRankingBtnEl = document.getElementById("menu-ranking-btn");
+const menuUsersBtnEl = document.getElementById("menu-users-btn");
+const menuInviteBtnEl = document.getElementById("menu-invite-btn");
 const logoutBtnEl = document.getElementById("logout-btn");
-const loginOpenBtnEl = document.getElementById("login-open-btn");
-const googleLoginBtnEl = document.getElementById("google-login-btn");
-const xLoginBtnEl = document.getElementById("x-login-btn");
-const discordLoginBtnEl = document.getElementById("discord-login-btn");
-const lineLoginBtnEl = document.getElementById("line-login-btn");
-const facebookLoginBtnEl = document.getElementById("facebook-login-btn");
-const githubLoginBtnEl = document.getElementById("github-login-btn");
-const loginSelectOverlayEl = document.getElementById("login-select-overlay");
-const loginSelectCloseBtnEl = document.getElementById("login-select-close-btn");
-const editNameBtnEl = document.getElementById("edit-name-btn");
-const menuToggleBtnEl = document.getElementById("menu-toggle-btn");
-const menuAuthPanelEl = document.getElementById("menu-auth-panel");
-const shareCopyBtnEl = document.getElementById("footer-share-copy-btn");
-const shareXBtnEl = document.getElementById("footer-share-x-btn");
-const shareFacebookBtnEl = document.getElementById("footer-share-facebook-btn");
-const resultShareXBtnEl = document.getElementById("result-share-x-btn");
-const resultShareFacebookBtnEl = document.getElementById("result-share-facebook-btn");
-const resultShareCopyBtnEl = document.getElementById("result-share-copy-btn");
-
-const SITE_URL = "https://s-typing.f5.si/";
-const SITE_SHARE_TEXT = "シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム";
-
-function buildXShareUrl(text){
-  return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}&via=simple_typing`;
-}
-
-function buildFacebookShareUrl(text){
-  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(text)}`;
-}
-
-async function copyToClipboard(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    showCustomAlert("コピーしました");
-  }catch(err){
-    showCustomAlert("コピーに失敗しました");
-  }
-}
-
-shareXBtnEl.href = buildXShareUrl(SITE_SHARE_TEXT);
-shareFacebookBtnEl.href = buildFacebookShareUrl(SITE_SHARE_TEXT);
-
-let resultShareText = SITE_SHARE_TEXT;
-
-function updateResultShareLinks(text){
-  resultShareText = `${text}\n${SITE_URL}`;
-  resultShareXBtnEl.href = buildXShareUrl(text);
-  resultShareFacebookBtnEl.href = buildFacebookShareUrl(text);
-}
-
-shareCopyBtnEl.addEventListener("click", () => copyToClipboard(`${SITE_SHARE_TEXT}\n${SITE_URL}`));
-
-resultShareCopyBtnEl.addEventListener("click", () => copyToClipboard(resultShareText));
-
-menuToggleBtnEl.addEventListener("click", () => {
-  menuAuthPanelEl.classList.toggle("hidden");
-});
-
-function nameErrorMessage(data, fallback){
-  if(data && data.error === "name_blocked") return "この名前は使用できません";
-  if(data && data.error === "name_check_failed") return "名前の確認に失敗しました。しばらくしてからもう一度お試しください";
-  return fallback;
-}
-
-editNameBtnEl.addEventListener("click", () => {
-  const prefill = currentPlayerName || "";
-  showNameInputModal(async (name) => {
-    const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-    let data;
-    try{
-      const body = isLoggedIn
-        ? { action: "setName", token: getSessionToken(), name }
-        : { action: "checkName", name };
-      const res = await fetch(`${RANKING_API_URL}/auth`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      data = await res.json();
-    }catch(e){
-      return { ok: false, message: "通信に失敗しました" };
-    }
-    if(isLoggedIn){
-      if(!data.name) return { ok: false, message: nameErrorMessage(data, "名前の変更に失敗しました") };
-      currentPlayerName = data.name;
-    } else {
-      if(!data.ok) return { ok: false, message: nameErrorMessage(data, "名前の変更に失敗しました") };
-      currentPlayerName = name;
-      localStorage.setItem(GUEST_NAME_KEY, name);
-    }
-    updatePlayerNameLabel();
-    updateSetupHighScore();
-    return { ok: true };
-  }, prefill);
-});
-
-let currentPlayerName = null;
-let serverHighScores = null;
-
-function getPlayerName(){
-  return currentPlayerName;
-}
-
-function getSessionToken(){
-  return localStorage.getItem(SESSION_TOKEN_KEY);
-}
-
-function setSessionToken(token){
-  localStorage.setItem(SESSION_TOKEN_KEY, token);
-}
-
-function clearSessionToken(){
-  localStorage.removeItem(SESSION_TOKEN_KEY);
-}
-
-function updatePlayerNameLabel(){
-  currentPlayerLabelEl.textContent = currentPlayerName ? currentPlayerName : "";
-}
-
-async function loadServerHighScores(token){
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "getHighScores", token })
-    });
-    const data = await res.json();
-    serverHighScores = data.highScores || {};
-  }catch(e){
-    serverHighScores = {};
-  }
-}
-
-async function showLoggedInUi(name, token, inputModeFromAccount, displaySettingsFromAccount){
-  currentPlayerName = name;
-  await loadServerHighScores(token);
-  updatePlayerNameLabel();
-  updateSetupHighScore();
-  loginOpenBtnEl.classList.add("hidden");
-  logoutBtnEl.classList.remove("hidden");
-  applyInputMode(inputModeFromAccount || "realtime");
-  applyDisplaySettings(displaySettingsFromAccount || getGuestDisplaySettings());
-}
-
-function showLoggedOutUi(){
-  currentPlayerName = localStorage.getItem(GUEST_NAME_KEY) || "GUEST";
-  serverHighScores = null;
-  updatePlayerNameLabel();
-  updateSetupHighScore();
-  loginOpenBtnEl.classList.remove("hidden");
-  logoutBtnEl.classList.add("hidden");
-  applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
-  applyDisplaySettings(getGuestDisplaySettings());
-}
-
-async function verifySession(){
-  const token = getSessionToken();
-  if(!token){
-    showLoggedOutUi();
-    return;
-  }
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "verify", token })
-    });
-    const data = await res.json();
-    if(data.valid){
-      await showLoggedInUi(data.name, token, data.inputMode, data.displaySettings);
-    } else {
-      clearSessionToken();
-      showLoggedOutUi();
-    }
-  }catch(e){
-    showLoggedOutUi();
-  }
-}
-
-async function handleLoginResponse(loginBody){
-  loginSelectOverlayEl.classList.remove("visible");
-  let data;
-  try{
-    const res = await fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(loginBody)
-    });
-    data = await res.json();
-  }catch(e){
-    showCustomAlert("ログインに失敗しました");
-    return;
-  }
-  if(data.error){
-    showCustomAlert("ログインに失敗しました");
-    return;
-  }
-  if(data.isNewUser){
-    showNameInputModal(async (name) => {
-      let regData;
-      try{
-        const regRes = await fetch(`${RANKING_API_URL}/auth`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "register", pendingToken: data.pendingToken, name })
-        });
-        regData = await regRes.json();
-      }catch(e){
-        return { ok: false, message: "通信に失敗しました" };
-      }
-      if(!regData.token){
-        return { ok: false, message: nameErrorMessage(regData, "登録に失敗しました") };
-      }
-      return {
-        ok: true,
-        after: async () => {
-          setSessionToken(regData.token);
-          await showLoggedInUi(regData.name, regData.token, regData.inputMode, regData.displaySettings);
-        }
-      };
-    }, "");
-  } else {
-    setSessionToken(data.token);
-    await showLoggedInUi(data.name, data.token, data.inputMode, data.displaySettings);
-  }
-}
-
-async function handleGoogleCredential(idToken){
-  await handleLoginResponse({ action: "login", idToken });
-}
-
-async function handleXCredential(code, codeVerifier, redirectUri){
-  await handleLoginResponse({ action: "login", provider: "x", code, codeVerifier, redirectUri });
-}
-
-async function handleDiscordCredential(code, codeVerifier, redirectUri){
-  await handleLoginResponse({ action: "login", provider: "discord", code, codeVerifier, redirectUri });
-}
-
-async function handleLineCredential(code, codeVerifier, redirectUri){
-  await handleLoginResponse({ action: "login", provider: "line", code, codeVerifier, redirectUri });
-}
-
-async function handleFacebookCredential(code, redirectUri){
-  await handleLoginResponse({ action: "login", provider: "facebook", code, redirectUri });
-}
-
-async function handleGithubCredential(code, redirectUri){
-  await handleLoginResponse({ action: "login", provider: "github", code, redirectUri });
-}
-
-const GOOGLE_AUTH_NONCE_KEY = "googleAuthNonce";
-const X_AUTH_STATE_KEY = "xAuthState";
-const X_AUTH_VERIFIER_KEY = "xAuthVerifier";
-const DISCORD_AUTH_STATE_KEY = "discordAuthState";
-const DISCORD_AUTH_VERIFIER_KEY = "discordAuthVerifier";
-const DISCORD_STATE_PREFIX = "discord_";
-const LINE_AUTH_STATE_KEY = "lineAuthState";
-const LINE_AUTH_VERIFIER_KEY = "lineAuthVerifier";
-const LINE_STATE_PREFIX = "line_";
-const FACEBOOK_AUTH_STATE_KEY = "facebookAuthState";
-const FACEBOOK_STATE_PREFIX = "facebook_";
-const GITHUB_AUTH_STATE_KEY = "githubAuthState";
-const GITHUB_STATE_PREFIX = "github_";
-
-function generateGoogleAuthNonce(){
-  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-}
-
-function startGoogleLogin(){
-  const nonce = generateGoogleAuthNonce();
-  sessionStorage.setItem(GOOGLE_AUTH_NONCE_KEY, nonce);
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  const params = new URLSearchParams({
-    client_id: GOOGLE_CLIENT_ID,
-    redirect_uri: redirectUri,
-    response_type: "id_token",
-    scope: "openid",
-    nonce,
-    prompt: "select_account"
-  });
-  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
-}
-
-function decodeGoogleIdTokenPayload(idToken){
-  const payloadPart = idToken.split(".")[1];
-  const base64 = payloadPart.replace(/-/g, "+").replace(/_/g, "/");
-  return JSON.parse(atob(base64));
-}
-
-async function processGoogleAuthRedirect(){
-  const hash = window.location.hash;
-  if(!hash || !hash.includes("id_token")) return false;
-  const params = new URLSearchParams(hash.substring(1));
-  const idToken = params.get("id_token");
-  const error = params.get("error");
-  history.replaceState(null, "", window.location.pathname + window.location.search);
-  if(error || !idToken) return false;
-  const expectedNonce = sessionStorage.getItem(GOOGLE_AUTH_NONCE_KEY);
-  sessionStorage.removeItem(GOOGLE_AUTH_NONCE_KEY);
-  try{
-    const payload = decodeGoogleIdTokenPayload(idToken);
-    if(expectedNonce && payload.nonce !== expectedNonce){
-      showCustomAlert("ログインに失敗しました");
-      return true;
-    }
-  }catch(e){
-    showCustomAlert("ログインに失敗しました");
-    return true;
-  }
-  await handleGoogleCredential(idToken);
-  return true;
-}
-
-function generateXAuthState(){
-  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-}
-
-function base64UrlEncode(buffer){
-  let binary = "";
-  const bytes = new Uint8Array(buffer);
-  for(let i = 0; i < bytes.byteLength; i++){
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-}
-
-function generateXCodeVerifier(){
-  const array = new Uint8Array(64);
-  crypto.getRandomValues(array);
-  return base64UrlEncode(array.buffer);
-}
-
-async function generateXCodeChallenge(verifier){
-  const encoder = new TextEncoder();
-  const data = encoder.encode(verifier);
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return base64UrlEncode(digest);
-}
-
-async function startXLogin(){
-  const state = generateXAuthState();
-  const codeVerifier = generateXCodeVerifier();
-  const codeChallenge = await generateXCodeChallenge(codeVerifier);
-  sessionStorage.setItem(X_AUTH_STATE_KEY, state);
-  sessionStorage.setItem(X_AUTH_VERIFIER_KEY, codeVerifier);
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  const params = new URLSearchParams({
-    response_type: "code",
-    client_id: X_CLIENT_ID,
-    redirect_uri: redirectUri,
-    scope: "users.read tweet.read",
-    state,
-    code_challenge: codeChallenge,
-    code_challenge_method: "S256"
-  });
-  window.location.href = `https://x.com/i/oauth2/authorize?${params.toString()}`;
-}
-
-async function startDiscordLogin(){
-  const state = `${DISCORD_STATE_PREFIX}${generateXAuthState()}`;
-  const codeVerifier = generateXCodeVerifier();
-  const codeChallenge = await generateXCodeChallenge(codeVerifier);
-  sessionStorage.setItem(DISCORD_AUTH_STATE_KEY, state);
-  sessionStorage.setItem(DISCORD_AUTH_VERIFIER_KEY, codeVerifier);
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  const params = new URLSearchParams({
-    response_type: "code",
-    client_id: DISCORD_CLIENT_ID,
-    redirect_uri: redirectUri,
-    scope: "identify",
-    state,
-    code_challenge: codeChallenge,
-    code_challenge_method: "S256"
-  });
-  window.location.href = `https://discord.com/oauth2/authorize?${params.toString()}`;
-}
-
-async function startLineLogin(){
-  const state = `${LINE_STATE_PREFIX}${generateXAuthState()}`;
-  const codeVerifier = generateXCodeVerifier();
-  const codeChallenge = await generateXCodeChallenge(codeVerifier);
-  sessionStorage.setItem(LINE_AUTH_STATE_KEY, state);
-  sessionStorage.setItem(LINE_AUTH_VERIFIER_KEY, codeVerifier);
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  const params = new URLSearchParams({
-    response_type: "code",
-    client_id: LINE_CHANNEL_ID,
-    redirect_uri: redirectUri,
-    scope: "profile",
-    state,
-    code_challenge: codeChallenge,
-    code_challenge_method: "S256"
-  });
-  window.location.href = `https://access.line.me/oauth2/v2.1/authorize?${params.toString()}`;
-}
-
-async function processLineAuthRedirect(){
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-  const state = params.get("state");
-  const error = params.get("error");
-  if(!state || !state.startsWith(LINE_STATE_PREFIX)) return false;
-  if(!code && !error) return false;
-  history.replaceState(null, "", window.location.pathname);
-  const expectedState = sessionStorage.getItem(LINE_AUTH_STATE_KEY);
-  const codeVerifier = sessionStorage.getItem(LINE_AUTH_VERIFIER_KEY);
-  sessionStorage.removeItem(LINE_AUTH_STATE_KEY);
-  sessionStorage.removeItem(LINE_AUTH_VERIFIER_KEY);
-  if(error) return false;
-  if(!codeVerifier || !expectedState || state !== expectedState){
-    showCustomAlert("ログインに失敗しました");
-    return true;
-  }
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  await handleLineCredential(code, codeVerifier, redirectUri);
-  return true;
-}
-
-async function processDiscordAuthRedirect(){
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-  const state = params.get("state");
-  const error = params.get("error");
-  if(!state || !state.startsWith(DISCORD_STATE_PREFIX)) return false;
-  if(!code && !error) return false;
-  history.replaceState(null, "", window.location.pathname);
-  const expectedState = sessionStorage.getItem(DISCORD_AUTH_STATE_KEY);
-  const codeVerifier = sessionStorage.getItem(DISCORD_AUTH_VERIFIER_KEY);
-  sessionStorage.removeItem(DISCORD_AUTH_STATE_KEY);
-  sessionStorage.removeItem(DISCORD_AUTH_VERIFIER_KEY);
-  if(error) return false;
-  if(!codeVerifier || !expectedState || state !== expectedState){
-    showCustomAlert("ログインに失敗しました");
-    return true;
-  }
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  await handleDiscordCredential(code, codeVerifier, redirectUri);
-  return true;
-}
-
-async function startFacebookLogin(){
-  const state = `${FACEBOOK_STATE_PREFIX}${generateXAuthState()}`;
-  sessionStorage.setItem(FACEBOOK_AUTH_STATE_KEY, state);
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  const params = new URLSearchParams({
-    client_id: FACEBOOK_APP_ID,
-    redirect_uri: redirectUri,
-    response_type: "code",
-    scope: "public_profile",
-    state
-  });
-  window.location.href = `https://www.facebook.com/v22.0/dialog/oauth?${params.toString()}`;
-}
-
-async function startGithubLogin(){
-  const state = `${GITHUB_STATE_PREFIX}${generateXAuthState()}`;
-  sessionStorage.setItem(GITHUB_AUTH_STATE_KEY, state);
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  const params = new URLSearchParams({
-    client_id: GITHUB_CLIENT_ID,
-    redirect_uri: redirectUri,
-    scope: "read:user",
-    state
-  });
-  window.location.href = `https://github.com/login/oauth/authorize?${params.toString()}`;
-}
-
-async function processStatePrefixedAuthRedirect(prefix, stateKey, onCode){
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-  const state = params.get("state");
-  const error = params.get("error");
-  if(!state || !state.startsWith(prefix)) return false;
-  if(!code && !error) return false;
-  history.replaceState(null, "", window.location.pathname);
-  const expectedState = sessionStorage.getItem(stateKey);
-  sessionStorage.removeItem(stateKey);
-  if(error) return false;
-  if(!expectedState || state !== expectedState){
-    showCustomAlert("ログインに失敗しました");
-    return true;
-  }
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  await onCode(code, redirectUri);
-  return true;
-}
-
-function processFacebookAuthRedirect(){
-  return processStatePrefixedAuthRedirect(FACEBOOK_STATE_PREFIX, FACEBOOK_AUTH_STATE_KEY, handleFacebookCredential);
-}
-
-function processGithubAuthRedirect(){
-  return processStatePrefixedAuthRedirect(GITHUB_STATE_PREFIX, GITHUB_AUTH_STATE_KEY, handleGithubCredential);
-}
-
-async function processXAuthRedirect(){
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-  const state = params.get("state");
-  const error = params.get("error");
-  if(!code && !error) return false;
-  if(state && (state.startsWith(DISCORD_STATE_PREFIX) || state.startsWith(LINE_STATE_PREFIX) || state.startsWith(FACEBOOK_STATE_PREFIX) || state.startsWith(GITHUB_STATE_PREFIX))) return false;
-  history.replaceState(null, "", window.location.pathname);
-  if(error){
-    sessionStorage.removeItem(X_AUTH_STATE_KEY);
-    sessionStorage.removeItem(X_AUTH_VERIFIER_KEY);
-    return false;
-  }
-  const expectedState = sessionStorage.getItem(X_AUTH_STATE_KEY);
-  const codeVerifier = sessionStorage.getItem(X_AUTH_VERIFIER_KEY);
-  sessionStorage.removeItem(X_AUTH_STATE_KEY);
-  sessionStorage.removeItem(X_AUTH_VERIFIER_KEY);
-  if(!codeVerifier || (expectedState && state !== expectedState)){
-    showCustomAlert("ログインに失敗しました");
-    return true;
-  }
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
-  await handleXCredential(code, codeVerifier, redirectUri);
-  return true;
-}
-
-loginOpenBtnEl.addEventListener("click", () => {
-  loginSelectOverlayEl.classList.add("visible");
-});
-
-loginSelectCloseBtnEl.addEventListener("click", () => {
-  loginSelectOverlayEl.classList.remove("visible");
-});
-
-googleLoginBtnEl.addEventListener("click", () => {
-  startGoogleLogin();
-});
-
-xLoginBtnEl.addEventListener("click", () => {
-  startXLogin();
-});
-
-discordLoginBtnEl.addEventListener("click", () => {
-  startDiscordLogin();
-});
-
-lineLoginBtnEl.addEventListener("click", () => {
-  startLineLogin();
-});
-
-facebookLoginBtnEl.addEventListener("click", () => {
-  startFacebookLogin();
-});
-
-githubLoginBtnEl.addEventListener("click", () => {
-  startGithubLogin();
-});
-
-logoutBtnEl.addEventListener("click", () => {
-  const token = getSessionToken();
-  clearSessionToken();
-  showLoggedOutUi();
-  if(token){
-    fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "logout", token })
-    }).catch(() => {});
-  }
-});
-
-const appLoadingOverlayEl = document.getElementById("app-loading-overlay");
-let appLoadingCount = 1;
-
-function showAppLoadingOverlay(){
-  appLoadingCount++;
-  appLoadingOverlayEl.classList.remove("hidden");
-}
-
-function hideAppLoadingOverlay(){
-  appLoadingCount = Math.max(0, appLoadingCount - 1);
-  if(appLoadingCount === 0) appLoadingOverlayEl.classList.add("hidden");
-}
-
-window.addEventListener("load", async () => {
-  let handledRedirect = await processGoogleAuthRedirect();
-  if(!handledRedirect) handledRedirect = await processDiscordAuthRedirect();
-  if(!handledRedirect) handledRedirect = await processLineAuthRedirect();
-  if(!handledRedirect) handledRedirect = await processFacebookAuthRedirect();
-  if(!handledRedirect) handledRedirect = await processGithubAuthRedirect();
-  if(!handledRedirect) await processXAuthRedirect();
-  const sessionLoadPromise = currentPlayerName ? Promise.resolve() : verifySession();
-  Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
-});
-
-
-function katakanaToHiragana(str){
-  return (str || '').replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
-}
-
-const wordListCache = {};
-const sentenceReadingCache = {};
-
-async function fetchJson(url){
-  const response = await fetch(url);
-  if(!response.ok) throw new Error("failed to load data");
-  return response;
-}
-
-async function fetchWordList(mode, level){
-  const cacheKey = `${mode}-${level}`;
-  if(wordListCache[cacheKey]) return wordListCache[cacheKey];
-  const res = await fetchJson(`words/${cacheKey}.json`);
-  const list = await res.json();
-  wordListCache[cacheKey] = list;
-  return list;
-}
-
-async function ensureSentenceReadings(level, words){
-  if(sentenceReadingCache[level]) return sentenceReadingCache[level];
-  try{
-    const res = await fetchJson(`words/sentence-${level}2.json`);
-    const readings = await res.json();
-    const map = {};
-    (words || []).forEach((word, i) => {
-      map[word] = readings[i] !== undefined ? readings[i] : word;
-    });
-    sentenceReadingCache[level] = map;
-    return map;
-  }catch(e){
-    sentenceReadingCache[level] = {};
-    return sentenceReadingCache[level];
-  }
-}
-
-async function ensureWordList(mode, level){
-  const cacheKey = `${mode}-${level}`;
-  let list = wordListCache[cacheKey];
-  if(!list){
-    while(!list){
-      try{
-        list = await fetchWordList(mode, level);
-      }catch(e){
-        await new Promise(resolve => setTimeout(resolve, 1500));
-      }
-    }
-  }
-  if(mode === "sentence" && !sentenceReadingCache[level]){
-    await ensureSentenceReadings(level, list);
-  }
-  return list;
-}
-
-const ALL_MODES = ["hiragana", "katakana", "sentence"];
-const ALL_LEVELS = ["beginner", "intermediate", "advanced"];
-
-async function preloadAllWordLists(){
-  showAppLoadingOverlay();
-  const tasks = [];
-  for(const mode of ALL_MODES){
-    for(const level of ALL_LEVELS){
-      tasks.push(ensureWordList(mode, level));
-    }
-  }
-  try{
-    await Promise.all(tasks);
-  }finally{
-    hideAppLoadingOverlay();
-  }
-}
-
-function getCurrentWordReading(){
-  if(currentMode === "katakana") return katakanaToHiragana(currentWord);
-  if(currentMode === "sentence"){
-    const map = sentenceReadingCache[currentLevel] || {};
-    return map[currentWord] || currentWord;
-  }
-  return currentWord;
-}
-
-
-const levelLabels = { beginner:"初級", intermediate:"中級", advanced:"上級" };
-const modeLabels = { hiragana:"ひらがな", katakana:"カタカナ", sentence:"文章" };
-
-let currentMode = "hiragana";
-let currentLevel = "beginner";
-let inputMode = "realtime";
-let typingText = null;
-let currentWord = "";
-let usedWords = [];
-let score = 0;
-let missCount = 0;
-let totalCharsTyped = 0;
-let timeLeft = 100;
-let timerId = null;
-let isComposing = false;
-
-const setupEl = document.getElementById("setup");
-const gameEl = document.getElementById("game");
-const resultEl = document.getElementById("result");
-const wordDisplayEl = document.getElementById("word-display");
-const sentenceReadingDisplayEl = document.getElementById("sentence-reading-display");
-const romajiDisplayEl = document.getElementById("romaji-display");
-const inputRowEl = document.querySelector(".input-row");
-const inputEl = document.getElementById("typing-input");
-const scoreLabelEl = document.getElementById("score-label");
-const timeLabelEl = document.getElementById("time-label");
-const timerFillEl = document.getElementById("timer-fill");
-const levelLabelEl = document.getElementById("level-label");
-const hintLabelEl = document.getElementById("hint-label");
-const resultScoreEl = document.getElementById("result-score");
-const resultSubEl = document.getElementById("result-sub");
-const statAccuracyEl = document.getElementById("stat-accuracy");
-const statSpeedEl = document.getElementById("stat-speed");
-const statMissEl = document.getElementById("stat-miss");
-const imeSpacerEl = document.getElementById("ime-spacer");
-const headerEl = document.getElementById("site-header");
-const opponentScoreLabelEl = document.getElementById("opponent-score-label");
-const searchingEl = document.getElementById("searching");
-const searchCountLabelEl = document.getElementById("search-count-label");
-const cancelSearchBtn = document.getElementById("cancel-search-btn");
-const countdownEl = document.getElementById("countdown");
-const countdownNumberEl = document.getElementById("countdown-number");
-const friendMenuEl = document.getElementById("friend-menu");
-const friendCreateEl = document.getElementById("friend-create");
-const friendJoinEl = document.getElementById("friend-join");
-const friendWaitingEl = document.getElementById("friend-waiting");
-const friendCodeLabelEl = document.getElementById("friend-code-label");
-const friendCodeInputEl = document.getElementById("friend-code-input");
-friendCodeInputEl.addEventListener("input", () => {
-  friendCodeInputEl.value = friendCodeInputEl.value.replace(/[^0-9]/g, "");
-});
-
-const ONLINE_SERVER_URL = "wss://key-onl.user-x45.workers.dev";
-const RANKING_API_URL = ONLINE_SERVER_URL.replace(/^wss:/, "https:").replace(/^ws:/, "http:");
-
-const clickSoundEl = new Audio("sounds/click.mp3");
-const keySoundEl = new Audio("sounds/key.mp3");
-const correctSoundEl = new Audio("sounds/correct.mp3");
-const incorrectSoundEl = new Audio("sounds/incorrect.mp3");
-let isMuted = localStorage.getItem("isMuted") === "true";
-
-function playSound(baseAudio){
-  if(isMuted) return;
-  const sound = baseAudio.cloneNode();
-  sound.play().catch(() => {});
-}
-
-document.addEventListener("click", (e) => {
-  if(e.target.closest("button")){
-    playSound(clickSoundEl);
-  }
-});
-
-inputEl.addEventListener("keydown", () => {
-  playSound(keySoundEl);
-});
-
-const muteBtn = document.getElementById("mute-btn");
-muteBtn.checked = isMuted;
-muteBtn.addEventListener("change", () => {
-  isMuted = muteBtn.checked;
-  localStorage.setItem("isMuted", isMuted);
-});
-
-const rankingBoxEl = document.getElementById("ranking-box");
-const rankingListEl = document.getElementById("ranking-list");
-const rankingTitleEl = document.querySelector(".ranking-title");
-const resultRankBadgeEl = document.getElementById("result-rank-badge");
-const setupHighScoreEl = document.getElementById("setup-high-score");
-const resultHighScoreEl = document.getElementById("result-high-score");
-const newRecordBadgeEl = document.getElementById("new-record-badge");
-const rankingSubmittingIndicatorEl = document.getElementById("ranking-submitting-indicator");
-
-function getHighScoreKey(mode, level){
-  return `highScore_${mode}_${level}`;
-}
-
-function getHighScore(mode, level){
-  const key = getHighScoreKey(mode, level);
-  if(serverHighScores){
-    return serverHighScores[key] || 0;
-  }
-  const value = localStorage.getItem(key);
-  return value ? parseInt(value, 10) : 0;
-}
-
-function setHighScore(mode, level, newScore){
-  const key = getHighScoreKey(mode, level);
-  if(serverHighScores){
-    serverHighScores[key] = newScore;
-    const token = getSessionToken();
-    if(token){
-      fetch(`${RANKING_API_URL}/auth`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "setHighScore", token, mode, level, score: newScore })
-      }).catch(() => {});
-    }
-    return;
-  }
-  localStorage.setItem(key, String(newScore));
-}
-
-function updateSetupHighScore(){
-  setupHighScoreEl.textContent = `ハイスコア ${getHighScore(currentMode, currentLevel)}`;
-}
-
-let rankingRequestId = 0;
-const RANKING_DISPLAY_MAX = 20;
-
-function escapeHtml(str){
-  return String(str).replace(/[&<>"']/g, (ch) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[ch]));
-}
-
-function renderRanking(scores){
-  if(!Array.isArray(scores) || scores.length === 0){
-    rankingBoxEl.classList.add("hidden");
-    rankingListEl.innerHTML = "";
-    return;
-  }
-  rankingListEl.innerHTML = scores.map((s, i) => {
-    const rank = i + 1;
-    const entryScore = typeof s === "object" && s !== null ? s.score : s;
-    const entryName = typeof s === "object" && s !== null && s.name ? s.name : "GUEST";
-    return `<li class="ranking-item${rank <= 3 ? " top3" : ""}"><span class="rank">${rank}位</span><span class="name">${escapeHtml(entryName)}</span><span class="score">${entryScore}</span></li>`;
-  }).join("");
-  rankingBoxEl.classList.remove("hidden");
-}
-
-async function loadRanking(){
-  const requestId = ++rankingRequestId;
-  const mode = currentMode;
-  const level = currentLevel;
-  const modeLabel = modeLabels[mode] || "ひらがな";
-  rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
-  rankingBoxEl.classList.add("hidden");
-  rankingListEl.innerHTML = "";
-  try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=normal`);
-    if(requestId !== rankingRequestId) return;
-    if(!res.ok){
-      rankingBoxEl.classList.add("hidden");
-      rankingListEl.innerHTML = "";
-      return;
-    }
-    const data = await res.json();
-    if(requestId !== rankingRequestId) return;
-    renderRanking(data.scores);
-  }catch(e){
-    if(requestId !== rankingRequestId) return;
-    rankingBoxEl.classList.add("hidden");
-    rankingListEl.innerHTML = "";
-  }
-}
-
-function logPlay(mode, level, matchType, opponent){
-  const name = normalizePlayerName(getPlayerName());
-  fetch(`${RANKING_API_URL}/playlog`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, mode, level, matchType: matchType || "solo", opponent: opponent || "" })
-  }).catch(() => {});
-}
-
-async function fetchWithRetry(url, options, attempts){
-  for(let i = 0; i < attempts; i++){
-    try{
-      const res = await fetch(url, options);
-      if(res.ok) return res;
-    }catch(e){
-    }
-    if(i < attempts - 1){
-      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
-    }
-  }
-  return null;
-}
-
-
-async function submitScoreToRanking(score, mode, level, name){
-  const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=normal`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ score, name })
-  }, 4);
-  if(!res) return;
-  try{
-    const data = await res.json();
-    if(mode === currentMode && level === currentLevel){
-      renderRanking(data.top20);
-    }
-    if(data.rank){
-      resultRankBadgeEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング ${data.rank}位にランクインしました！`;
-      resultRankBadgeEl.classList.add("visible");
-    }
-  }catch(e){
-  }
-}
-
-async function checkRankQualifies(score, mode, level){
-  try{
-    const res = await fetch(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=normal`);
-    if(!res.ok) return true;
-    const data = await res.json();
-    const scores = data.scores;
-    if(!Array.isArray(scores)) return true;
-    if(scores.length < RANKING_DISPLAY_MAX) return true;
-    const lowestEntry = scores[scores.length - 1];
-    const lowestScore = typeof lowestEntry === "object" && lowestEntry !== null ? lowestEntry.score : lowestEntry;
-    return score >= lowestScore;
-  }catch(e){
-    return true;
-  }
-}
-
-async function handleRankingSubmission(score, mode, level){
-  const qualifies = await checkRankQualifies(score, mode, level);
-  if(!qualifies) return;
-  const name = normalizePlayerName(getPlayerName());
-  if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.add("visible");
-  await submitScoreToRanking(score, mode, level, name);
-  if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.remove("visible");
-}
-
-const initialRankingLoadPromise = loadRanking();
-
-let ws = null;
-let matchId = null;
-let myRole = null;
-let opponentName = "";
-let isOnlineMode = false;
-let onlineWordDeck = [];
-let onlineIndex = 0;
-let onlineScore = 0;
-let onlineMiss = 0;
-let onlineChars = 0;
-let friendWs = null;
-let friendRole = null;
-let opponentScore = 0;
-let searchCountdownTimer = null;
-let onlineTimerId = null;
-let onlineTimeLeft = 100;
-let countdownTimerId = null;
-
-function fitSpacerToViewport(){
-  imeSpacerEl.style.height = "0px";
-  requestAnimationFrame(() => {
-    const contentHeight = document.documentElement.scrollHeight;
-    const available = window.innerHeight - contentHeight;
-    imeSpacerEl.style.height = `${Math.max(0, available)}px`;
-  });
-}
-
-window.addEventListener("resize", fitSpacerToViewport);
-window.addEventListener("resize", fitWordDisplayFontSize);
-window.addEventListener("resize", fitRomajiDisplayFontSize);
-window.addEventListener("resize", scrollRomajiDisplayToTypedPosition);
-if(window.visualViewport){
-  window.visualViewport.addEventListener("resize", fitSpacerToViewport);
-  window.visualViewport.addEventListener("resize", fitWordDisplayFontSize);
-  window.visualViewport.addEventListener("resize", fitRomajiDisplayFontSize);
-  window.visualViewport.addEventListener("resize", scrollRomajiDisplayToTypedPosition);
-}
-
-document.querySelectorAll(".mode-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentMode = btn.dataset.mode;
-    currentLevel = "beginner";
-    document.querySelectorAll(".levels").forEach(row => {
-      row.classList.toggle("hidden", row.dataset.row !== currentMode);
-      row.querySelectorAll(".level-btn").forEach((lb, i) => {
-        lb.classList.toggle("active", i === 0);
-      });
-    });
-    loadRanking();
-    updateUrlHash();
-    updateSetupHighScore();
-  });
-});
-
-document.querySelectorAll(".levels").forEach(row => {
-  row.querySelectorAll(".level-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      row.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentLevel = btn.dataset.level;
-      loadRanking();
-      updateUrlHash();
-      updateSetupHighScore();
-    });
-  });
-});
-
-function updateUrlHash(){
-  if(currentMode === "hiragana" && currentLevel === "beginner"){
-    history.replaceState(null, "", window.location.pathname + window.location.search);
-  } else {
-    window.location.hash = `${currentMode}-${currentLevel}`;
-  }
-}
-
-function applyStateFromHash(){
-  const hash = window.location.hash.replace("#", "");
-  const validModes = ["hiragana", "katakana", "sentence"];
-  const validLevels = ["beginner", "intermediate", "advanced"];
-  const [mode, level] = hash.split("-");
-
-  if(hash && validModes.includes(mode) && validLevels.includes(level)){
-    currentMode = mode;
-    currentLevel = level;
-  } else {
-    currentMode = "hiragana";
-    currentLevel = "beginner";
-  }
-
-  document.querySelectorAll(".mode-btn").forEach(b => {
-    b.classList.toggle("active", b.dataset.mode === currentMode);
-  });
-
-  document.querySelectorAll(".levels").forEach(row => {
-    row.classList.toggle("hidden", row.dataset.row !== currentMode);
-    row.querySelectorAll(".level-btn").forEach(lb => {
-      lb.classList.toggle("active", lb.dataset.level === currentLevel);
-    });
-  });
-
-  loadRanking();
-  updateSetupHighScore();
-}
-
-document.getElementById("footer-year").textContent = new Date().getFullYear();
-
-applyStateFromHash();
-preloadAllWordLists();
-window.addEventListener("hashchange", () => {
-  if(isInGameFlow()){
-    quitToTop();
-  }
-  applyStateFromHash();
-});
-
-document.getElementById("start-btn").addEventListener("click", startGame);
-document.getElementById("start-online-btn").addEventListener("click", startOnlineSearch);
-cancelSearchBtn.addEventListener("click", cancelSearch);
-document.getElementById("retry-btn").addEventListener("click", () => {
-  resultEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-});
-
-function startOnlineSearch(){
-  friendRole = null;
-  setupEl.classList.add("hidden");
-  searchingEl.classList.add("visible");
-  let secondsLeft = 15;
-  searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
-  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
-  ws = new WebSocket(`${ONLINE_SERVER_URL}/lobby?mode=${currentMode}&level=${currentLevel}&name=${myName}`);
-  ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "matched"){
-      clearInterval(searchCountdownTimer);
-      matchId = msg.matchId;
-      myRole = msg.role;
-      opponentName = msg.opponentName || "GUEST";
-      connectToMatch();
-    } else if(msg.type === "timeout"){
-      clearInterval(searchCountdownTimer);
-      cancelSearch();
-      showCustomAlert("対戦相手が見つかりませんでした");
-    }
-  };
-  ws.onerror = () => {
-    clearInterval(searchCountdownTimer);
-    cancelSearch();
-    showCustomAlert("サーバーに接続できませんでした");
-  };
-  searchCountdownTimer = setInterval(() => {
-    secondsLeft--;
-    searchCountLabelEl.textContent = `残り ${secondsLeft} 秒`;
-    if(secondsLeft <= 0){
-      clearInterval(searchCountdownTimer);
-    }
-  }, 1000);
-}
-
-function cancelSearch(){
-  if(ws){ ws.close(); ws = null; }
-  clearInterval(searchCountdownTimer);
-  searchingEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-}
-
-function isInGameFlow(){
-  return gameEl.classList.contains("visible") ||
-    countdownEl.classList.contains("visible") ||
-    searchingEl.classList.contains("visible") ||
-    friendMenuEl.classList.contains("visible") ||
-    friendCreateEl.classList.contains("visible") ||
-    friendWaitingEl.classList.contains("visible") ||
-    friendJoinEl.classList.contains("visible");
-}
-
-function quitToTop(){
-  clearInterval(timerId);
-  clearInterval(onlineTimerId);
-  clearInterval(countdownTimerId);
-  clearInterval(searchCountdownTimer);
-  if(ws){ ws.close(); ws = null; }
-  if(friendWs){ friendWs.close(); friendWs = null; }
-  friendRole = null;
-  isOnlineMode = false;
-  countdownEl.classList.remove("visible");
-  searchingEl.classList.remove("visible");
-  friendMenuEl.classList.remove("visible");
-  friendCreateEl.classList.remove("visible");
-  friendWaitingEl.classList.remove("visible");
-  friendJoinEl.classList.remove("visible");
-  gameEl.classList.remove("visible");
-  headerEl.classList.remove("hidden");
-  document.body.classList.remove("game-active");
-  resultEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-}
-
-function generateFriendCode(){
-  return String(Math.floor(100000 + Math.random() * 900000));
-}
-
-function connectFriendRoom(code, role){
-  const myName = encodeURIComponent(normalizePlayerName(getPlayerName()));
-  friendRole = role;
-  friendWs = new WebSocket(`${ONLINE_SERVER_URL}/friend/${code}?role=${role}&mode=${currentMode}&level=${currentLevel}&name=${myName}`);
-  friendWs.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "matched"){
-      friendWs = null;
-      matchId = msg.matchId;
-      myRole = msg.role;
-      opponentName = msg.opponentName || "GUEST";
-      if(msg.mode) currentMode = msg.mode;
-      if(msg.level) currentLevel = msg.level;
-      friendCreateEl.classList.remove("visible");
-      friendWaitingEl.classList.remove("visible");
-      connectToMatch();
-    } else if(msg.type === "timeout"){
-      cancelFriend();
-      showCustomAlert("相手が見つかりませんでした");
-    }
-  };
-  friendWs.onerror = () => {
-    cancelFriend();
-    showCustomAlert(role === "guest" ? "招待コードが見つかりませんでした" : "サーバーに接続できませんでした");
-  };
-}
-
-function startFriendCreate(){
-  const code = generateFriendCode();
-  friendCodeLabelEl.textContent = code;
-  friendMenuEl.classList.remove("visible");
-  friendCreateEl.classList.add("visible");
-  connectFriendRoom(code, "host");
-}
-
-function startFriendJoin(){
-  const code = friendCodeInputEl.value.trim();
-  if(!code){
-    showCustomAlert("招待コードを入力してください");
-    return;
-  }
-  if(!/^[0-9]+$/.test(code)){
-    showCustomAlert("招待コードは数字のみ入力してください");
-    return;
-  }
-  friendJoinEl.classList.remove("visible");
-  friendWaitingEl.classList.add("visible");
-  connectFriendRoom(code, "guest");
-}
-
-function copyFriendCode(){
-  const code = friendCodeLabelEl.textContent;
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(code);
-  }
-  showCustomAlert("コードをコピーしました");
-}
-
-function cancelFriend(){
-  if(friendWs){ friendWs.close(); friendWs = null; }
-  friendRole = null;
-  friendCreateEl.classList.remove("visible");
-  friendWaitingEl.classList.remove("visible");
-  friendJoinEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-}
-
-document.getElementById("start-friend-btn").addEventListener("click", () => {
-  setupEl.classList.add("hidden");
-  friendMenuEl.classList.add("visible");
-});
-document.getElementById("friend-menu-back-btn").addEventListener("click", () => {
-  friendMenuEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-});
-document.getElementById("friend-create-btn").addEventListener("click", startFriendCreate);
-document.getElementById("friend-create-cancel-btn").addEventListener("click", cancelFriend);
-document.getElementById("friend-code-copy-btn").addEventListener("click", copyFriendCode);
-document.getElementById("friend-join-open-btn").addEventListener("click", () => {
-  friendMenuEl.classList.remove("visible");
-  friendCodeInputEl.value = "";
-  friendJoinEl.classList.add("visible");
-  friendCodeInputEl.focus();
-});
-document.getElementById("friend-join-cancel-btn").addEventListener("click", () => {
-  friendJoinEl.classList.remove("visible");
-  setupEl.classList.remove("hidden");
-});
-document.getElementById("friend-join-submit-btn").addEventListener("click", startFriendJoin);
-document.getElementById("friend-waiting-cancel-btn").addEventListener("click", cancelFriend);
-
-function connectToMatch(){
-  if(ws) ws.close();
-  ws = new WebSocket(`${ONLINE_SERVER_URL}/match/${matchId}?role=${myRole}&mode=${currentMode}&level=${currentLevel}`);
-  ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if(msg.type === "start"){
-      onlineWordDeck = msg.wordDeck;
-      startOnlineCountdown();
-    } else if(msg.type === "opponentProgress"){
-      opponentScore = msg.score;
-      updateOpponentHud();
-    } else if(msg.type === "end"){
-      finishOnlineGame(msg);
-    } else if(msg.type === "opponentLeft"){
-      finishOnlineGame({
-        you:{score:onlineScore, miss:onlineMiss},
-        opponent:{score:opponentScore, miss:0},
-        result:"win",
-        forfeit:true
-      });
-    }
-  };
-}
-
-function startOnlineCountdown(){
-  searchingEl.classList.remove("visible");
-  countdownEl.classList.add("visible");
-  let count = 3;
-  countdownNumberEl.textContent = count;
-  clearInterval(countdownTimerId);
-  countdownTimerId = setInterval(() => {
-    count--;
-    if(count > 0){
-      countdownNumberEl.textContent = count;
-    } else {
-      clearInterval(countdownTimerId);
-      countdownEl.classList.remove("visible");
-      beginOnlineMatch();
-    }
-  }, 1000);
-}
-
-async function beginOnlineMatch(){
-  logPlay(currentMode, currentLevel, friendRole ? "friend" : "online", opponentName);
-  isOnlineMode = true;
-  onlineIndex = 0;
-  onlineScore = 0;
-  onlineMiss = 0;
-  onlineChars = 0;
-  opponentScore = 0;
-  onlineTimeLeft = 100;
-  gameEl.classList.add("visible");
-  headerEl.classList.add("hidden");
-  document.body.classList.add("game-active");
-  opponentScoreLabelEl.classList.remove("hidden");
-  endGameBtn.classList.add("hidden");
-  const modeLabel = modeLabels[currentMode] || "ひらがな";
-  levelLabelEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）`;
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  scoreLabelEl.textContent = `${myDisplayName} 0 もん`;
-  timeLabelEl.textContent = `残り 100 秒`;
-  timeLabelEl.classList.remove("time-warning");
-  resetTimerFill();
-  updateOpponentHud();
-  if(currentMode === "sentence"){
-    await ensureSentenceReadings(currentLevel, onlineWordDeck);
-  }
-  currentWord = onlineWordDeck[0];
-  if(romajiDisplayEl){
-    romajiDisplayEl.classList.remove("shake");
-    romajiDisplayEl.scrollLeft = 0;
-  }
-  renderWord();
-  inputEl.value = "";
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-  fitSpacerToViewport();
-  inputEl.focus();
-  clearInterval(onlineTimerId);
-  onlineTimerId = setInterval(() => {
-    onlineTimeLeft--;
-    timeLabelEl.textContent = `残り ${onlineTimeLeft} 秒`;
-    timeLabelEl.classList.toggle("time-warning", onlineTimeLeft <= 10);
-    timerFillEl.style.width = `${(onlineTimeLeft / 100) * 100}%`;
-    if(onlineTimeLeft <= 0){
-      clearInterval(onlineTimerId);
-      if(ws && ws.readyState === WebSocket.OPEN){
-        ws.send(JSON.stringify({type:"finished", score:onlineScore, miss:onlineMiss}));
-      }
-    }
-  }, 1000);
-}
-
-function resetTimerFill(){
-  timerFillEl.classList.add("no-transition");
-  timerFillEl.style.width = "100%";
-  void timerFillEl.offsetWidth;
-  timerFillEl.classList.remove("no-transition");
-}
-
-function updateOpponentHud(){
-  const displayName = opponentName || "GUEST";
-  opponentScoreLabelEl.textContent = `${displayName} ${opponentScore} もん`;
-}
-
-function handleOnlineSubmit(typed){
-  if(typed !== currentWord){
-    onlineMiss++;
-    hintLabelEl.textContent = "まだ違います";
-    shakeInput();
-    playSound(incorrectSoundEl);
-    return;
-  }
-  onlineScore++;
-  onlineChars += currentWord.length;
-  onlineIndex++;
-  currentWord = onlineWordDeck[onlineIndex % onlineWordDeck.length];
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  scoreLabelEl.textContent = `${myDisplayName} ${onlineScore} もん`;
-  renderWord();
-  inputEl.value = "";
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-  fitSpacerToViewport();
-  playSound(correctSoundEl);
-  if(ws && ws.readyState === WebSocket.OPEN){
-    ws.send(JSON.stringify({type:"progress", score:onlineScore, index:onlineIndex}));
-  }
-}
-
-function finishOnlineGame(msg){
-  clearInterval(onlineTimerId);
-  clearInterval(countdownTimerId);
-  countdownEl.classList.remove("visible");
-  isOnlineMode = false;
-  gameEl.classList.remove("visible");
-  headerEl.classList.remove("hidden");
-  document.body.classList.remove("game-active");
-  opponentScoreLabelEl.classList.add("hidden");
-  endGameBtn.classList.remove("hidden");
-  resultEl.classList.add("visible");
-  const you = msg.you;
-  const opponent = msg.opponent;
-  const attempts = you.score + you.miss;
-  const accuracy = attempts === 0 ? 0 : Math.round((you.score / attempts) * 100);
-  const speed = Math.round((onlineChars / 100) * 60);
-  let resultLabel = "ひきわけ";
-  if(msg.result === "win") resultLabel = msg.forfeit ? "不戦勝" : "しょうり";
-  else if(msg.result === "lose") resultLabel = "はいせん";
-  resultScoreEl.textContent = resultLabel;
-  const modeLabel = modeLabels[currentMode] || "ひらがな";
-  const myDisplayName = normalizePlayerName(getPlayerName()) || "GUEST";
-  const oppDisplayName = opponentName || "GUEST";
-  resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}（オンライン）/ ${myDisplayName} ${you.score}もん・${oppDisplayName} ${opponent.score}もん`;
-  updateResultShareLinks(`シンプルタイピングのオンライン対戦で${resultLabel}でした！（${you.score}もん せいかい）`);
-  statAccuracyEl.textContent = `${accuracy}%`;
-  statSpeedEl.textContent = speed;
-  statMissEl.textContent = you.miss;
-  if(ws){ ws.close(); ws = null; }
-  opponentName = "";
-}
-
-function pickWord(){
-  const pool = wordListCache[`${currentMode}-${currentLevel}`] || [];
-  let candidates = pool.filter(w => !usedWords.includes(w));
-  if(candidates.length === 0){
-    usedWords = [];
-    candidates = pool;
-  }
-  const word = candidates[Math.floor(Math.random() * candidates.length)];
-  usedWords.push(word);
-  return word;
-}
-
-function renderSentenceReading(){
-  if(!sentenceReadingDisplayEl) return;
-  if(currentMode !== "sentence" || !showHiragana){
-    sentenceReadingDisplayEl.classList.remove("visible");
-    sentenceReadingDisplayEl.innerHTML = "";
-    return;
-  }
-  const reading = getCurrentWordReading();
-  sentenceReadingDisplayEl.classList.add("visible");
-  sentenceReadingDisplayEl.innerHTML = [...reading].map(c => `<span class="sentence-reading-char">${c}</span>`).join("");
-}
-
-function renderWord(){
-  wordDisplayEl.innerHTML = currentWord.split("").map(c => `<span class="char">${c}</span>`).join("");
-  renderSentenceReading();
-  fitWordDisplayFontSize();
-  if(inputMode === "realtime"){
-    setupRealtimeWord();
-  }
-  updateSentenceProgressHighlight();
-}
-
-function resetHintLabel(){
-  hintLabelEl.textContent = inputMode === "realtime" ? "ローマ字でタイピングしよう" : "Enterで確定";
-}
-
-function updateInputModeUI(){
-  const isRealtime = inputMode === "realtime";
-  if(inputRowEl) inputRowEl.classList.toggle("hidden", isRealtime);
-  if(romajiDisplayEl) romajiDisplayEl.classList.toggle("hidden", !isRealtime || !showRomaji);
-  if(inputMode !== "realtime"){
-    typingText = null;
-  }
-  resetHintLabel();
-  updateSentenceProgressHighlight();
-}
-
-let showRomaji = localStorage.getItem(SHOW_ROMAJI_KEY) !== "false";
-let showHiragana = localStorage.getItem(SHOW_HIRAGANA_KEY) !== "false";
-let romajiUppercase = localStorage.getItem(ROMAJI_UPPERCASE_KEY) === "true";
-let showKeyboard = localStorage.getItem(SHOW_KEYBOARD_KEY) !== "false";
-
-const showRomajiCheckEl = document.getElementById("show-romaji-check");
-const showHiraganaCheckEl = document.getElementById("show-hiragana-check");
-const romajiUppercaseCheckEl = document.getElementById("romaji-uppercase-check");
-const showKeyboardCheckEl = document.getElementById("show-keyboard-check");
-const keyboardGuideEl = document.getElementById("keyboard-guide");
-
-function applyRomajiUppercaseUI(){
-  if(romajiDisplayEl) romajiDisplayEl.classList.toggle("uppercase", romajiUppercase);
-}
-
-function applyKeyboardUI(){
-  if(!keyboardGuideEl) return;
-  const visible = inputMode === "realtime" && showKeyboard;
-  keyboardGuideEl.classList.toggle("visible", visible);
-  showNextKey();
-}
-
-function highlightKeyboardKey(key, isMiss){
-  if(!keyboardGuideEl || !keyboardGuideEl.classList.contains("visible")) return;
-  keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => el.classList.remove("active", "miss"));
-  if(!key) return;
-  const upper = key.toUpperCase();
-  const stateClass = isMiss ? "miss" : "active";
-  keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => {
-    if(el.textContent.trim() === upper) el.classList.add(stateClass);
-  });
-}
-
-function showNextKey(){
-  if(!keyboardGuideEl || !keyboardGuideEl.classList.contains("visible")) return;
-  keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => el.classList.remove("next"));
-  if(!typingText || !typingText.remainingRoman) return;
-  const next = typingText.remainingRoman[0].toUpperCase();
-  keyboardGuideEl.querySelectorAll(".kb-key").forEach(el => {
-    if(el.textContent.trim() === next) el.classList.add("next");
-  });
-}
-
-function refreshDisplaySettingCheckboxes(){
-  if(showRomajiCheckEl) showRomajiCheckEl.checked = showRomaji;
-  if(showHiraganaCheckEl) showHiraganaCheckEl.checked = showHiragana;
-  if(romajiUppercaseCheckEl) romajiUppercaseCheckEl.checked = romajiUppercase;
-  if(showKeyboardCheckEl) showKeyboardCheckEl.checked = showKeyboard;
-}
-
-function applyDisplaySettings(settings){
-  showRomaji = settings && settings.showRomaji !== undefined ? settings.showRomaji !== false : true;
-  showHiragana = settings && settings.showHiragana !== undefined ? settings.showHiragana !== false : true;
-  romajiUppercase = settings && settings.romajiUppercase === true;
-  showKeyboard = settings && settings.showKeyboard !== undefined ? settings.showKeyboard !== false : true;
-  refreshDisplaySettingCheckboxes();
-  updateInputModeUI();
-  renderSentenceReading();
-  applyRomajiUppercaseUI();
-  applyKeyboardUI();
-}
-
-function getGuestDisplaySettings(){
-  return {
-    showRomaji: localStorage.getItem(SHOW_ROMAJI_KEY) !== "false",
-    showHiragana: localStorage.getItem(SHOW_HIRAGANA_KEY) !== "false",
-    romajiUppercase: localStorage.getItem(ROMAJI_UPPERCASE_KEY) === "true",
-    showKeyboard: localStorage.getItem(SHOW_KEYBOARD_KEY) !== "false"
-  };
-}
-
-function saveGuestDisplaySettings(){
-  localStorage.setItem(SHOW_ROMAJI_KEY, String(showRomaji));
-  localStorage.setItem(SHOW_HIRAGANA_KEY, String(showHiragana));
-  localStorage.setItem(ROMAJI_UPPERCASE_KEY, String(romajiUppercase));
-  localStorage.setItem(SHOW_KEYBOARD_KEY, String(showKeyboard));
-}
-
-function handleDisplaySettingChange(){
-  const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-  if(isLoggedIn){
-    const token = getSessionToken();
-    fetch(`${RANKING_API_URL}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "setDisplaySettings", token, showRomaji, showHiragana, romajiUppercase, showKeyboard })
-    }).catch(() => {});
-  } else {
-    saveGuestDisplaySettings();
-  }
-}
-
-if(showRomajiCheckEl){
-  showRomajiCheckEl.addEventListener("change", () => {
-    showRomaji = showRomajiCheckEl.checked;
-    updateInputModeUI();
-    handleDisplaySettingChange();
-  });
-}
-
-if(showHiraganaCheckEl){
-  showHiraganaCheckEl.addEventListener("change", () => {
-    showHiragana = showHiraganaCheckEl.checked;
-    renderSentenceReading();
-    handleDisplaySettingChange();
-  });
-}
-
-if(romajiUppercaseCheckEl){
-  romajiUppercaseCheckEl.addEventListener("change", () => {
-    romajiUppercase = romajiUppercaseCheckEl.checked;
-    applyRomajiUppercaseUI();
-    handleDisplaySettingChange();
-  });
-}
-
-if(showKeyboardCheckEl){
-  showKeyboardCheckEl.addEventListener("change", () => {
-    showKeyboard = showKeyboardCheckEl.checked;
-    applyKeyboardUI();
-    handleDisplaySettingChange();
-  });
-}
-
-refreshDisplaySettingCheckboxes();
-applyRomajiUppercaseUI();
-applyKeyboardUI();
-
-const showRomajiLabelEl = document.getElementById("show-romaji-label");
-const romajiUppercaseLabelEl = document.getElementById("romaji-uppercase-label");
-const showKeyboardLabelEl = document.getElementById("show-keyboard-label");
-
-function applyInputMode(mode){
-  inputMode = mode === "textbox" ? "textbox" : "realtime";
-  document.querySelectorAll(".input-mode-btn").forEach(b => {
-    b.classList.toggle("active", b.dataset.inputMode === inputMode);
-  });
-  const isRealtime = inputMode === "realtime";
-  if(showRomajiLabelEl) showRomajiLabelEl.classList.toggle("hidden", !isRealtime);
-  if(romajiUppercaseLabelEl) romajiUppercaseLabelEl.classList.toggle("hidden", !isRealtime);
-  if(showKeyboardLabelEl) showKeyboardLabelEl.classList.toggle("hidden", !isRealtime);
-  updateInputModeUI();
-  applyKeyboardUI();
-  if(inputMode === "realtime" && gameEl.classList.contains("visible")){
-    setupRealtimeWord();
-  }
-}
-
-document.querySelectorAll(".input-mode-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const selectedMode = btn.dataset.inputMode;
-    applyInputMode(selectedMode);
-    const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
-    if(isLoggedIn){
-      const token = getSessionToken();
-      fetch(`${RANKING_API_URL}/auth`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "setInputMode", token, inputMode: selectedMode })
-      }).catch(() => {});
-    } else {
-      localStorage.setItem(GUEST_INPUT_MODE_KEY, selectedMode);
-    }
-  });
-});
-
-applyInputMode(localStorage.getItem(GUEST_INPUT_MODE_KEY) || "realtime");
-
-function buildTypingText(reading){
-  try{
-    return new TypingText(reading);
-  }catch(e){}
-  try{
-    const sanitized = [...reading].filter(c => /[ぁ-んー]/.test(c)).join("");
-    if(sanitized) return new TypingText(sanitized);
-  }catch(e){}
-  return null;
-}
-
-function setupRealtimeWord(){
-  const reading = getCurrentWordReading();
-  if(romajiDisplayEl){
-    romajiDisplayEl.classList.remove("shake");
-    romajiDisplayEl.scrollLeft = 0;
-  }
-  typingText = buildTypingText(reading);
-  renderRomajiDisplay();
-  fitRomajiDisplayFontSize();
-  showNextKey();
-}
-
-function renderRomajiDisplay(){
-  if(!romajiDisplayEl) return;
-  if(!typingText){
-    romajiDisplayEl.innerHTML = "";
-    showNextKey();
-    return;
-  }
-  const doneHtml = `<span class="rchar done">${typingText.completedRoman}</span>`;
-  const restHtml = `<span class="rchar current">${typingText.remainingRoman}</span>`;
-  romajiDisplayEl.innerHTML = doneHtml + restHtml;
-  scrollRomajiDisplayToTypedPosition();
-  showNextKey();
-}
-
-function fitRomajiDisplayFontSize(){
-  if(!romajiDisplayEl) return;
-  const baseSize = 26;
-  const minSize = 15;
-  const maxScrollableWidth = romajiDisplayEl.clientWidth * 2.2;
-  let size = baseSize;
-  romajiDisplayEl.style.fontSize = `${size}px`;
-  while(romajiDisplayEl.scrollWidth > maxScrollableWidth && size > minSize){
-    size -= 1;
-    romajiDisplayEl.style.fontSize = `${size}px`;
-  }
-  romajiDisplayEl.classList.toggle("centered", romajiDisplayEl.scrollWidth <= romajiDisplayEl.clientWidth);
-}
-
-function scrollRomajiDisplayToTypedPosition(){
-  if(!romajiDisplayEl || romajiDisplayEl.classList.contains("hidden")) return;
-  const doneEl = romajiDisplayEl.querySelector(".rchar.done");
-  if(!doneEl) return;
-  const typedPosition = doneEl.offsetLeft + doneEl.offsetWidth;
-  const targetScrollLeft = typedPosition - romajiDisplayEl.clientWidth * 0.4;
-  const maxScrollLeft = Math.max(0, romajiDisplayEl.scrollWidth - romajiDisplayEl.clientWidth);
-  romajiDisplayEl.scrollLeft = Math.min(maxScrollLeft, Math.max(0, targetScrollLeft));
-}
-
-function getRealtimeCompletedKanaCount(){
-  if(!typingText || currentMode !== "sentence") return 0;
-  const reading = getCurrentWordReading();
-  const remainingRoman = typingText.remainingRoman;
-  if(!remainingRoman) return [...reading].length;
-
-  const chars = [...reading];
-  for(let i = 0; i <= chars.length; i++){
-    const suffix = chars.slice(i).join("");
-    try{
-      const suffixTypingText = new TypingText(suffix);
-      if(suffixTypingText.remainingRoman === remainingRoman){
-        return i;
-      }
-    }catch(e){
-      break;
-    }
-  }
-  return 0;
-}
-
-function updateSentenceProgressHighlight(){
-  if(!sentenceReadingDisplayEl) return;
-  const readingChars = sentenceReadingDisplayEl.querySelectorAll(".sentence-reading-char");
-  readingChars.forEach(el => el.classList.remove("done"));
-}
-
-function shakeRomaji(){
-  if(!romajiDisplayEl) return;
-  romajiDisplayEl.classList.remove("shake");
-  void romajiDisplayEl.offsetWidth;
-  romajiDisplayEl.classList.add("shake");
-}
-
-function completeRealtimeWord(){
-  if(isOnlineMode){
-    handleOnlineSubmit(currentWord);
-    return;
-  }
-  score++;
-  totalCharsTyped += currentWord.length;
-  scoreLabelEl.textContent = `せいかい ${score} もん`;
-  playSound(correctSoundEl);
-  nextWord();
-}
-
-function handleRealtimeKey(key){
-  if(!typingText){
-    setupRealtimeWord();
-    if(!typingText) return "unmatch";
-  }
-  let result;
-  try{
-    result = typingText.inputKey(key);
-  }catch(e){
-    return "unmatch";
-  }
-
-  if(result === "unmatch"){
-    missCount++;
-    hintLabelEl.textContent = "ちがうキーです";
-    shakeRomaji();
-    playSound(incorrectSoundEl);
-    return result;
-  }
-
-  playSound(keySoundEl);
-  hintLabelEl.textContent = "ローマ字でタイピングしよう";
-  renderRomajiDisplay();
-  updateSentenceProgressHighlight();
-
-  if(result === "complete"){
-    completeRealtimeWord();
-  }
-  return result;
-}
-
-document.addEventListener("keydown", (e) => {
-  if(inputMode !== "realtime") return;
-  if(!gameEl.classList.contains("visible")) return;
-  if(!e.isTrusted) return;
-  if(e.metaKey || e.ctrlKey || e.altKey) return;
-  if(e.key.length !== 1 || !/^[a-zA-Z\-]$/.test(e.key)) return;
-  e.preventDefault();
-  const result = handleRealtimeKey(e.key.toLowerCase());
-  highlightKeyboardKey(e.key, result === "unmatch");
-});
-
-document.addEventListener("keyup", (e) => {
-  if(inputMode !== "realtime") return;
-  if(!gameEl.classList.contains("visible")) return;
-  highlightKeyboardKey(null);
-});
-
-function fitWordDisplayFontSize(){
-  const baseSize = parseFloat(getComputedStyle(wordDisplayEl).fontSize);
-  const minSize = 12;
-  let size = baseSize;
-  wordDisplayEl.style.fontSize = "";
-  while(wordDisplayEl.scrollWidth > wordDisplayEl.clientWidth && size > minSize){
-    size -= 1;
-    wordDisplayEl.style.fontSize = `${size}px`;
-  }
-}
-
-function updateProgressHighlight(typed){
-  const chars = wordDisplayEl.querySelectorAll(".char");
-  chars.forEach(el => el.classList.remove("done"));
-
-  if(inputMode !== "textbox") return;
-
-  let stillCorrect = true;
-  chars.forEach((el, i) => {
-    if(stillCorrect && i < typed.length && typed[i] === currentWord[i]){
-      el.classList.add("done");
-    }else{
-      stillCorrect = false;
-    }
-  });
-}
-
-function nextWord(){
-  currentWord = pickWord();
-  renderWord();
-  inputEl.value = "";
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-  fitSpacerToViewport();
-}
-
-async function startGame(){
-  logPlay(currentMode, currentLevel, "solo", "");
-  showAppLoadingOverlay();
-  await ensureWordList(currentMode, currentLevel);
-  hideAppLoadingOverlay();
-  setupEl.classList.add("hidden");
-  resultEl.classList.remove("visible");
-  await runSoloCountdown();
-  gameEl.classList.add("visible");
-  headerEl.classList.add("hidden");
-  document.body.classList.add("game-active");
-  endGameBtn.classList.remove("hidden");
-  fitSpacerToViewport();
-  const modeLabel = modeLabels[currentMode] || "ひらがな";
-  levelLabelEl.textContent = `${modeLabel}・${levelLabels[currentLevel]}`;
-  score = 0;
-  missCount = 0;
-  totalCharsTyped = 0;
-  timeLeft = 100;
-  usedWords = [];
-  if(romajiDisplayEl){
-    romajiDisplayEl.classList.remove("shake");
-    romajiDisplayEl.scrollLeft = 0;
-  }
-  resultRankBadgeEl.classList.remove("visible");
-  resultRankBadgeEl.textContent = "";
-  newRecordBadgeEl.classList.remove("visible");
-  if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.remove("visible");
-  scoreLabelEl.textContent = `せいかい 0 もん`;
-  timeLabelEl.textContent = `残り 100 秒`;
-  timeLabelEl.classList.remove("time-warning");
-  resetTimerFill();
-  nextWord();
-  inputEl.focus();
-  clearInterval(timerId);
-  timerId = setInterval(() => {
-    timeLeft--;
-    timeLabelEl.textContent = `残り ${timeLeft} 秒`;
-    timeLabelEl.classList.toggle("time-warning", timeLeft <= 10);
-    timerFillEl.style.width = `${(timeLeft / 100) * 100}%`;
-    if(timeLeft <= 0){
-      endGame(true);
-    }
-  }, 1000);
-}
-
-function runSoloCountdown(){
-  return new Promise(resolve => {
-    countdownEl.classList.add("visible");
-    let count = 3;
-    countdownNumberEl.textContent = count;
-    clearInterval(countdownTimerId);
-    countdownTimerId = setInterval(() => {
-      count--;
-      if(count > 0){
-        countdownNumberEl.textContent = count;
-      } else {
-        clearInterval(countdownTimerId);
-        countdownEl.classList.remove("visible");
-        resolve();
-      }
-    }, 1000);
-  });
-}
-
-function endGame(isNormalEnd){
-  clearInterval(timerId);
-  gameEl.classList.remove("visible");
-  headerEl.classList.remove("hidden");
-  document.body.classList.remove("game-active");
-  if(isNormalEnd){
-    resultEl.classList.add("visible");
-
-    const attempts = score + missCount;
-    const accuracy = attempts === 0 ? 0 : Math.round((score / attempts) * 100);
-    const speed = Math.round((totalCharsTyped / 100) * 60);
-    const baseScore = score * 100 + speed * 2;
-    const missPenalty = Math.min(missCount * 30, baseScore * 0.5);
-    const finalScore = Math.max(0, Math.round(baseScore - missPenalty));
-
-    resultScoreEl.textContent = finalScore;
-    const modeLabel = modeLabels[currentMode] || "ひらがな";
-    resultSubEl.textContent = `${modeLabel}・${levelLabels[currentLevel]} / ${score}もん せいかい`;
-    updateResultShareLinks(`シンプルタイピングで${modeLabel}・${levelLabels[currentLevel]}をプレイして${finalScore}点でした！`);
-    statAccuracyEl.textContent = `${accuracy}%`;
-    statSpeedEl.textContent = speed;
-    statMissEl.textContent = missCount;
-
-    const previousHighScore = getHighScore(currentMode, currentLevel);
-    if(finalScore > previousHighScore){
-      setHighScore(currentMode, currentLevel, finalScore);
-      resultHighScoreEl.textContent = `ハイスコア ${finalScore}`;
-      newRecordBadgeEl.classList.add("visible");
-    } else {
-      resultHighScoreEl.textContent = `ハイスコア ${previousHighScore}`;
-      newRecordBadgeEl.classList.remove("visible");
-    }
-    updateSetupHighScore();
-
-    if(finalScore > 0){
-      handleRankingSubmission(finalScore, currentMode, currentLevel);
-    }
-    recordPlayResult(currentMode, currentLevel, accuracy, speed, missCount, finalScore);
-  } else {
-    setupEl.classList.remove("hidden");
-  }
-}
-
-const endGameBtn = document.getElementById("end-game-btn");
-endGameBtn.addEventListener("click", () => {
-  if(isOnlineMode) return;
-  endGame(false);
-});
-
-document.addEventListener("keydown", (e) => {
-  if(e.key === "Escape" && gameEl.classList.contains("visible")){
-    if(isOnlineMode) return;
-    endGame(false);
-  }
-});
-
-function shakeInput(){
-  inputEl.classList.remove("shake");
-  void inputEl.offsetWidth;
-  inputEl.classList.add("shake");
-}
-
-
-inputEl.addEventListener("compositionstart", () => { isComposing = true; });
-inputEl.addEventListener("compositionend", () => {
-  setTimeout(() => { isComposing = false; }, 0);
-});
-
-inputEl.addEventListener("paste", (e) => {
-  e.preventDefault();
-});
-
-inputEl.addEventListener("drop", (e) => {
-  e.preventDefault();
-});
-
-inputEl.addEventListener("input", (e) => {
-  if(inputMode === "textbox") updateProgressHighlight(inputEl.value);
-  inputEl.classList.remove("shake");
-  resetHintLabel();
-});
-
-inputEl.addEventListener("keydown", (e) => {
-  if(e.key !== "Enter") return;
-  if(isComposing || e.isComposing || e.keyCode === 229) return;
-  e.preventDefault();
-
-  const typed = inputEl.value.trim();
-
-  if(isOnlineMode){
-    handleOnlineSubmit(typed);
-    return;
-  }
-
-  if(typed !== currentWord){
-    missCount++;
-    hintLabelEl.textContent = "まだ違います";
-    shakeInput();
-    playSound(incorrectSoundEl);
-    return;
-  }
-
-  score++;
-  totalCharsTyped += currentWord.length;
-  scoreLabelEl.textContent = `せいかい ${score} もん`;
-  playSound(correctSoundEl);
-  nextWord();
-});
-
-document.addEventListener("visibilitychange", () => {
-  if(document.visibilityState !== "hidden") return;
-  if(searchingEl.classList.contains("visible")){
-    cancelSearch();
-  } else if(friendCreateEl.classList.contains("visible") || friendWaitingEl.classList.contains("visible")){
-    cancelFriend();
-  } else if(countdownEl.classList.contains("visible")){
-    clearInterval(countdownTimerId);
-    countdownEl.classList.remove("visible");
-    if(ws){ ws.close(); ws = null; }
-    setupEl.classList.remove("hidden");
-  } else if(isOnlineMode){
-    if(ws && ws.readyState === WebSocket.OPEN){
-      ws.close();
-    }
-    finishOnlineGame({
-      you:{score:onlineScore, miss:onlineMiss},
-      opponent:{score:opponentScore, miss:0},
-      result:"lose",
-      forfeit:true
-    });
-  }
-});
-
-const PRESENCE_PING_MS = 30000;
-const PRESENCE_SYNC_MS = 1000;
+const rankingBackBtnEl = document.getElementById("ranking-back-btn");
+const userBackBtnEl = document.getElementById("user-back-btn");
+const userRefreshBtnEl = document.getElementById("user-refresh-btn");
+const inviteBackBtnEl = document.getElementById("invite-back-btn");
+const inviteRefreshBtnEl = document.getElementById("invite-refresh-btn");
+const menuPlaylogBtnEl = document.getElementById("menu-playlog-btn");
+const playlogListEl = document.getElementById("playlog-list");
+const playlogBackBtnEl = document.getElementById("playlog-back-btn");
+const playlogRefreshBtnEl = document.getElementById("playlog-refresh-btn");
+const playlogClearBtnEl = document.getElementById("playlog-clear-btn");
+const eventDashboardEl = document.getElementById("event-dashboard");
+const presenceDashboardEl = document.getElementById("presence-dashboard");
+const menuPresenceBtnEl = document.getElementById("menu-presence-btn");
+const presenceBackBtnEl = document.getElementById("presence-back-btn");
+const presenceStatusEl = document.getElementById("presence-status");
+const presenceStatusTextEl = document.getElementById("presence-status-text");
+const presenceTotalEl = document.getElementById("presence-total");
+const presencePlayingEl = document.getElementById("presence-playing");
+const presenceMatchingEl = document.getElementById("presence-matching");
+const presenceIdleEl = document.getElementById("presence-idle");
+const presenceModeGridEl = document.getElementById("presence-mode-grid");
+const presenceListEl = document.getElementById("presence-list");
+const ACTIVITY_LABELS = { idle: "メニュー画面", solo: "一人プレイ中", online: "オンライン対戦中", friend: "フレンド対戦中", matching: "対戦相手を待機中" };
+const PLAYING_ACTIVITIES = ["solo", "online", "friend"];
+const presenceModeCountEls = {};
+let presenceClients = [];
+let presenceReceivedAt = 0;
+let presenceDurationEls = [];
 let presenceSocket = null;
+let presenceSession = 0;
 let presenceRetry = 0;
 let presenceReconnectTimer = null;
-let presenceLastSent = "";
+let presenceDurationTimer = null;
+const menuEventBtnEl = document.getElementById("menu-event-btn");
+const eventBackBtnEl = document.getElementById("event-back-btn");
+const eventRefreshBtnEl = document.getElementById("event-refresh-btn");
+const eventStatusTextEl = document.getElementById("event-status-text");
+const eventMonthInputEl = document.getElementById("event-month-input");
+const eventNoticeInputEl = document.getElementById("event-notice-input");
+const eventModeChecksEl = document.getElementById("event-combo-checks");
+const eventEnableBtnEl = document.getElementById("event-enable-btn");
+const eventDisableBtnEl = document.getElementById("event-disable-btn");
+const eventArchiveMonthInputEl = document.getElementById("event-archive-month-input");
+const eventArchiveLoadBtnEl = document.getElementById("event-archive-load-btn");
+const eventArchiveGridEl = document.getElementById("event-archive-grid");
 
-function computePresenceState(){
-  let activity = "idle";
-  if(gameEl.classList.contains("visible")){
-    activity = isOnlineMode ? (friendRole ? "friend" : "online") : "solo";
-  } else if(countdownEl.classList.contains("visible")){
-    activity = ws ? (friendRole ? "friend" : "online") : "solo";
-  } else if(
-    searchingEl.classList.contains("visible") ||
-    friendCreateEl.classList.contains("visible") ||
-    friendWaitingEl.classList.contains("visible") ||
-    friendJoinEl.classList.contains("visible")
-  ){
-    activity = "matching";
+function showOnly(el){
+  if(el !== presenceDashboardEl) stopPresenceStream();
+  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl, playlogDashboardEl, eventDashboardEl, passkeyDashboardEl, presenceDashboardEl].forEach(node => {
+    if(node === el){
+      node.classList.remove("hidden");
+    } else {
+      node.classList.add("hidden");
+    }
+  });
+}
+
+async function callAdmin(action, extra){
+  const res = await fetch(`${WORKER_URL}/admin`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token: adminToken, action, ...extra })
+  });
+  if(res.status === 401){
+    throw new Error("unauthorized");
   }
-  const active = activity !== "idle";
-  return {
-    type: "state",
-    activity,
-    mode: active ? currentMode : "",
-    level: active ? currentLevel : "",
-    name: normalizePlayerName(getPlayerName())
-  };
+  return res.json();
 }
 
-function syncPresence(){
-  if(!presenceSocket || presenceSocket.readyState !== WebSocket.OPEN) return;
-  const payload = JSON.stringify(computePresenceState());
-  if(payload === presenceLastSent) return;
-  presenceLastSent = payload;
-  presenceSocket.send(payload);
+function b64urlToBuffer(str){
+  const s = String(str).replace(/-/g, "+").replace(/_/g, "/");
+  const padded = s + "=".repeat((4 - (s.length % 4)) % 4);
+  const bin = atob(padded);
+  const out = new Uint8Array(bin.length);
+  for(let i = 0; i < bin.length; i++){
+    out[i] = bin.charCodeAt(i);
+  }
+  return out.buffer;
 }
 
-function schedulePresenceReconnect(){
+function bufferToB64url(buf){
+  const arr = new Uint8Array(buf);
+  let bin = "";
+  for(let i = 0; i < arr.length; i++){
+    bin += String.fromCharCode(arr[i]);
+  }
+  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+async function postAdmin(payload){
+  const res = await fetch(`${WORKER_URL}/admin`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  let data = {};
+  try{
+    data = await res.json();
+  }catch(e){
+    data = {};
+  }
+  if(res.status === 429){
+    const err = new Error("locked");
+    err.retryAfterSeconds = data.retryAfterSeconds;
+    throw err;
+  }
+  if(res.status === 401){
+    throw new Error("unauthorized");
+  }
+  if(!res.ok){
+    throw new Error(data.error || "error");
+  }
+  return data;
+}
+
+async function login(){
+  const options = await postAdmin({ action: "authOptions" });
+  if(!options.hasCredentials){
+    throw new Error("no_credentials");
+  }
+  const assertion = await navigator.credentials.get({
+    publicKey: {
+      challenge: b64urlToBuffer(options.challenge),
+      rpId: options.rpId,
+      allowCredentials: options.allowCredentials.map(id => ({ type: "public-key", id: b64urlToBuffer(id) })),
+      userVerification: "required",
+      timeout: 60000
+    }
+  });
+  const data = await postAdmin({
+    action: "login",
+    credential: {
+      id: assertion.id,
+      response: {
+        clientDataJSON: bufferToB64url(assertion.response.clientDataJSON),
+        authenticatorData: bufferToB64url(assertion.response.authenticatorData),
+        signature: bufferToB64url(assertion.response.signature)
+      }
+    }
+  });
+  currentCredentialId = assertion.id;
+  return data.token;
+}
+
+async function registerPasskey(auth){
+  const options = await postAdmin({ action: "registerOptions", ...auth });
+  const pk = options.publicKey;
+  const created = await navigator.credentials.create({
+    publicKey: {
+      challenge: b64urlToBuffer(pk.challenge),
+      rp: pk.rp,
+      user: { id: b64urlToBuffer(pk.user.id), name: pk.user.name, displayName: pk.user.displayName },
+      pubKeyCredParams: pk.pubKeyCredParams,
+      authenticatorSelection: pk.authenticatorSelection,
+      excludeCredentials: pk.excludeCredentials.map(c => ({ type: "public-key", id: b64urlToBuffer(c.id) })),
+      attestation: pk.attestation,
+      timeout: pk.timeout
+    }
+  });
+  const result = await postAdmin({
+    action: "register",
+    ...auth,
+    credential: {
+      id: created.id,
+      response: {
+        clientDataJSON: bufferToB64url(created.response.clientDataJSON),
+        attestationObject: bufferToB64url(created.response.attestationObject)
+      }
+    }
+  });
+  return { ...result, credentialId: created.id };
+}
+
+function passkeyErrorMessage(e){
+  if(e.message === "locked"){
+    const minutes = Math.ceil(e.retryAfterSeconds / 60);
+    return `試行回数が多すぎます。${minutes}分後にもう一度お試しください`;
+  }
+  if(e.name === "NotAllowedError" || e.name === "AbortError"){
+    return "パスキーの操作がキャンセルされました";
+  }
+  if(e.name === "InvalidStateError"){
+    return "このパスキーはすでに登録されています";
+  }
+  if(e.message === "unauthorized"){
+    return "認証に失敗しました";
+  }
+  if(e.message === "passkey_not_configured"){
+    return "サーバーのパスキー設定が未完了です";
+  }
+  return "エラーが発生しました。もう一度お試しください";
+}
+
+function renderBoards(data){
+  boardGridEl.innerHTML = "";
+  for(const mode of MODES){
+    for(const level of LEVELS){
+      const key = `${mode}:${level}`;
+      const scores = data[key] || [];
+      const board = document.createElement("div");
+      board.className = "board";
+
+      const head = document.createElement("div");
+      head.className = "board-head";
+
+      const title = document.createElement("div");
+      title.className = "board-title";
+      title.textContent = `${MODE_LABELS[mode]}・${LEVEL_LABELS[level]}`;
+
+      const clearBtn = document.createElement("button");
+      clearBtn.className = "clear-btn";
+      clearBtn.textContent = "全削除";
+      clearBtn.addEventListener("click", async () => {
+        if(!confirm(`${MODE_LABELS[mode]}・${LEVEL_LABELS[level]} のランキングを全て削除しますか？`)) return;
+        showOnly(loadingPanelEl);
+        try{
+          await callAdmin("clear", { mode, level });
+          await loadRankingDashboard();
+        }catch(e){
+          handleSessionExpired();
+        }
+      });
+
+      head.appendChild(title);
+      head.appendChild(clearBtn);
+      board.appendChild(head);
+
+      if(scores.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "empty-text";
+        empty.textContent = "データがありません";
+        board.appendChild(empty);
+      } else {
+        scores.forEach((entry, i) => {
+          const scoreValue = typeof entry === "object" && entry !== null ? entry.score : entry;
+          const scoreName = typeof entry === "object" && entry !== null && entry.name ? entry.name : "GUEST";
+
+          const row = document.createElement("div");
+          row.className = "score-row";
+
+          const rank = document.createElement("div");
+          rank.className = "score-rank";
+          rank.textContent = `${i + 1}位`;
+
+          const name = document.createElement("div");
+          name.className = "score-name";
+          name.textContent = scoreName;
+
+          const value = document.createElement("div");
+          value.className = "score-value";
+          value.textContent = scoreValue;
+
+          const del = document.createElement("button");
+          del.className = "delete-btn";
+          del.textContent = "削除";
+          del.addEventListener("click", async () => {
+            if(!confirm(`${scoreName}（${scoreValue}）を削除しますか？`)) return;
+            showOnly(loadingPanelEl);
+            try{
+              await callAdmin("delete", { mode, level, score: scoreValue });
+              await loadRankingDashboard();
+            }catch(e){
+              handleSessionExpired();
+            }
+          });
+
+          row.appendChild(rank);
+          row.appendChild(name);
+          row.appendChild(value);
+          row.appendChild(del);
+          board.appendChild(row);
+        });
+      }
+
+      boardGridEl.appendChild(board);
+    }
+  }
+}
+
+function renderUsers(users){
+  userListEl.innerHTML = "";
+  if(!users || users.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "登録されているユーザーがいません";
+    userListEl.appendChild(empty);
+    return;
+  }
+
+  users.forEach(user => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const name = document.createElement("div");
+    name.className = "user-name";
+    name.textContent = user.name || "GUEST";
+
+    const sub = document.createElement("div");
+    sub.className = "user-sub";
+    sub.textContent = user.sub;
+
+    const scoreKeys = Object.keys(user.highScores || {});
+    const scores = document.createElement("div");
+    scores.className = "user-scores";
+    scores.textContent = scoreKeys.length > 0
+      ? scoreKeys.map(k => `${k}: ${user.highScores[k]}`).join(" / ")
+      : "ハイスコアなし";
+
+    info.appendChild(name);
+    info.appendChild(sub);
+    info.appendChild(scores);
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "user-delete-btn";
+    delBtn.textContent = "削除";
+    delBtn.addEventListener("click", async () => {
+      if(!confirm(`ユーザー「${user.name || "GUEST"}」を削除しますか？この操作は取り消せません`)) return;
+      showOnly(loadingPanelEl);
+      try{
+        await callAdmin("deleteUser", { sub: user.sub });
+        await loadUserDashboard();
+      }catch(e){
+        handleSessionExpired();
+      }
+    });
+
+    row.appendChild(info);
+    row.appendChild(delBtn);
+    userListEl.appendChild(row);
+  });
+}
+
+function renderInviteCodes(codes){
+  inviteListEl.innerHTML = "";
+  if(!codes || codes.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "有効な招待コードがありません";
+    inviteListEl.appendChild(empty);
+    return;
+  }
+
+  codes.forEach(entry => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const code = document.createElement("div");
+    code.className = "user-name";
+    code.textContent = entry.code;
+
+    const meta = document.createElement("div");
+    meta.className = "user-sub";
+    meta.textContent = `${MODE_LABELS[entry.mode] || entry.mode} / ${LEVEL_LABELS[entry.level] || entry.level}`;
+
+    const expires = document.createElement("div");
+    expires.className = "user-scores";
+    expires.textContent = `有効期限: ${new Date(entry.expiresAt).toLocaleString("ja-JP")}`;
+
+    info.appendChild(code);
+    info.appendChild(meta);
+    info.appendChild(expires);
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "user-delete-btn";
+    delBtn.textContent = "削除";
+    delBtn.addEventListener("click", async () => {
+      if(!confirm(`招待コード「${entry.code}」を削除しますか？`)) return;
+      showOnly(loadingPanelEl);
+      try{
+        await callAdmin("deleteInviteCode", { code: entry.code });
+        await loadInviteDashboard();
+      }catch(e){
+        handleSessionExpired();
+      }
+    });
+
+    row.appendChild(info);
+    row.appendChild(delBtn);
+    inviteListEl.appendChild(row);
+  });
+}
+
+function renderPlayLog(entries){
+  playlogListEl.innerHTML = "";
+  if(!entries || entries.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "プレイ履歴がありません";
+    playlogListEl.appendChild(empty);
+    return;
+  }
+
+  entries.forEach(entry => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const name = document.createElement("div");
+    name.className = "user-name";
+    name.textContent = entry.name || "GUEST";
+
+    const meta = document.createElement("div");
+    meta.className = "user-sub";
+    meta.textContent = `${MODE_LABELS[entry.mode] || entry.mode} / ${LEVEL_LABELS[entry.level] || entry.level}`;
+
+    const matchInfo = document.createElement("div");
+    matchInfo.className = "user-sub";
+    const matchTypeLabel = MATCH_TYPE_LABELS[entry.matchType] || MATCH_TYPE_LABELS.solo;
+    matchInfo.textContent = entry.opponent ? `${matchTypeLabel} vs ${entry.opponent}` : matchTypeLabel;
+
+    const time = document.createElement("div");
+    time.className = "user-scores";
+    time.textContent = new Date(entry.ts).toLocaleString("ja-JP");
+
+    const network = document.createElement("div");
+    network.className = "user-sub";
+    network.textContent = `IP: ${entry.ip || "unknown"}`;
+
+    const agent = document.createElement("div");
+    agent.className = "user-sub";
+    agent.textContent = `UA: ${entry.userAgent || "unknown"}`;
+
+    info.appendChild(name);
+    info.appendChild(meta);
+    info.appendChild(matchInfo);
+    info.appendChild(time);
+    info.appendChild(network);
+    info.appendChild(agent);
+
+    row.appendChild(info);
+    playlogListEl.appendChild(row);
+  });
+}
+
+function renderArchiveBoards(data, month){
+  eventArchiveGridEl.innerHTML = "";
+  for(const mode of MODES){
+    for(const level of LEVELS){
+      const key = `${mode}:${level}`;
+      const scores = data[key] || [];
+      const board = document.createElement("div");
+      board.className = "board";
+
+      const head = document.createElement("div");
+      head.className = "board-head";
+
+      const title = document.createElement("div");
+      title.className = "board-title";
+      title.textContent = `${MODE_LABELS[mode]}・${LEVEL_LABELS[level]}`;
+
+      const clearBtn = document.createElement("button");
+      clearBtn.className = "clear-btn";
+      clearBtn.textContent = "全削除";
+      clearBtn.addEventListener("click", async () => {
+        if(!confirm(`${MODE_LABELS[mode]}・${LEVEL_LABELS[level]} の ${month} のランキングを全て削除しますか？`)) return;
+        showOnly(loadingPanelEl);
+        try{
+          await callAdmin("clearMonthRanking", { mode, level, month });
+          const refreshed = await callAdmin("getEventArchive", { month });
+          renderArchiveBoards(refreshed, month);
+          showOnly(eventDashboardEl);
+        }catch(e){
+          handleSessionExpired();
+        }
+      });
+
+      head.appendChild(title);
+      head.appendChild(clearBtn);
+      board.appendChild(head);
+
+      if(scores.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "empty-text";
+        empty.textContent = "データがありません";
+        board.appendChild(empty);
+      } else {
+        scores.forEach((entry, i) => {
+          const scoreValue = typeof entry === "object" && entry !== null ? entry.score : entry;
+          const scoreName = typeof entry === "object" && entry !== null && entry.name ? entry.name : "GUEST";
+
+          const row = document.createElement("div");
+          row.className = "score-row";
+
+          const rank = document.createElement("div");
+          rank.className = "score-rank";
+          rank.textContent = `${i + 1}位`;
+
+          const name = document.createElement("div");
+          name.className = "score-name";
+          name.textContent = scoreName;
+
+          const value = document.createElement("div");
+          value.className = "score-value";
+          value.textContent = scoreValue;
+
+          const del = document.createElement("button");
+          del.className = "delete-btn";
+          del.textContent = "削除";
+          del.addEventListener("click", async () => {
+            if(!confirm(`${scoreName}（${scoreValue}）を削除しますか？`)) return;
+            showOnly(loadingPanelEl);
+            try{
+              await callAdmin("deleteMonthRanking", { mode, level, month, score: scoreValue });
+              const refreshed = await callAdmin("getEventArchive", { month });
+              renderArchiveBoards(refreshed, month);
+              showOnly(eventDashboardEl);
+            }catch(e){
+              handleSessionExpired();
+            }
+          });
+
+          row.appendChild(rank);
+          row.appendChild(name);
+          row.appendChild(value);
+          row.appendChild(del);
+          board.appendChild(row);
+        });
+      }
+
+      eventArchiveGridEl.appendChild(board);
+    }
+  }
+}
+
+function buildEventComboChecks(){
+  eventModeChecksEl.innerHTML = "";
+  MODES.forEach(mode => {
+    const row = document.createElement("div");
+    row.className = "event-combo-row";
+
+    const title = document.createElement("div");
+    title.className = "event-combo-row-title";
+    title.textContent = MODE_LABELS[mode];
+    row.appendChild(title);
+
+    const checks = document.createElement("div");
+    checks.className = "event-combo-row-checks";
+    LEVELS.forEach(level => {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.value = `${mode}:${level}`;
+      input.checked = true;
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(` ${LEVEL_LABELS[level]}`));
+      checks.appendChild(label);
+    });
+    row.appendChild(checks);
+
+    eventModeChecksEl.appendChild(row);
+  });
+}
+
+function getSelectedEventCombos(){
+  return Array.from(eventModeChecksEl.querySelectorAll("input[type=checkbox]:checked")).map(el => el.value);
+}
+
+function setSelectedEventCombos(combos){
+  const allCombos = MODES.flatMap(mode => LEVELS.map(level => `${mode}:${level}`));
+  const list = Array.isArray(combos) && combos.length > 0 ? combos : allCombos;
+  eventModeChecksEl.querySelectorAll("input[type=checkbox]").forEach(el => {
+    el.checked = list.includes(el.value);
+  });
+}
+
+buildEventComboChecks();
+
+async function loadEventDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("getEventMode", {});
+    const allCombos = MODES.flatMap(mode => LEVELS.map(level => `${mode}:${level}`));
+    const activeCombos = data.combos && data.combos.length > 0 ? data.combos : allCombos;
+    const comboLabels = activeCombos.map(c => {
+      const [mode, level] = c.split(":");
+      return `${MODE_LABELS[mode]}・${LEVEL_LABELS[level]}`;
+    }).join("、");
+    eventStatusTextEl.textContent = data.enabled
+      ? `イベントモード: 有効中（対象月: ${data.month || "未設定"} / 対象: ${comboLabels}）`
+      : "イベントモード: 無効";
+    eventMonthInputEl.value = data.month || "";
+    eventNoticeInputEl.value = data.notice || "";
+    setSelectedEventCombos(data.combos);
+    eventArchiveGridEl.innerHTML = "";
+    showOnly(eventDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+eventEnableBtnEl.addEventListener("click", async () => {
+  const month = eventMonthInputEl.value;
+  if(!month){
+    alert("対象月を選択してください");
+    return;
+  }
+  const combos = getSelectedEventCombos();
+  if(combos.length === 0){
+    alert("対象タイピングモード・難易度を1つ以上選択してください");
+    return;
+  }
+  if(!confirm(`${month} を対象にイベントモードを有効化しますか？`)) return;
+  showOnly(loadingPanelEl);
+  try{
+    await callAdmin("setEventMode", { enabled: true, month, combos, notice: eventNoticeInputEl.value });
+    await loadEventDashboard();
+  }catch(e){
+    handleSessionExpired();
+  }
+});
+
+eventDisableBtnEl.addEventListener("click", async () => {
+  if(!confirm("イベントモードを無効化しますか？")) return;
+  showOnly(loadingPanelEl);
+  try{
+    await callAdmin("setEventMode", { enabled: false, month: eventMonthInputEl.value, combos: getSelectedEventCombos(), notice: eventNoticeInputEl.value });
+    await loadEventDashboard();
+  }catch(e){
+    handleSessionExpired();
+  }
+});
+
+eventArchiveLoadBtnEl.addEventListener("click", async () => {
+  const month = eventArchiveMonthInputEl.value;
+  if(!month){
+    alert("確認したい月を選択してください");
+    return;
+  }
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("getEventArchive", { month });
+    showOnly(eventDashboardEl);
+    renderArchiveBoards(data, month);
+  }catch(e){
+    handleSessionExpired();
+  }
+});
+
+menuEventBtnEl.addEventListener("click", loadEventDashboard);
+eventBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+eventRefreshBtnEl.addEventListener("click", loadEventDashboard);
+
+async function loadPlayLogDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("listPlayLog", {});
+    renderPlayLog(data.entries);
+    showOnly(playlogDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+async function loadRankingDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("list", {});
+    renderBoards(data);
+    showOnly(rankingDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+async function loadUserDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("listUsers", {});
+    renderUsers(data.users);
+    showOnly(userDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+async function loadInviteDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("listInviteCodes", {});
+    renderInviteCodes(data.codes);
+    showOnly(inviteDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+function handleSessionExpired(){
+  adminToken = "";
+  showOnly(loginPanelEl);
+  loginErrorEl.textContent = "セッションが切れました。もう一度パスキーでログインしてください";
+}
+
+async function tryLogin(){
+  loginErrorEl.textContent = "";
+  if(!window.PublicKeyCredential){
+    loginErrorEl.textContent = "このブラウザはパスキーに対応していません";
+    return;
+  }
+  try{
+    adminToken = await login();
+    showOnly(menuPanelEl);
+  }catch(e){
+    showOnly(loginPanelEl);
+    if(e.message === "no_credentials"){
+      showSetupArea();
+    } else {
+      loginErrorEl.textContent = passkeyErrorMessage(e);
+    }
+  }
+}
+
+async function trySetup(){
+  setupErrorEl.textContent = "";
+  if(!window.PublicKeyCredential){
+    setupErrorEl.textContent = "このブラウザはパスキーに対応していません";
+    return;
+  }
+  try{
+    const data = await registerPasskey({ setupCode: setupInputEl.value });
+    setupInputEl.value = "";
+    adminToken = data.token;
+    currentCredentialId = data.credentialId;
+    setupAreaEl.classList.add("hidden");
+    loginBtnEl.classList.remove("hidden");
+    showOnly(menuPanelEl);
+  }catch(e){
+    setupErrorEl.textContent = e.message === "unauthorized" ? "セットアップコードが違います" : passkeyErrorMessage(e);
+  }
+}
+
+function showSetupArea(){
+  loginBtnEl.classList.add("hidden");
+  setupAreaEl.classList.remove("hidden");
+}
+
+async function initLogin(){
+  try{
+    const options = await postAdmin({ action: "authOptions" });
+    if(!options.hasCredentials){
+      showSetupArea();
+    }
+  }catch(e){
+    loginErrorEl.textContent = passkeyErrorMessage(e);
+  }
+}
+
+loginBtnEl.addEventListener("click", tryLogin);
+setupBtnEl.addEventListener("click", trySetup);
+setupInputEl.addEventListener("keydown", (e) => {
+  if(e.key === "Enter") trySetup();
+});
+
+function formatDateTime(ts){
+  return ts ? new Date(ts).toLocaleString("ja-JP") : "なし";
+}
+
+function renderPasskeys(credentials){
+  passkeyListEl.innerHTML = "";
+  if(!credentials || credentials.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "登録されているパスキーがありません";
+    passkeyListEl.appendChild(empty);
+    return;
+  }
+
+  credentials.forEach(entry => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const name = document.createElement("div");
+    name.className = "user-name";
+    name.textContent = entry.id === currentCredentialId ? `${entry.label}（この端末）` : entry.label;
+
+    const created = document.createElement("div");
+    created.className = "user-sub";
+    created.textContent = `登録日時: ${formatDateTime(entry.createdAt)}`;
+
+    const used = document.createElement("div");
+    used.className = "user-scores";
+    used.textContent = `最終使用: ${formatDateTime(entry.lastUsedAt)}`;
+
+    info.appendChild(name);
+    info.appendChild(created);
+    info.appendChild(used);
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "user-delete-btn";
+    delBtn.textContent = "削除";
+    delBtn.addEventListener("click", async () => {
+      const isCurrent = entry.id === currentCredentialId;
+      const message = isCurrent
+        ? `この端末のパスキー「${entry.label}」を削除しますか？次回からこの端末ではログインできなくなります`
+        : `パスキー「${entry.label}」を削除しますか？`;
+      if(!confirm(message)) return;
+      showOnly(loadingPanelEl);
+      try{
+        const result = await callAdmin("deletePasskey", { id: entry.id });
+        if(result.error === "last_credential"){
+          alert("最後のパスキーは削除できません");
+        } else if(result.error){
+          alert("削除に失敗しました");
+        }
+        await loadPasskeyDashboard();
+      }catch(e){
+        handleSessionExpired();
+      }
+    });
+
+    row.appendChild(info);
+    row.appendChild(delBtn);
+    passkeyListEl.appendChild(row);
+  });
+}
+
+async function loadPasskeyDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("listPasskeys", {});
+    renderPasskeys(data.credentials);
+    showOnly(passkeyDashboardEl);
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+menuPasskeyBtnEl.addEventListener("click", loadPasskeyDashboard);
+passkeyBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+passkeyRefreshBtnEl.addEventListener("click", loadPasskeyDashboard);
+
+passkeyAddBtnEl.addEventListener("click", async () => {
+  try{
+    await registerPasskey({ token: adminToken });
+    alert("パスキーを登録しました");
+    await loadPasskeyDashboard();
+  }catch(e){
+    if(e.message === "unauthorized"){
+      handleSessionExpired();
+    } else {
+      alert(passkeyErrorMessage(e));
+    }
+  }
+});
+
+menuRankingBtnEl.addEventListener("click", loadRankingDashboard);
+menuUsersBtnEl.addEventListener("click", loadUserDashboard);
+menuInviteBtnEl.addEventListener("click", loadInviteDashboard);
+menuPlaylogBtnEl.addEventListener("click", loadPlayLogDashboard);
+
+logoutBtnEl.addEventListener("click", () => {
+  adminToken = "";
+  loginErrorEl.textContent = "";
+  showOnly(loginPanelEl);
+});
+
+rankingBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+userBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+inviteBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+playlogBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+
+refreshBtnEl.addEventListener("click", loadRankingDashboard);
+userRefreshBtnEl.addEventListener("click", loadUserDashboard);
+inviteRefreshBtnEl.addEventListener("click", loadInviteDashboard);
+playlogRefreshBtnEl.addEventListener("click", loadPlayLogDashboard);
+
+playlogClearBtnEl.addEventListener("click", async () => {
+  if(!confirm("プレイログを全て削除しますか？")) return;
+  showOnly(loadingPanelEl);
+  try{
+    await callAdmin("clearPlayLog", {});
+    await loadPlayLogDashboard();
+  }catch(e){
+    handleSessionExpired();
+  }
+});
+function formatDuration(ms){
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const seconds = total % 60;
+  if(hours > 0) return `${hours}時間${minutes}分`;
+  if(minutes > 0) return `${minutes}分${seconds}秒`;
+  return `${seconds}秒`;
+}
+
+function buildPresenceModeBoards(){
+  presenceModeGridEl.innerHTML = "";
+  MODES.forEach(mode => {
+    const board = document.createElement("div");
+    board.className = "board";
+
+    const head = document.createElement("div");
+    head.className = "board-head";
+
+    const title = document.createElement("div");
+    title.className = "board-title";
+    title.textContent = MODE_LABELS[mode];
+
+    const total = document.createElement("div");
+    total.className = "presence-count zero";
+    total.textContent = "0";
+    presenceModeCountEls[mode] = total;
+
+    head.appendChild(title);
+    head.appendChild(total);
+    board.appendChild(head);
+
+    LEVELS.forEach(level => {
+      const row = document.createElement("div");
+      row.className = "score-row";
+
+      const label = document.createElement("div");
+      label.className = "score-name";
+      label.textContent = LEVEL_LABELS[level];
+
+      const count = document.createElement("div");
+      count.className = "presence-count zero";
+      count.textContent = "0";
+      presenceModeCountEls[`${mode}:${level}`] = count;
+
+      row.appendChild(label);
+      row.appendChild(count);
+      board.appendChild(row);
+    });
+
+    presenceModeGridEl.appendChild(board);
+  });
+}
+
+function presenceSortKey(client){
+  if(PLAYING_ACTIVITIES.includes(client.activity)) return 0;
+  return client.activity === "matching" ? 1 : 2;
+}
+
+function updatePresenceDurations(){
+  const elapsed = Date.now() - presenceReceivedAt;
+  presenceDurationEls.forEach(item => {
+    item.el.textContent = `接続時間: ${formatDuration(item.baseMs + elapsed)}`;
+  });
+}
+
+function renderPresence(){
+  const clients = presenceClients.slice().sort((a, b) => presenceSortKey(a) - presenceSortKey(b) || a.connectedMs - b.connectedMs);
+
+  let playing = 0;
+  let matching = 0;
+  let idle = 0;
+  const counts = {};
+  clients.forEach(client => {
+    if(PLAYING_ACTIVITIES.includes(client.activity)){
+      playing++;
+      if(client.mode){
+        counts[client.mode] = (counts[client.mode] || 0) + 1;
+        counts[`${client.mode}:${client.level}`] = (counts[`${client.mode}:${client.level}`] || 0) + 1;
+      }
+    } else if(client.activity === "matching"){
+      matching++;
+    } else {
+      idle++;
+    }
+  });
+
+  presenceTotalEl.textContent = clients.length;
+  presencePlayingEl.textContent = playing;
+  presenceMatchingEl.textContent = matching;
+  presenceIdleEl.textContent = idle;
+
+  Object.keys(presenceModeCountEls).forEach(key => {
+    const count = counts[key] || 0;
+    presenceModeCountEls[key].textContent = count;
+    presenceModeCountEls[key].classList.toggle("zero", count === 0);
+  });
+
+  presenceListEl.innerHTML = "";
+  presenceDurationEls = [];
+
+  if(clients.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "現在サイトを開いているユーザーはいません";
+    presenceListEl.appendChild(empty);
+    return;
+  }
+
+  clients.forEach(client => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const nameRow = document.createElement("div");
+    nameRow.className = "presence-name-row";
+
+    const name = document.createElement("div");
+    name.className = "user-name";
+    name.textContent = client.name || "GUEST";
+
+    const badge = document.createElement("span");
+    const sortKey = presenceSortKey(client);
+    badge.className = `presence-badge${sortKey === 0 ? " playing" : sortKey === 1 ? " matching" : ""}`;
+    badge.textContent = ACTIVITY_LABELS[client.activity] || ACTIVITY_LABELS.idle;
+
+    nameRow.appendChild(name);
+    nameRow.appendChild(badge);
+    info.appendChild(nameRow);
+
+    if(client.mode){
+      const meta = document.createElement("div");
+      meta.className = "user-sub";
+      meta.textContent = `${MODE_LABELS[client.mode] || client.mode} / ${LEVEL_LABELS[client.level] || client.level}`;
+      info.appendChild(meta);
+    }
+
+    const duration = document.createElement("div");
+    duration.className = "user-scores";
+    presenceDurationEls.push({ el: duration, baseMs: client.connectedMs });
+    info.appendChild(duration);
+
+    const network = document.createElement("div");
+    network.className = "user-sub";
+    network.textContent = `IP: ${client.ip || "unknown"}`;
+    info.appendChild(network);
+
+    const agent = document.createElement("div");
+    agent.className = "user-sub";
+    agent.textContent = `UA: ${client.userAgent || "unknown"}`;
+    info.appendChild(agent);
+
+    row.appendChild(info);
+    presenceListEl.appendChild(row);
+  });
+
+  updatePresenceDurations();
+}
+
+function applyPresenceSnapshot(data){
+  presenceClients = Array.isArray(data.clients) ? data.clients : [];
+  presenceReceivedAt = Date.now();
+  renderPresence();
+}
+
+function setPresenceStatus(connected){
+  presenceStatusEl.classList.toggle("connected", connected);
+  presenceStatusTextEl.textContent = connected ? "リアルタイム更新中" : "再接続中...";
+}
+
+function stopPresenceStream(){
+  presenceSession++;
   clearTimeout(presenceReconnectTimer);
-  const delay = Math.min(60000, 1000 * 2 ** presenceRetry) + Math.floor(Math.random() * 1000);
-  presenceRetry++;
-  presenceReconnectTimer = setTimeout(connectPresence, delay);
+  clearInterval(presenceDurationTimer);
+  presenceReconnectTimer = null;
+  presenceDurationTimer = null;
+  if(presenceSocket){
+    const socket = presenceSocket;
+    presenceSocket = null;
+    socket.close();
+  }
 }
 
-function connectPresence(){
+function schedulePresenceReconnect(session){
+  const delay = Math.min(15000, 1000 * 2 ** presenceRetry);
+  presenceRetry++;
+  presenceReconnectTimer = setTimeout(async () => {
+    if(session !== presenceSession) return;
+    try{
+      const data = await callAdmin("presenceSnapshot", {});
+      if(session !== presenceSession) return;
+      applyPresenceSnapshot(data);
+      connectPresenceStream();
+    }catch(e){
+      if(session !== presenceSession) return;
+      if(e.message === "unauthorized"){
+        handleSessionExpired();
+      } else {
+        schedulePresenceReconnect(session);
+      }
+    }
+  }, delay);
+}
+
+function connectPresenceStream(){
+  const session = presenceSession;
   let socket;
   try{
-    socket = new WebSocket(`${ONLINE_SERVER_URL}/presence`);
+    socket = new WebSocket(`${WORKER_URL.replace(/^http/, "ws")}/admin-presence`, ["admin-presence", adminToken]);
   }catch(e){
-    schedulePresenceReconnect();
+    setPresenceStatus(false);
+    schedulePresenceReconnect(session);
     return;
   }
   presenceSocket = socket;
   socket.onopen = () => {
+    if(session !== presenceSession) return;
     presenceRetry = 0;
-    presenceLastSent = "";
-    syncPresence();
+    setPresenceStatus(true);
+  };
+  socket.onmessage = (event) => {
+    if(session !== presenceSession) return;
+    let data;
+    try{
+      data = JSON.parse(event.data);
+    }catch(e){
+      return;
+    }
+    if(data && data.type === "snapshot") applyPresenceSnapshot(data);
   };
   socket.onclose = () => {
+    if(session !== presenceSession) return;
     if(presenceSocket === socket) presenceSocket = null;
-    presenceLastSent = "";
-    schedulePresenceReconnect();
+    setPresenceStatus(false);
+    schedulePresenceReconnect(session);
   };
 }
 
-connectPresence();
-setInterval(syncPresence, PRESENCE_SYNC_MS);
-setInterval(() => {
-  if(presenceSocket && presenceSocket.readyState === WebSocket.OPEN){
-    presenceSocket.send(JSON.stringify({ type: "ping" }));
-  }
-}, PRESENCE_PING_MS);
+function startPresenceStream(){
+  stopPresenceStream();
+  presenceRetry = 0;
+  setPresenceStatus(false);
+  presenceDurationTimer = setInterval(updatePresenceDurations, 1000);
+  connectPresenceStream();
+}
 
-(function(){
-  const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
-  if(!isMobile) return;
-  const STORAGE_KEY = "mobileWarningHidden";
+async function loadPresenceDashboard(){
+  showOnly(loadingPanelEl);
   try{
-    if(localStorage.getItem(STORAGE_KEY) === "1") return;
-  }catch(e){}
-  const overlay = document.getElementById("mobile-warning-overlay");
-  const closeBtn = document.getElementById("mobile-warning-close");
-  const hideCheck = document.getElementById("mobile-warning-hide");
-  overlay.classList.add("visible");
-  closeBtn.addEventListener("click", () => {
-    if(hideCheck.checked){
-      try{
-        localStorage.setItem(STORAGE_KEY, "1");
-      }catch(e){}
+    const data = await callAdmin("presenceSnapshot", {});
+    if(!Array.isArray(data.clients)){
+      alert("リアルタイム状況を取得できませんでした。サーバーのDurable Object設定（PRESENCE）を確認してください");
+      showOnly(menuPanelEl);
+      return;
     }
-    overlay.classList.remove("visible");
-  });
-})();
-
-(function(){
-  const selector = ".mobile-warning-overlay, .custom-alert-overlay, .name-input-overlay, .input-mode-overlay";
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const timers = new WeakMap();
-
-  function finishClosing(el){
-    clearTimeout(timers.get(el));
-    el.classList.remove("closing");
+    applyPresenceSnapshot(data);
+    showOnly(presenceDashboardEl);
+    startPresenceStream();
+  }catch(e){
+    handleSessionExpired();
   }
+}
 
-  const observer = new MutationObserver(records => {
-    records.forEach(record => {
-      const el = record.target;
-      const wasVisible = (record.oldValue || "").split(/\s+/).includes("visible");
-      if(el.classList.contains("visible")){
-        if(el.classList.contains("closing")) finishClosing(el);
-        return;
-      }
-      if(wasVisible && !el.classList.contains("closing") && !reduceMotion.matches){
-        el.classList.add("closing");
-        timers.set(el, setTimeout(() => finishClosing(el), 400));
-      }
-    });
-  });
+buildPresenceModeBoards();
+menuPresenceBtnEl.addEventListener("click", loadPresenceDashboard);
+presenceBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
 
-  document.querySelectorAll(selector).forEach(el => {
-    observer.observe(el, { attributes:true, attributeFilter:["class"], attributeOldValue:true });
-    el.addEventListener("animationend", e => {
-      if(e.target === el && el.classList.contains("closing")) finishClosing(el);
-    });
-  });
-})();
+initLogin();
 </script>
 </body>
 </html>
