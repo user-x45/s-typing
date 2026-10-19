@@ -467,6 +467,103 @@
     font-size:13px;
     color:var(--ink);
   }
+
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:12px;
+    margin-bottom:16px;
+  }
+
+  .stat-card{
+    background:var(--panel-bg-soft);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:16px;
+    text-align:center;
+  }
+
+  .stat-value{
+    font-size:32px;
+    font-weight:800;
+    color:var(--hanko);
+    line-height:1.2;
+  }
+
+  .stat-label{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+
+  .live-status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+
+  .live-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--ink-soft);
+    opacity:0.6;
+  }
+
+  .live-status.connected .live-dot{
+    background:#3fa66b;
+    opacity:1;
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+
+  @keyframes pulse{
+    0%, 100%{ box-shadow:0 0 0 0 rgba(63,166,107,0.5); }
+    50%{ box-shadow:0 0 0 6px rgba(63,166,107,0); }
+  }
+
+  .presence-count{
+    font-weight:700;
+    font-size:14px;
+    min-width:28px;
+    text-align:right;
+  }
+
+  .presence-count.zero{
+    opacity:0.4;
+  }
+
+  .presence-mode-grid{
+    margin-bottom:16px;
+  }
+
+  .presence-name-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+
+  .presence-badge{
+    font-size:11px;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+  }
+
+  .presence-badge.playing{
+    background:var(--hanko);
+    border-color:var(--hanko);
+    color:var(--washi);
+  }
+
+  .presence-badge.matching{
+    border-color:var(--gold);
+    color:var(--gold);
+  }
 </style>
 </head>
 <body>
@@ -498,6 +595,7 @@
       <button class="menu-btn" id="menu-users-btn">ユーザー管理</button>
       <button class="menu-btn" id="menu-invite-btn">招待コード管理</button>
       <button class="menu-btn" id="menu-playlog-btn">プレイログ</button>
+      <button class="menu-btn" id="menu-presence-btn">リアルタイム状況</button>
       <button class="menu-btn" id="menu-event-btn">イベントモード</button>
       <button class="menu-btn" id="menu-passkey-btn">パスキー管理</button>
       <button class="logout-btn" id="logout-btn">ログアウト</button>
@@ -548,6 +646,24 @@
       </div>
     </div>
     <div class="user-list" id="playlog-list"></div>
+  </div>
+
+  <div id="presence-dashboard" class="hidden">
+    <div class="top-actions">
+      <button class="back-btn" id="presence-back-btn">戻る</button>
+      <div class="live-status" id="presence-status">
+        <span class="live-dot"></span>
+        <span id="presence-status-text">接続中...</span>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-value" id="presence-total">0</div><div class="stat-label">サイトを開いている人数</div></div>
+      <div class="stat-card"><div class="stat-value" id="presence-playing">0</div><div class="stat-label">プレイ中</div></div>
+      <div class="stat-card"><div class="stat-value" id="presence-matching">0</div><div class="stat-label">対戦相手を待機中</div></div>
+      <div class="stat-card"><div class="stat-value" id="presence-idle">0</div><div class="stat-label">メニュー画面</div></div>
+    </div>
+    <div class="board-grid presence-mode-grid" id="presence-mode-grid"></div>
+    <div class="user-list" id="presence-list"></div>
   </div>
 
   <div id="event-dashboard" class="hidden">
@@ -625,6 +741,28 @@ const playlogBackBtnEl = document.getElementById("playlog-back-btn");
 const playlogRefreshBtnEl = document.getElementById("playlog-refresh-btn");
 const playlogClearBtnEl = document.getElementById("playlog-clear-btn");
 const eventDashboardEl = document.getElementById("event-dashboard");
+const presenceDashboardEl = document.getElementById("presence-dashboard");
+const menuPresenceBtnEl = document.getElementById("menu-presence-btn");
+const presenceBackBtnEl = document.getElementById("presence-back-btn");
+const presenceStatusEl = document.getElementById("presence-status");
+const presenceStatusTextEl = document.getElementById("presence-status-text");
+const presenceTotalEl = document.getElementById("presence-total");
+const presencePlayingEl = document.getElementById("presence-playing");
+const presenceMatchingEl = document.getElementById("presence-matching");
+const presenceIdleEl = document.getElementById("presence-idle");
+const presenceModeGridEl = document.getElementById("presence-mode-grid");
+const presenceListEl = document.getElementById("presence-list");
+const ACTIVITY_LABELS = { idle: "メニュー画面", solo: "一人プレイ中", online: "オンライン対戦中", friend: "フレンド対戦中", matching: "対戦相手を待機中" };
+const PLAYING_ACTIVITIES = ["solo", "online", "friend"];
+const presenceModeCountEls = {};
+let presenceClients = [];
+let presenceReceivedAt = 0;
+let presenceDurationEls = [];
+let presenceSocket = null;
+let presenceSession = 0;
+let presenceRetry = 0;
+let presenceReconnectTimer = null;
+let presenceDurationTimer = null;
 const menuEventBtnEl = document.getElementById("menu-event-btn");
 const eventBackBtnEl = document.getElementById("event-back-btn");
 const eventRefreshBtnEl = document.getElementById("event-refresh-btn");
@@ -639,7 +777,8 @@ const eventArchiveLoadBtnEl = document.getElementById("event-archive-load-btn");
 const eventArchiveGridEl = document.getElementById("event-archive-grid");
 
 function showOnly(el){
-  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl, playlogDashboardEl, eventDashboardEl, passkeyDashboardEl].forEach(node => {
+  if(el !== presenceDashboardEl) stopPresenceStream();
+  [loginPanelEl, loadingPanelEl, menuPanelEl, rankingDashboardEl, userDashboardEl, inviteDashboardEl, playlogDashboardEl, eventDashboardEl, passkeyDashboardEl, presenceDashboardEl].forEach(node => {
     if(node === el){
       node.classList.remove("hidden");
     } else {
@@ -1477,6 +1616,275 @@ playlogClearBtnEl.addEventListener("click", async () => {
     handleSessionExpired();
   }
 });
+function formatDuration(ms){
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const seconds = total % 60;
+  if(hours > 0) return `${hours}時間${minutes}分`;
+  if(minutes > 0) return `${minutes}分${seconds}秒`;
+  return `${seconds}秒`;
+}
+
+function buildPresenceModeBoards(){
+  presenceModeGridEl.innerHTML = "";
+  MODES.forEach(mode => {
+    const board = document.createElement("div");
+    board.className = "board";
+
+    const head = document.createElement("div");
+    head.className = "board-head";
+
+    const title = document.createElement("div");
+    title.className = "board-title";
+    title.textContent = MODE_LABELS[mode];
+
+    const total = document.createElement("div");
+    total.className = "presence-count zero";
+    total.textContent = "0";
+    presenceModeCountEls[mode] = total;
+
+    head.appendChild(title);
+    head.appendChild(total);
+    board.appendChild(head);
+
+    LEVELS.forEach(level => {
+      const row = document.createElement("div");
+      row.className = "score-row";
+
+      const label = document.createElement("div");
+      label.className = "score-name";
+      label.textContent = LEVEL_LABELS[level];
+
+      const count = document.createElement("div");
+      count.className = "presence-count zero";
+      count.textContent = "0";
+      presenceModeCountEls[`${mode}:${level}`] = count;
+
+      row.appendChild(label);
+      row.appendChild(count);
+      board.appendChild(row);
+    });
+
+    presenceModeGridEl.appendChild(board);
+  });
+}
+
+function presenceSortKey(client){
+  if(PLAYING_ACTIVITIES.includes(client.activity)) return 0;
+  return client.activity === "matching" ? 1 : 2;
+}
+
+function updatePresenceDurations(){
+  const elapsed = Date.now() - presenceReceivedAt;
+  presenceDurationEls.forEach(item => {
+    item.el.textContent = `接続時間: ${formatDuration(item.baseMs + elapsed)}`;
+  });
+}
+
+function renderPresence(){
+  const clients = presenceClients.slice().sort((a, b) => presenceSortKey(a) - presenceSortKey(b) || a.connectedMs - b.connectedMs);
+
+  let playing = 0;
+  let matching = 0;
+  let idle = 0;
+  const counts = {};
+  clients.forEach(client => {
+    if(PLAYING_ACTIVITIES.includes(client.activity)){
+      playing++;
+      if(client.mode){
+        counts[client.mode] = (counts[client.mode] || 0) + 1;
+        counts[`${client.mode}:${client.level}`] = (counts[`${client.mode}:${client.level}`] || 0) + 1;
+      }
+    } else if(client.activity === "matching"){
+      matching++;
+    } else {
+      idle++;
+    }
+  });
+
+  presenceTotalEl.textContent = clients.length;
+  presencePlayingEl.textContent = playing;
+  presenceMatchingEl.textContent = matching;
+  presenceIdleEl.textContent = idle;
+
+  Object.keys(presenceModeCountEls).forEach(key => {
+    const count = counts[key] || 0;
+    presenceModeCountEls[key].textContent = count;
+    presenceModeCountEls[key].classList.toggle("zero", count === 0);
+  });
+
+  presenceListEl.innerHTML = "";
+  presenceDurationEls = [];
+
+  if(clients.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty-text";
+    empty.textContent = "現在サイトを開いているユーザーはいません";
+    presenceListEl.appendChild(empty);
+    return;
+  }
+
+  clients.forEach(client => {
+    const row = document.createElement("div");
+    row.className = "user-row";
+
+    const info = document.createElement("div");
+    info.className = "user-info";
+
+    const nameRow = document.createElement("div");
+    nameRow.className = "presence-name-row";
+
+    const name = document.createElement("div");
+    name.className = "user-name";
+    name.textContent = client.name || "GUEST";
+
+    const badge = document.createElement("span");
+    const sortKey = presenceSortKey(client);
+    badge.className = `presence-badge${sortKey === 0 ? " playing" : sortKey === 1 ? " matching" : ""}`;
+    badge.textContent = ACTIVITY_LABELS[client.activity] || ACTIVITY_LABELS.idle;
+
+    nameRow.appendChild(name);
+    nameRow.appendChild(badge);
+    info.appendChild(nameRow);
+
+    if(client.mode){
+      const meta = document.createElement("div");
+      meta.className = "user-sub";
+      meta.textContent = `${MODE_LABELS[client.mode] || client.mode} / ${LEVEL_LABELS[client.level] || client.level}`;
+      info.appendChild(meta);
+    }
+
+    const duration = document.createElement("div");
+    duration.className = "user-scores";
+    presenceDurationEls.push({ el: duration, baseMs: client.connectedMs });
+    info.appendChild(duration);
+
+    const network = document.createElement("div");
+    network.className = "user-sub";
+    network.textContent = `IP: ${client.ip || "unknown"}`;
+    info.appendChild(network);
+
+    const agent = document.createElement("div");
+    agent.className = "user-sub";
+    agent.textContent = `UA: ${client.userAgent || "unknown"}`;
+    info.appendChild(agent);
+
+    row.appendChild(info);
+    presenceListEl.appendChild(row);
+  });
+
+  updatePresenceDurations();
+}
+
+function applyPresenceSnapshot(data){
+  presenceClients = Array.isArray(data.clients) ? data.clients : [];
+  presenceReceivedAt = Date.now();
+  renderPresence();
+}
+
+function setPresenceStatus(connected){
+  presenceStatusEl.classList.toggle("connected", connected);
+  presenceStatusTextEl.textContent = connected ? "リアルタイム更新中" : "再接続中...";
+}
+
+function stopPresenceStream(){
+  presenceSession++;
+  clearTimeout(presenceReconnectTimer);
+  clearInterval(presenceDurationTimer);
+  presenceReconnectTimer = null;
+  presenceDurationTimer = null;
+  if(presenceSocket){
+    const socket = presenceSocket;
+    presenceSocket = null;
+    socket.close();
+  }
+}
+
+function schedulePresenceReconnect(session){
+  const delay = Math.min(15000, 1000 * 2 ** presenceRetry);
+  presenceRetry++;
+  presenceReconnectTimer = setTimeout(async () => {
+    if(session !== presenceSession) return;
+    try{
+      const data = await callAdmin("presenceSnapshot", {});
+      if(session !== presenceSession) return;
+      applyPresenceSnapshot(data);
+      connectPresenceStream();
+    }catch(e){
+      if(session !== presenceSession) return;
+      if(e.message === "unauthorized"){
+        handleSessionExpired();
+      } else {
+        schedulePresenceReconnect(session);
+      }
+    }
+  }, delay);
+}
+
+function connectPresenceStream(){
+  const session = presenceSession;
+  let socket;
+  try{
+    socket = new WebSocket(`${WORKER_URL.replace(/^http/, "ws")}/admin-presence`, ["admin-presence", adminToken]);
+  }catch(e){
+    setPresenceStatus(false);
+    schedulePresenceReconnect(session);
+    return;
+  }
+  presenceSocket = socket;
+  socket.onopen = () => {
+    if(session !== presenceSession) return;
+    presenceRetry = 0;
+    setPresenceStatus(true);
+  };
+  socket.onmessage = (event) => {
+    if(session !== presenceSession) return;
+    let data;
+    try{
+      data = JSON.parse(event.data);
+    }catch(e){
+      return;
+    }
+    if(data && data.type === "snapshot") applyPresenceSnapshot(data);
+  };
+  socket.onclose = () => {
+    if(session !== presenceSession) return;
+    if(presenceSocket === socket) presenceSocket = null;
+    setPresenceStatus(false);
+    schedulePresenceReconnect(session);
+  };
+}
+
+function startPresenceStream(){
+  stopPresenceStream();
+  presenceRetry = 0;
+  setPresenceStatus(false);
+  presenceDurationTimer = setInterval(updatePresenceDurations, 1000);
+  connectPresenceStream();
+}
+
+async function loadPresenceDashboard(){
+  showOnly(loadingPanelEl);
+  try{
+    const data = await callAdmin("presenceSnapshot", {});
+    if(!Array.isArray(data.clients)){
+      alert("リアルタイム状況を取得できませんでした。サーバーのDurable Object設定（PRESENCE）を確認してください");
+      showOnly(menuPanelEl);
+      return;
+    }
+    applyPresenceSnapshot(data);
+    showOnly(presenceDashboardEl);
+    startPresenceStream();
+  }catch(e){
+    handleSessionExpired();
+  }
+}
+
+buildPresenceModeBoards();
+menuPresenceBtnEl.addEventListener("click", loadPresenceDashboard);
+presenceBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+
 initLogin();
 </script>
 </body>
