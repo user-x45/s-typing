@@ -3013,12 +3013,6 @@ logoutBtnEl.addEventListener("click", () => {
 
 const appLoadingOverlayEl = document.getElementById("app-loading-overlay");
 let appLoadingCount = 1;
-setTimeout(() => {
-  if(appLoadingCount > 0){
-    appLoadingCount = 0;
-    appLoadingOverlayEl.classList.add("hidden");
-  }
-}, 3000);
 
 function showAppLoadingOverlay(){
   appLoadingCount++;
@@ -3104,20 +3098,17 @@ const ALL_LEVELS = ["beginner", "intermediate", "advanced"];
 
 async function preloadAllWordLists(){
   showAppLoadingOverlay();
+  const tasks = [];
   for(const mode of ALL_MODES){
     for(const level of ALL_LEVELS){
-      let loaded = false;
-      while(!loaded){
-        try{
-          await ensureWordList(mode, level);
-          loaded = true;
-        }catch(e){
-          await new Promise(resolve => setTimeout(resolve, 1500));
-        }
-      }
+      tasks.push(ensureWordList(mode, level));
     }
   }
-  hideAppLoadingOverlay();
+  try{
+    await Promise.all(tasks);
+  }finally{
+    hideAppLoadingOverlay();
+  }
 }
 
 function getCurrentWordReading(){
