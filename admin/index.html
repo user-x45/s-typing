@@ -560,17 +560,6 @@
     color:var(--washi);
   }
 
-  .presence-score{
-    font-size:13px;
-    font-weight:700;
-    color:var(--hanko);
-  }
-
-  .presence-word{
-    font-size:13px;
-    word-break:break-all;
-  }
-
   .presence-badge.matching{
     border-color:var(--gold);
     color:var(--gold);
@@ -1764,18 +1753,6 @@ function renderPresence(){
       meta.className = "user-sub";
       meta.textContent = `${MODE_LABELS[client.mode] || client.mode} / ${LEVEL_LABELS[client.level] || client.level}`;
       info.appendChild(meta);
-    }
-
-    if(PLAYING_ACTIVITIES.includes(client.activity)){
-      const scoreLine = document.createElement("div");
-      scoreLine.className = "presence-score";
-      scoreLine.textContent = `スコア: ${client.score || 0}`;
-      info.appendChild(scoreLine);
-
-      const wordLine = document.createElement("div");
-      wordLine.className = "presence-word";
-      wordLine.textContent = `問題: ${client.word || "-"}`;
-      info.appendChild(wordLine);
     }
 
     const duration = document.createElement("div");
