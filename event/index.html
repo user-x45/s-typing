@@ -1106,6 +1106,42 @@
     margin-bottom:4px;
   }
 
+  .about-section{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:13px;
+    line-height:1.8;
+    color:var(--ink-soft);
+  }
+
+  .about-section h2{
+    text-align:center;
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    color:var(--gold);
+    margin:0 0 10px;
+  }
+
+  .about-section h3{
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink);
+    margin:16px 0 4px;
+  }
+
+  .about-section p{
+    margin:0 0 8px;
+  }
+
+  .noscript-message{
+    max-width:640px;
+    margin:40px auto;
+    padding:0 16px;
+    line-height:1.8;
+  }
+
   .site-footer-links{
     display:flex;
     justify-content:center;
@@ -1997,6 +2033,14 @@
 </style>
 </head>
 <body>
+<noscript>
+  <div class="noscript-message">
+    <h1>シンプルタイピング｜イベント限定ランキング</h1>
+    <p>シンプルタイピングのイベント限定ランキングページです。期間限定イベントの開催中に、ひらがな・カタカナ・文章のタイピングで記録を投稿し、イベント専用ランキングで競えます。</p>
+    <p>ゲームを遊ぶにはJavaScriptを有効にしてください。</p>
+    <p><a href="/">トップページ</a> ／ <a href="/terms/">利用規約</a> ／ <a href="/privacy/">プライバシーポリシー</a></p>
+  </div>
+</noscript>
 <div class="mobile-warning-overlay" id="mobile-warning-overlay">
   <div class="mobile-warning-box">
     <p class="mobile-warning-message">このサイトはスマートフォンに最適化されていません。<br>パソコンでの閲覧を推奨します。</p>
@@ -2097,20 +2141,31 @@
       <div class="info-box">
         <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
         <ul class="info-list">
-          <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
+          <li>イベントに参加するにはログインが必要です。</li>
+          <li>モードとレベルを選んで「ひとりで練習」をタップしてスタートします。</li>
           <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
-          <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
-          <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
-          <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
+          <li>制限時間内にできるだけ多く正解を重ねて、イベントランキングのスコアを競います。</li>
+          <li>イベント期間中の記録だけが、イベント専用ランキングに反映されます。</li>
         </ul>
 
         <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
         <ul class="info-list">
-          <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
-          <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
-          <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
+          <li>開催中のイベントがない間は、挑戦ボタンは利用できません。</li>
+          <li>通信状況によっては、記録がランキングに反映されない場合があります。</li>
+          <li>イベントランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
           <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
         </ul>
+
+        <section class="about-section" id="about">
+          <h2>イベント限定ランキングについて</h2>
+          <p>このページは、シンプルタイピングで期間限定のイベントを開催しているときに、イベント専用のランキングへ挑戦できるページです。通常のランキングとは別に集計されるので、イベント期間中の記録だけで順位を競えます。</p>
+
+          <h3>参加方法</h3>
+          <p>イベントに参加するにはログインが必要です。ひらがな・カタカナ・文章のモードと、初級・中級・上級のレベルを選んで「ひとりで練習」から挑戦すると、記録がイベントランキングに反映されます。</p>
+
+          <h3>イベントが開催されていないとき</h3>
+          <p>開催中のイベントがない間は、挑戦ボタンは利用できません。次回のイベントは公式Xでお知らせしますので、ぜひフォローしてお待ちください。</p>
+        </section>
 
         <div class="official-x-banner">
           <a href="https://x.com/simple_typing" target="_blank" rel="noopener" class="official-x-link">
@@ -3107,20 +3162,17 @@ const ALL_LEVELS = ["beginner", "intermediate", "advanced"];
 
 async function preloadAllWordLists(){
   showAppLoadingOverlay();
+  const tasks = [];
   for(const mode of ALL_MODES){
     for(const level of ALL_LEVELS){
-      let loaded = false;
-      while(!loaded){
-        try{
-          await ensureWordList(mode, level);
-          loaded = true;
-        }catch(e){
-          await new Promise(resolve => setTimeout(resolve, 1500));
-        }
-      }
+      tasks.push(ensureWordList(mode, level));
     }
   }
-  hideAppLoadingOverlay();
+  try{
+    await Promise.all(tasks);
+  }finally{
+    hideAppLoadingOverlay();
+  }
 }
 
 function getCurrentWordReading(){
