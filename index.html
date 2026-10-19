@@ -4458,12 +4458,15 @@ function computePresenceState(){
     activity = "matching";
   }
   const active = activity !== "idle";
+  const inGame = gameEl.classList.contains("visible");
   return {
     type: "state",
     activity,
     mode: active ? currentMode : "",
     level: active ? currentLevel : "",
-    name: normalizePlayerName(getPlayerName())
+    name: normalizePlayerName(getPlayerName()),
+    score: inGame ? (isOnlineMode ? onlineScore : score) : 0,
+    word: inGame ? String(currentWord || "").slice(0, 100) : ""
   };
 }
 
