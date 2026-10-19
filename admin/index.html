@@ -564,6 +564,16 @@
     border-color:var(--gold);
     color:var(--gold);
   }
+
+  .presence-badge.event-page{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#3a2a00;
+  }
+
+  .presence-row-event{
+    border-color:var(--gold);
+  }
 </style>
 </head>
 <body>
@@ -1727,7 +1737,7 @@ function renderPresence(){
 
   clients.forEach(client => {
     const row = document.createElement("div");
-    row.className = "user-row";
+    row.className = client.page === "event" ? "user-row presence-row-event" : "user-row";
 
     const info = document.createElement("div");
     info.className = "user-info";
@@ -1745,6 +1755,12 @@ function renderPresence(){
     badge.textContent = ACTIVITY_LABELS[client.activity] || ACTIVITY_LABELS.idle;
 
     nameRow.appendChild(name);
+    if(client.page === "event"){
+      const pageBadge = document.createElement("span");
+      pageBadge.className = "presence-badge event-page";
+      pageBadge.textContent = "イベントページ";
+      nameRow.appendChild(pageBadge);
+    }
     nameRow.appendChild(badge);
     info.appendChild(nameRow);
 
