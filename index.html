@@ -4460,6 +4460,7 @@ function computePresenceState(){
   const active = activity !== "idle";
   return {
     type: "state",
+    page: "main",
     activity,
     mode: active ? currentMode : "",
     level: active ? currentLevel : "",
