@@ -2403,14 +2403,16 @@ async function openPlayRecords(){
   renderPlayRecords(records);
 }
 
-async function recordPlayResult(mode, level, accuracy, speed, miss, score){
+async function recordPlayResult(mode, level, accuracy, speed, miss, score, finishPromise){
   const isLoggedIn = !logoutBtnEl.classList.contains("hidden");
   if(isLoggedIn){
     const token = getSessionToken();
+    const session = await finishPromise;
+    if(!session) return;
     await fetchWithRetry(`${RANKING_API_URL}/auth`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "addPlayRecord", token, mode, level, accuracy, speed, miss, score })
+      body: JSON.stringify({ action: "addPlayRecord", token, mode, level, gameId: session.gameId })
     }, 4);
   } else {
     addGuestPlayRecord({ mode, level, playedAt: Date.now(), accuracy, speed, miss, score });
@@ -3227,16 +3229,19 @@ function getHighScore(mode, level){
   return value ? parseInt(value, 10) : 0;
 }
 
-function setHighScore(mode, level, newScore){
+function setHighScore(mode, level, newScore, finishPromise){
   const key = getHighScoreKey(mode, level);
   if(serverHighScores){
     serverHighScores[key] = newScore;
     const token = getSessionToken();
     if(token){
-      fetch(`${RANKING_API_URL}/auth`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "setHighScore", token, mode, level, score: newScore })
+      Promise.resolve(finishPromise).then(session => {
+        if(!session) return;
+        return fetch(`${RANKING_API_URL}/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "setHighScore", token, mode, level, gameId: session.gameId })
+        });
       }).catch(() => {});
     }
     return;
@@ -3326,13 +3331,62 @@ async function fetchWithRetry(url, options, attempts){
 }
 
 
-async function submitScoreToRanking(score, mode, level, name){
+let gameSession = null;
+let wordTimes = [];
+let lastWordAt = 0;
+
+function startGameSession(mode, level){
+  wordTimes = [];
+  lastWordAt = performance.now();
+  gameSession = fetch(`${RANKING_API_URL}/game/start?mode=${mode}&level=${level}`, { method: "POST" })
+    .then(res => res.ok ? res.json() : null)
+    .then(data => data && data.gameId ? { gameId: data.gameId, mode, level } : null)
+    .catch(() => null);
+}
+
+function recordWordTime(){
+  const now = performance.now();
+  wordTimes.push(now - lastWordAt);
+  lastWordAt = now;
+}
+
+function getIntervalStats(){
+  const n = wordTimes.length;
+  if(n === 0) return { n: 0, mean: 0, std: 0, min: 0 };
+  const mean = wordTimes.reduce((a, b) => a + b, 0) / n;
+  const variance = wordTimes.reduce((a, b) => a + (b - mean) ** 2, 0) / n;
+  return { n, mean, std: Math.sqrt(variance), min: Math.min(...wordTimes) };
+}
+
+async function finishGameSession(words, chars, miss){
+  const iv = getIntervalStats();
+  const session = await gameSession;
+  gameSession = null;
+  if(!session) return null;
+  const res = await fetchWithRetry(`${RANKING_API_URL}/game/finish?mode=${session.mode}&level=${session.level}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ gameId: session.gameId, words, chars, miss, iv })
+  }, 3);
+  if(!res) return null;
+  try{
+    const data = await res.json();
+    return data && data.ok ? { gameId: session.gameId, score: data.score } : null;
+  }catch(e){
+    return null;
+  }
+}
+
+async function submitScoreToRanking(gameId, mode, level, name){
   const res = await fetchWithRetry(`${RANKING_API_URL}/ranking?mode=${mode}&level=${level}&force=normal`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ score, name })
+    body: JSON.stringify({ gameId, name })
   }, 4);
-  if(!res) return;
+  if(!res){
+    showRankingError();
+    return;
+  }
   try{
     const data = await res.json();
     if(mode === currentMode && level === currentLevel){
@@ -3362,12 +3416,22 @@ async function checkRankQualifies(score, mode, level){
   }
 }
 
-async function handleRankingSubmission(score, mode, level){
-  const qualifies = await checkRankQualifies(score, mode, level);
+function showRankingError(){
+  resultRankBadgeEl.textContent = "通信の都合でランキングに登録できませんでした";
+  resultRankBadgeEl.classList.add("visible");
+}
+
+async function handleRankingSubmission(mode, level, finishPromise){
+  const session = await finishPromise;
+  if(!session){
+    showRankingError();
+    return;
+  }
+  const qualifies = await checkRankQualifies(session.score, mode, level);
   if(!qualifies) return;
   const name = normalizePlayerName(getPlayerName());
   if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.add("visible");
-  await submitScoreToRanking(score, mode, level, name);
+  await submitScoreToRanking(session.gameId, mode, level, name);
   if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.remove("visible");
 }
 
@@ -4148,6 +4212,7 @@ function completeRealtimeWord(){
     return;
   }
   score++;
+  recordWordTime();
   totalCharsTyped += currentWord.length;
   scoreLabelEl.textContent = `せいかい ${score} もん`;
   playSound(correctSoundEl);
@@ -4258,6 +4323,7 @@ async function startGame(){
   totalCharsTyped = 0;
   timeLeft = 100;
   usedWords = [];
+  startGameSession(currentMode, currentLevel);
   if(romajiDisplayEl){
     romajiDisplayEl.classList.remove("shake");
     romajiDisplayEl.scrollLeft = 0;
@@ -4317,6 +4383,7 @@ function endGame(isNormalEnd){
     const baseScore = score * 100 + speed * 2;
     const missPenalty = Math.min(missCount * 30, baseScore * 0.5);
     const finalScore = Math.max(0, Math.round(baseScore - missPenalty));
+    const finishPromise = finishGameSession(score, totalCharsTyped, missCount);
 
     resultScoreEl.textContent = finalScore;
     const modeLabel = modeLabels[currentMode] || "ひらがな";
@@ -4328,7 +4395,7 @@ function endGame(isNormalEnd){
 
     const previousHighScore = getHighScore(currentMode, currentLevel);
     if(finalScore > previousHighScore){
-      setHighScore(currentMode, currentLevel, finalScore);
+      setHighScore(currentMode, currentLevel, finalScore, finishPromise);
       resultHighScoreEl.textContent = `ハイスコア ${finalScore}`;
       newRecordBadgeEl.classList.add("visible");
     } else {
@@ -4338,9 +4405,9 @@ function endGame(isNormalEnd){
     updateSetupHighScore();
 
     if(finalScore > 0){
-      handleRankingSubmission(finalScore, currentMode, currentLevel);
+      handleRankingSubmission(currentMode, currentLevel, finishPromise);
     }
-    recordPlayResult(currentMode, currentLevel, accuracy, speed, missCount, finalScore);
+    recordPlayResult(currentMode, currentLevel, accuracy, speed, missCount, finalScore, finishPromise);
   } else {
     setupEl.classList.remove("hidden");
   }
@@ -4406,6 +4473,7 @@ inputEl.addEventListener("keydown", (e) => {
   }
 
   score++;
+  recordWordTime();
   totalCharsTyped += currentWord.length;
   scoreLabelEl.textContent = `せいかい ${score} もん`;
   playSound(correctSoundEl);
