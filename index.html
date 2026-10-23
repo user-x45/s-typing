@@ -2011,7 +2011,7 @@
       <div class="ranking-box hidden" id="ranking-box">
         <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
         <div class="ranking-tabs" id="ranking-tabs">
-          <button type="button" class="ranking-tab active" data-period="total">総合</button>
+          <button type="button" class="ranking-tab active" data-period="total">全期間</button>
           <button type="button" class="ranking-tab" data-period="month">今月</button>
           <button type="button" class="ranking-tab" data-period="week">今週</button>
         </div>
@@ -3286,7 +3286,7 @@ function updateSetupHighScore(){
 let rankingRequestId = 0;
 let currentRankingPeriod = "total";
 const RANKING_DISPLAY_MAX = 20;
-const RANKING_PERIOD_LABELS = { total: "総合", month: "今月", week: "今週" };
+const RANKING_PERIOD_LABELS = { total: "全期間", month: "今月", week: "今週" };
 
 function escapeHtml(str){
   return String(str).replace(/[&<>"']/g, (ch) => ({
