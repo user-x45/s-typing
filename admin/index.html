@@ -315,6 +315,29 @@
     padding:6px 4px;
   }
 
+  .period-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+  }
+
+  .period-tab{
+    background:transparent;
+    border:1.5px solid var(--ink-soft);
+    color:var(--ink-soft);
+    border-radius:10px;
+    padding:7px 18px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  .period-tab.active{
+    background:var(--hanko);
+    border-color:var(--hanko);
+    color:#fff;
+  }
+
   .top-actions{
     display:flex;
     justify-content:space-between;
@@ -627,6 +650,11 @@
       <button class="back-btn" id="ranking-back-btn">戻る</button>
       <button class="refresh-btn" id="refresh-btn">再読み込み</button>
     </div>
+    <div class="period-tabs" id="period-tabs">
+      <button type="button" class="period-tab active" data-period="total">総合</button>
+      <button type="button" class="period-tab" data-period="week">今週（日曜〜）</button>
+      <button type="button" class="period-tab" data-period="month">今月（月初〜）</button>
+    </div>
     <div class="board-grid" id="board-grid"></div>
   </div>
 
@@ -717,6 +745,8 @@ const WORKER_URL = "https://key-onl.user-x45.workers.dev";
 const MODE_LABELS = { hiragana: "ひらがな", katakana: "カタカナ", sentence: "文章" };
 const LEVEL_LABELS = { beginner: "初級", intermediate: "中級", advanced: "上級" };
 const MATCH_TYPE_LABELS = { solo: "一人プレイ", online: "オンライン対戦", friend: "フレンド対戦" };
+const PERIOD_LABELS = { total: "総合", week: "今週", month: "今月" };
+let rankingPeriod = "total";
 const MODES = ["hiragana", "katakana", "sentence"];
 const LEVELS = ["beginner", "intermediate", "advanced"];
 
@@ -943,7 +973,7 @@ function passkeyErrorMessage(e){
   return "エラーが発生しました。もう一度お試しください";
 }
 
-function renderBoards(data){
+function renderBoards(data, period){
   boardGridEl.innerHTML = "";
   for(const mode of MODES){
     for(const level of LEVELS){
@@ -963,10 +993,10 @@ function renderBoards(data){
       clearBtn.className = "clear-btn";
       clearBtn.textContent = "全削除";
       clearBtn.addEventListener("click", async () => {
-        if(!confirm(`${MODE_LABELS[mode]}・${LEVEL_LABELS[level]} のランキングを全て削除しますか？`)) return;
+        if(!confirm(`${MODE_LABELS[mode]}・${LEVEL_LABELS[level]} の${PERIOD_LABELS[period]}ランキングを全て削除しますか？`)) return;
         showOnly(loadingPanelEl);
         try{
-          await callAdmin("clear", { mode, level });
+          await callAdmin("clear", { mode, level, period });
           await loadRankingDashboard();
         }catch(e){
           handleSessionExpired();
@@ -1009,7 +1039,7 @@ function renderBoards(data){
             if(!confirm(`${scoreName}（${scoreValue}）を削除しますか？`)) return;
             showOnly(loadingPanelEl);
             try{
-              await callAdmin("delete", { mode, level, score: scoreValue });
+              await callAdmin("delete", { mode, level, score: scoreValue, period });
               await loadRankingDashboard();
             }catch(e){
               handleSessionExpired();
@@ -1413,9 +1443,13 @@ async function loadPlayLogDashboard(){
 
 async function loadRankingDashboard(){
   showOnly(loadingPanelEl);
+  const period = rankingPeriod;
   try{
-    const data = await callAdmin("list", {});
-    renderBoards(data);
+    const data = await callAdmin("list", { period });
+    renderBoards(data, period);
+    document.querySelectorAll("#period-tabs .period-tab").forEach(node => {
+      node.classList.toggle("active", node.dataset.period === period);
+    });
     showOnly(rankingDashboardEl);
   }catch(e){
     handleSessionExpired();
@@ -1617,6 +1651,13 @@ logoutBtnEl.addEventListener("click", () => {
 });
 
 rankingBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
+
+document.getElementById("period-tabs").addEventListener("click", (e) => {
+  const btn = e.target.closest(".period-tab");
+  if(!btn || btn.dataset.period === rankingPeriod) return;
+  rankingPeriod = btn.dataset.period;
+  loadRankingDashboard();
+});
 userBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
 inviteBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
 playlogBackBtnEl.addEventListener("click", () => showOnly(menuPanelEl));
