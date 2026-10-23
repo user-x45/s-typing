@@ -3299,25 +3299,7 @@ let rankingRequestId = 0;
 let currentRankingPeriod = "total";
 const RANKING_DISPLAY_MAX = 20;
 const RANKING_PERIOD_LABELS = { total: "全期間", month: "今月", week: "今週" };
-const RANKING_WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
-
-function getRankingPeriodStartJST(period){
-  const jst = new Date(Date.now() + 9 * 60 * 60 * 1000);
-  const year = jst.getUTCFullYear();
-  const month = jst.getUTCMonth();
-  const day = jst.getUTCDate();
-  if(period === "week") return new Date(Date.UTC(year, month, day - jst.getUTCDay()));
-  if(period === "month") return new Date(Date.UTC(year, month, 1));
-  return null;
-}
-
-function getRankingPeriodNote(period){
-  const start = getRankingPeriodStartJST(period);
-  if(!start) return "";
-  const label = `${start.getUTCMonth() + 1}/${start.getUTCDate()}（${RANKING_WEEKDAYS[start.getUTCDay()]}）`;
-  const reset = period === "week" ? "毎週日曜" : "毎月1日";
-  return `${label} 0:00 からの集計（${reset}にリセット）`;
-}
+const RANKING_PERIOD_NOTES = { total: "", month: "毎月1日 0:00にリセット", week: "毎週日曜 0:00にリセット" };
 
 function escapeHtml(str){
   return String(str).replace(/[&<>"']/g, (ch) => ({
@@ -3355,7 +3337,7 @@ async function loadRanking(keepBox){
   const level = currentLevel;
   const period = currentRankingPeriod;
   const modeLabel = modeLabels[mode] || "ひらがな";
-  document.getElementById("ranking-period-note").textContent = getRankingPeriodNote(period);
+  document.getElementById("ranking-period-note").textContent = RANKING_PERIOD_NOTES[period] || "";
   rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
   if(keepBox === true){
     rankingListEl.innerHTML = `<li class="ranking-loading">読み込み中...</li>`;
