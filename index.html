@@ -36,11 +36,8 @@
 <link href="favicon/152.png" rel="apple-touch-icon-precomposed" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap"></noscript>
-<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=optional" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=optional"></noscript>
 <link rel="preload" as="image" href="logo.svg" fetchpriority="high">
 <script type="application/ld+json">
 {
@@ -90,7 +87,7 @@
     --washi:#faf8f4;
     --washi-deep:#f0ece2;
     --ink:#2b2a2e;
-    --ink-soft:#7a7680;
+    --ink-soft:#67636d;
     --hanko:#e0563f;
     --hanko-deep:#c4432e;
     --gold:#dba52a;
@@ -118,6 +115,23 @@
       --panel-bg-soft:#2b2a2e;
       --input-bg:#232226;
     }
+  }
+
+  .ic{
+    width:1em;
+    height:1em;
+    fill:currentColor;
+    display:inline-block;
+    vertical-align:-0.125em;
+    flex-shrink:0;
+  }
+
+  .ic-spin{
+    animation:ic-spin 1s linear infinite;
+  }
+
+  @keyframes ic-spin{
+    to{ transform:rotate(360deg); }
   }
 
   *{box-sizing:border-box;}
@@ -1630,7 +1644,7 @@
     display:flex;
   }
 
-  .ranking-submitting-indicator .fa-spinner{
+  .ranking-submitting-indicator .ic-spinner{
     color:var(--hanko);
   }
 
@@ -2090,6 +2104,7 @@
 </style>
 </head>
 <body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true"><symbol id="i-bars" viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></symbol><symbol id="i-pen" viewBox="0 0 512 512"><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></symbol><symbol id="i-right-to-bracket" viewBox="0 0 512 512"><path d="M217.9 105.9L340.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L217.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1L32 320c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM352 416l64 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c53 0 96 43 96 96l0 256c0 53-43 96-96 96l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/></symbol><symbol id="i-right-from-bracket" viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></symbol><symbol id="i-keyboard" viewBox="0 0 576 512"><path d="M64 64C28.7 64 0 92.7 0 128V384c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H64zm16 64h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V144c0-8.8 7.2-16 16-16zM64 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V240zm16 80h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V336c0-8.8 7.2-16 16-16zm80-176c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H176c-8.8 0-16-7.2-16-16V144zm16 80h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H176c-8.8 0-16-7.2-16-16V240c0-8.8 7.2-16 16-16zM160 336c0-8.8 7.2-16 16-16H400c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H176c-8.8 0-16-7.2-16-16V336zM272 128h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V144c0-8.8 7.2-16 16-16zM256 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V240zM368 128h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V144c0-8.8 7.2-16 16-16zM352 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V240zM464 128h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H464c-8.8 0-16-7.2-16-16V144c0-8.8 7.2-16 16-16zM448 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H464c-8.8 0-16-7.2-16-16V240zm16 80h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H464c-8.8 0-16-7.2-16-16V336c0-8.8 7.2-16 16-16z"/></symbol><symbol id="i-globe" viewBox="0 0 512 512"><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/></symbol><symbol id="i-user-group" viewBox="0 0 640 512"><path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM609.3 512H471.4c5.4-9.4 8.6-20.3 8.6-32v-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2h61.4C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"/></symbol><symbol id="i-clock-rotate-left" viewBox="0 0 512 512"><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></symbol><symbol id="i-trophy" viewBox="0 0 576 512"><path d="M400 0H176c-26.5 0-48.1 21.8-47.1 48.2c.2 5.3 .4 10.6 .7 15.8H24C10.7 64 0 74.7 0 88c0 92.6 33.5 157 78.5 200.7c44.3 43.1 98.3 64.8 138.1 75.8c23.4 6.5 39.4 26 39.4 45.6c0 20.9-17 37.9-37.9 37.9H192c-17.7 0-32 14.3-32 32s14.3 32 32 32H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H357.9C337 448 320 431 320 410.1c0-19.6 15.9-39.2 39.4-45.6c39.9-11 93.9-32.7 138.2-75.8C542.5 245 576 180.6 576 88c0-13.3-10.7-24-24-24H446.4c.3-5.2 .5-10.4 .7-15.8C448.1 21.8 426.5 0 400 0zM48.9 112h84.4c9.1 90.1 29.2 150.3 51.9 190.6c-24.9-11-50.8-26.5-73.2-48.3c-32-31.1-58-76-63-142.3zM464.1 254.3c-22.4 21.8-48.3 37.3-73.2 48.3c22.7-40.3 42.8-100.5 51.9-190.6h84.4c-5.1 66.3-31.1 111.2-63 142.3z"/></symbol><symbol id="i-circle-info" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></symbol><symbol id="i-triangle-exclamation" viewBox="0 0 512 512"><path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></symbol><symbol id="i-link" viewBox="0 0 640 512"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></symbol><symbol id="i-spinner" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></symbol><symbol id="i-x-twitter" viewBox="0 0 512 512"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></symbol><symbol id="i-facebook-f" viewBox="0 0 320 512"><path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></symbol><symbol id="i-line" viewBox="0 0 512 512"><path d="M311 196.8v81.3c0 2.1-1.6 3.7-3.7 3.7h-13c-1.3 0-2.4-.7-3-1.5l-37.3-50.3v48.2c0 2.1-1.6 3.7-3.7 3.7h-13c-2.1 0-3.7-1.6-3.7-3.7V196.9c0-2.1 1.6-3.7 3.7-3.7h12.9c1.1 0 2.4 .6 3 1.6l37.3 50.3V196.9c0-2.1 1.6-3.7 3.7-3.7h13c2.1-.1 3.8 1.6 3.8 3.5zm-93.7-3.7h-13c-2.1 0-3.7 1.6-3.7 3.7v81.3c0 2.1 1.6 3.7 3.7 3.7h13c2.1 0 3.7-1.6 3.7-3.7V196.8c0-1.9-1.6-3.7-3.7-3.7zm-31.4 68.1H150.3V196.8c0-2.1-1.6-3.7-3.7-3.7h-13c-2.1 0-3.7 1.6-3.7 3.7v81.3c0 1 .3 1.8 1 2.5c.7 .6 1.5 1 2.5 1h52.2c2.1 0 3.7-1.6 3.7-3.7v-13c0-1.9-1.6-3.7-3.5-3.7zm193.7-68.1H327.3c-1.9 0-3.7 1.6-3.7 3.7v81.3c0 1.9 1.6 3.7 3.7 3.7h52.2c2.1 0 3.7-1.6 3.7-3.7V265c0-2.1-1.6-3.7-3.7-3.7H344V247.7h35.5c2.1 0 3.7-1.6 3.7-3.7V230.9c0-2.1-1.6-3.7-3.7-3.7H344V213.5h35.5c2.1 0 3.7-1.6 3.7-3.7v-13c-.1-1.9-1.7-3.7-3.7-3.7zM512 93.4V419.4c-.1 51.2-42.1 92.7-93.4 92.6H92.6C41.4 511.9-.1 469.8 0 418.6V92.6C.1 41.4 42.2-.1 93.4 0H419.4c51.2 .1 92.7 42.1 92.6 93.4zM441.6 233.5c0-83.4-83.7-151.3-186.4-151.3s-186.4 67.9-186.4 151.3c0 74.7 66.3 137.4 155.9 149.3c21.8 4.7 19.3 12.7 14.4 42.1c-.8 4.7-3.8 18.4 16.1 10.1s107.3-63.2 146.5-108.2c27-29.7 39.9-59.8 39.9-93.1z"/></symbol><symbol id="i-discord" viewBox="0 0 640 512"><path d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.971,0-52.843-26.587-52.843-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.844,59.239C470.715,310.993,447.538,337.58,417.871,337.58Z"/></symbol><symbol id="i-github" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></symbol></svg>
 <noscript>
   <div class="noscript-message">
     <h1>シンプルタイピング</h1>
@@ -2105,21 +2120,21 @@
 <div class="stage">
   <div class="menu-bar" id="site-header">
     <a href="/" class="menu-brand">
-      <img src="logo.svg" alt="シンプルタイピング" class="menu-logo" height="32" decoding="async" fetchpriority="high">
+      <img src="logo.svg" alt="シンプルタイピング" class="menu-logo" width="28" height="28" decoding="async" fetchpriority="high">
       <h1 class="menu-title">シンプルタイピング</h1>
     </a>
-    <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="メニュー"><i class="fas fa-bars"></i> メニュー</button>
+    <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="メニュー"><svg class="ic ic-bars" aria-hidden="true"><use href="#i-bars"/></svg> メニュー</button>
     <div class="menu-auth hidden" id="menu-auth-panel">
       <div class="menu-auth-row">
         <span class="player-name-label" id="current-player-label"></span>
-        <button class="edit-name-btn" id="edit-name-btn" aria-label="名前を変更"><i class="fas fa-pen"></i></button>
+        <button class="edit-name-btn" id="edit-name-btn" aria-label="名前を変更"><svg class="ic ic-pen" aria-hidden="true"><use href="#i-pen"/></svg></button>
       </div>
-      <button class="switch-player-btn" id="login-open-btn"><i class="fas fa-right-to-bracket"></i> ログイン</button>
-      <button class="switch-player-btn hidden" id="logout-btn"><i class="fas fa-right-from-bracket"></i> ログアウト</button>
+      <button class="switch-player-btn" id="login-open-btn"><svg class="ic ic-right-to-bracket" aria-hidden="true"><use href="#i-right-to-bracket"/></svg> ログイン</button>
+      <button class="switch-player-btn hidden" id="logout-btn"><svg class="ic ic-right-from-bracket" aria-hidden="true"><use href="#i-right-from-bracket"/></svg> ログアウト</button>
     </div>
   </div>
 
-  <div class="panel">
+  <main class="panel">
 
     <div class="setup" id="setup">
       <div class="mode-tabs">
@@ -2149,14 +2164,14 @@
       <div class="high-score-label setup-high-score" id="setup-high-score">ハイスコア 0</div>
 
       <div class="start-row">
-        <button class="start-btn" id="start-btn"><i class="fa-solid fa-keyboard"></i> ひとりで練習</button>
-        <button class="start-btn online-btn" id="start-online-btn"><i class="fa-solid fa-globe"></i> オンライン対戦</button>
-        <button class="start-btn online-btn" id="start-friend-btn"><i class="fa-solid fa-user-group"></i> フレンド対戦</button>
+        <button class="start-btn" id="start-btn"><svg class="ic ic-keyboard" aria-hidden="true"><use href="#i-keyboard"/></svg> ひとりで練習</button>
+        <button class="start-btn online-btn" id="start-online-btn"><svg class="ic ic-globe" aria-hidden="true"><use href="#i-globe"/></svg> オンライン対戦</button>
+        <button class="start-btn online-btn" id="start-friend-btn"><svg class="ic ic-user-group" aria-hidden="true"><use href="#i-user-group"/></svg> フレンド対戦</button>
       </div>
 
       <div class="mode-and-mute-row">
-        <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
-        <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
+        <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><svg class="ic ic-keyboard" aria-hidden="true"><use href="#i-keyboard"/></svg> 入力モード</button>
+        <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><svg class="ic ic-clock-rotate-left" aria-hidden="true"><use href="#i-clock-rotate-left"/></svg> 今までの記録</button>
         <label class="mute-check-label">
           <input type="checkbox" id="mute-btn" class="mute-check">
           ミュート
@@ -2164,7 +2179,7 @@
       </div>
 
       <div class="ranking-box hidden" id="ranking-box">
-        <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
+        <div class="ranking-title"><svg class="ic ic-trophy" aria-hidden="true"><use href="#i-trophy"/></svg> ランキング TOP20（総合スコア）</div>
         <div class="ranking-tabs" id="ranking-tabs">
           <button type="button" class="ranking-tab active" data-period="total">全期間</button>
           <button type="button" class="ranking-tab" data-period="month">今月</button>
@@ -2175,7 +2190,7 @@
       </div>
 
       <div class="info-box">
-        <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
+        <div class="info-title"><svg class="ic ic-circle-info" aria-hidden="true"><use href="#i-circle-info"/></svg> 遊び方</div>
         <ul class="info-list">
           <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
           <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
@@ -2184,7 +2199,7 @@
           <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
         </ul>
 
-        <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
+        <div class="info-title"><svg class="ic ic-triangle-exclamation" aria-hidden="true"><use href="#i-triangle-exclamation"/></svg> 注意事項</div>
         <ul class="info-list">
           <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
           <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
@@ -2208,16 +2223,16 @@
 
         <div class="official-x-banner">
           <a href="https://x.com/simple_typing" target="_blank" rel="noopener" class="official-x-link">
-            <i class="fa-brands fa-x-twitter"></i> 公式Xをフォローする
+            <svg class="ic ic-x-twitter" aria-hidden="true"><use href="#i-x-twitter"/></svg> 公式Xをフォローする
           </a>
         </div>
 
         <div class="share-footer" id="share-footer">
           <span class="site-footer-label">このサイトをシェア</span>
           <div class="footer-share">
-            <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
-            <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
+            <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><svg class="ic ic-x-twitter" aria-hidden="true"><use href="#i-x-twitter"/></svg> X</a>
+            <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><svg class="ic ic-facebook-f" aria-hidden="true"><use href="#i-facebook-f"/></svg> Facebook</a>
+            <button class="share-btn copy" id="footer-share-copy-btn"><svg class="ic ic-link" aria-hidden="true"><use href="#i-link"/></svg> コピー</button>
           </div>
         </div>
 
@@ -2321,7 +2336,7 @@
       <div class="result-rank-badge" id="result-rank-badge"></div>
       <div class="high-score-label result-high-score" id="result-high-score">ハイスコア 0</div>
       <div class="new-record-badge" id="new-record-badge">ハイスコア更新！</div>
-      <div class="ranking-submitting-indicator" id="ranking-submitting-indicator"><i class="fa-solid fa-spinner fa-spin"></i>ランキング登録中...</div>
+      <div class="ranking-submitting-indicator" id="ranking-submitting-indicator"><svg class="ic ic-spin ic-spinner" aria-hidden="true"><use href="#i-spinner"/></svg>ランキング登録中...</div>
       <div class="stat-grid">
         <div class="stat-box">
           <div class="stat-value" id="stat-accuracy">0%</div>
@@ -2337,14 +2352,14 @@
         </div>
       </div>
       <div class="result-share">
-        <a class="share-btn x" id="result-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> Xでシェア</a>
-        <a class="share-btn facebook" id="result-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebookでシェア</a>
-        <button class="share-btn copy" id="result-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
+        <a class="share-btn x" id="result-share-x-btn" target="_blank" rel="noopener"><svg class="ic ic-x-twitter" aria-hidden="true"><use href="#i-x-twitter"/></svg> Xでシェア</a>
+        <a class="share-btn facebook" id="result-share-facebook-btn" target="_blank" rel="noopener"><svg class="ic ic-facebook-f" aria-hidden="true"><use href="#i-facebook-f"/></svg> Facebookでシェア</a>
+        <button class="share-btn copy" id="result-share-copy-btn"><svg class="ic ic-link" aria-hidden="true"><use href="#i-link"/></svg> コピー</button>
       </div>
       <button class="retry-btn" id="retry-btn">もう一度</button>
     </div>
 
-  </div>
+  </main>
 </div>
 
 <div class="custom-alert-overlay" id="custom-alert-overlay">
@@ -2399,11 +2414,11 @@
     <p class="login-select-desc">ログインすると、プレイ記録・ハイスコア・表示設定がアカウントに保存され、別のパソコンでも続きから遊べます。</p>
     <div class="login-provider-list">
       <button class="login-provider-btn google" id="google-login-btn"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google</button>
-      <button class="login-provider-btn line" id="line-login-btn"><i class="fa-brands fa-line"></i> LINE</button>
-      <button class="login-provider-btn x" id="x-login-btn"><i class="fa-brands fa-x-twitter"></i> X</button>
-      <button class="login-provider-btn facebook" id="facebook-login-btn"><i class="fa-brands fa-facebook-f"></i> Facebook</button>
-      <button class="login-provider-btn discord" id="discord-login-btn"><i class="fa-brands fa-discord"></i> Discord</button>
-      <button class="login-provider-btn github" id="github-login-btn"><i class="fa-brands fa-github"></i> GitHub</button>
+      <button class="login-provider-btn line" id="line-login-btn"><svg class="ic ic-line" aria-hidden="true"><use href="#i-line"/></svg> LINE</button>
+      <button class="login-provider-btn x" id="x-login-btn"><svg class="ic ic-x-twitter" aria-hidden="true"><use href="#i-x-twitter"/></svg> X</button>
+      <button class="login-provider-btn facebook" id="facebook-login-btn"><svg class="ic ic-facebook-f" aria-hidden="true"><use href="#i-facebook-f"/></svg> Facebook</button>
+      <button class="login-provider-btn discord" id="discord-login-btn"><svg class="ic ic-discord" aria-hidden="true"><use href="#i-discord"/></svg> Discord</button>
+      <button class="login-provider-btn github" id="github-login-btn"><svg class="ic ic-github" aria-hidden="true"><use href="#i-github"/></svg> GitHub</button>
     </div>
     <button class="input-mode-close-btn" id="login-select-close-btn">閉じる</button>
   </div>
@@ -3488,7 +3503,7 @@ async function loadRanking(keepBox){
   const period = currentRankingPeriod;
   const modeLabel = modeLabels[mode] || "ひらがな";
   document.getElementById("ranking-period-note").textContent = RANKING_PERIOD_NOTES[period] || "";
-  rankingTitleEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
+  rankingTitleEl.innerHTML = `<svg class="ic ic-trophy" aria-hidden="true"><use href="#i-trophy"/></svg> ランキング TOP20（${modeLabel}・${levelLabels[level]}）`;
   if(keepBox === true){
     rankingListEl.innerHTML = `<li class="ranking-loading">読み込み中...</li>`;
   } else {
@@ -3604,7 +3619,7 @@ async function submitScoreToRanking(gameId, mode, level, name){
       .filter(p => periods[p] && periods[p].rank)
       .map(p => `${RANKING_PERIOD_LABELS[p]}${periods[p].rank}位`);
     if(ranked.length > 0){
-      resultRankBadgeEl.innerHTML = `<i class="fas fa-trophy"></i> ランキング ${ranked.join("・")}にランクインしました！`;
+      resultRankBadgeEl.innerHTML = `<svg class="ic ic-trophy" aria-hidden="true"><use href="#i-trophy"/></svg> ランキング ${ranked.join("・")}にランクインしました！`;
       resultRankBadgeEl.classList.add("visible");
     }
   }catch(e){
