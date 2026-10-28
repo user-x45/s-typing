@@ -989,7 +989,9 @@ function formatGeo(geo){
     }catch(e){}
   }
   const parts = [country, geo.region, geo.city].filter((v, i, arr) => v && arr.indexOf(v) === i);
-  return parts.join(" ");
+  const place = parts.join(" ");
+  if(!place) return "";
+  return geo.source ? `${place} / 取得元: ${geo.source}` : place;
 }
 
 function formatNetwork(ip, geo){
