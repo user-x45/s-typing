@@ -980,6 +980,23 @@ function passkeyErrorMessage(e){
   return "エラーが発生しました。もう一度お試しください";
 }
 
+function formatGeo(geo){
+  if(!geo) return "";
+  let country = geo.country || "";
+  if(country){
+    try{
+      country = new Intl.DisplayNames(["ja"], { type: "region" }).of(country) || country;
+    }catch(e){}
+  }
+  const parts = [country, geo.region, geo.city].filter((v, i, arr) => v && arr.indexOf(v) === i);
+  return parts.join(" ");
+}
+
+function formatNetwork(ip, geo){
+  const place = formatGeo(geo);
+  return place ? `IP: ${ip || "unknown"}（${place}）` : `IP: ${ip || "unknown"}`;
+}
+
 function renderBoards(data, period){
   boardGridEl.innerHTML = "";
   for(const mode of MODES){
@@ -1211,7 +1228,7 @@ function renderPlayLog(entries){
 
     const network = document.createElement("div");
     network.className = "user-sub";
-    network.textContent = `IP: ${entry.ip || "unknown"}`;
+    network.textContent = formatNetwork(entry.ip, entry.geo);
 
     const agent = document.createElement("div");
     agent.className = "user-sub";
@@ -1842,7 +1859,7 @@ function renderPresence(){
 
     const network = document.createElement("div");
     network.className = "user-sub";
-    network.textContent = `IP: ${client.ip || "unknown"}`;
+    network.textContent = formatNetwork(client.ip, client.geo);
     info.appendChild(network);
 
     const agent = document.createElement("div");
