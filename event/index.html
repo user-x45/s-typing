@@ -1555,6 +1555,25 @@
     display:block;
   }
 
+  .no-record-badge{
+    display:none;
+    margin:10px auto 0;
+    max-width:280px;
+    padding:8px 14px;
+    background:var(--panel-bg-soft);
+    color:var(--ink-soft);
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.05em;
+    text-align:center;
+  }
+
+  .no-record-badge.visible{
+    display:block;
+  }
+
   .ranking-submitting-indicator{
     display:none;
     align-items:center;
@@ -2345,6 +2364,7 @@
       <div class="result-rank-badge" id="result-rank-badge"></div>
       <div class="high-score-label result-high-score" id="result-high-score">ハイスコア 0</div>
       <div class="new-record-badge" id="new-record-badge">ハイスコア更新！</div>
+      <div class="no-record-badge" id="no-record-badge">ハイスコアには届きませんでした</div>
       <div class="ranking-submitting-indicator" id="ranking-submitting-indicator"><i class="fa-solid fa-spinner fa-spin"></i>ランキング登録中...</div>
       <div class="stat-grid">
         <div class="stat-box">
@@ -3352,6 +3372,7 @@ const resultRankBadgeEl = document.getElementById("result-rank-badge");
 const setupHighScoreEl = document.getElementById("setup-high-score");
 const resultHighScoreEl = document.getElementById("result-high-score");
 const newRecordBadgeEl = document.getElementById("new-record-badge");
+const noRecordBadgeEl = document.getElementById("no-record-badge");
 const rankingSubmittingIndicatorEl = document.getElementById("ranking-submitting-indicator");
 
 function getHighScoreKey(mode, level){
@@ -4341,6 +4362,7 @@ async function startGame(){
   resultRankBadgeEl.classList.remove("visible");
   resultRankBadgeEl.textContent = "";
   newRecordBadgeEl.classList.remove("visible");
+  noRecordBadgeEl.classList.remove("visible");
   if(rankingSubmittingIndicatorEl) rankingSubmittingIndicatorEl.classList.remove("visible");
   scoreLabelEl.textContent = `せいかい 0 もん`;
   timeLabelEl.textContent = `残り 100 秒`;
@@ -4408,9 +4430,11 @@ function endGame(isNormalEnd){
       setHighScore(currentMode, currentLevel, finalScore, finishPromise);
       resultHighScoreEl.textContent = `ハイスコア ${finalScore}`;
       newRecordBadgeEl.classList.add("visible");
+      noRecordBadgeEl.classList.remove("visible");
     } else {
       resultHighScoreEl.textContent = `ハイスコア ${previousHighScore}`;
       newRecordBadgeEl.classList.remove("visible");
+      noRecordBadgeEl.classList.add("visible");
     }
     updateSetupHighScore();
 
