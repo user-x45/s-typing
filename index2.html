@@ -11,34 +11,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。">
+<link rel="canonical" href="https://s-typing.f5.si/">
+<meta content="https://s-typing.f5.si/" property="og:url">
+<meta content="シンプルタイピング" property="og:title">
+<meta content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。" property="og:description">
+<meta content="website" property="og:type">
+<meta content="シンプルタイピング" property="og:site_name">
+<meta content="https://s-typing.f5.si/ogp.png" property="og:image">
+<meta content="image/png" property="og:image:type">
+<meta content="1200" property="og:image:width">
+<meta content="630" property="og:image:height">
+<meta content="シンプルタイピングのトップ画面" property="og:image:alt">
+<meta content="summary_large_image" name="twitter:card">
+<meta content="@simple_typing" name="twitter:site">
+<meta content="シンプルタイピング" name="twitter:title">
+<meta content="無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。初級から上級までレベルを選んで一人で練習したり、オンライン対戦で全国のプレイヤーとタイピング速度を競えます。" name="twitter:description">
+<meta content="https://s-typing.f5.si/ogp.png" name="twitter:image">
+<title>シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム</title>
+<link href="favicon/32.png" rel="icon" sizes="32x32" type="image/png">
+<link href="favicon/96.png" rel="icon" sizes="96x96" type="image/png">
+<link href="favicon/144.png" rel="icon" sizes="144x144" type="image/png">
+<link href="favicon/180.png" rel="apple-touch-icon" type="image/png">
+<link href="favicon/152.png" rel="apple-touch-icon-precomposed" type="image/png">
 <meta name="theme-color" content="#faf8f4">
-<title>シンプルタイピング</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "WebSite",
+  "name": "シンプルタイピング",
+  "url": "https://s-typing.f5.si/",
+  "inLanguage": "ja",
+  "description": "無料で遊べるひらがな・カタカナ・文章タイピング練習ゲーム。オンライン対戦やフレンド対戦にも対応しています。"
+}
+</script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments)}
+gtag("js",new Date());
+gtag("config","G-LSBNPPLE0E");
+(function(){
+  let loaded=false;
+  function load(){
+    if(loaded)return;
+    loaded=true;
+    const el=document.createElement("script");
+    el.async=true;
+    el.src="https://www.googletagmanager.com/gtag/js?id=G-LSBNPPLE0E";
+    document.head.appendChild(el);
+  }
+  ["pointerdown","keydown","scroll","touchstart"].forEach(t=>addEventListener(t,load,{once:true,passive:true}));
+  addEventListener("load",()=>setTimeout(load,4000));
+})();
+</script>
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#faf8f4;touch-action:manipulation;overscroll-behavior:none}
 canvas{display:block;width:100vw;height:100vh;height:100dvh;-webkit-tap-highlight-color:transparent;user-select:none}
 #cap{position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;border:0;padding:0;font-size:16px;pointer-events:none;caret-color:transparent}
+#tin{position:fixed;display:none;box-sizing:border-box;margin:0;padding:0 8px;border:0;outline:0;background:transparent;text-align:center;font-weight:700;letter-spacing:.06em;font-family:"M PLUS Rounded 1c","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;z-index:2}
+#tin::placeholder{color:#8a8690;font-weight:500}
 </style>
 </head>
 <body>
+<noscript>シンプルタイピングは、無料で遊べるひらがな・カタカナ・文章のタイピング練習ゲームです。ゲームを遊ぶにはJavaScriptを有効にしてください。</noscript>
 <canvas id="c"></canvas>
 <input id="cap" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="タイピング入力">
+<input id="tin" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done">
 <script src="typing-jp.js"></script>
 <script>
-const cv=document.getElementById("c"),cap=document.getElementById("cap");
+const cv=document.getElementById("c"),cap=document.getElementById("cap"),tin=document.getElementById("tin");
 const gl=cv.getContext("webgl",{alpha:false,antialias:true});
 const SERVER="wss://key-onl.user-x45.workers.dev",API=SERVER.replace(/^wss:/,"https:"),JH={"Content-Type":"application/json"};
-const TOUCH=matchMedia("(pointer: coarse)").matches||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const SITE="https://s-typing.f5.si/",SITE_TEXT="シンプルタイピング｜ひらがな・カタカナ・文章タイピング練習ゲーム";
+const TOUCH=matchMedia("(pointer: coarse)").matches||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1)||/Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
 const dark=matchMedia("(prefers-color-scheme: dark)").matches;
 const P=dark?{bg:"#1b1a1d",bg2:"#2b2a2e",panel:"#232226",ink:"#f0eee9",soft:"#a29d97",red:"#e8724f",teal:"#4bb3a8",purple:"#8a78bf",gold:"#e0b545",line:"#333136"}
 :{bg:"#faf8f4",bg2:"#f0ece2",panel:"#ffffff",ink:"#2b2a2e",soft:"#7a7680",red:"#e0563f",teal:"#2f9e94",purple:"#6c5a9e",gold:"#dba52a",line:"#e5e0d5"};
 const MODES=[["hiragana","ひらがな"],["katakana","カタカナ"],["sentence","文章"]],LEVELS=[["beginner","初級"],["intermediate","中級"],["advanced","上級"]];
 const SUB={hiragana:["2〜4文字","5〜7文字","8文字以上"],katakana:["2〜3文字","4〜7文字","8文字以上"],sentence:["10〜12文字","12〜14文字","14文字以上"]};
 const ML=Object.fromEntries(MODES),LL=Object.fromEntries(LEVELS);
-const TOGGLES=[["ローマ字","showRomaji",true],["ひらがな","showHiragana",true],["キーボード","showKeyboard",true],["大文字","romajiUppercase",false],["ミュート","isMuted",false]];
-const cfg={};
-TOGGLES.forEach(([,k,d])=>{const v=localStorage.getItem(k);cfg[k]=v===null?d:v==="true"});
+const DISP=[["ローマ字表示","showRomaji",true],["ひらがな表示","showHiragana",true],["キーボード表示","showKeyboard",true],["ローマ字を大文字にする","romajiUppercase",false]];
 const KB=["1234567890-","QWERTYUIOP@","ASDFGHJKL;:","ZXCVBNM,./"];
+const PN={total:"全期間",month:"今月",week:"今週",today:"今日"};
+const PNOTE={total:"",today:"毎日 0:00にリセット",month:"毎月1日 0:00にリセット",week:"毎週日曜 0:00にリセット"};
+const cfg={};
+DISP.forEach(([,k,d])=>{const v=localStorage.getItem(k);cfg[k]=v===null?d:v==="true"});
+let muted=localStorage.getItem("isMuted")==="true",inputMode="realtime";
 
 const VS="attribute vec2 p;uniform vec4 r;uniform vec2 res;varying vec2 uv,lp;void main(){vec2 q=r.xy+p*r.zw;uv=p;lp=p*r.zw;gl_Position=vec4(q.x/res.x*2.-1.,1.-q.y/res.y*2.,0.,1.);}";
 const FS="precision mediump float;varying vec2 uv,lp;uniform vec4 col,col2,col3;uniform vec2 sz;uniform float rad,mode,t,a,px;uniform sampler2D tex;"+
@@ -52,7 +113,7 @@ const vb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vb);gl.bufferData(gl.AR
 const pl=gl.getAttribLocation(pr,"p");gl.enableVertexAttribArray(pl);gl.vertexAttribPointer(pl,2,gl.FLOAT,false,0,0);
 gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);gl.uniform1i(u.tex,0);
 
-let W=0,H=0,S=1,VW=0,VH=0,DPR=1,mx=-1,my=-1,hits=[],cur=false;
+let W=0,H=0,S=1,VW=0,VH=0,DPR=1,mx=-1,my=-1,hits=[],cur=false,clipR=null,inUse=false;
 function resize(){
   DPR=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;
   const bw=Math.round(W*DPR),bh=Math.round(H*DPR);
@@ -64,7 +125,11 @@ function rect(x,y,w,h,r,c,a=1){
   gl.uniform1f(u.mode,0);gl.uniform4f(u.r,x,y,w,h);gl.uniform2f(u.sz,w,h);gl.uniform1f(u.rad,Math.min(r,w/2,h/2));
   const k=col(c);gl.uniform4f(u.col,k[0],k[1],k[2],1);gl.uniform1f(u.a,a);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
 }
-const tc=document.createElement("canvas"),tx=tc.getContext("2d"),cache=new Map();
+function clip(x,y,w,h){
+  const k=S*DPR;gl.enable(gl.SCISSOR_TEST);gl.scissor(Math.round(x*k),Math.round(cv.height-(y+h)*k),Math.round(w*k),Math.round(h*k));clipR=[y,y+h];
+}
+function unclip(){gl.disable(gl.SCISSOR_TEST);clipR=null}
+const tc=document.createElement("canvas"),tx=tc.getContext("2d"),cache=new Map(),wrapC={};
 const font=(size,wt,mono)=>`${wt} ${size}px ${mono?'"SFMono-Regular",Consolas,Menlo,monospace':'"M PLUS Rounded 1c","Hiragino Kaku Gothic ProN",Meiryo,sans-serif'}`;
 function clearCache(){cache.forEach(e=>gl.deleteTexture(e.t));cache.clear()}
 function tex(s,size,c,wt,mono){
@@ -87,73 +152,284 @@ function text(s,x,y,size,c,al="center",wt=700,a=1,mono=0){
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);return e.w-4;
 }
 function fit(s,size,mw,wt=700,mono=0){tx.setTransform(1,0,0,1,0,0);tx.font=font(size,wt,mono);const w=tx.measureText(s).width;return w>mw?size*mw/w:size}
+function wrap(s,size,mw,wt=500){
+  const k=s+"|"+size+"|"+mw+"|"+wt;if(wrapC[k])return wrapC[k];
+  tx.setTransform(1,0,0,1,0,0);tx.font=font(size,wt,0);
+  const out=[];let ln="";
+  for(const ch of s){if(tx.measureText(ln+ch).width>mw&&ln){out.push(ln);ln=ch}else ln+=ch}
+  out.push(ln);return wrapC[k]=out;
+}
+function two(d,r,cx,y,size,c1,c2,wt,mono,dx=0,mw=1e4){
+  const sz=Math.min(size,fit(d+r,size,mw,wt,mono));
+  tx.setTransform(1,0,0,1,0,0);tx.font=font(sz,wt,mono);
+  const sx=cx-tx.measureText(d+r).width/2+dx,dw=text(d,sx,y,sz,c1,"left",wt,1,mono);
+  text(r,sx+dw,y,sz,c2,"left",wt,1,mono);
+}
 function btn(x,y,w,h,label,bg,fg,fn,size=16,rad=12){
-  const hov=mx>=x&&mx<=x+w&&my>=y&&my<=y+h;if(hov)cur=true;
+  const hov=mx>=x&&mx<=x+w&&my>=y&&my<=y+h&&(!clipR||(my>=clipR[0]&&my<=clipR[1]));if(hov)cur=true;
   rect(x,y,w,h,rad,bg);if(hov)rect(x,y,w,h,rad,"#ffffff",.15);
-  text(label,x+w/2,y+h/2,size,fg);hits.push([x,y,w,h,fn]);
+  text(label,x+w/2,y+h/2,Math.min(size,fit(label,size,w-8)),fg);hits.push([x,y,w,h,fn,clipR]);
+}
+function outline(x,y,w,h,label,sub,active,fn){
+  const hov=mx>=x&&mx<=x+w&&my>=y&&my<=y+h;if(hov)cur=true;
+  rect(x,y,w,h,14,active?P.teal:P.line);if(!active)rect(x+1.5,y+1.5,w-3,h-3,12.5,hov?P.bg2:P.panel);
+  text(label,x+w/2,y+(sub?h*.36:h/2),15,active?"#0b3a34":P.soft);
+  if(sub)text(sub,x+w/2,y+h*.72,11,active?"#0b3a34":P.soft,"center",500,.75);
+  hits.push([x,y,w,h,fn,clipR]);
 }
 function spin(x,y,r,now){for(let i=0;i<10;i++){const an=now/250+i*Math.PI/5;rect(x+Math.cos(an)*r-4,y+Math.sin(an)*r-4,8,8,4,P.red,(i+1)/10)}}
+function placeInput(x,y,w,h,size,ph){
+  inUse=true;const s=tin.style;s.display="block";s.left=x*S+"px";s.top=y*S+"px";s.width=w*S+"px";s.height=h*S+"px";
+  s.fontSize=size*S+"px";s.color=P.ink;s.caretColor=P.red;tin.placeholder=ph||"";
+}
 
-let scene="menu",mode="hiragana",level="beginner",ws=null,fws=null,matchId=null,role=null,opp="",oppScore=0,deck=[],idx=0,friend=null,code="";
+let scene="load",prevScene="menu",mode="hiragana",level="beginner",ws=null,fws=null,matchId=null,role=null,opp="",oppScore=0,deck=[],idx=0,friend=null,code="";
 let endAt=0,cdEnd=0,cdFn=null,searchEnd=0,isOn=false,sentFin=false,ended=false,word="",tt=null,score=0,miss=0,chars=0,used=[],times=[],lastAt=0,sess=null;
-let res=null,shake=-1e9,pressed=null,toastMsg="",toastUntil=0,rank=null,rid=0,comp=false;
-const wl={},rd={};
-const nm=()=>(localStorage.getItem("guestPlayerName")||"GUEST").trim().slice(0,6)||"GUEST";
+let res=null,shake=-1e9,pressed=null,toastMsg="",toastUntil=0,rank=null,rid=0,rperiod="total",rpage=0,comp=false,hint="",needFocus=false,records=null;
+let logged=false,pname=null,serverHS=null,nameCb=null,nameBusy=false,nameStatus="",nameErr=false,nameCancel=false,drag=null;
+const sc={y:0,max:0},wl={},rd={},snd={};
+const TK="sessionToken";
+const token=()=>localStorage.getItem(TK);
+const nm=()=>((logged?pname:localStorage.getItem("guestPlayerName"))||"GUEST").trim().slice(0,6)||"GUEST";
 const toast=m=>{toastMsg=m;toastUntil=performance.now()+2600};
-const snd={};
-const sfx=n=>{if(cfg.isMuted)return;try{(snd[n]||(snd[n]=new Audio(`sounds/${n}.mp3`))).cloneNode().play().catch(()=>{})}catch(e){}};
+const sfx=n=>{if(muted)return;try{(snd[n]||(snd[n]=new Audio(`sounds/${n}.mp3`))).cloneNode().play().catch(()=>{})}catch(e){}};
 const k2h=s=>s.replace(/[\u30a1-\u30f6]/g,c=>String.fromCharCode(c.charCodeAt(0)-96));
 const reading=()=>mode==="katakana"?k2h(word):mode==="sentence"?(rd[level]||{})[word]||word:word;
+const hsKey=(m,l)=>`highScore_${m}_${l}`;
+const getHS=(m,l)=>serverHS?serverHS[hsKey(m,l)]||0:+localStorage.getItem(hsKey(m,l))||0;
+const inFlow=()=>["play","count","search","fmenu","fcreate","fwait","fjoin"].includes(scene);
+const hintDefault=()=>inputMode==="realtime"?(TOUCH?"英字キーボードでローマ字入力":"ローマ字でタイピングしよう"):(TOUCH?"「決定」ボタンで確定":"Enterで確定");
 function primeKB(num){if(!TOUCH)return;cap.inputMode=num?"numeric":"url";try{cap.focus({preventScroll:true})}catch(e){}}
-function dropKB(){if(TOUCH&&document.activeElement===cap)cap.blur()}
+function dropKB(){if(document.activeElement===cap||document.activeElement===tin)document.activeElement.blur()}
 async function retry(url,opt,n){for(let i=0;i<n;i++){try{const r=await fetch(url,opt);if(r.ok)return r}catch(e){}if(i<n-1)await new Promise(r=>setTimeout(r,1000*(i+1)))}return null}
+async function auth(body){const r=await fetch(`${API}/auth`,{method:"POST",headers:JH,body:JSON.stringify(body)});return r.json()}
 
-async function loadWords(m,l){
+async function fetchWords(m,l){
   const k=m+"-"+l;
   if(!wl[k]){const r=await fetch(`words/${k}.json`);if(!r.ok)throw 0;wl[k]=await r.json()}
-  if(m==="sentence")await readings(l,wl[k]);
   return wl[k];
 }
 async function readings(l,words){
   if(rd[l])return;
   try{const r=await(await fetch(`words/sentence-${l}2.json`)).json();rd[l]={};words.forEach((w,i)=>rd[l][w]=r[i]!==undefined?r[i]:w)}catch(e){rd[l]={}}
 }
+async function ensureWords(m,l){
+  let list;
+  while(!list){try{list=await fetchWords(m,l)}catch(e){await new Promise(r=>setTimeout(r,1500))}}
+  if(m==="sentence")await readings(l,list);
+  return list;
+}
+function periods(){
+  const l=["total","month","week"],j=new Date(Date.now()+324e5).toISOString().slice(0,10);
+  if(j>="2026-10-29")l.unshift("today");
+  return l;
+}
 async function loadRank(){
   const id=++rid;rank=null;
-  try{const r=await fetch(`${API}/ranking?mode=${mode}&level=${level}&period=total&force=normal`);const d=await r.json();if(id===rid)rank=Array.isArray(d.scores)?d.scores:[]}
-  catch(e){if(id===rid)rank=[]}
+  try{
+    const r=await fetch(`${API}/ranking?mode=${mode}&level=${level}&period=${rperiod}&force=normal`);
+    if(id!==rid)return;
+    if(!r.ok){rank=[];return}
+    const d=await r.json();if(id===rid)rank=Array.isArray(d.scores)?d.scores:[];
+  }catch(e){if(id===rid)rank=[]}
 }
-const hsKey=()=>`highScore_${mode}_${level}`;
+function updateHash(){
+  if(mode==="hiragana"&&level==="beginner")history.replaceState(null,"",location.pathname+location.search);
+  else location.hash=`${mode}-${level}`;
+}
+function applyHash(){
+  const h=location.hash.replace("#",""),[m,l]=h.split("-");
+  if(h&&ML[m]&&LL[l]){mode=m;level=l}else{mode="hiragana";level="beginner"}
+  loadRank();
+}
+function setML(m,l){mode=m;level=l;loadRank();updateHash()}
 function logPlay(type,o){fetch(`${API}/playlog`,{method:"POST",headers:JH,body:JSON.stringify({name:nm(),mode,level,matchType:type,opponent:o||""})}).catch(()=>{})}
+
+function applyDisplay(s){
+  const d=(k,def)=>s&&s[k]!==undefined?s[k]!==false:def;
+  cfg.showRomaji=d("showRomaji",true);cfg.showHiragana=d("showHiragana",true);cfg.showKeyboard=d("showKeyboard",true);
+  cfg.romajiUppercase=!!(s&&s.romajiUppercase===true);
+}
+function saveDisplay(){
+  if(logged)auth({action:"setDisplaySettings",token:token(),showRomaji:cfg.showRomaji,showHiragana:cfg.showHiragana,romajiUppercase:cfg.romajiUppercase,showKeyboard:cfg.showKeyboard}).catch(()=>{});
+  else DISP.forEach(([,k])=>localStorage.setItem(k,String(cfg[k])));
+}
+function guestDisplay(){const o={};DISP.forEach(([,k,d])=>{const v=localStorage.getItem(k);o[k]=v===null?d:v==="true"});return o}
+function applyInputMode(m){inputMode=m==="textbox"?"textbox":"realtime";tt=null;if(scene==="play"&&inputMode==="realtime")setupWord();else if(scene==="play"){tin.value="";needFocus=true}}
+function setInputMode(m){
+  applyInputMode(m);
+  if(logged)auth({action:"setInputMode",token:token(),inputMode:m}).catch(()=>{});
+  else localStorage.setItem("guestInputMode",m);
+}
+async function showLoggedIn(name,tk,im,ds){
+  logged=true;pname=name;
+  try{const d=await auth({action:"getHighScores",token:tk});serverHS=d.highScores||{}}catch(e){serverHS={}}
+  applyInputMode(im||"realtime");applyDisplay(ds||guestDisplay());
+}
+function showLoggedOut(){
+  logged=false;pname=null;serverHS=null;
+  applyInputMode(localStorage.getItem("guestInputMode")||"realtime");applyDisplay(guestDisplay());
+}
+async function verifySession(){
+  const tk=token();
+  if(!tk){showLoggedOut();return}
+  try{
+    const d=await auth({action:"verify",token:tk});
+    if(d.valid)await showLoggedIn(d.name,tk,d.inputMode,d.displaySettings);
+    else{localStorage.removeItem(TK);showLoggedOut()}
+  }catch(e){showLoggedOut()}
+}
+function logout(){
+  const tk=token();localStorage.removeItem(TK);showLoggedOut();
+  if(tk)auth({action:"logout",token:tk}).catch(()=>{});
+}
+const nameErrMsg=(d,f)=>d&&d.error==="name_blocked"?"この名前は使用できません":d&&d.error==="name_check_failed"?"名前の確認に失敗しました。しばらくしてからもう一度お試しください":f;
+function openName(cb,prefill,cancelable){nameCb=cb;nameCancel=cancelable;tin.value=prefill||"";nameStatus="";nameErr=false;nameBusy=false;scene="name";needFocus=true}
+async function confirmName(){
+  if(nameBusy||!nameCb)return;
+  const n=(tin.value||"").trim().slice(0,6)||"GUEST";
+  nameBusy=true;nameStatus="チェック中...";nameErr=false;
+  let r;try{r=await nameCb(n)}catch(e){r={ok:false,message:"通信に失敗しました"}}
+  if(r&&r.ok){nameCb=null;nameBusy=false;nameStatus="";scene="menu";if(typeof r.after==="function")await r.after();return}
+  nameBusy=false;nameStatus=(r&&r.message)||"この名前は使用できません";nameErr=true;needFocus=true;
+}
+function editName(){
+  openName(async n=>{
+    let d;
+    try{d=await auth(logged?{action:"setName",token:token(),name:n}:{action:"checkName",name:n})}catch(e){return{ok:false,message:"通信に失敗しました"}}
+    if(logged){if(!d.name)return{ok:false,message:nameErrMsg(d,"名前の変更に失敗しました")};pname=d.name}
+    else{if(!d.ok)return{ok:false,message:nameErrMsg(d,"名前の変更に失敗しました")};localStorage.setItem("guestPlayerName",n)}
+    return{ok:true};
+  },nm(),true);
+}
+async function handleLogin(body){
+  scene="menu";
+  let d;
+  try{d=await auth(body)}catch(e){toast("ログインに失敗しました");return}
+  if(d.error){toast("ログインに失敗しました");return}
+  if(d.isNewUser){
+    openName(async n=>{
+      let r;
+      try{r=await auth({action:"register",pendingToken:d.pendingToken,name:n})}catch(e){return{ok:false,message:"通信に失敗しました"}}
+      if(!r.token)return{ok:false,message:nameErrMsg(r,"登録に失敗しました")};
+      return{ok:true,after:async()=>{localStorage.setItem(TK,r.token);await showLoggedIn(r.name,r.token,r.inputMode,r.displaySettings)}};
+    },"",false);
+  }else{localStorage.setItem(TK,d.token);await showLoggedIn(d.name,d.token,d.inputMode,d.displaySettings)}
+}
+const OA={
+  x:{id:"UjYwZ1NXM0JBamtyVjhwWno4Ujk6MTpjaQ",url:"https://x.com/i/oauth2/authorize",scope:"users.read tweet.read",pkce:1,prefix:"",type:1},
+  discord:{id:"1562590068269391973",url:"https://discord.com/oauth2/authorize",scope:"identify",pkce:1,prefix:"discord_",type:1},
+  line:{id:"2011967727",url:"https://access.line.me/oauth2/v2.1/authorize",scope:"profile",pkce:1,prefix:"line_",type:1},
+  facebook:{id:"1102163979219229",url:"https://www.facebook.com/v22.0/dialog/oauth",scope:"public_profile",pkce:0,prefix:"facebook_",type:1},
+  github:{id:"Ov23lir193cZSwg32bcj",url:"https://github.com/login/oauth/authorize",scope:"read:user",pkce:0,prefix:"github_",type:0}
+};
+const GOOGLE_ID="7365893755-eqm3coij6otohorig4bgq4mtoen1q7sf.apps.googleusercontent.com";
+const redirectUri=()=>`${location.origin}${location.pathname}`;
+const uuid=()=>window.crypto&&crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2)}`;
+function b64url(buf){let b="";new Uint8Array(buf).forEach(c=>b+=String.fromCharCode(c));return btoa(b).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+async function startLogin(p){
+  if(p==="google"){
+    const nonce=uuid();sessionStorage.setItem("googleAuthNonce",nonce);
+    location.href="https://accounts.google.com/o/oauth2/v2/auth?"+new URLSearchParams({client_id:GOOGLE_ID,redirect_uri:redirectUri(),response_type:"id_token",scope:"openid",nonce,prompt:"select_account"});
+    return;
+  }
+  const o=OA[p],st=o.prefix+uuid();sessionStorage.setItem(p+"AuthState",st);
+  const q={client_id:o.id,redirect_uri:redirectUri(),scope:o.scope,state:st};
+  if(o.type)q.response_type="code";
+  if(o.pkce){
+    const a=new Uint8Array(64);crypto.getRandomValues(a);const v=b64url(a.buffer);
+    sessionStorage.setItem(p+"AuthVerifier",v);
+    q.code_challenge=b64url(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v)));q.code_challenge_method="S256";
+  }
+  location.href=o.url+"?"+new URLSearchParams(q);
+}
+async function processGoogle(){
+  const h=location.hash;
+  if(!h||!h.includes("id_token"))return false;
+  const q=new URLSearchParams(h.substring(1)),idToken=q.get("id_token"),err=q.get("error");
+  history.replaceState(null,"",location.pathname+location.search);
+  if(err||!idToken)return false;
+  const en=sessionStorage.getItem("googleAuthNonce");sessionStorage.removeItem("googleAuthNonce");
+  try{
+    const pl=JSON.parse(atob(idToken.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));
+    if(en&&pl.nonce!==en){toast("ログインに失敗しました");return true}
+  }catch(e){toast("ログインに失敗しました");return true}
+  await handleLogin({action:"login",idToken});return true;
+}
+async function processRedirect(){
+  const q=new URLSearchParams(location.search),c=q.get("code"),st=q.get("state"),err=q.get("error");
+  if(!c&&!err)return false;
+  let p="x";
+  for(const k of["discord","line","facebook","github"])if(st&&st.startsWith(k+"_"))p=k;
+  history.replaceState(null,"",location.pathname);
+  const es=sessionStorage.getItem(p+"AuthState"),cvf=sessionStorage.getItem(p+"AuthVerifier");
+  sessionStorage.removeItem(p+"AuthState");sessionStorage.removeItem(p+"AuthVerifier");
+  if(err)return false;
+  const o=OA[p],bad=p==="x"?(!cvf||(es&&st!==es)):((o.pkce&&!cvf)||!es||st!==es);
+  if(bad){toast("ログインに失敗しました");return true}
+  const body={action:"login",provider:p,code:c,redirectUri:redirectUri()};
+  if(o.pkce)body.codeVerifier=cvf;
+  await handleLogin(body);return true;
+}
+
+function guestRecords(){try{const a=JSON.parse(localStorage.getItem("guestPlayRecords")||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
+async function openRecords(){
+  scene="records";sc.y=0;records=null;
+  if(logged){try{const d=await auth({action:"getPlayRecords",token:token()});records=Array.isArray(d.playRecords)?d.playRecords:[]}catch(e){records=[]}}
+  else records=guestRecords();
+}
+async function recordPlay(m,l,acc,spd,ms,fs,fp){
+  if(logged){
+    const t=token(),s=await fp;if(!s)return;
+    await retry(`${API}/auth`,{method:"POST",headers:JH,body:JSON.stringify({action:"addPlayRecord",token:t,mode:m,level:l,gameId:s.gameId})},4);
+  }else{
+    const a=guestRecords();a.unshift({mode:m,level:l,playedAt:Date.now(),accuracy:acc,speed:spd,miss:ms,score:fs});
+    localStorage.setItem("guestPlayRecords",JSON.stringify(a.slice(0,20)));
+  }
+}
+function setHS(m,l,v,fp){
+  const k=hsKey(m,l);
+  if(serverHS){
+    serverHS[k]=v;const t=token();
+    if(t)Promise.resolve(fp).then(s=>{if(!s)return;return fetch(`${API}/auth`,{method:"POST",headers:JH,body:JSON.stringify({action:"setHighScore",token:t,mode:m,level:l,gameId:s.gameId})})}).catch(()=>{});
+    return;
+  }
+  localStorage.setItem(k,String(v));
+}
 
 function setupWord(){
   const r=reading();tt=null;
   try{tt=new TypingText(r)}catch(e){try{const s=[...r].filter(c=>/[ぁ-んー]/.test(c)).join("");if(s)tt=new TypingText(s)}catch(e2){}}
 }
 function nextWord(){
-  if(isOn){word=deck[idx%deck.length]}
+  if(isOn)word=deck[idx%deck.length];
   else{
     const pool=wl[`${mode}-${level}`]||[];let c=pool.filter(w=>!used.includes(w));
     if(!c.length){used=[];c=pool}
     word=c[Math.floor(Math.random()*c.length)];used.push(word);
   }
-  setupWord();
+  if(inputMode==="realtime")setupWord();
+  hint=hintDefault();
 }
 function key(k){
-  if(scene!=="play")return;
+  if(scene!=="play"||inputMode!=="realtime")return;
   if(!tt)setupWord();if(!tt)return;
   let r;try{r=tt.inputKey(k)}catch(e){return}
   const now=performance.now();
-  if(r==="unmatch"){miss++;shake=now;pressed={k,bad:1,at:now};sfx("incorrect");if(TOUCH&&navigator.vibrate)navigator.vibrate(25);return}
-  sfx("key");pressed={k,bad:0,at:now};
+  if(r==="unmatch"){miss++;hint="ちがうキーです";shake=now;pressed={k,bad:1,at:now};sfx("incorrect");if(TOUCH&&navigator.vibrate)navigator.vibrate(25);return}
+  sfx("key");pressed={k,bad:0,at:now};hint=hintDefault();
   if(r==="complete")wordDone();
+}
+function submitText(){
+  if(scene!=="play"||inputMode!=="textbox")return;
+  const typed=tin.value.trim();
+  if(typed!==word){miss++;hint="まだ違います";shake=performance.now();sfx("incorrect");return}
+  tin.value="";wordDone();
 }
 function wordDone(){
   score++;chars+=word.length;sfx("correct");
-  if(isOn){
-    idx++;
-    if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:"progress",score,index:idx}));
-  }else{const n=performance.now();times.push(n-lastAt);lastAt=n}
+  if(isOn){idx++;if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:"progress",score,index:idx}))}
+  else{const n=performance.now();times.push(n-lastAt);lastAt=n}
   nextWord();
 }
 
@@ -169,22 +445,20 @@ async function finishSession(){
   if(!r)return null;
   try{const d=await r.json();return d&&d.ok?{gameId:s.gameId,score:d.score}:null}catch(e){return null}
 }
-function periods(){
-  const l=["total","month","week"],j=new Date(Date.now()+324e5).toISOString().slice(0,10);
-  if(j>="2026-10-29")l.push("today");return l;
-}
-const PN={total:"全期間",month:"今月",week:"今週",today:"今日"};
-async function submit(fp,r,m,l){
-  const s=await fp;
-  if(!s){r.rank="通信の都合でランキングに登録できませんでした";return}
-  const ok=(await Promise.all(periods().map(async p=>{
+async function qualifies(sc0,m,l){
+  const ok=await Promise.all(periods().map(async p=>{
     try{
       const q=await fetch(`${API}/ranking?mode=${m}&level=${l}&period=${p}&force=normal`);if(!q.ok)return 1;
       const a=(await q.json()).scores;if(!Array.isArray(a)||a.length<20)return 1;
-      const z=a[a.length-1];return s.score>=(z&&z.score!==undefined?z.score:z);
+      const z=a[a.length-1];return sc0>=(z&&z.score!==undefined?z.score:z);
     }catch(e){return 1}
-  }))).some(Boolean);
-  if(!ok)return;
+  }));
+  return ok.some(Boolean);
+}
+async function submit(fp,r,m,l){
+  const s=await fp;
+  if(!s){r.rank="通信の都合でランキングに登録できませんでした";return}
+  if(!await qualifies(s.score,m,l))return;
   r.rank="ランキング登録中...";
   const q=await retry(`${API}/ranking?mode=${m}&level=${l}&force=normal`,{method:"POST",headers:JH,body:JSON.stringify({gameId:s.gameId,name:nm()})},4);
   if(!q){r.rank="通信の都合でランキングに登録できませんでした";return}
@@ -192,36 +466,36 @@ async function submit(fp,r,m,l){
     const d=await q.json(),ps=d.periods||{};
     const t=periods().filter(p=>ps[p]&&ps[p].rank).map(p=>`${PN[p]}${ps[p].rank}位`);
     r.rank=t.length?`ランキング ${t.join("・")}にランクイン！`:"";
-    if(m===mode&&l===level)loadRank();
+    if(m===mode&&l===level){const shown=ps[rperiod];rank=shown?shown.top20:d.top20}
   }catch(e){r.rank=""}
 }
 
 function countdown(fn){scene="count";cdEnd=performance.now()+3000;cdFn=fn}
 async function solo(){
   primeKB();logPlay("solo");scene="load";
-  try{await loadWords(mode,level)}catch(e){scene="menu";toast("単語の読み込みに失敗しました");return}
+  await ensureWords(mode,level);
   countdown(beginSolo);
 }
 function beginSolo(){
-  isOn=false;ended=false;score=miss=chars=0;used=[];endAt=performance.now()+1e5;
-  startSession();nextWord();scene="play";
+  isOn=false;ended=false;score=miss=chars=0;used=[];tin.value="";endAt=performance.now()+1e5;
+  startSession();nextWord();scene="play";needFocus=true;
 }
 function endSolo(){
   ended=true;dropKB();
   const att=score+miss,acc=att?Math.round(score/att*100):0,spd=Math.round(chars/100*60),base=score*100+spd*2;
-  const fs=Math.max(0,Math.round(base-Math.min(miss*30,base*.5))),fp=finishSession(),prev=+localStorage.getItem(hsKey())||0;
-  let nr=false;if(fs>prev){localStorage.setItem(hsKey(),String(fs));nr=true}
-  res={title:String(fs),sub:`${ML[mode]}・${LL[level]} / ${score}もん せいかい`,acc,spd,miss,hs:Math.max(prev,fs),nr,rank:"",
-    share:`シンプルタイピングで${ML[mode]}・${LL[level]}をプレイして${fs}点でした！`};
+  const fs=Math.max(0,Math.round(base-Math.min(miss*30,base*.5))),fp=finishSession(),prev=getHS(mode,level),m=mode,l=level,sc0=score,ms=miss;
+  let nr=false;if(fs>prev){setHS(m,l,fs,fp);nr=true}
+  res={title:String(fs),sub:`${ML[m]}・${LL[l]} / ${sc0}もん せいかい`,acc,spd,miss:ms,hs:Math.max(prev,fs),nr,rank:"",
+    share:`シンプルタイピングで${ML[m]}・${LL[l]}をプレイして${fs}点でした！`};
   scene="result";
-  if(fs>0)submit(fp,res,mode,level);
+  if(fs>0)submit(fp,res,m,l);
+  recordPlay(m,l,acc,spd,ms,fs,fp);
 }
 function quit(){
   dropKB();isOn=false;ended=true;
   if(ws){ws.close();ws=null}if(fws){fws.close();fws=null}
   friend=null;scene="menu";
 }
-
 function connectMatch(){
   if(ws)ws.close();
   ws=new WebSocket(`${SERVER}/match/${matchId}?role=${role}&mode=${mode}&level=${level}`);
@@ -236,8 +510,8 @@ function connectMatch(){
 async function beginOnline(){
   logPlay(friend?"friend":"online",opp);
   if(mode==="sentence")await readings(level,deck);
-  isOn=true;sentFin=false;ended=false;score=miss=chars=idx=oppScore=0;endAt=performance.now()+1e5;
-  nextWord();scene="play";
+  isOn=true;sentFin=false;ended=false;score=miss=chars=idx=oppScore=0;tin.value="";endAt=performance.now()+1e5;
+  nextWord();scene="play";needFocus=true;
 }
 function finishOnline(m){
   dropKB();isOn=false;ended=true;
@@ -259,9 +533,7 @@ function online(){
   };
   ws.onerror=()=>{cancel();toast("サーバーに接続できませんでした")};
 }
-function cancel(){
-  dropKB();if(ws){ws.close();ws=null}if(fws){fws.close();fws=null}friend=null;scene="menu";
-}
+function cancel(){dropKB();if(ws){ws.close();ws=null}if(fws){fws.close();fws=null}friend=null;scene="menu"}
 function connectFriend(c,r){
   friend=r;
   fws=new WebSocket(`${SERVER}/friend/${c}?role=${r}&mode=${mode}&level=${level}&name=${encodeURIComponent(nm())}`);
@@ -276,18 +548,13 @@ function connectFriend(c,r){
 }
 function friendCreate(){code=String(Math.floor(1e5+Math.random()*9e5));scene="fcreate";connectFriend(code,"host")}
 function friendJoin(){
-  if(!/^[0-9]+$/.test(code)){toast("招待コードを数字で入力してください");return}
+  if(!code){toast("招待コードを入力してください");return}
+  if(!/^[0-9]+$/.test(code)){toast("招待コードは数字のみ入力してください");return}
   primeKB(true);scene="fwait";connectFriend(code,"guest");
 }
-async function editName(){
-  const v=prompt("お名前を入力してください（6文字まで）",nm());if(v===null)return;
-  const n=(v.trim().slice(0,6))||"GUEST";
-  try{
-    const r=await fetch(`${API}/auth`,{method:"POST",headers:JH,body:JSON.stringify({action:"checkName",name:n})}),d=await r.json();
-    if(!d.ok){toast("この名前は使用できません");return}
-    localStorage.setItem("guestPlayerName",n);
-  }catch(e){toast("通信に失敗しました")}
-}
+const copy=async t=>{try{await navigator.clipboard.writeText(t);toast("コピーしました")}catch(e){toast("コピーに失敗しました")}};
+const shareX=t=>open(`https://x.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(SITE)}&via=simple_typing`,"_blank","noopener");
+const shareFB=t=>open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE)}&quote=${encodeURIComponent(t)}`,"_blank","noopener");
 
 function bg(now){
   const a=col(P.bg),b=col(P.bg2),c=col(P.red);
@@ -295,53 +562,182 @@ function bg(now){
   gl.uniform4f(u.col,a[0],a[1],a[2],1);gl.uniform4f(u.col2,b[0],b[1],b[2],1);gl.uniform4f(u.col3,c[0],c[1],c[2],1);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
 }
-function card(w,h){const x=(VW-w)/2,y=(VH-h)/2;rect(x,y,w,h,20,P.panel);return[x,y]}
-function outline(x,y,w,h,label,sub,active,fn){
-  const hov=mx>=x&&mx<=x+w&&my>=y&&my<=y+h;if(hov)cur=true;
-  rect(x,y,w,h,14,active?P.teal:P.line);if(!active)rect(x+1.5,y+1.5,w-3,h-3,12.5,hov?P.bg2:P.panel);
-  text(label,x+w/2,y+(sub?h*.36:h/2),15,active?"#0b3a34":P.soft);
-  if(sub)text(sub,x+w/2,y+h*.72,11,active?"#0b3a34":P.soft,"center",500,.75);
-  hits.push([x,y,w,h,fn]);
+function card(w,h,y0){const x=(VW-w)/2,y=y0!==undefined?y0:(VH-h)/2;rect(x,y,w,h,20,P.panel);return[x,y]}
+function over(now,w,h){scenes.menu(now);hits=[];cur=false;rect(0,0,VW,VH,"#1f1c19",.55);return card(w,h)}
+function tabs(x,y,w,h,items,active,fn,size=13){
+  rect(x,y,w,h,h/2.6,P.bg2);const tw=(w-8)/items.length;
+  items.forEach(([k,l],i)=>btn(x+4+i*tw,y+3,tw,h-6,l,k===active?P.red:P.bg2,k===active?"#ffffff":P.soft,()=>fn(k),size,(h-6)/2.6));
 }
+function rankRows(list,from,n,x0,cw,y0,step,rh,cols){
+  const rw=(cw-(cols-1)*10)/cols;
+  list.slice(from,from+n).forEach((s,j)=>{
+    const i=from+j,x=x0+(j%cols)*(rw+10),y=y0+Math.floor(j/cols)*step,top=i<3,e=typeof s==="object"&&s?s:{score:s};
+    rect(x,y,rw,rh,12,P.bg2);
+    text(`${i+1}位`,x+10,y+rh/2,12,top?P.gold:P.red,"left");
+    text((e.name||"GUEST").slice(0,6),x+50,y+rh/2,12,P.soft,"left",500);
+    text(String(e.score),x+rw-10,y+rh/2,12,P.ink,"right");
+  });
+}
+const INFO=[
+["h","遊び方"],
+["li","モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。"],
+["li","画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。"],
+["li","制限時間内にできるだけ多く正解を重ねてスコアを競います。"],
+["li","オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。"],
+["li","フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。"],
+["h","注意事項"],
+["li","オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。"],
+["li","通信状況によっては、対戦中に相手が切断されることがあります。"],
+["li","ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。"],
+["li","名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。"],
+["h","シンプルタイピングについて"],
+["p","シンプルタイピングは、登録なしですぐに遊べる無料のタイピング練習ゲームです。表示された言葉をローマ字入力やかな入力で素早く正確に打ち込み、制限時間内のスコアを競います。パソコンでもスマートフォンでも遊べ、タイピングを始めたばかりの方から、さらに速度を伸ばしたい方まで楽しめます。"],
+["h3","ひらがな・カタカナ・文章の3つのモード"],
+["p","ひらがなモードでは身近な言葉を、カタカナモードではカタカナ語を練習できます。文章モードでは短い一文を入力するため、実際の文章入力に近い感覚で練習できます。各モードは文字数に応じて初級・中級・上級に分かれているので、自分に合った難易度を選べます。"],
+["h3","オンライン対戦とフレンド対戦"],
+["p","オンライン対戦では、同じモード・レベルを選んだ相手とリアルタイムでスコアを競えます。フレンド対戦では、招待コードを共有して友達とだけ対戦できます。ログインするとプレイ記録やランキングにも参加できます。"],
+["h3","タイピング上達のコツ"],
+["p","最初は速さよりも正確さを意識し、ホームポジション（左手はFDSA、右手はJKL;）に指を置いて、画面を見たまま打つ練習を続けるのが上達への近道です。毎日5分でも続けることで、打鍵の速度とミスの少なさが着実に伸びていきます。"]
+];
+function clampScroll(){sc.y=Math.max(0,Math.min(sc.max,sc.y))}
+function goScroll(s){scene=s;sc.y=0;sc.max=0}
+
 const scenes={
-menu(){
+load(now){spin(VW/2,VH/2-16,22,now);text("読み込み中...",VW/2,VH/2+40,14,P.soft,"center",600)},
+menu(now){
   const cw=Math.min(VW-32,640),x0=(VW-cw)/2,cx=VW/2;
-  text("シンプルタイピング",cx,44,Math.min(34,fit("シンプルタイピング",34,VW-150,800)),P.ink,"center",800);
-  btn(VW-118,8,104,26,"✎ "+nm(),P.bg2,P.soft,editName,12,13);
-  rect(x0-12,76,cw+24,548,18,P.panel);
-  rect(x0,92,cw,44,14,P.bg2);
+  let hx=VW-10;
+  const hb=(l,fn,w)=>{hx-=w;btn(hx,6,w,26,l,P.bg2,P.soft,fn,11,13);hx-=6};
+  if(logged)hb("ログアウト",logout,78);else hb("ログイン",()=>{scene="login"},66);
+  hb("✎",editName,30);
+  text(nm(),hx-2,19,12,P.soft,"right",500);
+  text("シンプルタイピング",cx,56,fit("シンプルタイピング",30,VW-40,800),P.ink,"center",800);
+  rect(x0-12,84,cw+24,552,18,P.panel);
+  rect(x0,96,cw,44,14,P.bg2);
   const tw=(cw-8)/3;
-  MODES.forEach(([m,l],i)=>{
-    const x=x0+4+i*tw;
-    btn(x,96,tw,36,l,m===mode?P.red:P.bg2,m===mode?"#ffffff":P.soft,()=>{mode=m;level="beginner";loadRank()},14,11);
-  });
+  MODES.forEach(([m,l],i)=>btn(x0+4+i*tw,100,tw,36,l,m===mode?P.red:P.bg2,m===mode?"#ffffff":P.soft,()=>setML(m,"beginner"),14,11));
   const lw=(cw-20)/3;
-  LEVELS.forEach(([l,lb],i)=>outline(x0+i*(lw+10),148,lw,58,lb,SUB[mode][i],l===level,()=>{level=l;loadRank()}));
-  text(`ハイスコア ${+localStorage.getItem(hsKey())||0}`,cx,226,12,P.soft,"center",500);
+  LEVELS.forEach(([l,lb],i)=>outline(x0+i*(lw+10),148,lw,52,lb,SUB[mode][i],l===level,()=>setML(mode,l)));
+  text(`ハイスコア ${getHS(mode,level)}`,cx,214,12,P.soft,"center",500);
   const bw=(cw-16)/3;
-  btn(x0,248,bw,52,"ひとりで練習",P.red,"#ffffff",solo,15,10);
-  btn(x0+bw+8,248,bw,52,"オンライン対戦",P.purple,"#ffffff",online,15,10);
-  btn(x0+2*(bw+8),248,bw,52,"フレンド対戦",P.purple,"#ffffff",()=>{scene="fmenu"},15,10);
-  const gw=(cw-24)/5;
-  TOGGLES.forEach(([l,k],i)=>{
-    const on=cfg[k];
-    btn(x0+i*(gw+6),316,gw,32,l,on?P.teal:P.bg2,on?"#ffffff":P.soft,()=>{cfg[k]=!cfg[k];localStorage.setItem(k,String(cfg[k]))},12,16);
-  });
-  text(`ランキング TOP10（${ML[mode]}・${LL[level]}）`,cx,380,14,P.gold);
-  if(!rank||!rank.length)text(rank?"まだ記録がありません":"読み込み中...",cx,440,13,P.soft,"center",500);
-  else{
-    const rw=(cw-10)/2;
-    rank.slice(0,10).forEach((s,i)=>{
-      const x=x0+(i%2)*(rw+10),y=402+Math.floor(i/2)*34,top=i<3,e=typeof s==="object"&&s?s:{score:s};
-      rect(x,y,rw,28,12,P.bg2);
-      text(`${i+1}位`,x+10,y+14,12,top?P.gold:P.red,"left");
-      text((e.name||"GUEST").slice(0,6),x+48,y+14,12,P.soft,"left",500);
-      text(String(e.score),x+rw-10,y+14,12,P.ink,"right");
-    });
-  }
-  text("Enterキー不要・英字キーでローマ字入力",cx,598,11,P.soft,"center",500,.7);
+  btn(x0,228,bw,48,"ひとりで練習",P.red,"#ffffff",solo,15,10);
+  btn(x0+bw+8,228,bw,48,"オンライン対戦",P.purple,"#ffffff",online,15,10);
+  btn(x0+2*(bw+8),228,bw,48,"フレンド対戦",P.purple,"#ffffff",()=>{scene="fmenu"},15,10);
+  const sw=(cw-18)/4;
+  btn(x0,284,sw,30,"入力モード",P.bg2,P.ink,()=>{scene="settings"},12,10);
+  btn(x0+sw+6,284,sw,30,"今までの記録",P.bg2,P.ink,openRecords,12,10);
+  btn(x0+2*(sw+6),284,sw,30,"遊び方・情報",P.bg2,P.ink,()=>goScroll("info"),12,10);
+  btn(x0+3*(sw+6),284,sw,30,muted?"ミュート中":"ミュート",muted?P.teal:P.bg2,muted?"#ffffff":P.ink,()=>{muted=!muted;localStorage.setItem("isMuted",String(muted))},12,10);
+  text(`ランキング TOP20（${ML[mode]}・${LL[level]}）`,cx,334,14,P.gold);
+  const ps=periods();
+  tabs(x0,346,cw,28,ps.map(p=>[p,PN[p]]),rperiod,p=>{rperiod=p;rpage=0;loadRank()},12);
+  if(!rank||!rank.length)text(rank?"まだ記録がありません":"読み込み中...",cx,448,13,P.soft,"center",500);
+  else rankRows(rank,0,10,x0,cw,382,30,24,2);
+  btn(x0,538,cw,30,"ランキングをすべて見る（11位以降も表示）",P.bg2,P.ink,()=>{rpage=0;scene="rank"},12,10);
+  btn(x0+cw/2-130,584,120,22,"利用規約",P.panel,P.soft,()=>open("/terms/","_blank","noopener"),11,8);
+  btn(x0+cw/2+10,584,120,22,"プライバシーポリシー",P.panel,P.soft,()=>open("/privacy/","_blank","noopener"),11,8);
+  text(`© ${new Date().getFullYear()} シンプルタイピング`,cx,618,11,P.soft,"center",500,.7);
 },
-load(){text("読み込み中...",VW/2,VH/2,20,P.soft)},
+rank(){
+  const cw=Math.min(VW-32,520),x0=(VW-cw)/2,cx=VW/2;
+  rect(x0-12,8,cw+24,VH>660?644:644,18,P.panel);
+  text("ランキング",cx,28,18,P.gold);
+  tabs(x0,44,cw,36,MODES,mode,m=>setML(m,"beginner"),13);
+  const lw=(cw-20)/3;
+  LEVELS.forEach(([l,lb],i)=>btn(x0+i*(lw+10),88,lw,30,lb,l===level?P.teal:P.bg2,l===level?"#0b3a34":P.soft,()=>setML(mode,l),13,10));
+  const ps=periods();
+  tabs(x0,126,cw,32,ps.map(p=>[p,PN[p]]),rperiod,p=>{rperiod=p;rpage=0;loadRank()},12);
+  text(PNOTE[rperiod],cx,170,11,P.soft,"center",500);
+  if(!rank||!rank.length)text(rank?"まだ記録がありません":"読み込み中...",cx,330,14,P.soft,"center",500);
+  else rankRows(rank,rpage*10,10,x0,cw,184,38,32,1);
+  tabs(x0,574,cw,32,[[0,"1〜10位"],[1,"11〜20位"]],rpage,p=>{rpage=p},12);
+  btn(cx-70,614,140,30,"戻る",P.bg2,P.ink,()=>{scene="menu"},13,10);
+},
+info(){
+  const cw=Math.min(VW-40,600),x0=(VW-cw)/2,cx=VW/2,y0=56,y1=VH-60;
+  rect(x0-14,8,cw+28,VH-16,18,P.panel);
+  text("遊び方・情報",cx,30,18,P.gold);
+  clip(0,y0,VW,y1-y0);
+  let y=y0+10-sc.y;
+  INFO.forEach(([t,s])=>{
+    if(t==="h"){y+=10;text(s,cx,y+10,16,P.gold);y+=34}
+    else if(t==="h3"){y+=8;text(s,x0,y+8,14,P.ink,"left");y+=26}
+    else{
+      const ind=t==="li"?16:0;
+      wrap(s,13,cw-ind).forEach((ln,i)=>{if(t==="li"&&i===0)text("・",x0,y+10,13,P.soft,"left",500);text(ln,x0+ind,y+10,13,P.soft,"left",500);y+=22});
+      y+=6;
+    }
+  });
+  y+=14;
+  btn(cx-90,y,180,40,"公式Xをフォローする",P.ink,P.bg,()=>open("https://x.com/simple_typing","_blank","noopener"),13,12);y+=56;
+  text("このサイトをシェア",cx,y,12,P.soft,"center",500);y+=14;
+  const bw=(cw-20)/3;
+  btn(x0,y,bw,36,"X",P.ink,P.bg,()=>shareX(SITE_TEXT),13,10);
+  btn(x0+bw+10,y,bw,36,"Facebook",P.purple,"#ffffff",()=>shareFB(SITE_TEXT),13,10);
+  btn(x0+2*(bw+10),y,bw,36,"コピー",P.teal,"#ffffff",()=>copy(`${SITE_TEXT}\n${SITE}`),13,10);y+=60;
+  btn(cx-130,y,120,24,"利用規約",P.panel,P.soft,()=>open("/terms/","_blank","noopener"),11,8);
+  btn(cx+10,y,120,24,"プライバシーポリシー",P.panel,P.soft,()=>open("/privacy/","_blank","noopener"),11,8);y+=36;
+  text(`© ${new Date().getFullYear()} シンプルタイピング`,cx,y,11,P.soft,"center",500,.7);y+=30;
+  sc.max=Math.max(0,y+sc.y-y1);clampScroll();
+  unclip();
+  btn(cx-70,VH-48,140,34,"戻る",P.bg2,P.ink,()=>{scene="menu"},14,10);
+},
+settings(now){
+  const cw=Math.min(VW-32,420),[x,y]=over(now,cw,380),cx=VW/2;
+  text("入力モードを選択",cx,y+30,15,P.ink);
+  tabs(x+20,y+52,cw-40,40,[["realtime","リアルタイム"],["textbox","テキストボックス"]],inputMode,setInputMode,13);
+  const rt=inputMode==="realtime";
+  let yy=y+112;
+  DISP.forEach(([l,k])=>{
+    if(!rt&&k!=="showHiragana")return;
+    if(k==="showKeyboard"&&TOUCH)return;
+    const on=cfg[k];
+    btn(x+20,yy,cw-40,34,`${on?"☑":"☐"}  ${l}`,on?P.teal:P.bg2,on?"#ffffff":P.soft,()=>{cfg[k]=!cfg[k];saveDisplay()},13,10);
+    yy+=42;
+  });
+  btn(cx-70,y+380-54,140,40,"閉じる",P.bg2,P.ink,()=>{scene="menu"},14,12);
+},
+records(now){
+  const cw=Math.min(VW-32,460),h=Math.min(VH-40,560),[x,y]=over(now,cw,h),cx=VW/2;
+  text("今までの記録",cx,y+30,15,P.ink);
+  const y0=y+54,y1=y+h-60;
+  clip(x,y0,cw,y1-y0);
+  if(!records)text("読み込み中...",cx,y0+40,13,P.soft,"center",500);
+  else if(!records.length)text("まだ記録がありません",cx,y0+40,13,P.soft,"center",500);
+  else records.forEach((r,i)=>{
+    const ry=y0+i*58-sc.y;
+    rect(x+16,ry,cw-32,52,12,P.bg2);
+    text(`${ML[r.mode]||r.mode}・${LL[r.level]||r.level}`,x+28,ry+16,13,P.ink,"left");
+    const d=new Date(r.playedAt),z=n=>String(n).padStart(2,"0");
+    text(`${d.getFullYear()}/${z(d.getMonth()+1)}/${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`,x+cw-28,ry+16,11,P.soft,"right",500);
+    text(`スコア ${r.score!==undefined?r.score:"-"}　正誤率 ${r.accuracy}%　${r.speed}文字/分　ミス ${r.miss}`,x+28,ry+38,fit("スコア 0　正誤率 100%　000文字/分　ミス 00",11,cw-56,500),P.soft,"left",500);
+  });
+  sc.max=Math.max(0,(records?records.length:0)*58-(y1-y0));clampScroll();
+  unclip();
+  btn(cx-70,y+h-48,140,36,"閉じる",P.bg2,P.ink,()=>{scene="menu"},14,12);
+},
+login(now){
+  const cw=Math.min(VW-32,420),[x,y]=over(now,cw,360),cx=VW/2;
+  text("ログイン方法を選択",cx,y+30,15,P.ink);
+  wrap("ログインすると、プレイ記録・ハイスコア・表示設定がアカウントに保存され、別のパソコンでも続きから遊べます。",12,cw-48).forEach((l,i)=>text(l,cx,y+60+i*18,12,P.soft,"center",500));
+  const bw=(cw-50)/2;
+  [["google","Google","#ffffff","#3c4043"],["line","LINE","#06c755","#ffffff"],["x","X","#000000","#ffffff"],["facebook","Facebook","#1877f2","#ffffff"],["discord","Discord","#5865f2","#ffffff"],["github","GitHub","#24292f","#ffffff"]].forEach(([p,l,bgc,fg],i)=>{
+    const bx=x+20+(i%2)*(bw+10),by=y+128+Math.floor(i/2)*52;
+    btn(bx,by,bw,44,l,bgc,fg,()=>startLogin(p),14,12);
+  });
+  btn(cx-70,y+300,140,40,"閉じる",P.bg2,P.ink,()=>{scene="menu"},14,12);
+},
+name(now){
+  const cw=Math.min(VW-32,360),[x,y]=over(now,cw,nameCancel?340:290),cx=VW/2;
+  text("お名前を入力してください（6文字まで）",cx,y+30,fit("お名前を入力してください（6文字まで）",14,cw-30),P.ink);
+  wrap("本名など個人を特定できる名前は入力しないでください。不適切な名前は使用できません。",12,cw-48).forEach((l,i)=>text(l,cx,y+60+i*17,12,P.soft,"center",500));
+  rect(x+24,y+112,cw-48,44,14,P.line);rect(x+25.5,y+113.5,cw-51,41,13,P.bg2);
+  placeInput(x+24,y+112,cw-48,44,18,"GUEST");tin.maxLength=6;
+  if(needFocus){needFocus=false;tin.focus()}
+  text(nameStatus,cx,y+176,13,nameErr?P.red:P.soft,"center",500);
+  btn(cx-60,y+200,120,42,nameBusy?"...":"登録",P.red,"#ffffff",confirmName,14,14);
+  if(nameCancel)btn(cx-60,y+252,120,40,"キャンセル",P.bg2,P.ink,()=>{nameCb=null;scene="menu"},13,12);
+},
 search(now){
   const[x,y]=card(Math.min(VW-32,440),300),cx=VW/2;
   text("対戦相手をさがしています",cx,y+50,fit("対戦相手をさがしています",20,Math.min(VW-64,400)),P.ink);
@@ -373,7 +769,7 @@ fjoin(now){
   text(code||"------",cx,y+108,32,code?P.ink:P.soft,"center",800,code?1:.4);
   btn(cx-90,y+160,180,48,"参加する",P.purple,"#ffffff",friendJoin,15,10);
   btn(cx-70,y+226,140,44,"キャンセル",P.bg2,P.ink,()=>{dropKB();scene="menu"},14);
-  if(TOUCH)hits.unshift([0,0,VW,VH,()=>primeKB(true)]);
+  if(TOUCH)hits.unshift([0,0,VW,VH,()=>primeKB(true),null]);
 },
 fwait(now){
   const[x,y]=card(Math.min(VW-32,440),260),cx=VW/2;
@@ -388,7 +784,7 @@ count(now){
   text(String(n),VW/2,VH/2,Math.round(110+30*f),P.red,"center",800,.4+.6*(1-f*.5));
   if(TOUCH&&document.activeElement!==cap){
     text("画面をタップしてキーボードを開いておこう",VW/2,VH/2+90,14,P.soft,"center",700);
-    hits.unshift([0,0,VW,VH,()=>primeKB()]);
+    hits.unshift([0,0,VW,VH,()=>primeKB(),null]);
   }
 },
 play(now){
@@ -398,11 +794,11 @@ play(now){
     else endSolo();
   }
   if(scene!=="play")return;
-  const cw=Math.min(VW-32,760),cx=VW/2,x0=cx-cw/2,warn=left<=10;
-  const pw=Math.min(150,(cw-90)/2.2);
+  const cw=Math.min(VW-32,760),cx=VW/2,x0=cx-cw/2,warn=left<=10,rt=inputMode==="realtime";
+  const pw=Math.min(150,(cw-90)/2.2),myT=isOn?`${nm()} ${score} もん`:`せいかい ${score} もん`;
   rect(x0,18,pw,34,12,P.teal,.14);
-  text(isOn?`${nm()} ${score}`:`せいかい ${score} もん`,x0+pw/2,35,fit(isOn?`${nm()} ${score} もん`:`せいかい ${score} もん`,15,pw-10),P.teal,"center",800);
-  if(isOn){rect(cx-pw/2,18,pw,34,12,P.purple,.14);const t=`${opp||"GUEST"} ${oppScore} もん`;text(t,cx,35,fit(t,15,pw-10),P.purple,"center",800)}
+  text(myT,x0+pw/2,35,fit(myT,15,pw-10,800),P.teal,"center",800);
+  if(isOn){rect(cx-pw/2,18,pw,34,12,P.purple,.14);const t=`${opp||"GUEST"} ${oppScore} もん`;text(t,cx,35,fit(t,15,pw-10,800),P.purple,"center",800)}
   const tx0=isOn?x0+cw-pw:x0+cw-pw-78;
   rect(tx0,18,pw,34,12,P.red,warn?.2+.1*Math.sin(now/160):.14);
   text(`残り ${left} 秒`,tx0+pw/2,35,15,P.red,"center",800);
@@ -410,28 +806,37 @@ play(now){
   rect(x0,66,cw,6,3,P.ink,.1);
   const fr=Math.max(0,Math.min(1,(endAt-now)/1e5));
   if(fr>0)rect(x0,66,cw*fr,6,3,warn?P.red:P.teal);
-  const cy=96,ch=TOUCH?190:210;
+  const cy=96,ch=TOUCH?190:210,sa=now-shake,dx=sa<300?Math.sin(sa*.05)*6*(1-sa/300):0;
   rect(x0,cy,cw,ch,20,P.bg2);
   text(isOn?`${ML[mode]}・${LL[level]}（オンライン）`:`${ML[mode]}・${LL[level]}`,cx,cy+22,12,P.gold,"center",700);
-  const showRd=mode==="sentence"&&cfg.showHiragana;
-  text(word,cx,cy+(showRd?62:78),fit(word,54,cw-40,600),P.ink,"center",600);
+  const showRd=mode==="sentence"&&cfg.showHiragana,showRo=rt&&cfg.showRomaji;
+  let done="";
+  if(!rt){const v=tin.value;let i=0;while(i<v.length&&v[i]===word[i])i++;done=word.slice(0,i)}
+  const wy=cy+(showRd?62:(showRo?78:ch/2));
+  two(done,word.slice(done.length),cx,wy,54,P.red,P.ink,600,0,0,cw-40);
   if(showRd){const r=reading();text(r,cx,cy+104,fit(r,20,cw-40,500),P.soft,"center",500)}
-  if(cfg.showRomaji&&tt){
+  if(showRo&&tt){
     let d=tt.completedRoman,r=tt.remainingRoman;if(cfg.romajiUppercase){d=d.toUpperCase();r=r.toUpperCase()}
-    const sz=fit(d+r,34,cw-40,700,1),sa=now-shake,dx=sa<300?Math.sin(sa*.05)*6*(1-sa/300):0;
-    tx.setTransform(1,0,0,1,0,0);tx.font=font(sz,700,1);
-    const tw=tx.measureText(d+r).width,sx=cx-tw/2+dx;
-    const dw=text(d,sx,cy+ch-46,sz,P.red,"left",700,1,1);
-    text(r,sx+dw,cy+ch-46,sz,P.soft,"left",700,1,1);
+    two(d,r,cx,cy+ch-46,34,P.red,P.soft,700,1,dx,cw-40);
   }
-  const hint=TOUCH&&document.activeElement!==cap;
-  if(hint){
-    rect(x0,cy+ch+14,cw,40,12,P.teal,.8+.2*Math.sin(now/200));
-    text("タップしてキーボードを開く",cx,cy+ch+34,14,"#ffffff");
-    hits.unshift([0,0,VW,VH,()=>primeKB()]);
-  }
-  if(!TOUCH&&cfg.showKeyboard){
-    const ks=Math.min(46,(cw-10)/12.5),g=6,nx=tt&&tt.remainingRoman?tt.remainingRoman[0].toUpperCase():"",y0=cy+ch+30;
+  const focused=document.activeElement===(rt?cap:tin),needTap=TOUCH&&!focused;
+  let iy=cy+ch+14;
+  if(!rt){
+    const bw=TOUCH?cw-84:cw;
+    rect(x0,iy,bw,50,14,P.line);rect(x0+1.5,iy+1.5,bw-3,47,12.5,P.panel);
+    placeInput(x0,iy,bw,50,22,"ここに入力してください");tin.maxLength=200;
+    if(needFocus){needFocus=false;tin.focus()}
+    if(TOUCH)btn(x0+cw-76,iy,76,50,"決定",P.red,"#ffffff",submitText,15,14);
+    iy+=60;
+  }else if(needFocus){needFocus=false;if(TOUCH)primeKB()}
+  if(needTap){
+    rect(x0,iy,cw,34,12,P.teal,.8+.2*Math.sin(now/200));
+    text("タップしてキーボードを開く",cx,iy+17,14,"#ffffff");
+    hits.unshift([0,0,VW,VH,()=>rt?primeKB():tin.focus(),null]);
+    iy+=40;
+  }else{text(hint,cx,iy+10,12,P.soft,"center",500,.8);iy+=24}
+  if(rt&&!TOUCH&&cfg.showKeyboard){
+    const ks=Math.min(46,(cw-10)/12.5),g=6,nx=tt&&tt.remainingRoman?tt.remainingRoman[0].toUpperCase():"",y0=iy+10;
     const pk=pressed&&now-pressed.at<150?pressed:null;
     KB.forEach((row,r)=>{
       const rw=row.length*(ks+g)-g,sx=cx-rw/2+[0,.2,.5,.9][r]*ks;
@@ -445,45 +850,60 @@ play(now){
   }
 },
 result(now){
-  const cw=Math.min(VW-32,520),[x,y]=card(cw,500),cx=VW/2;
-  text("RESULT",cx,y+34,14,P.gold);
-  text(res.title,cx,y+96,fit(res.title,64,cw-40,800),P.red,"center",800);
-  text(res.sub,cx,y+146,fit(res.sub,13,cw-30,500),P.soft,"center",500);
-  if(res.rank){const t=res.rank,w=Math.min(cw-40,fit(t,13,1e4)*t.length*.9+30);rect(cx-w/2,y+168,w,32,16,P.red);text(t,cx,y+184,fit(t,13,w-16),"#ffffff")}
-  if(res.hs!==null){text(`ハイスコア ${res.hs}`,cx,y+222,12,P.soft,"center",500);if(res.nr)rect(cx-80,y+238,160,28,14,P.gold),text("ハイスコア更新！",cx,y+252,13,"#ffffff")}
+  const cw=Math.min(VW-32,520),[x,y]=card(cw,540),cx=VW/2,lx=cx-cw/2;
+  text("RESULT",cx,y+32,14,P.gold);
+  text(res.title,cx,y+92,fit(res.title,64,cw-40,800),P.red,"center",800);
+  text(res.sub,cx,y+140,fit(res.sub,13,cw-30,500),P.soft,"center",500);
+  if(res.rank){const t=res.rank,sz=fit(t,13,cw-60),w=Math.min(cw-40,t.length*sz*1.05+36);rect(cx-w/2,y+158,w,32,16,P.red);text(t,cx,y+174,sz,"#ffffff")}
+  if(res.hs!==null){
+    text(`ハイスコア ${res.hs}`,cx,y+214,12,P.soft,"center",500);
+    if(res.nr){rect(cx-80,y+230,160,28,14,P.gold);text("ハイスコア更新！",cx,y+244,13,"#ffffff")}
+  }
   const bw=(cw-60)/3;
   [[`${res.acc}%`,"正誤率"],[String(res.spd),"文字/分"],[String(res.miss),"ミス数"]].forEach(([v,l],i)=>{
-    rect(cx-cw/2+20+i*(bw+10),y+286,bw,70,14,P.bg2);
-    text(v,cx-cw/2+20+i*(bw+10)+bw/2,y+312,22,P.ink,"center",800);
-    text(l,cx-cw/2+20+i*(bw+10)+bw/2,y+340,11,P.soft,"center",500,.8);
+    const bx=lx+20+i*(bw+10);
+    rect(bx,y+278,bw,70,14,P.bg2);
+    text(v,bx+bw/2,y+304,22,P.ink,"center",800);
+    text(l,bx+bw/2,y+332,11,P.soft,"center",500,.8);
   });
-  btn(cx-130,y+380,125,44,"Xでシェア",P.ink,P.bg,()=>{
-    open(`https://x.com/intent/tweet?text=${encodeURIComponent(res.share)}&url=${encodeURIComponent("https://s-typing.f5.si/")}&via=simple_typing`,"_blank","noopener");
-  },14);
-  btn(cx+5,y+380,125,44,"コピー",P.teal,"#ffffff",()=>{if(navigator.clipboard)navigator.clipboard.writeText(res.share+"\nhttps://s-typing.f5.si/");toast("コピーしました")},14);
-  btn(cx-90,y+436,180,44,"もう一度",P.red,"#ffffff",()=>{scene="menu";loadRank()},15);
+  const sw=(cw-60)/3;
+  btn(lx+20,y+370,sw,40,"Xでシェア",P.ink,P.bg,()=>shareX(res.share),13,12);
+  btn(lx+30+sw,y+370,sw,40,"Facebook",P.purple,"#ffffff",()=>shareFB(res.share),13,12);
+  btn(lx+40+2*sw,y+370,sw,40,"コピー",P.teal,"#ffffff",()=>copy(`${res.share}\n${SITE}`),13,12);
+  btn(cx-90,y+436,180,48,"もう一度",P.red,"#ffffff",()=>{scene="menu";loadRank()},15,14);
 }
 };
 
 function frame(now){
   requestAnimationFrame(frame);
-  resize();hits=[];cur=false;
-  if(cache.size>300)clearCache();
-  gl.viewport(0,0,cv.width,cv.height);
+  resize();hits=[];cur=false;inUse=false;clipR=null;
+  if(cache.size>700)clearCache();
+  gl.viewport(0,0,cv.width,cv.height);gl.disable(gl.SCISSOR_TEST);
   gl.uniform2f(u.res,VW,VH);gl.uniform1f(u.px,S);
-  bg(now);scenes[scene](now);
+  bg(now);scenes[scene](now);unclip();
   if(now<toastUntil){
-    const w=Math.min(VW-32,fit(toastMsg,14,1e4)*toastMsg.length*.95+40);
-    rect((VW-w)/2,VH-64,w,38,19,P.ink,.92);text(toastMsg,VW/2,VH-45,14,P.bg);
+    const sz=fit(toastMsg,14,VW-60),w=Math.min(VW-32,sz*toastMsg.length*1.05+40);
+    rect((VW-w)/2,VH-64,w,38,19,P.ink,.92);text(toastMsg,VW/2,VH-45,sz,P.bg);
   }
+  if(!inUse&&tin.style.display!=="none"){tin.style.display="none";if(document.activeElement===tin)tin.blur()}
   cv.style.cursor=cur?"pointer":"default";
 }
-cv.addEventListener("pointermove",e=>{mx=e.clientX/S;my=e.clientY/S});
+cv.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY,moved:0};mx=e.clientX/S;my=e.clientY/S});
+cv.addEventListener("pointermove",e=>{
+  mx=e.clientX/S;my=e.clientY/S;
+  if(drag&&e.buttons){
+    const dy=e.clientY-drag.y;drag.moved+=Math.abs(dy)+Math.abs(e.clientX-drag.x);drag.x=e.clientX;drag.y=e.clientY;
+    if(scene==="info"||scene==="records"){sc.y-=dy/S;clampScroll()}
+  }
+});
 cv.addEventListener("pointerleave",()=>{mx=my=-1});
-cv.addEventListener("pointerdown",e=>{
+addEventListener("wheel",e=>{if(scene==="info"||scene==="records"){sc.y+=e.deltaY/S;clampScroll()}},{passive:true});
+cv.addEventListener("click",e=>{
+  if(drag&&drag.moved>8)return;
   mx=e.clientX/S;my=e.clientY/S;
   for(let i=hits.length-1;i>=0;i--){
-    const[x,y,w,h,fn]=hits[i];
+    const[x,y,w,h,fn,c]=hits[i];
+    if(c&&(my<c[0]||my>c[1]))continue;
     if(mx>=x&&mx<=x+w&&my>=y&&my<=y+h){sfx("click");fn();return}
   }
 });
@@ -491,13 +911,22 @@ addEventListener("keydown",e=>{
   if(e.metaKey||e.ctrlKey||e.altKey)return;
   if(scene==="play"){
     if(e.key==="Escape"&&!isOn){quit();return}
-    if(/^[a-zA-Z-]$/.test(e.key)){e.preventDefault();key(e.key.toLowerCase())}
+    if(inputMode==="realtime"&&/^[a-zA-Z-]$/.test(e.key)){e.preventDefault();key(e.key.toLowerCase())}
   }else if(scene==="fjoin"){
     if(/^[0-9]$/.test(e.key)){e.preventDefault();if(code.length<6)code+=e.key}
     else if(e.key==="Backspace"){e.preventDefault();code=code.slice(0,-1)}
     else if(e.key==="Enter")friendJoin();
   }
 });
+addEventListener("keyup",()=>{pressed=pressed&&performance.now()-pressed.at<150?pressed:null});
+tin.addEventListener("keydown",e=>{
+  if(e.key!=="Enter"||e.isComposing||e.keyCode===229)return;
+  e.preventDefault();
+  if(scene==="name")confirmName();else submitText();
+});
+tin.addEventListener("keydown",e=>{if(scene==="play"&&e.key.length===1)sfx("key")});
+tin.addEventListener("beforeinput",e=>{if(/^insertFrom(Paste|Drop|Yank)$/.test(e.inputType))e.preventDefault()});
+tin.addEventListener("input",()=>{if(scene==="play")hint=hintDefault()});
 function drain(){
   const v=cap.value;cap.value="";
   for(const raw of v){
@@ -508,19 +937,71 @@ function drain(){
 cap.addEventListener("compositionstart",()=>{comp=true});
 cap.addEventListener("compositionend",()=>{comp=false;drain()});
 cap.addEventListener("input",e=>{if(!comp&&!e.isComposing)drain()});
+addEventListener("hashchange",()=>{if(inFlow())quit();applyHash()});
 document.addEventListener("visibilitychange",()=>{
   if(document.visibilityState!=="hidden")return;
   if(scene==="search"||scene==="fcreate"||scene==="fwait")cancel();
-  else if(scene==="count"){cdFn=null;if(ws){ws.close();ws=null}scene="menu"}
+  else if(scene==="count"){cdFn=null;clearTimeout(0);if(ws){ws.close();ws=null}scene="menu"}
   else if(scene==="play"&&isOn){
     if(ws&&ws.readyState===1)ws.close();
     finishOnline({you:{score,miss},opponent:{score:oppScore,miss:0},result:"lose",forfeit:true});
   }
 });
+
+let psock=null,pretry=0,ptimer=null,plast="",penabled=false;
+function presenceState(){
+  let activity="idle";
+  if(scene==="play")activity=isOn?(friend?"friend":"online"):"solo";
+  else if(scene==="count")activity=ws?(friend?"friend":"online"):"solo";
+  else if(["search","fcreate","fwait","fjoin"].includes(scene))activity="matching";
+  const on=activity!=="idle";
+  return{type:"state",page:"main",activity,mode:on?mode:"",level:on?level:"",name:nm()};
+}
+function syncPresence(){
+  if(!psock||psock.readyState!==1)return;
+  const p=JSON.stringify(presenceState());
+  if(p===plast)return;
+  plast=p;psock.send(p);
+}
+function schedulePresence(){
+  clearTimeout(ptimer);
+  if(document.visibilityState==="hidden")return;
+  const d=Math.min(6e4,1000*2**pretry)+Math.floor(Math.random()*1000);
+  pretry++;ptimer=setTimeout(connectPresence,d);
+}
+function connectPresence(){
+  if(!penabled||document.visibilityState==="hidden")return;
+  if(psock&&psock.readyState<=1)return;
+  let s;
+  try{s=new WebSocket(`${SERVER}/presence`)}catch(e){schedulePresence();return}
+  psock=s;
+  s.onopen=()=>{pretry=0;plast="";syncPresence()};
+  s.onclose=()=>{if(psock===s)psock=null;plast="";schedulePresence()};
+}
+function disconnectPresence(){
+  clearTimeout(ptimer);const s=psock;psock=null;plast="";
+  if(s){s.onclose=null;try{s.close(1000,"hidden")}catch(e){}}
+}
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="hidden"){if(!isOn)disconnectPresence()}
+  else{pretry=0;connectPresence()}
+});
+["pointerdown","keydown","scroll","touchstart"].forEach(t=>addEventListener(t,()=>{if(penabled)return;penabled=true;connectPresence()},{once:true,passive:true}));
+setInterval(syncPresence,1000);
+setInterval(()=>{if(psock&&psock.readyState===1)psock.send("ping")},30000);
+
 if(document.fonts&&document.fonts.load)document.fonts.load('700 20px "M PLUS Rounded 1c"').then(clearCache);
-loadRank();
-Promise.all(MODES.flatMap(([m])=>LEVELS.map(([l])=>loadWords(m,l).catch(()=>{})))).then(()=>{});
+applyHash();
 requestAnimationFrame(frame);
+(async()=>{
+  const rankP=loadRank();
+  const words=Promise.all(MODES.flatMap(([m])=>LEVELS.map(([l])=>ensureWords(m,l))));
+  let handled=await processGoogle();
+  if(!handled)handled=await processRedirect();
+  const sessionP=logged?Promise.resolve():verifySession();
+  await Promise.all([rankP,words,sessionP]).catch(()=>{});
+  if(scene==="load")scene="menu";
+})();
 </script>
 </body>
 </html>
