@@ -403,6 +403,15 @@
     to{ transform:rotate(360deg); }
   }
 
+
+
+
+
+
+
+
+
+
   .custom-alert-overlay{
     display:none;
     position:fixed;
@@ -2078,312 +2087,6 @@
     .is-touch body.game-active .panel{ padding:8px 10px; }
   }
 
-  html,body{
-    height:100%;
-    overflow:hidden;
-  }
-
-  body{
-    height:100vh;
-    height:100dvh;
-    min-height:0;
-    padding:clamp(8px,1.6vh,18px) clamp(10px,2vw,28px);
-    overflow:hidden;
-  }
-
-  .stage{
-    max-width:none;
-    height:100%;
-    min-height:0;
-    display:flex;
-    flex-direction:column;
-  }
-
-  .menu-bar{
-    flex-shrink:0;
-    margin-bottom:clamp(6px,1.4vh,14px);
-    padding-top:clamp(6px,1.2vh,12px);
-    padding-bottom:clamp(6px,1.2vh,12px);
-  }
-
-  .panel{
-    flex:1;
-    min-height:0;
-    display:flex;
-    flex-direction:column;
-    padding:clamp(12px,2.4vh,28px) clamp(14px,2.4vw,32px);
-    overflow:hidden;
-  }
-
-  .ime-spacer{
-    display:none;
-  }
-
-  .setup{
-    flex:1;
-    min-height:0;
-    display:flex;
-    flex-direction:column;
-  }
-
-  .setup-layout{
-    flex:1;
-    min-height:0;
-    width:100%;
-    max-width:1360px;
-    margin:0 auto;
-    display:grid;
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-    gap:clamp(16px,3vw,48px);
-    align-items:stretch;
-  }
-
-  .setup-main{
-    min-height:0;
-    width:100%;
-    max-width:640px;
-    margin:0 auto;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-  }
-
-  .setup-side{
-    min-height:0;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    padding-left:clamp(16px,3vw,48px);
-    border-left:1px solid var(--line);
-  }
-
-  .setup-side .ranking-box,
-  #ranking-modal-body .ranking-box{
-    margin:0;
-    padding:0;
-    border:0;
-  }
-
-  .setup-side .ranking-box{
-    display:flex;
-    flex-direction:column;
-    min-height:0;
-    max-height:100%;
-  }
-
-  .setup-side .ranking-box.hidden{
-    display:none !important;
-  }
-
-  .setup-side .ranking-list{
-    min-height:0;
-    overflow-y:auto;
-    align-content:start;
-  }
-
-  .mode-tabs{ margin-bottom:clamp(8px,2vh,22px); }
-  .mode-btn{ padding-top:clamp(8px,1.6vh,11px); padding-bottom:clamp(8px,1.6vh,11px); }
-  .levels{ margin-bottom:clamp(8px,2vh,22px); }
-  .level-btn{ padding-top:clamp(8px,1.8vh,14px); padding-bottom:clamp(8px,1.8vh,14px); }
-  .setup-high-score{ margin-bottom:clamp(8px,1.8vh,16px); }
-  .start-btn{ padding-top:clamp(9px,1.6vh,13px); padding-bottom:clamp(9px,1.6vh,13px); }
-  .mode-and-mute-row{ margin-top:clamp(6px,1.4vh,10px); }
-
-  .app-footer{
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:16px;
-    padding-top:clamp(4px,1vh,10px);
-    font-size:11px;
-  }
-
-  .app-footer .site-footer-links,
-  .app-footer .site-footer{
-    margin:0;
-    padding:0;
-    border:0;
-  }
-
-  body.game-active .app-footer{
-    display:none;
-  }
-
-  .online-status.visible,
-  .result.visible{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    flex:1;
-    min-height:0;
-    width:100%;
-    max-width:760px;
-    margin:0 auto;
-  }
-
-  .result.visible .stat-grid{
-    width:100%;
-    max-width:480px;
-  }
-
-  .result-score{ font-size:clamp(40px,9vh,72px); }
-  .result-sub{ margin-bottom:clamp(10px,2.4vh,26px); }
-  .stat-grid{ margin-bottom:clamp(10px,2.4vh,26px); }
-
-  .game.visible{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    flex:1;
-    min-height:0;
-    width:100%;
-    max-width:1000px;
-    margin:0 auto;
-  }
-
-  #word-display{
-    font-size:clamp(24px,min(8vh,6vw),72px);
-  }
-
-  .word-frame{
-    padding:clamp(14px,4vh,44px) 16px;
-  }
-
-  .keyboard-guide{
-    --k:clamp(24px,4.6vh,46px);
-  }
-
-  .kb-row{
-    gap:clamp(3px,0.7vh,6px);
-    margin-bottom:clamp(3px,0.7vh,6px);
-  }
-
-  .kb-key{
-    min-width:var(--k);
-    height:var(--k);
-    font-size:clamp(10px,1.8vh,16px);
-  }
-
-  .kb-key.wide{
-    min-width:calc(var(--k) * 1.6);
-  }
-
-  .kb-key.space{
-    min-width:calc(var(--k) * 4.6);
-  }
-
-  @media (max-height:640px){
-    .keyboard-guide{ display:none !important; }
-  }
-
-  .info-modal-box{
-    background:var(--washi);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:24px;
-    max-width:680px;
-    width:100%;
-    max-height:88vh;
-    max-height:88dvh;
-    display:flex;
-    flex-direction:column;
-    position:relative;
-    margin:auto;
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  }
-
-  .info-modal-box .input-mode-modal-title{
-    font-weight:700;
-    text-align:center;
-    flex-shrink:0;
-  }
-
-  .info-modal-box .input-mode-close-btn{
-    align-self:center;
-    flex-shrink:0;
-  }
-
-  .info-modal-body{
-    flex:1;
-    min-height:0;
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
-    margin-bottom:16px;
-  }
-
-  .info-modal-body .info-box{
-    margin-top:0;
-    padding-top:0;
-    border-top:0;
-  }
-
-  .input-mode-overlay.visible .info-modal-box{
-    animation:popup-pop-in 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
-  }
-
-  .input-mode-overlay.closing .info-modal-box{
-    animation:popup-pop-out 0.2s ease both;
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .input-mode-overlay.visible .info-modal-box,
-    .input-mode-overlay.closing .info-modal-box{
-      animation:none;
-    }
-  }
-
-  @media (max-width:860px), (max-height:519px){
-    .setup-layout{
-      grid-template-columns:minmax(0,1fr);
-    }
-    .setup-side{
-      display:none;
-    }
-  }
-
-  @media (min-width:861px) and (min-height:520px){
-    #ranking-open-btn{
-      display:none;
-    }
-  }
-
-  @media (max-width:480px){
-    .start-row{
-      flex-direction:row;
-      align-items:stretch;
-      gap:6px;
-    }
-    .start-btn{
-      flex:1;
-      width:auto;
-      min-width:0;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:2px;
-      font-size:11px;
-      letter-spacing:0.02em;
-      padding-left:2px;
-      padding-right:2px;
-    }
-    .start-btn i{ font-size:16px; }
-    .friend-menu-row .start-btn,
-    #friend-join .start-btn{
-      flex-direction:row;
-      width:100%;
-      font-size:14px;
-    }
-  }
-
-  .is-touch body{
-    height:var(--vvh,100dvh);
-    min-height:0;
-    overflow:hidden;
-  }
-
 </style>
 </head>
 <body>
@@ -2419,8 +2122,6 @@
   <div class="panel">
 
     <div class="setup" id="setup">
-      <div class="setup-layout">
-        <div class="setup-main">
       <div class="mode-tabs">
         <button class="mode-btn active" data-mode="hiragana">ひらがな</button>
         <button class="mode-btn" data-mode="katakana">カタカナ</button>
@@ -2456,15 +2157,12 @@
       <div class="mode-and-mute-row">
         <button class="input-mode-toggle-btn" id="input-mode-toggle-btn"><i class="fa-solid fa-keyboard"></i> 入力モード</button>
         <button class="input-mode-toggle-btn" id="play-records-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> 今までの記録</button>
-        <button class="input-mode-toggle-btn" id="info-open-btn"><i class="fa-solid fa-circle-info"></i> 遊び方・案内</button>
-        <button class="input-mode-toggle-btn" id="ranking-open-btn"><i class="fa-solid fa-trophy"></i> ランキング</button>
         <label class="mute-check-label">
           <input type="checkbox" id="mute-btn" class="mute-check">
           ミュート
         </label>
       </div>
-        </div>
-        <div class="setup-side" id="setup-side">
+
       <div class="ranking-box hidden" id="ranking-box">
         <div class="ranking-title"><i class="fas fa-trophy"></i> ランキング TOP20（総合スコア）</div>
         <div class="ranking-tabs" id="ranking-tabs">
@@ -2476,7 +2174,56 @@
         <div class="ranking-period-note" id="ranking-period-note"></div>
         <ol class="ranking-list" id="ranking-list"></ol>
       </div>
+
+      <div class="info-box">
+        <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
+        <ul class="info-list">
+          <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
+          <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
+          <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
+          <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
+          <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
+        </ul>
+
+        <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
+        <ul class="info-list">
+          <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
+          <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
+          <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
+          <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
+        </ul>
+
+        <section class="about-section" id="about">
+          <h2>シンプルタイピングについて</h2>
+          <p>シンプルタイピングは、登録なしですぐに遊べる無料のタイピング練習ゲームです。表示された言葉をローマ字入力やかな入力で素早く正確に打ち込み、制限時間内のスコアを競います。パソコンでもスマートフォンでも遊べ、タイピングを始めたばかりの方から、さらに速度を伸ばしたい方まで楽しめます。</p>
+
+          <h3>ひらがな・カタカナ・文章の3つのモード</h3>
+          <p>ひらがなモードでは身近な言葉を、カタカナモードではカタカナ語を練習できます。文章モードでは短い一文を入力するため、実際の文章入力に近い感覚で練習できます。各モードは文字数に応じて初級・中級・上級に分かれているので、自分に合った難易度を選べます。</p>
+
+          <h3>オンライン対戦とフレンド対戦</h3>
+          <p>オンライン対戦では、同じモード・レベルを選んだ相手とリアルタイムでスコアを競えます。フレンド対戦では、招待コードを共有して友達とだけ対戦できます。ログインするとプレイ記録やランキングにも参加できます。</p>
+
+          <h3>タイピング上達のコツ</h3>
+          <p>最初は速さよりも正確さを意識し、ホームポジション（左手はFDSA、右手はJKL;）に指を置いて、画面を見たまま打つ練習を続けるのが上達への近道です。毎日5分でも続けることで、打鍵の速度とミスの少なさが着実に伸びていきます。</p>
+        </section>
+
+        <div class="official-x-banner">
+          <a href="https://x.com/simple_typing" target="_blank" rel="noopener" class="official-x-link">
+            <i class="fa-brands fa-x-twitter"></i> 公式Xをフォローする
+          </a>
         </div>
+
+        <div class="share-footer" id="share-footer">
+          <span class="site-footer-label">このサイトをシェア</span>
+          <div class="footer-share">
+            <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
+            <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
+          </div>
+        </div>
+
+        <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
+        <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
       </div>
     </div>
 
@@ -2599,10 +2346,6 @@
     </div>
 
   </div>
-  <footer class="app-footer">
-    <div class="site-footer-links"><a href="/terms/">利用規約</a><a href="/privacy/">プライバシーポリシー</a></div>
-    <div class="site-footer">© <span id="footer-year"></span> シンプルタイピング</div>
-  </footer>
 </div>
 
 <div class="custom-alert-overlay" id="custom-alert-overlay">
@@ -2672,70 +2415,6 @@
     <div class="input-mode-modal-title">今までの記録</div>
     <ul class="play-records-list" id="play-records-list"></ul>
     <button class="input-mode-close-btn" id="play-records-close-btn">閉じる</button>
-  </div>
-</div>
-
-<div class="input-mode-overlay" id="info-overlay">
-  <div class="info-modal-box">
-    <div class="input-mode-modal-title">遊び方・案内</div>
-    <div class="info-modal-body">
-      <div class="info-box">
-        <div class="info-title"><i class="fas fa-circle-info"></i> 遊び方</div>
-        <ul class="info-list">
-          <li>モードとレベルを選んで「ひとりで練習」または「オンライン対戦」をタップしてスタートします。</li>
-          <li>画面に表示された文字を入力し、Enterキー（またはスマホの確定ボタン）で回答します。</li>
-          <li>制限時間内にできるだけ多く正解を重ねてスコアを競います。</li>
-          <li>オンライン対戦では、同じモード・レベルを選んだ相手とマッチングし、リアルタイムでスコアを競います。</li>
-          <li>フレンド対戦では、招待コードを使って特定の友達とだけ対戦できます。</li>
-        </ul>
-
-        <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
-        <ul class="info-list">
-          <li>オンライン対戦は相手が見つかるまで最大15秒お待ちいただきます。見つからない場合は時間をおいて再度お試しください。</li>
-          <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
-          <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
-          <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
-        </ul>
-
-        <section class="about-section" id="about">
-          <h2>シンプルタイピングについて</h2>
-          <p>シンプルタイピングは、登録なしですぐに遊べる無料のタイピング練習ゲームです。表示された言葉をローマ字入力やかな入力で素早く正確に打ち込み、制限時間内のスコアを競います。パソコンでもスマートフォンでも遊べ、タイピングを始めたばかりの方から、さらに速度を伸ばしたい方まで楽しめます。</p>
-
-          <h3>ひらがな・カタカナ・文章の3つのモード</h3>
-          <p>ひらがなモードでは身近な言葉を、カタカナモードではカタカナ語を練習できます。文章モードでは短い一文を入力するため、実際の文章入力に近い感覚で練習できます。各モードは文字数に応じて初級・中級・上級に分かれているので、自分に合った難易度を選べます。</p>
-
-          <h3>オンライン対戦とフレンド対戦</h3>
-          <p>オンライン対戦では、同じモード・レベルを選んだ相手とリアルタイムでスコアを競えます。フレンド対戦では、招待コードを共有して友達とだけ対戦できます。ログインするとプレイ記録やランキングにも参加できます。</p>
-
-          <h3>タイピング上達のコツ</h3>
-          <p>最初は速さよりも正確さを意識し、ホームポジション（左手はFDSA、右手はJKL;）に指を置いて、画面を見たまま打つ練習を続けるのが上達への近道です。毎日5分でも続けることで、打鍵の速度とミスの少なさが着実に伸びていきます。</p>
-        </section>
-
-        <div class="official-x-banner">
-          <a href="https://x.com/simple_typing" target="_blank" rel="noopener" class="official-x-link">
-            <i class="fa-brands fa-x-twitter"></i> 公式Xをフォローする
-          </a>
-        </div>
-
-        <div class="share-footer" id="share-footer">
-          <span class="site-footer-label">このサイトをシェア</span>
-          <div class="footer-share">
-            <a class="share-btn x" id="footer-share-x-btn" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i> X</a>
-            <a class="share-btn facebook" id="footer-share-facebook-btn" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-            <button class="share-btn copy" id="footer-share-copy-btn"><i class="fas fa-link"></i> コピー</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    <button class="input-mode-close-btn" id="info-close-btn">閉じる</button>
-  </div>
-</div>
-
-<div class="input-mode-overlay" id="ranking-overlay">
-  <div class="info-modal-box">
-    <div class="info-modal-body" id="ranking-modal-body"></div>
-    <button class="input-mode-close-btn" id="ranking-close-btn">閉じる</button>
   </div>
 </div>
 
@@ -3551,6 +3230,7 @@ window.addEventListener("load", async () => {
   Promise.all([initialRankingLoadPromise, sessionLoadPromise]).finally(hideAppLoadingOverlay);
 });
 
+
 function katakanaToHiragana(str){
   return (str || '').replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
 }
@@ -3634,6 +3314,7 @@ function getCurrentWordReading(){
   }
   return currentWord;
 }
+
 
 const levelLabels = { beginner:"初級", intermediate:"中級", advanced:"上級" };
 const modeLabels = { hiragana:"ひらがな", katakana:"カタカナ", sentence:"文章" };
@@ -3924,6 +3605,7 @@ async function fetchWithRetry(url, options, attempts){
   }
   return null;
 }
+
 
 let gameSession = null;
 let wordTimes = [];
@@ -5156,6 +4838,7 @@ function shakeInput(){
   inputEl.classList.add("shake");
 }
 
+
 inputEl.addEventListener("compositionstart", () => { isComposing = true; });
 inputEl.addEventListener("compositionend", () => {
   setTimeout(() => { isComposing = false; }, 0);
@@ -5369,46 +5052,6 @@ setInterval(() => {
       if(e.target === el && el.classList.contains("closing")) finishClosing(el);
     });
   });
-})();
-
-(function(){
-  const infoOverlay = document.getElementById("info-overlay");
-  const rankingOverlay = document.getElementById("ranking-overlay");
-  const rankingModalBody = document.getElementById("ranking-modal-body");
-  const rankingSide = document.getElementById("setup-side");
-  const rankingBox = document.getElementById("ranking-box");
-  const wideQuery = window.matchMedia("(min-width:861px) and (min-height:520px)");
-
-  function placeRankingBox(){
-    if(wideQuery.matches){
-      rankingSide.appendChild(rankingBox);
-      rankingOverlay.classList.remove("visible");
-    } else {
-      rankingModalBody.appendChild(rankingBox);
-    }
-  }
-
-  function bindOverlay(overlay, openId, closeId){
-    const openBtn = document.getElementById(openId);
-    if(openBtn) openBtn.addEventListener("click", () => overlay.classList.add("visible"));
-    document.getElementById(closeId).addEventListener("click", () => overlay.classList.remove("visible"));
-    overlay.addEventListener("click", (e) => {
-      if(e.target === overlay) overlay.classList.remove("visible");
-    });
-  }
-
-  bindOverlay(infoOverlay, "info-open-btn", "info-close-btn");
-  bindOverlay(rankingOverlay, "ranking-open-btn", "ranking-close-btn");
-
-  document.addEventListener("keydown", (e) => {
-    if(e.key !== "Escape") return;
-    infoOverlay.classList.remove("visible");
-    rankingOverlay.classList.remove("visible");
-  });
-
-  placeRankingBox();
-  if(wideQuery.addEventListener) wideQuery.addEventListener("change", placeRankingBox);
-  else wideQuery.addListener(placeRankingBox);
 })();
 </script>
 </body>
