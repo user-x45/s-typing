@@ -524,7 +524,7 @@
 
         <div class="info-title"><i class="fas fa-triangle-exclamation"></i> 注意事項</div>
         <ul class="info-list">
-          <li>オンライン対戦では、まず<span id="info-search-initial">10</span>秒間対戦相手を探します。見つからない場合は、見つかりしだいオンライン対戦に移行しますので、それまでの間ひとりで練習してお待ちいただけます。最大<span id="info-search-total">60</span>秒探しても見つからない場合は、時間をおいて再度お試しください。</li>
+          <li>オンライン対戦では、まず<span id="info-search-initial">10</span>秒間対戦相手を探します。見つからない場合は、見つかりしだいオンライン対戦に移行しますので、それまでの間ひとりで練習してお待ちいただけます。最大<span id="info-search-total">70</span>秒探しても見つからない場合は、時間をおいて再度お試しください。</li>
           <li>通信状況によっては、対戦中に相手が切断されることがあります。</li>
           <li>ランキングは総合スコアをもとに集計され、不正な行為が確認された場合は登録内容を削除する場合があります。</li>
           <li>名前は6文字まで登録できます。不適切な名前は運営により変更・削除される場合があります。</li>
@@ -1718,7 +1718,7 @@ const ONLINE_SERVER_URL = "wss://key-onl.user-x45.workers.dev";
 const RANKING_API_URL = ONLINE_SERVER_URL.replace(/^wss:/, "https:").replace(/^ws:/, "http:");
 
 const ONLINE_SEARCH_INITIAL_SECONDS = 10;
-const ONLINE_SEARCH_TOTAL_SECONDS = 60;
+const ONLINE_SEARCH_TOTAL_SECONDS = 70;
 const SEARCH_NOTICE_MS = 5000;
 const SEARCH_TICK_MS = 250;
 
