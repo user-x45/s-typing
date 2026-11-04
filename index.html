@@ -99,8 +99,8 @@
   *{box-sizing:border-box;}
   button,input,select,textarea{font-family:inherit;}
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
-  html{height:100%;}
-  body{margin:0;min-height:100vh;min-height:100dvh;background:var(--paper);color:var(--ink);font-family:var(--ui);line-height:1.6;display:flex;justify-content:center;padding:40px 16px;overflow-x:clip;}
+  html{height:100%;overflow-x:hidden;}
+  body{margin:0;min-height:100vh;min-height:100dvh;background:var(--paper);color:var(--ink);font-family:var(--ui);line-height:1.6;display:flex;justify-content:center;padding:40px 16px;}
   body.game-active{padding:clamp(8px,2vh,16px) 16px;}
   .hidden{display:none !important;}
   .stage{width:100%;max-width:640px;}
@@ -383,7 +383,7 @@
   .is-touch #countdown.needs-focus .countdown-hint{display:block;}
   .is-touch .keyboard-guide{display:none !important;}
   html.is-touch{overscroll-behavior-y:none;}
-  .is-touch body{min-height:100dvh;padding:calc(16px + env(safe-area-inset-top,0px)) calc(10px + env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) calc(10px + env(safe-area-inset-left,0px));-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+  .is-touch body{min-height:var(--vvh,100dvh);padding:calc(16px + env(safe-area-inset-top,0px)) calc(10px + env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) calc(10px + env(safe-area-inset-left,0px));-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
   .is-touch body.game-active{height:var(--vvh,100dvh);min-height:0;overflow:hidden;overscroll-behavior:none;padding-top:calc(8px + env(safe-area-inset-top,0px));padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));}
   .is-touch body.game-active .stage{overflow-y:auto;}
   .is-touch body.game-active .panel{padding:14px 12px;}
@@ -2124,21 +2124,10 @@ function updateTapHint(){
   countdownEl.classList.toggle("needs-focus", !typing);
 }
 
-let lastViewportHeight = 0;
-let viewportSyncQueued = false;
-
 function syncViewportHeight(){
-  if(viewportSyncQueued) return;
-  viewportSyncQueued = true;
-  requestAnimationFrame(() => {
-    viewportSyncQueued = false;
-    const height = Math.round(window.visualViewport ? window.visualViewport.height : window.innerHeight);
-    if(height !== lastViewportHeight){
-      lastViewportHeight = height;
-      document.documentElement.style.setProperty("--vvh", `${height}px`);
-    }
-    if(document.body.classList.contains("game-active")) window.scrollTo(0, 0);
-  });
+  const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  document.documentElement.style.setProperty("--vvh", `${Math.round(height)}px`);
+  if(document.body.classList.contains("game-active")) window.scrollTo(0, 0);
 }
 
 if(IS_TOUCH_DEVICE){
@@ -2168,6 +2157,7 @@ if(IS_TOUCH_DEVICE){
   window.addEventListener("orientationchange", syncViewportHeight);
   if(window.visualViewport){
     window.visualViewport.addEventListener("resize", syncViewportHeight);
+    window.visualViewport.addEventListener("scroll", syncViewportHeight);
   }
   updateTapHint();
 }
@@ -2185,17 +2175,15 @@ function fitSpacerToViewport(){
   });
 }
 
-function onViewportResize(){
-  if(!gameEl.classList.contains("visible")) return;
-  fitSpacerToViewport();
-  fitWordDisplayFontSize();
-  fitRomajiDisplayFontSize();
-  scrollRomajiDisplayToTypedPosition();
-}
-
-window.addEventListener("resize", onViewportResize);
+window.addEventListener("resize", fitSpacerToViewport);
+window.addEventListener("resize", fitWordDisplayFontSize);
+window.addEventListener("resize", fitRomajiDisplayFontSize);
+window.addEventListener("resize", scrollRomajiDisplayToTypedPosition);
 if(window.visualViewport){
-  window.visualViewport.addEventListener("resize", onViewportResize);
+  window.visualViewport.addEventListener("resize", fitSpacerToViewport);
+  window.visualViewport.addEventListener("resize", fitWordDisplayFontSize);
+  window.visualViewport.addEventListener("resize", fitRomajiDisplayFontSize);
+  window.visualViewport.addEventListener("resize", scrollRomajiDisplayToTypedPosition);
 }
 
 document.querySelectorAll(".mode-btn").forEach(btn => {
