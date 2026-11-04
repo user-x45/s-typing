@@ -34,7 +34,7 @@
 <link href="favicon/144.png" rel="icon" sizes="144x144" type="image/png">
 <link href="favicon/180.png" rel="apple-touch-icon" type="image/png">
 <link href="favicon/152.png" rel="apple-touch-icon-precomposed" type="image/png">
-<meta name="theme-color" content="#faf8f4">
+<meta name="theme-color" content="#eef1f4">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -87,14 +87,14 @@
 </script>
 <style>
   :root{
-    --paper:#faf8f4;--sheet:#ffffff;--sheet-2:#f3efe6;--ink:#2b2a2e;--ink-soft:#7a7680;--rule:#e5e0d5;
+    --paper:#eef1f4;--sheet:#fbfcfd;--sheet-2:#f0f3f6;--ink:#2b2a2e;--ink-soft:#7a7680;--rule:#d3dae2;
     --accent:#e0563f;--accent-ink:#ffffff;--miss:#c4432e;
     --ui:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",Meiryo,"メイリオ",sans-serif;
     --mincho:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
     --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
   }
   @media (prefers-color-scheme: dark){
-    :root{--paper:#1b1a1d;--sheet:#232226;--sheet-2:#2b2a2e;--ink:#f0eee9;--ink-soft:#a29d97;--rule:#333136;--accent:#e8724f;--accent-ink:#ffffff;--miss:#f28762;}
+    :root{--paper:#0f1318;--sheet:#171c23;--sheet-2:#1e252d;--ink:#f0eee9;--ink-soft:#a29d97;--rule:#2b343e;--accent:#e8724f;--accent-ink:#ffffff;--miss:#f28762;}
   }
   *{box-sizing:border-box;}
   button,input,select,textarea{font-family:inherit;}
@@ -105,7 +105,7 @@
   .hidden{display:none !important;}
   .stage{width:100%;max-width:640px;}
 
-  .custom-alert-overlay,.name-input-overlay,.input-mode-overlay{display:none;position:fixed;inset:0;background:rgba(31,28,25,0.55);align-items:center;justify-content:center;z-index:1000;padding:20px;overflow-y:auto;-webkit-overflow-scrolling:touch;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+  .custom-alert-overlay,.name-input-overlay,.input-mode-overlay{display:none;position:fixed;inset:0;background:rgba(15,19,24,0.55);align-items:center;justify-content:center;z-index:1000;padding:20px;overflow-y:auto;-webkit-overflow-scrolling:touch;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
   .custom-alert-overlay.visible,.name-input-overlay.visible,.input-mode-overlay.visible{display:flex;animation:overlay-fade-in 0.2s ease both;}
   .custom-alert-overlay.visible .custom-alert-box,.name-input-overlay.visible .name-input-box,.input-mode-overlay.visible .input-mode-box{animation:popup-in 0.22s ease both;}
   .custom-alert-overlay.closing,.name-input-overlay.closing,.input-mode-overlay.closing{display:flex;pointer-events:none;animation:overlay-fade-out 0.2s ease both;}
